@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.lodging.mapper.LodgingMapper">
+
+	<!-- 
+		void insertLodging(LodInformation lodinformation)
+	 -->
+	<insert id="insertLodging" parameterType="com.nadri.lodging.vo.LodInformation">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+        	 select lodging_information_seq.nextval from dual
+      	</selectKey>
+		insert into lodging_information
+		(lod_no, lod_name, lod_address, lod_check_in, lod_check_out, lod_intro, category_no, lod_grade_no, lod_refund, lod_sales)
+		values
+		(#{no}, #{name}, #{address}, #{checkIn}, #{checkOut}, #{intro}, #{categoryNo}, #{GradeNo}, #{lodRefund}, #{lodSales})
+	</insert>
+	
+	<!-- 
+		void updateLodging(LodInformation lodinformation)
+	 -->
+	<update id="updateLodging" parameterType="com.nadri.lodging.vo.LodInformation">
+		update
+			lodging_information
+		set
+			lod_name = #{name},
+			lod_address = #{address},
+			lod_check_in = #{checkIn},
+			lod_check_out = #{checkOut},
+			lod_intro = #{intro},
+			lod_refund = #{lodRefund}
+		where
+			lod_no = #{no}	
+			
+	</update>
+	<!-- 
+			void deleteLodging(int lodNo);
+	 -->
+	<delete id="deleteLodging" parameterType="com.nadri.lodging.vo.LodInformation">
+		delete from 
+			lodging_information
+		where
+			lod_no = #{no}
+	</delete>
+	<!-- 
+			List<LodInformation> getLodgings(Criteria criteria);
+	 -->
+	<select id="getLodgings" parameterType="com.nadri.form.lodging.form.criteria" resultType="com.nadri.lodging.vo.LodInformation">
+		select
+			lod_no as no,
+			lod_name as name,
+			lod_address as address,
+			lod_check_in as checkIn,
+			lod_check_out as checkOut,
+			lod_intro as intro,
+			category_no as categoryNo,
+			lod_grade_no as GradeNo,
+			lod_Refund as lodRefund,
+			lod_sales as lodSales
+		from
+			lodging_information
+        
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
+
+
