@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.coupon.dao.CouponDao">
+
+	<resultMap id="CouponResultMap" type="com.nadri.coupon.vo.Coupon">
+		<id column="coupon_no" property="no"/>
+		<result column="coupon_quantity" property="quantity"/>
+		<result column="coupon_discountrate" property="discountRate"/>
+		<result column="coupon_startdate" property="startDate"/>
+		<result column="coupon_enddate" property="endDate"/>
+		<result column="coupon_category" property="category"/>
+		<result column="coupon_name" property="name"/>
+		<result column="coupon_issue_date" property="issueDate"/>
+		<result column="coupon_deleted" property="deleted"/>
+		<result column="coupon_issue_end" property="issueEndDate"/>
+	</resultMap>
+
+	<!-- 쿠폰 생성 -->
+	<insert id="insertCoupon" parameterType="com.nadri.coupon.vo.Coupon">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select coupon_no_seq.nextval
+			from dual
+		</selectKey>
+		insert into coupons (coupon_no,coupon_quantity,coupon_discountrate,coupon_startdate,
+						coupon_enddate,coupon_category,coupon_name)
+		values
+		(#{no},#{quantity},#{discountRate},#{startDate},#{endDate},#{category},#{name})
+	</insert>
+	
+	<!-- 쿠폰 정보 수정 -->
+	<update id="updateCoupon" parameterType="com.nadri.coupon.vo.Coupon">
+		update coupons
+		set
+			coupon_no = #{no},
+			coupon_quantity = #{quantity},
+			coupon_discountrate = #{discountRate},
+			coupon_startdate = #{startDate},
+			coupon_enddate = #{endDate},
+			coupon_category = #{category},
+			coupon_name = #{name}
+		where
+			coupon_no = #{no}
+	</update>
+	
+	<!-- 사용가능한 쿠폰조회 -->
+	<select id="getAllCoupons" resultMap="CouponResultMap">
+		select *
+		from coupons
+		where <![CDATA[coupon_enddate > sysdate]]>
+        and coupon_quantity > 0
+        and coupon_deleted = 'n'
+		order by coupon_enddate
+	</select>
+	
+	<!-- 만료된 쿠폰조회 -->
+	<select id="getInvalidCoupons" resultMap="CouponResultMap">
+		select *
+		from coupons
+		where <![CDATA[coupon_enddate < sysdate]]>
+        or coupon_quantity = 0
+        or coupon_deleted = 'y'
+		order by coupon_enddate asc
+	</select>
+	
+	<!-- 쿠폰 총 갯수 -->
+	<select id="getCouponTotalRows" parameterType="com.nadri.coupon.util.Criteria" resultType="int">
+		select count(*)
+		from coupons
+	</select>
+	
+	<!-- 메뉴별 쿠폰 찾기 -->
+	<select id="searchCoupons" parameterType="com.nadri.coupon.util.Criteria" resultMap="CouponResultMap">
+		select *
+		from (
+				select c.*, row_number() over(order by coupon_no desc)
+				from coupons c
+				<where>
+					<if test="menu!=null and value!=null">
+						coupon_category like '%' || #{value} || '%'
+					</if>
+				</where>
+			  )
+			  
+	</select>
+	
+</mapper>
