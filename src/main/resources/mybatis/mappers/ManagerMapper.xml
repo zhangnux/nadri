@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.manager.mapper.ManagerMapper">
+	<select id="getManager" parameterType="string" resultType="com.nadri.manager.vo.Manager">
+		select 
+			manager_no as no,
+			manager_id as id,
+			manager_password as password,
+			manager_check as isChecked
+		from manager
+		where 
+			manager_id = #{value}
+	</select>
+</mapper>
