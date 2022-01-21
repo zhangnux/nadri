@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.restaurant.mapper.RestaurantMapper">
+
+	<!--
+		List<Restaurant> getAllRestaurants();
+	-->
+	<select id="getAllRestaurants" resultType="com.nadri.restaurant.vo.Restaurant">
+		select
+			restaurant_no,
+			restaurant_name,
+			restaurant_picture,
+			restaurant_sales,
+			restaurant_content,
+			restaurant_category,
+			restaurant_address,
+			restaurant_city,
+			restaurant_parking,
+			restaurant_restdate,
+			restaurant_tel,
+			restaurant_open_time,
+			restaurant_star_point
+		from
+			restaurant
+		order by restaurant_star_point
+	</select>
+	
+	<!-- 
+		List<Restaurant> getRestaurantsByCategory();
+		
+		5개만 뽑아볼까?
+	-->
+	<select id="getRestaurantsByCategory" parameterType="String" resultType="com.nadri.restaurant.vo.Restaurant">
+		select
+			restaurant_no
+			restaurant_name
+			restaurant_picture
+			restaurant_sales
+			restaurant_content
+			restaurant_category
+			restaurant_address
+			restaurant_city
+			restaurant_parking
+			restaurant_restdate
+			restaurant_tel
+			restaurant_open_time
+			restaurant_star_point
+		from
+			restaurant
+		where
+			restaurant_category = #{value}
+		order by restaurant_star_point
+	</select>
+	
+	<!--
+		Restaurant getRestaurantDetail();
+	-->
+	<select id="getRestaurantDetail" parameterType="int" resultType="com.nadri.restaurant.vo.Restaurant">
+		select
+			restaurant_no
+			restaurant_name
+			restaurant_picture
+			restaurant_sales
+			restaurant_content
+			restaurant_category
+			restaurant_address
+			restaurant_city
+			restaurant_parking
+			restaurant_restdate
+			restaurant_tel
+			restaurant_open_time
+			restaurant_star_point
+		from
+			restaurant
+		where
+			restaurant_no = #{value}
+	
+	</select>
+	
+
+
+
+</mapper>
