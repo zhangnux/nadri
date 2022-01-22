@@ -16,10 +16,11 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Schedule {
-	private int ticketNo;
-	private int price;
-	private Date refundDate;
-	private int refundFee;
-	private int userNo;
-	
+	private int no;
+	private Date dpetTime;
+	private Date arriveTime;
+	private Date deptDate;
+	private Date arriveDate;
+	private Route route;
+	private Airplane airplane;
 }

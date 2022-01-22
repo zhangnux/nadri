@@ -2,6 +2,8 @@ package com.nadri.air.vo;
 
 import java.util.Date;
 
+import com.nadri.user.vo.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +25,6 @@ public class Reservation {
 	private Date reserveDate;
 	private Date paymentDate;
 	private Date cancleDate;
-	private int userNo;
+	private User user;
 	
 }

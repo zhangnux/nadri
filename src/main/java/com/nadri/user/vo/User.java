@@ -1,4 +1,4 @@
-package com.nadri.air.vo;
+package com.nadri.user.vo;
 
 import java.util.Date;
 
