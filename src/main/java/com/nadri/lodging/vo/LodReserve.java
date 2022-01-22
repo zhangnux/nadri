@@ -16,12 +16,12 @@ import lombok.ToString;
 @ToString
 public class LodReserve {
 
-	private int reserveNo;						// 예약번호
-	private Date reserveCheckIn;				// 룸 체크인 시간
-	private Date reserveCheckOut;				// 룸 체크아웃 시간
-	private int adultNo;						// 성인 인원
-	private int childNo;						// 아이 인원
-	private int totalNo;						// 총 인원
+	private int no;								// 예약번호
+	private Date checkIn;						// 룸 체크인 시간
+	private Date checkOut;						// 룸 체크아웃 시간
+	private int adult;							// 성인 인원
+	private int child;							// 아이 인원
+	private int total;							// 총 인원
 	private int extraPrice;						// 추가금액
 	private int totalPrice;						// 총금액
 	private Date reserveDate;					// 예약날짜
@@ -30,7 +30,7 @@ public class LodReserve {
 	private int availablePoint;					// 사용가능포인트
 	private int savePoint;						// 보유포인트
 	private int reserveName;					// 예약자대표
-	private int roomNo;							// 룸번호
-	private int userNo;							// 유저번호
-	private boolean couponUsed;					// 쿠폰사용여부
+	private LodRoom lodRoom;					// 룸번호
+	//private User user;						// 유저번호
+	//private ;									// 쿠폰사용여부
 }

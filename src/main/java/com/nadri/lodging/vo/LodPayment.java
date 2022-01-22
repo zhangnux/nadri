@@ -16,8 +16,8 @@ import lombok.ToString;
 @ToString
 public class LodPayment {
 
-	private int paymentNo;				// 결제번호
+	private int no;						// 결제번호
 	private Date paymentDate;			// 결제날짜
-	private int reserveNo;				// 예약날짜
+	private LodReserve lodReserve;		// 예약날짜
 }
 

@@ -14,13 +14,13 @@ import lombok.ToString;
 @ToString
 public class LodRoom {
 
-	private int roomNo;                   // 룸번호
-	private int lodNo;                    // 숙소번호
-	private String roomName;              // 룸이름
-	private int roomPerPerson;            // 룸 기준인원
-	private int roommaxPerson;            // 룸 최대인원
-	private int roomPrice;                // 룸 가격
-	private int roomDiscountPrice;        // 룸 할인가격
-	private int roomCategoryNo;           // 룸카테고리번호
-	private int roomFormNo;               // 룸 유형번호
+	private int no;                 		 	// 룸번호
+	private LodInformation lodinformation;   	// 숙소번호
+	private String name;             	 	 	// 룸이름
+	private int roomPerPerson;           		// 룸 기준인원
+	private int roomMaxPerson;           		// 룸 최대인원
+	private int price;               	 		// 룸 가격
+	private int discountPrice;        			// 룸 할인가격
+	private LodRoomCategory lodRoomCategory;  	// 룸카테고리번호
+	private LodRoomForm lodRoomForm;            // 룸 유형번호
 }

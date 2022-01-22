@@ -1,4 +1,7 @@
 package com.nadri.lodging.vo;
+
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,9 +15,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LodRoomForm {
+public class LodGetFactility {
 
-	private int no;                 // 룸유형번호
-	private int name;               // 룸유형이름
-	
+	private LodInformation lodInformation;			// 숙소번호
+	private LodFactility lodFactility;				// 편의시설번호
 }

@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class LodFactility {
 
-	private int factilityNo;			// 편의시설 번호
-	private String factilityName;		// 편의시설 이름
+	private int no;			// 편의시설 번호
+	private String name;		// 편의시설 이름
 	
 }
