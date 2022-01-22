@@ -1,5 +1,6 @@
 package com.nadri.restaurant.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,21 @@ public class RestaurantService {
 		
 	}
 	
-	public Restaurant getRestaurantByNo(int no) {
+	public Restaurant getRestaurantDetail(int no) {
 		
 		return rtMapper.getRestaurantDetail(no);
 	}
+	
+	
+	public void addNewRestaurant (Restaurant restaurant) {	
+		rtMapper.insertRestaurant(restaurant);
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 
