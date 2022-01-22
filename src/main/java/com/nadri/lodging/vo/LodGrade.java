@@ -15,6 +15,6 @@ import lombok.ToString;
 @ToString
 public class LodGrade {
 
-	private LodInformation lodInformation ;				// 등급번호
-	private int gradeStar;								// 별개수 
+	private int no ;				// 등급번호
+	private int Star;				// 별개수 
 }

@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class LodRoomCategory {
 
-	private int roomCategoryNo;                 // 룸카테고리 번호
-	private String roomCategoryName;            // 룸카테고리 이름
+	private int no;                 // 룸카테고리 번호
+	private String name;            // 룸카테고리 이름
 	
 }

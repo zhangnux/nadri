@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class LodService {	
 
-	private int serviceNo;              // 서비스번호
-	private String serviceName;         // 서비스이름
+	private int no;              // 서비스번호
+	private String name;         // 서비스이름
 	
 }

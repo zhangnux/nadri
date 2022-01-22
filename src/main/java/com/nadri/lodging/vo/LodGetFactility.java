@@ -1,4 +1,6 @@
-package com.nadri.air.vo;
+package com.nadri.lodging.vo;
+
+import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +11,12 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @Setter
 @ToString
-@Builder
-public class Route {
+public class LodGetFactility {
 
-	private int no;
-	private Airport airport;
-	
+	private LodInformation lodInformation;			// 숙소번호
+	private LodFactility lodFactility;				// 편의시설번호
 }

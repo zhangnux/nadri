@@ -12,5 +12,11 @@ public interface RestaurantMapper {
 	List<Restaurant> getAllRestaurants();
 	List<Restaurant> getRestaurantsByCategory();
 	Restaurant getRestaurantDetail(int no);
+	void insertRestaurant(Restaurant restaurant);
+	
+	
+	void insertReview();
+	void deleteReview();
+	
 
 }

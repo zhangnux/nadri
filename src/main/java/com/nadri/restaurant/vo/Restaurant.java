@@ -1,7 +1,5 @@
 package com.nadri.restaurant.vo;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,9 +24,9 @@ public class Restaurant {
 	private String address;		// 상세 주소
 	private String city;		// 도시
 	private String parking;		// 주차 가능여부 Y OR N
-	private Date restDate;		// 휴무일
+	private String restDate;		// 휴무일
 	private String tel;		// 전화번호
-	private Date openTime;		// 영업시간
+	private String openTime;		// 영업시간
 	private int sales;		// 매출양
 	private int starPoint;	// 별점
 

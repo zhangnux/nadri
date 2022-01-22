@@ -17,10 +17,21 @@
 
 <!-- ★ -->
 <div class="container">
+	
 
 	<div class="row mb-3">
 		<div class="col">
-			<img alt="" src="">
+			<img alt="${restaurant.picture }" src="">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col">
+			<h3>${restaurant.name }</h3>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<div class="col">
+			<p>${restaurant.content }</p>
 		</div>
 	</div>
 

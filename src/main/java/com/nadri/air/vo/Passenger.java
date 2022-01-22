@@ -2,6 +2,8 @@ package com.nadri.air.vo;
 
 import java.util.Date;
 
+import com.nadri.user.vo.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +19,7 @@ import lombok.ToString;
 @Builder
 public class Passenger {
 	private int no;
-	private int UserNo;
+	private User user;
 	private String firstName;
 	private String lastName;
 	private int age;

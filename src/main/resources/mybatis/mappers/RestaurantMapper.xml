@@ -32,18 +32,14 @@
 	-->
 	<select id="getRestaurantsByCategory" parameterType="String" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			restaurant_no
-			restaurant_name
-			restaurant_picture
-			restaurant_sales
-			restaurant_content
-			restaurant_category
-			restaurant_address
-			restaurant_city
-			restaurant_parking
-			restaurant_restdate
-			restaurant_tel
-			restaurant_open_time
+			restaurant_no,
+			restaurant_name,
+			restaurant_picture,
+			restaurant_category,
+			restaurant_address,
+			restaurant_city,
+			restaurant_parking,
+			restaurant_restdate,
 			restaurant_star_point
 		from
 			restaurant
@@ -57,18 +53,18 @@
 	-->
 	<select id="getRestaurantDetail" parameterType="int" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			restaurant_no
-			restaurant_name
-			restaurant_picture
-			restaurant_sales
-			restaurant_content
-			restaurant_category
-			restaurant_address
-			restaurant_city
-			restaurant_parking
-			restaurant_restdate
-			restaurant_tel
-			restaurant_open_time
+			restaurant_no,
+			restaurant_name,
+			restaurant_picture,
+			restaurant_sales,
+			restaurant_content,
+			restaurant_category,
+			restaurant_address,
+			restaurant_city,
+			restaurant_parking,
+			restaurant_restdate,
+			restaurant_tel,
+			restaurant_open_time,
 			restaurant_star_point
 		from
 			restaurant
@@ -77,7 +73,20 @@
 	
 	</select>
 	
-
+	<!-- 
+		void insertRestaurant();
+	-->
+	<insert id="insertRestaurant" parameterType="com.nadri.restaurant.vo.Restaurant">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select restaurant_no.nextval
+			from dual
+		</selectKey>
+		insert into restaurant
+		(restaurant_no, restaurant_name, restaurant_picture, restaurant_content, restaurant_category, restaurant_address,
+		restaurant_city, restaurant_parking, restaurant_restdate, restaurant_tel, restaurant_open_time)
+		values
+		(#{no}, #{name}, #{picture}, #{content}, #{category}, #{address}, #{city}, #{parking}, #{restDate}, #{tel}, #{openTime})	
+	</insert>
 
 
 </mapper>

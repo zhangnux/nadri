@@ -18,6 +18,6 @@ public class SeatsInfo {
 	private String type;
 	private int count;
 	private int price;
-	private int AirplaneNo;
+	private Airplane airplane;
 	
 }
