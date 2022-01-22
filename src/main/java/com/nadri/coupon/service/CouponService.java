@@ -33,5 +33,6 @@ public class CouponService {
 		return couponDao.searchCoupons(criteria);
 	}
 	
+	public void removeCoupon(int no) {}
 	
 }

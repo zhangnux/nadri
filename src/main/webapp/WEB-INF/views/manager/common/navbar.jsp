@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!-- Google fonts-->
+<link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap" rel="stylesheet" type="text/css" />
 <style>
 html, body {
     height: 100%;
+    font-family:'IBM Plex Sans KR', sans-serif;
 }
 
 #sidebar a.active {
@@ -48,6 +52,11 @@ html, body {
 	      <li class="nav-item mt-3">
 	        <a href="#" class="nav-link ${menu eq 'notice' ? 'active' : ''}">
 	          공지사항
+	        </a>
+	      </li>
+	      <li class="nav-item mt-3">
+	        <a href="../coupon/coulist.nadri" class="nav-link ${menu eq 'notice' ? 'active' : ''}">
+	          쿠폰관리
 	        </a>
 	      </li>
 	    </ul>

@@ -5,20 +5,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>나드리::쿠폰리스트</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <%@ include file="../common/head.jsp" %>
+<title>나드리::쿠폰리스트</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+<%-- <%@ include file="../manager/common/navbar.jsp" %> --%>
 <div class="container">
 	<div class="row">
 		<div class="col-auto pt-5">
 			<h1>쿠폰관리</h1>
 		</div>
 		<div class="col-auto pt-5">
-			<a class="btn btn-dark" href="#" style="font-size:15px">신규 쿠폰 발급</a>
+			<a class="btn btn-dark mt-3" href="#" style="font-size:15px">신규 쿠폰 발급</a>
 		</div>
 	</div>
 	
@@ -66,17 +67,18 @@
 								<td style="width: 25%;">${coupon.name }</td>
 								<td style="width: 10%; font-size:18px">${coupon.category }</td>
 								<td style="width: 10%; text-align:center;">${coupon.quantity }개</td>
-								<td style="width: 20%; font-size:16px;">
+								<td style="width: 20%; font-size:16px; text-align:center">
 									<fmt:formatDate value="${coupon.issueDate }" pattern="yyyy-MM-dd"/> 
-									~ 
-									<fmt:formatDate value="${coupon.issueEndDate }" pattern="yyyy-MM-dd"/>									
+									~ <fmt:formatDate value="${coupon.issueEndDate }" pattern="yyyy-MM-dd"/>									
 								</td>
-								<td style="width: 20%; font-size:16px"><fmt:formatDate value="${coupon.startDate }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${coupon.endDate }" pattern="yyyy-MM-dd"/></td>
+								<td style="width: 20%; font-size:16px; text-align:center;">
+									<fmt:formatDate value="${coupon.startDate }" pattern="yyyy-MM-dd"/> 
+									~ <fmt:formatDate value="${coupon.endDate }" pattern="yyyy-MM-dd"/></td>
 								<td style="width: 5%; text-align:center;">
 									<button class="btn btn-outline-primary btn-sm">수정</button>
 								</td>
 								<td style="width: 5%; text-align:center;">
-									<button class="btn btn-outline-danger btn-sm" data-delete-coupon>삭제</button>
+									<button class="btn btn-outline-danger btn-sm" data-coupon-no="${coupon.no }">삭제</button>
 								</td>
 							</tr>
 						</c:forEach>
@@ -96,7 +98,7 @@
 	
 	<div class="row mb-3">
 		<div class="col">
-			<table class="table" id="table-coupons" style="font-size:18px">
+			<table class="table" style="font-size:18px">
 				<thead>
 					<tr>
 						<th style="width: 5%; text-align:center;">번호</th>
@@ -142,8 +144,21 @@
 </div>
 <script type="text/javascript">
 
-	$("#delete-coupon").click(function(){
-		console.log("삭제클릭");
+	$("#table-coupons .btn-outline-danger").click(function(){
+		var doubleCheck;
+		doubleCheck=confirm("삭제된 쿠폰은 복구 할 수 없습니다. 삭제하시겠습니까?")
+		
+		if(doubleCheck){
+			
+			var itemNo = $btn.attr("data-item-no");
+			$.getJSON("/rest/coupon/delete", {no:itemNo}, function(response) {
+				if (response.status == 'OK') {
+					$btn.closest('tr').remove();
+				} else {}
+			}
+			
+		} else{}
+	
 	})
 
 </script>
