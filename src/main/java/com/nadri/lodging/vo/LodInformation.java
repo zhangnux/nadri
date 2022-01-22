@@ -22,8 +22,8 @@ public class LodInformation {
 	private Date checkIn;				// 오픈시간
 	private Date checkOut;				// 클로즈 시간
 	private String intro;				// 숙소소개
-	private int categoryNo;				// 카테고리 번호
-	private int GradeNo;				// 등급번호
+	private LodCatagory category;		// 카테고리 번호
+	private LodGrade Grade;				// 등급번호
 	private String lodRefund;			// 환불안내
 	private int lodSales;				// 판매 수
 }

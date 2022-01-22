@@ -52,8 +52,6 @@
 			lod_check_in as checkIn,
 			lod_check_out as checkOut,
 			lod_intro as intro,
-			category_no as categoryNo,
-			lod_grade_no as GradeNo,
 			lod_Refund as lodRefund,
 			lod_sales as lodSales
 		from

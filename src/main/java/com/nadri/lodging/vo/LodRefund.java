@@ -16,8 +16,8 @@ import lombok.ToString;
 @ToString
 public class LodRefund {
 
-	private int paymentNo;				// 결제번호
+	private LodPayment lodPayment;		// 결제번호
 	private Date refundDate;			// 환불날짜
-	private int refundPrice;			// 환부가격
+	private int refundPrice;			// 환불가격
 	private int refundFees;				// 환불수수료
 }
