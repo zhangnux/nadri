@@ -83,4 +83,13 @@
 			  
 	</select>
 	
+	<!-- 쿠폰 삭제(deleted를 y로) -->
+	<update id="deleteCoupon" parameterType="int">
+		update coupons
+		set
+			coupon_deleted = 'y'
+		where
+			coupon_no = #{no}
+	</update>
+	
 </mapper>

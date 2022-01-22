@@ -22,5 +22,6 @@ public interface CouponDao {
 	int getCouponTotalRows(Criteria criteria);
 	// 메뉴 별 발급 쿠폰 검색
 	List<Coupon> searchCoupons(Criteria criteria);
-	
+	// 쿠폰 삭제
+	void deleteCoupon(int no);
 }
