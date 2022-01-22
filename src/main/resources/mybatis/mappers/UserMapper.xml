@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.user.mapper.UserMapper">
+
+	<!-- 
+		void insertUser 
+	-->
+	<insert id="insertUser" parameterType="com.nadri.user.vo.User">
+		
+	</insert>
+	
+	<!-- 
+		void updateUser 
+	-->
+	<update id="updateUser" parameterType="com.nadri.user.vo.User">
+	
+	</update>
+	
+	<!--
+		void deleteUser 
+	-->
+	<delete id="deleteUser" parameterType="int">
+	
+	</delete>
+
+	<!-- 
+		User getUserByNo 
+	-->
+	<select id="getUserByNo" parameterType="int" resultType="com.nadri.user.vo.User">
+	
+	</select>
+</mapper>

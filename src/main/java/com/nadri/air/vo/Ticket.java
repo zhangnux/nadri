@@ -18,10 +18,10 @@ import lombok.ToString;
 public class Ticket {
 	private int no;
 	private String isCancled;
-	private int passengerNo;
-	private int typeNo;
-	private int scheduleNo;
-	private int airplaneNo;
-	private int reserveNo;
+	private Passenger passenger;
+	private SeatsInfo seatsInfo;
+	private Schedule schedule;
+	private Airplane airplane;
+	private Reservation reservation;
 	
 }
