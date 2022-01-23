@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@include file="../common/mainhead.jsp" %>
 <meta charset="UTF-8">
 <title></title>
   <meta charset="utf-8">
@@ -12,6 +13,13 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-
+<%@ include file="../common/mainnav.jsp" %>
+<div class="container">
+	<div class="row">
+		<div class="col">
+			
+		</div>
+	</div>
+</div>
 </body>
 </html>

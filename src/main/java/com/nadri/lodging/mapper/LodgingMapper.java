@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.nadri.lodging.form.Criteria;
 import com.nadri.lodging.vo.LodInformation;
 
 @Mapper
@@ -18,10 +17,7 @@ public interface LodgingMapper {
 	void deleteLodging(int no);
 	
 	// 숙소 전체 정보
-	List<LodInformation> getLodgings(Criteria criteria);
-	
-	// 숙소 순서 조회
-	int getLodgingCount(Criteria criteria);
+	List<LodInformation> getLodgings();
 	
 	// 숙소 번호로 조히
 	int getLodgingByNo(int no);
