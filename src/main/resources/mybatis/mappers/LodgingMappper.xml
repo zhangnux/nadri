@@ -42,9 +42,9 @@
 			lod_no = #{no}
 	</delete>
 	<!-- 
-			List<LodInformation> getLodgings(Criteria criteria);
+			List<LodInformation> getLodgings
 	 -->
-	<select id="getLodgings" parameterType="com.nadri.form.lodging.form.criteria" resultType="com.nadri.lodging.vo.LodInformation">
+	<select id="getAllLodgings" resultType="com.nadri.lodging.vo.LodInformation">
 		select
 			lod_no as no,
 			lod_name as name,
@@ -59,7 +59,25 @@
         
 	</select>
 
-
+		<!-- 
+				int getLodgingByNo(int no);
+	 -->
+	<select id="getLodgingByNo" parameterType="int"  resultType="com.nadri.lodging.vo.LodInformation">
+		select
+			lod_no as no,
+			lod_name as name,
+			lod_address as address,
+			lod_check_in as checkIn,
+			lod_check_out as checkOut,
+			lod_intro as intro,
+			lod_Refund as lodRefund,
+			lod_sales as lodSales
+		from
+			lodging_information
+		where
+			lod_no = #{value}
+        
+	</select>
 
 
 
@@ -72,5 +90,3 @@
 
 
 </mapper>
-
-
