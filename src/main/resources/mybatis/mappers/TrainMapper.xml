@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.train.mapper.TrainMapper">
+	<select id="getStationByWord" parameterType="string" resultType="com.nadri.train.vo.TrainStation">
+		select station_id as id,
+			 station_name as name,
+			 city_code as cityCode,
+			 check_used as isUsed  
+		from train_station
+		<where>
+			<choose>
+				<when test="word == 45207">
+					station_name > nchr(0) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 45795">
+					station_name > nchr(45207) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 46971">
+					station_name > nchr(45795) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 47559">
+					station_name > nchr(46971) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 48147">
+					station_name > nchr(47559) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 49323">
+					station_name > nchr(48147) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 50499">
+					station_name > nchr(49323) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 51087">
+					station_name > nchr(50499) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 52263">
+					station_name > nchr(45208) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 52851">
+					station_name > nchr(52263) and station_name &lt;=4 nchr(#{value})
+				</when>
+				<when test="word == 53439">
+					station_name > nchr(52851) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 54027">
+					station_name > nchr(53439) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 54615">
+					station_name > nchr(54027) and station_name &lt;= nchr(#{value})
+				</when>
+				<when test="word == 55203">
+					station_name > nchr(54615) and station_name &lt;=4 nchr(#{value})
+				</when>
+			</choose>
+		</where>
+	</select>
+
+</mapper>
