@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../common/tags.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<%@include file="../common/mainhead.jsp" %>
     <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +11,7 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+
 <%@ include file="../common/mainnav.jsp" %>
 <header class="masthead" style="background-image: url('../resources/images/nadri-restaurant.jpg');background-attachment: local">
     <div class="container position-relative px-4 px-lg-5">
@@ -28,28 +27,32 @@
 </header>
 
 <!-- ★ -->
+
 <div class="container">
+
+	<!-- 
+		옵션 선택하기
+		별점순
+		매출순
+	 -->
+	 <!-- 
+	 	탭
+	 	카테고리 : 한식, 일식, 양식, 기타
+	  -->
+	<div></div>
 	
 	<div class="row mb-3">
 		<div class="col">
-		<h5>한식</h5>
-			<div class="card" style="width: 18rem;">
-  				<img src="..." class="card-img-top" alt="...">
-  				<div class="card-body">
-    				<p class="card-text">blablabla</p>
-  				</div>
-			</div>
+			<p>음식점 목록</p>
+			<table class="table">
+				<tbody>
+					<tr>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
-	
-
 </div>
-<!--  -->
-
-<%@ include file="../common/footer.jsp" %>
 </body>
-<script type="text/javascript">
-
-
-</script>
 </html>

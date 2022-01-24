@@ -15,6 +15,11 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantMapper rtMapper;
 	
+	
+	public List<Restaurant> getAllRestaurants(){
+		return rtMapper.getAllRestaurants();
+	}
+	
 	public List<Restaurant> getRestaurantsByCategory(String category){
 		
 		return rtMapper.getRestaurantsByCategory();
@@ -32,6 +37,9 @@ public class RestaurantService {
 		
 	}
 	
+	public List<Restaurant> getBestRestaurants(){
+		return rtMapper.getBestRestaurants();
+	}
 	
 	
 	
