@@ -39,23 +39,37 @@ public class CouponController {
 	@GetMapping("/coulist.nadri")
 	public String list(Model model) {
 		
-//		int totalRecords = couponService.getTotalRows(criteria);
-//		Pagination pagination = new Pagination(page, totalRecords);
-		
-//		criteria.setBeginIndex(pagination.getBegin());
-//		criteria.setEndIndex(pagination.getEnd());
-		
 		List<Coupon> coupons = couponService.getAllCouponList();
 		List<Coupon> invalidCoupons = couponService.getInvalidCouponList();
 		
-//		List<Coupon> coupons = couponService.searchCoupons(criteria);
-		
 		model.addAttribute("coupons", coupons);
 		model.addAttribute("invalidCoupons", invalidCoupons);
-//		model.addAttribute("pagination",pagination);
 		
 		return "coupon/coulist";
 		
 	}
+	
+	@GetMapping("/delete.nadri")
+	public String deleteform(@RequestParam()int no, Model model) {
+		couponService.removeCoupon(no);
+		return "coupon/delete";
+	}
+	
+	@GetMapping("/modiform.nadri")
+	public String modifyform(int no, Model model) {
+		
+		Coupon coupon = couponService.couponDetail(no);
+		model.addAttribute("coupon", coupon);
+		
+		return "coupon/modiform";
+		
+	}
+	
+	@GetMapping("/insertform.nadri")
+	public String insertform(Model model) {
+		
+		return "coupon/insertform";
+	}
+	
 	
 }

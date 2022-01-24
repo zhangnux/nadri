@@ -14,7 +14,9 @@ public interface CouponDao {
 	void insertCoupon(Coupon coupon);
 	// 쿠폰 내용 변경
 	void updateCoupon(Coupon coupon);
-	// 쿠폰현황 조회
+	// 쿠폰번호로 내용 조회
+	Coupon getCouponDetail(int no);
+	// 쿠폰리스트 조회
 	List<Coupon> getAllCoupons();
 	//만료 쿠폰 조회
 	List<Coupon> getInvalidCoupons();
@@ -24,4 +26,5 @@ public interface CouponDao {
 	List<Coupon> searchCoupons(Criteria criteria);
 	// 쿠폰 삭제
 	void deleteCoupon(int no);
+	
 }
