@@ -5,7 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.nadri.restaurant.vo.Restaurant;
-import com.nadri.restaurant.web.form.Criteria;
+import com.nadri.restaurant.vo.RestaurantReview;
+import com.nadri.restaurant.web.form.RestaurantCriteria;
 
 
 @Mapper
@@ -17,15 +18,27 @@ public interface RestaurantMapper {
 	List<Restaurant> getRestaurantsByCategory();
 	List<Restaurant> getBestRestaurants();
 	
+	
 	Restaurant getRestaurantDetail(int no);
 	void insertRestaurant(Restaurant restaurant);
 	
-	int getRestaurantsTotalRows(Criteria criteria);
-	List<Restaurant> searchRestaurants(Criteria criteria);
+	int getRestaurantsTotalRows(RestaurantCriteria criteria);
+	List<Restaurant> searchRestaurants(RestaurantCriteria criteria);
 	
 	
-	void insertReview();
-	void deleteReview();
+	// 리뷰기능
+	
+	// 레스토랑 번호로 리뷰 불러오기
+	List<RestaurantReview> getAllReviewsByRestaurantNo();
+	
+	// 리뷰 작성
+	void insertReview(RestaurantReview restaurantReview);
+	// 리뷰 수정
+	void updateReview(RestaurantReview restaurantReview);
+	// 리뷰 번호
+	void deleteReview(int ReviewNo);
+	
+	
 	
 
 }

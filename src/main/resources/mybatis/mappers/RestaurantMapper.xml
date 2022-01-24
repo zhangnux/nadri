@@ -163,7 +163,52 @@
 			</where>			
 		)
 		where rn between #{beginIndex} and #{endIndex}
-	</select> 
+	</select>
 	
+	
+	<!--
+		List<RestaurantReview> getReviewsByRestaurantNo()
+		페이지네이션 넣고 하기
+	-->
+
+	
+	<!--
+		void insertReview(RestaurantReview restaurnatReview)
+		
+	-->
+	<insert id="insertReview" parameterType="com.nadri.restaurant.vo.RestaurantReview">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select restaurant_review_no.nextval
+			from dual
+		</selectKey>
+		insert into restaurant_review
+		()
+		values
+		()
+		where restaurant_no = #{value}
+	
+	</insert>
+	
+	<!--
+		void updateReview(RestaurantReview restaurantReview)
+		사진 수정은 어케함?
+	-->
+	<update id="updateReview" parameterType="com.nadri.restaurant.vo.RestaurantReview">
+		update restaurant_review
+		set
+			rt_review_title = #{title},
+			rt_review_content = #{content},
+			rt_review_star_point = #{starPoint}
+		where
+			review_no = #{no}
+	</update>
+	
+	<!--
+		void deleteReview(int ReviewNo)
+	-->
+	<delete id="deleteReview" parameterType="com.nadri.restaurant.vo.RestaurantReview">
+		delete from restaurant_review
+		where review_no = #{value}
+	</delete>
 
 </mapper>
