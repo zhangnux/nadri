@@ -34,10 +34,10 @@
 					station_name > nchr(50499) and station_name &lt;= nchr(#{value})
 				</when>
 				<when test="word == 52263">
-					station_name > nchr(45208) and station_name &lt;= nchr(#{value})
+					station_name > nchr(51087) and station_name &lt;= nchr(#{value})
 				</when>
 				<when test="word == 52851">
-					station_name > nchr(52263) and station_name &lt;=4 nchr(#{value})
+					station_name > nchr(52263) and station_name &lt;= nchr(#{value})
 				</when>
 				<when test="word == 53439">
 					station_name > nchr(52851) and station_name &lt;= nchr(#{value})
@@ -49,10 +49,28 @@
 					station_name > nchr(54027) and station_name &lt;= nchr(#{value})
 				</when>
 				<when test="word == 55203">
-					station_name > nchr(54615) and station_name &lt;=4 nchr(#{value})
+					station_name > nchr(54615) and station_name &lt;= nchr(#{value})
 				</when>
 			</choose>
 		</where>
 	</select>
-
+	
+	<select id="getAllTrainSchedules" resultType="com.nadri.train.vo.TrainSchedule">
+		select 	schedule_no as no,
+				schedule_departure_time as departureTime,
+			 schedule_arrival_time as arrivalTime,
+			 train_no as trainNo,
+			 route_no as routeNo
+		from train_schedule
+	</select>
+	
+	<insert id="insertNewSchedule" parameterType="java.util.List">
+		insert into train_schedule(schedule_no, schedule_departure_time, schedule_arrival_time, train_no, route_no)
+		select train_schedules_seq.nextval, A.* from (
+		<foreach collection="list" item="data" separator="UNION ALL ">
+			select #{data.departureTime}, #{data.arrivalTime}, 
+				#{data.trainNo}, #{data.routeNo}
+			from dual
+		</foreach> ) A
+	</insert>
 </mapper>
