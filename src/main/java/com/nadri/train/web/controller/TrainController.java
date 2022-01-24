@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nadri.train.service.TrainService;
@@ -28,55 +29,35 @@ public class TrainController {
 		return "train/trainSearch";
 	}
 	
-	@GetMapping("/list.do")
+	@PostMapping("/list.nadri")
 	public String list() {
 		return "train/trainList";
 	}
-	
-	@GetMapping("/insert.do")
-	public void insertSchedule() {
-		
-		List<TrainSchedule> schedules = service.getAllSchedules();
-		List<TrainSchedule> newSchedules = new ArrayList<>();
-		for (int i=1; i<5; i++) {
+//  스케줄 값 늘리는 메소드
+//	@GetMapping("/insert.do")
+//	public void insertSchedule() {
+//		
+//		List<TrainSchedule> schedules = service.getAllSchedules();
+//		List<TrainSchedule> newSchedules = new ArrayList<>();
+//		// 부터 시작!
+//		for (int i=31; i<41; i++) {
 //			for(TrainSchedule schedule : schedules) {
-			TrainSchedule schedule = schedules.get(0);
-			TrainSchedule nwschedule = new TrainSchedule(); 
-				
-				log.info("전: " + schedule.getDepartureTime());
-				Calendar cal = Calendar.getInstance();
-					
-				cal.setTime(schedule.getDepartureTime());
-				cal.add(Calendar.DATE, i);
-				log.info("후: " + cal.getTime());
-				nwschedule.setDepartureTime(cal.getTime());
-				
-				cal.setTime(schedule.getArrivalTime()); 
-				cal.add(Calendar.DATE, i); 
-				nwschedule.setArrivalTime(cal.getTime());
-				nwschedule.setTrainNo(schedule.getTrainNo());
-				nwschedule.setRouteNo(schedule.getRouteNo());
-				newSchedules.add(nwschedule);
-//			}
-		}
-		service.addNewSchedule(newSchedules);
-		
-		for(TrainSchedule schedule : newSchedules) {
-			System.out.println("출발 : " + schedule.getDepartureTime());
-		}
-		
-//		for (int i=0; i<3; i++) {
-//			Calendar cal = Calendar.getInstance();
+//				TrainSchedule nwschedule = new TrainSchedule(); 
+//				Calendar cal = Calendar.getInstance();
+//					
+//				cal.setTime(schedule.getDepartureTime());
+//				cal.add(Calendar.DATE, i);
+//				nwschedule.setDepartureTime(cal.getTime());
 //				
-//			cal.setTime(schedules.get(i).getDepartureTime());
-//			cal.add(Calendar.DATE, i);
-//			log.info("출: " + schedules.get(i).getDepartureTime());
-//			log.info("출: " + cal.getTime());
-//			
-//			cal.setTime(schedules.get(i).getArrivalTime()); 
-//			cal.add(Calendar.DATE, i); 
-//			log.info("후: " + schedules.get(i).getArrivalTime());
-//			log.info("후: " + cal.getTime());
+//				cal.setTime(schedule.getArrivalTime()); 
+//				cal.add(Calendar.DATE, i); 
+//				nwschedule.setArrivalTime(cal.getTime());
+//				
+//				nwschedule.setTrainNo(schedule.getTrainNo());
+//				nwschedule.setRouteNo(schedule.getRouteNo());
+//				newSchedules.add(nwschedule);
+//			}
 //		}
-	}
+//		service.addNewSchedule(newSchedules);
+//	}
 }
