@@ -14,28 +14,32 @@
 <%-- <%@ include file="../manager/common/navbar.jsp" %> --%>
 <div class="container">
 	<h1 class="mt-5 mb-5"><strong>쿠폰 생성</strong></h1>
-	<form id="form-modify-coupon" method="post" action="#" class="p-3 border-top border-bottom">
+	<form id="form-modify-coupon" method="post" action="insert.nadri" class="p-3 border-top border-bottom">
 		<div class="row mb-3 mt-5">
-			<label class="modiform col-auto p-2" required>쿠폰이름</label>
+			<label class="modiform col-auto p-2">쿠폰이름</label>
 			<div class="col col-4">
-				<input class="form-control" name="name" type="text">
+				<input class="form-control" name="name" type="text" maxlength=20 required>
+			</div>
+			<div class="col col-auto mt-2">
+				<a>20자 이내로 작성해주세요.</a>
 			</div>
 		</div>
 		<div class="row mb-3">
 			<label class="modiform col-auto p-2">쿠폰수량</label>
 			<div class="col col-1 me-5">
-				<input class="form-control" name="quantity" type="number" min=0 value=0>
+				<input class="form-control" name="quantity" type="number" min=1 value=1>
 			</div>
 			<label class="modiform col-auto p-2">할인율(%)</label>
-			<div class="col col-1">
-				<input class="form-control" name="quantity" type="number" min=0 value=0>
+			<div class="col col-1 me-5">
+				<input class="form-control" name="discountRate" type="number" min=1 value=1>
 			</div>
 			<label class="modiform col-auto p-2">사용처</label>
 			<div class="col col-auto">
-				<select class="form-select" id="autoSizingSelect">
-					<option name="lod">숙박</option>
-					<option name="res">음식점</option>
-					<option name="attr">즐길거리</option>
+				<select class="form-select" id="autoSizingSelect" name="category">
+					<option value="공통">공통</option>
+					<option value="숙소">숙소</option>
+					<option value="음식점">음식점</option>
+					<option value="즐길거리">즐길거리</option>
 				</select>
 			</div>
 		</div>
@@ -52,7 +56,7 @@
 				<div class="row mb-3">
 			<label class="modiform col-auto p-2">사용시작일</label>
 			<div class="col col-2">
-				<input class="form-control" name="startDate" type="date" id="startDate">
+				<input class="form-control" name="startDate" type="date" id="startDate" required>
 			</div>
 			<label class="modiform col-auto p-2">사용종료일</label>
 			<div class="col col-auto">
@@ -61,7 +65,7 @@
 		</div>
 		<div class="row right">
 			<div class="col-12 mb-5 mt-3">
-				<button class="btn btn-outline-primary me-2">수정</button>
+				<button class="btn btn-outline-primary me-2">생성</button>
 				<a class="btn btn-outline-dark" href="coulist.nadri">취소</a>
 			</div>
 		</div>

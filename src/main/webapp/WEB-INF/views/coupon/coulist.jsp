@@ -37,6 +37,9 @@
 				</select>
 			</form>
 		</div>
+		<div class="col">
+			<a>현재 사용가능한 쿠폰을 조회합니다.</a>
+		</div>
 	</div>
 	
 	<div class="row mb-3">
@@ -47,7 +50,8 @@
 						<th style="width: 5%; text-align:center;">번호</th>
 						<th style="width: 25%; text-align:center;">쿠폰 이름</th>
 						<th style="width: 10%;">사용처</th>
-						<th style="width: 10%">남은 수량</th>					
+						<th style="width: 5%">할인율</th>					
+						<th style="width: 5%">잔여량</th>					
 						<th style="width: 15%; text-align:center;">배포기간</th>
 						<th style="width: 15%; text-align:center;">사용기간</th>
 					</tr>
@@ -65,10 +69,11 @@
 								<td style="width: 5%;">${coupon.no }</td>
 								<td style="width: 25%;">${coupon.name }</td>
 								<td style="width: 10%; font-size:18px">${coupon.category }</td>
-								<td style="width: 10%; text-align:center;">${coupon.quantity }개</td>
+								<td style="width: 5%; text-align:center;">${coupon.discountRate }%</td>
+								<td style="width: 5%; text-align:center;">${coupon.quantity }개</td>
 								<td style="width: 20%; font-size:16px; text-align:center">
 									<fmt:formatDate value="${coupon.issueDate }" pattern="yyyy-MM-dd"/> 
-									~ <fmt:formatDate value="${coupon.issueEndDate }" pattern="yyyy-MM-dd"/>									
+									~ <fmt:formatDate value="${coupon.issueEndDate }" pattern="yyyy-MM-dd"/>							
 								</td>
 								<td style="width: 20%; font-size:16px; text-align:center;">
 									<fmt:formatDate value="${coupon.startDate }" pattern="yyyy-MM-dd"/> 
@@ -90,8 +95,11 @@
 	
 	
 		<div class="row">
-			<div class="col-3">
+			<div class="col-auto">
 				<h3><strong>만료된 쿠폰</strong></h3>
+			</div>
+			<div class="col">
+			<a>사용기간 만료, 수량없음, 삭제된 쿠폰을 조회합니다.</a>
 			</div>
 		</div>
 	
@@ -103,7 +111,8 @@
 						<th style="width: 5%; text-align:center;">번호</th>
 						<th style="width: 25%; text-align:center;">쿠폰 이름</th>
 						<th style="width: 10%;">사용처</th>
-						<th style="width: 10%;font-size:18px;">남은 수량</th>					
+						<th style="width: 10%;font-size:18px;">할인율</th>					
+						<th style="width: 10%;font-size:18px;">잔여</th>					
 						<th style="width: 20%; text-align:center;">배포기간</th>
 						<th style="width: 20%; text-align:center;">사용기간</th>
 					</tr>
@@ -121,13 +130,14 @@
 								<td style="width: 5%;">${invCoupon.no }</td>
 								<td style="width: 25%;">${invCoupon.name }</td>
 								<td style="width: 10%;">${invCoupon.category }</td>
-								<td style="width: 10%; text-align:center;">${invCoupon.quantity }개</td>
-								<td style="width: 20%;">
+								<td style="width: 5%; text-align:center;">${invCoupon.discountRate}%</td>
+								<td style="width: 5%; text-align:center;">${invCoupon.quantity }개</td>
+								<td style="width: 20%; font-size:16px; text-align:center;">
 									<fmt:formatDate value="${invCoupon.issueDate }" pattern="yyyy-MM-dd"/> 
 									~ 
 									<fmt:formatDate value="${invCoupon.issueEndDate }" pattern="yyyy-MM-dd"/>								
 								</td>
-								<td style="width: 20%; font-size:16px">
+								<td style="width: 20%; font-size:16px; text-align:center;">
 									<fmt:formatDate value="${invCoupon.startDate }" pattern="yyyy-MM-dd"/> 
 									~ 
 									<fmt:formatDate value="${invCoupon.endDate }" pattern="yyyy-MM-dd"/>
@@ -135,11 +145,11 @@
 							</tr>
 						</c:forEach>
 					</c:otherwise>
-					</c:choose>
-					</tbody>
-				</table>		
-			</div>
+				</c:choose>
+				</tbody>
+			</table>		
 		</div>
+	</div>
 </div>
 <script type="text/javascript">
 

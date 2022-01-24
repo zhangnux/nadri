@@ -54,22 +54,34 @@ public class CouponController {
 		couponService.removeCoupon(no);
 		return "coupon/delete";
 	}
-	
-	@GetMapping("/modiform.nadri")
-	public String modifyform(int no, Model model) {
-		
-		Coupon coupon = couponService.couponDetail(no);
-		model.addAttribute("coupon", coupon);
-		
-		return "coupon/modiform";
-		
-	}
-	
+
+	/* 생성관련 */
 	@GetMapping("/insertform.nadri")
 	public String insertform(Model model) {
 		
 		return "coupon/insertform";
 	}
+	
+	@PostMapping("/insert.nadri")
+	public String insert(Coupon coupon, Model model) {
+		couponService.addNewCoupon(coupon);
+		return "redirect:coulist.nadri";
+	}
+	
+	/* 수정관련 */
+	@GetMapping("/modiform.nadri")
+	public String modifyform(int no, Model model) {		
+		Coupon coupon = couponService.couponDetail(no);
+		model.addAttribute("coupon", coupon);		
+		return "coupon/modiform";	
+	}
+	
+	@PostMapping("/update.nadri")
+	public String modify(Coupon coupon, Model model) {	
+		couponService.modifyCoupon(coupon);
+		return "redirect:coulist.nadri";
+	}
+
 	
 	
 }
