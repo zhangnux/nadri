@@ -15,34 +15,38 @@
 <div class="container">
 	<h1 class="mt-5 mb-1"><strong>쿠폰 수정</strong></h1>
 	<p class="mb-5">쿠폰 번호와 배포 시작일은 수정 할 수 없습니다.</p>
-	<form id="form-modify-coupon" method="post" action="#" class="p-3 border-top border-bottom">
+	
+	<form id="form-modify-coupon" method="post" action="update.nadri" class="p-3 border-top border-bottom">
 		<div class="row mb-3 mt-5">
-			<label class="modiform col-auto p-2">쿠폰번호</label>
 			<div class="col col-4">
-				<input class="form-control" name="no" type="text" placeholder="${coupon.no}" disabled>
+				<input class="form-control" name="no" type="text" value="${coupon.no}" hidden />
 			</div>
 		</div>
 		<div class="row mb-3">
 			<label class="modiform col-auto p-2">쿠폰이름</label>
 			<div class="col col-4">
-				<input class="form-control" name="name" type="text" placeholder="${coupon.name}">
+				<input class="form-control" name="name" type="text" value="${coupon.name}" maxlength=20>
+			</div>
+			<div class="col col-auto mt-2">
+				<a>20자 이내로 작성해주세요.</a>
 			</div>
 		</div>
 		<div class="row mb-3">
-			<label class="modiform col-auto p-2">쿠폰수량</label>
+			<label class="modiform col-auto p-2">잔여수량</label>
 			<div class="col col-1 me-5">
 				<input class="form-control" name="quantity" type="number" value="${coupon.quantity }" min=0>
 			</div>
 			<label class="modiform col-auto p-2">할인율(%)</label>
-			<div class="col col-1">
+			<div class="col col-1 me-5">
 				<input class="form-control" name="discountRate" type="number" value="${coupon.discountRate }" min=0>
 			</div>
 			<label class="modiform col-auto p-2">사용처</label>
 			<div class="col col-auto">
-				<select class="form-select" id="autoSizingSelect">
-					<option name="lod" ${coupon.category eq 'lod'?'selected':'' }>숙박</option>
-					<option name="res" ${coupon.category eq 'res'?'selected':'' }>음식점</option>
-					<option name="attr" ${coupon.category eq 'attr'?'selected':'' }>즐길거리</option>
+				<select class="form-select" id="autoSizingSelect" name="category">
+					<option value="공통" ${coupon.category eq '공통'?'selected':'' }>공통</option>
+					<option value="숙소" ${coupon.category eq '숙소'?'selected':'' }>숙소</option>
+					<option value="음식점" ${coupon.category eq '음식점'?'selected':'' }>음식점</option>
+					<option value="즐길거리" ${coupon.category eq '즐길거리'?'selected':'' }>즐길거리</option>
 				</select>
 			</div>
 		</div>
@@ -56,7 +60,7 @@
 				<input class="form-control" name="issueEndDate" type="date" id="issueEndDate">
 			</div>
 		</div>
-				<div class="row mb-3">
+		<div class="row mb-3">
 			<label class="modiform col-auto p-2">사용시작일</label>
 			<div class="col col-2">
 				<input class="form-control" name="startDate" type="date" value="<fmt:formatDate value="${coupon.startDate }" pattern="yyyy-MM-dd"/>">
@@ -68,11 +72,12 @@
 		</div>
 		<div class="row right">
 			<div class="col-12 mt-5 mb-5">
-				<button class="btn btn-outline-primary me-2">수정</button>
+				<button class="btn btn-outline-primary me-2" type="submit">수정</button>
 				<a class="btn btn-outline-dark" href="coulist.nadri">취소</a>
 			</div>
 		</div>
 	</form>
+	
 </div>
 <script>
 	

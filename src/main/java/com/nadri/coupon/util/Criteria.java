@@ -42,8 +42,6 @@ public class Criteria {
 		this.endIndex = endIndex;
 	}
 	
-	
-
 	public String getMenu() {
 		return menu;
 	}

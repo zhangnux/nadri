@@ -2,17 +2,23 @@ package com.nadri.coupon.vo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Coupon {
 
 	private int no;
 	private String name;
 	private int quantity;
 	private int discountRate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 	private String category;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date issueDate;
 	private String deleted;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date issueEndDate;
 	
 	public Coupon() {}
