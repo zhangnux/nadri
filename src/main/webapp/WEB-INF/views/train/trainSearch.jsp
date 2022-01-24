@@ -13,35 +13,38 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 	<script src="https://kit.fontawesome.com/2dd5a5b03c.js" crossorigin="anonymous"></script>
+	<!-- 달력 ui -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 <style>
+	#search:hover {
+		background-color: #A48284;
+	}
+
 	input:focus {
 		outline: none;
 	}
 	div.div-show-station {
 		position: relative;
-		width: 94px;
 	}
 	.fa-train {
 		position: absolute;
 		top: 33%;
-		left: 90%;
+		right: 32%;
 		color: #7E5C5E;
 	}
 	.bi-arrow-repeat {
-		position: absolute;
-		top: 0.4%;
-		left: 75.8%;	
 		opacity: 0.3;
 		font-size: 40px;
 		color: #7E5C5E;
 	}
-	div.div-show-station input, div#passenger input {
+	div.div-show-station input, div.passenger input {
 		height: 40px;
 		width: 170px;
 		font-size: 18px;
 	}
-	div#time input, select {
+	div.time input, select {
 		border-radius: 0;
 		border: 1px solid #949494;
 		height: 36px;
@@ -52,22 +55,19 @@
 		display: inline-block;
 		padding: 4px 14px;
 	}
-	.modal a {
-		text-decoration: none;
-		color: black;
-	}
-	.station-table a {
-		border: 1px solid #A6CAF9;
+	.station-table span {
 		width: 100px;
 		display: inline-block;
 		text-align: center;
 		height: 30px;
-		background-color: #B7D5FC;
-	}
-	a.none {
 		background-color: #A0A0A0;
 		border: 1px solid #808080;
 		color: white;
+	}
+	span[data-station-id] {
+		background-color: #B7D5FC;
+		border: 1px solid #A6CAF9;
+		color: black;
 	}
 	.station-table td {
 		float: left;
@@ -94,6 +94,16 @@
 		-webkit-box-shadow:0px 1px 1px grey;
 		box-shadow: 0px 6px 10px #EAEAEA;
 	}
+	
+	#trainBooking .dropdown-menu li {
+		display: flex; 
+		justify-content: space-between; 
+		margin: 8px;
+	}
+	
+	#trainBooking .dropdown-menu span, span[data-station-id], #word-Menu span, .div-show-station span{
+		cursor: pointer;
+	}
 </style>
 <body>
 <%@ include file="../common/mainnav.jsp" %>
@@ -109,7 +119,7 @@
         </div>
     </div>
 </header>
-<div class="container">
+<div class="container" id="trainBooking">
 	<div class="row">
 		<div class="col my-5">
 			<h2>기차표</h2>		
@@ -123,21 +133,21 @@
 		<div class="col">
 			<form action="" method="post" class="border">
 				<div class="row">
-					<div class="my-3 ms-4 col-md-1 div-show-station" id="departure">
+					<div class="my-3 ms-4 col-md-2 div-show-station" id="departure">
 						<label style="display: block; font-size: 14px; color: gray;">출발지</label>
-						<input type="text" style="border: none;" name="departureStation">
+						<input type="text" style="border: none;" name="departureStation" data-station-id="">
 					</div>
-					<div class="m-3 col-md-1 div-show-station">
-						<a href="#" style="color: black;">
+					<div class="m-3 col-md-1 div-show-station" style="width: 40px; padding: 0;">
+						<span id="recycle">
 							<i class="bi bi-arrow-repeat"></i>
 							<i class="fa fa-train" aria-hidden="true"></i>
-						</a>
+						</span>
 					</div>
-					<div class="m-3 col-md-1 div-show-station" id="arrival">
+					<div class="m-3 col-md-2 div-show-station" id="arrival">
 						<label style="display: block; font-size: 14px; color: gray;">도착지</label>
 						<input type="text" style="border: none;" name="arrivalStation">
 					</div>
-					<div class="col-md-7 text-end" style="margin: auto;">
+					<div class="col-md-6 text-end" style="margin: auto;">
 						<input type="radio" value="편도" name="way" checked="checked">편도
 						<input class="ms-3" type="radio" value="왕복" name="way">왕복
 					</div>
@@ -151,8 +161,8 @@
 					<div class="m-3 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da;
 						border-right: 1px solid; border-right-color: #ced4da; ">
 						<label style="display: block; font-size: 14px; color: gray;">출발시간</label>
-						<div id="time">
-							<input class="" type="date" name="goTime">
+						<div class="time">
+							<input type="text" class="datepicker">
 							<select name="goTime" style="width: 50px;">
 								<c:forEach var="time" begin="0" end="23">
 									<c:choose>
@@ -168,30 +178,33 @@
 							<span>시</span>
 						</div>
 					</div>
-					<div class="col-md-7" style="display:flex; justify-content:space-between; align-items: center; 
-					width:808px; padding: 0;" id="passenger">
-						  <div class="m-3 dropdown-toggle" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" 
-						  aria-expanded="false" style="display: inline-block;">
+					<div class="col-md-7 passenger" style="display:flex; justify-content:space-between; align-items: center; 
+					width:808px; padding: 0;">
+						  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
+						  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
 							<label style="display: block; font-size: 14px; color: gray;">승객</label>
-							<input type="text" style="border: none;" name="count" readonly="readonly" value="1명">
+							<input type="text" style="border: none;" name="count" readonly="readonly" value="1">명
 						  </div>
-						  <ul class="dropdown-menu" aria-labelledby="defaultDropdown" style="width: 200px;">
-						    <li style="display: flex; justify-content: space-between; margin: 8px;">
-						    	<div >어른 <p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
-							    <div>
-							    	<a href="#"><i class="bi bi-dash-circle"></i></a> 0
-							    	<a class="" href="#"><i class="bi bi-plus-circle"></i></a>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
+						    <li>
+						    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
+							    <div id="adult">
+							    	<span><i class="bi bi-dash-circle"></i></span>
+							    	<span>1</span>
+							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
-						    <li style="display: flex; justify-content: space-between; margin: 8px;">
+						    <li>
 						    	<div>어린이</div>
 							    <div>
-							    	<a href="#"><i class="bi bi-dash-circle"></i></a> 0
-							    	<a class="" href="#"><i class="bi bi-plus-circle"></i></a>
+							    	<span><i class="bi bi-dash-circle"></i></span>
+							    	<span>0</span>
+							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
 						</ul>
-						<div class="h-100" style="text-align-last:center; display:inline-block; 
+						<!-- 검색 버튼 -->
+						<div id="search" class="h-100" style="text-align-last:center; display:inline-block; cursor:pointer;
 							width: 90px; margin-right: 4px; background-color: #7E5C5E;">
 							<i class="bi bi-search" style="font-size: 30px; color: white; display:flex; padding: 30px;"></i>
 						</div>
@@ -204,8 +217,8 @@
 					</div>
 					<div class="m-3 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
 						<label style="display: block; font-size: 14px; color: gray;">출발시간</label>
-						<div id="time">
-							<input class="" type="date" name="goTime">
+						<div class="time">
+							<input type="text" class="datepicker">
 							<select name="goTime" style="width: 50px;">
 								<c:forEach var="time" begin="0" end="23">
 									<c:choose>
@@ -221,28 +234,30 @@
 							<span>시</span>
 						</div>
 					</div>
-					<div class="col-md-6" style="align-items: center; padding: 0;" 
-						id="passenger">
-						  <div class="m-3 dropdown-toggle" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+					<div class="col-md-6 passenger" style="align-items: center; padding: 0;">
+						  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
+						  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
 							<label style="display: block; font-size: 14px; color: gray;">승객</label>
-							<input type="text" style="border: none;" name="count" readonly="readonly" value="1명">
+							<input type="text" style="border: none;" name="count" readonly="readonly" value="1">명
 						  </div>
-						  <ul class="dropdown-menu" aria-labelledby="defaultDropdown" style="width: 200px;">
-						    <li style="display: flex; justify-content: space-between; margin: 8px;">
-						    	<div >어른 <p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
-							    <div>
-							    	<a href="#"><i class="bi bi-dash-circle"></i></a> 0
-							    	<a class="" href="#"><i class="bi bi-plus-circle"></i></a>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
+						    <li>
+						    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
+							    <div id="adult">
+							    	<span><i class="bi bi-dash-circle"></i></span>
+							    	<span>1</span>
+							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
-						    <li style="display: flex; justify-content: space-between; margin: 8px;">
+						    <li>
 						    	<div>어린이</div>
 							    <div>
-							    	<a href="#"><i class="bi bi-dash-circle"></i></a> 0
-							    	<a class="" href="#"><i class="bi bi-plus-circle"></i></a>
+							    	<span><i class="bi bi-dash-circle"></i></span>
+							    	<span>0</span>
+							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
-						  </ul>
+						</ul>
 					</div>
 				</div>
 			</form>
@@ -387,28 +402,28 @@
       			</div>
       			<div class="modal-body">
       				<div>
-      					<ul class="border">
-      						<li><a href="#">가</a></li>
-      						<li><a href="#">나</a></li>
-      						<li><a href="#">다</a></li>
-      						<li><a href="#">라</a></li>
-      						<li><a href="#">마</a></li>
-      						<li><a href="#">바</a></li>
-      						<li><a href="#">사</a></li>
-      						<li><a href="#">아</a></li>
-      						<li><a href="#">자</a></li>
-      						<li><a href="#">차</a></li>
-      						<li><a href="#">카</a></li>
-      						<li><a href="#">타</a></li>
-      						<li><a href="#">파</a></li>
-      						<li><a href="#">하</a></li>
+      					<ul class="border" id="word-Menu">
+      						<li><span id="45207">가</span></li>
+      						<li><span id="45795">나</span></li>
+      						<li><span id="46971">다</span></li>
+      						<li><span id="47559">라</span></li>
+      						<li><span id="48147">마</span></li>
+      						<li><span id="49323">바</span></li>
+      						<li><span id="50499">사</span></li>
+      						<li><span id="51087">아</span></li>
+      						<li><span id="52263">자</span></li>
+      						<li><span id="52851">차</span></li>
+      						<li><span id="53439">카</span></li>
+      						<li><span id="54027">타</span></li>
+      						<li><span id="54615">파</span></li>
+      						<li><span id="55203">하</span></li>
       					</ul>
       				</div>
         			<div class="card" style="text-align: center">
         				<!-- <div class="card-header"><strong id="movie-title"></strong></div> -->
         				<table class="station-table" style="margin: 24px;">
         					<tbody style="display: table-row-group;">
-        						<tr style="display: table-row;" id="station">
+        						<tr style="display: table-row;">
         							
         						</tr>
         					</tbody>
@@ -422,39 +437,128 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
 	$(function() {
+		// 누르면 왕복 검색창이 생김
 		$("input[value=왕복]").click(function() {
 			$("#go").nextAll().show()
 			$("#one").hide().next().show()
 		}) 
 		
+		// 왕복 검색창 없어짐
 		$("input[value=편도]").click(function() {
 			$("#go").nextAll().hide()
 			$("#one").show().next().hide()
 		})
 		
+		// modal에서 단어에 따른 기차역 리스트 출력
+		$("#word-Menu span").click(function() {
+			let no = $(this).attr('id')
+			getStationMenu(no);
+		})
+		
+		// 출발역과 도착역 값을 바꿔줌
+		$("#recycle").click(function() {
+			let $inputBox = $(this).parents('div')
+			let arrival = $inputBox.find("input[name=arrivalStation]").val()
+			let departure = $inputBox.find("input[name=departureStation]").val()
+			$inputBox.find("input[name=departureStation]").val(arrival)
+			$inputBox.find("input[name=arrivalStation]").val(departure)
+		})
 		
 		var stationModal = new bootstrap.Modal(document.getElementById('modal-station'), {
 			keyboard: false
 		});
 		
-		$("div#departure").click(function() {
+		// 입력한 단어에 따라 기차역 목록을 불러오는 함수
+		function getStationMenu(no) {
 			let $tr = $(".station-table tr").empty()
-			$.getJSON("/api/train/station/45207", function(response) {
+			
+			$.getJSON("/api/train/station/"+ no, function(response) {
 				if (response.status == 'OK') {
-					$.each(response.items, function(index, station) {
-						let st = "<td data-station-id=" + station.id + ">"
-						if (station.isUsed == 'N') {
-							st += "<a class='none'>" + station.name + "</a>"
-						} else (
-							st += "<a href='#'>" + station.name + "</a>"
-						)
-							st += "</td>"
+					if (response.items.length === 0) {
+						let st = "<td style='text-align: center; float:none;'>등록된 기차역이 존재하지 않습니다.</td>"
 						$tr.append(st)
-					})
+					} else {
+						$.each(response.items, function(index, station) {
+							let st = "<td>"
+							
+							if (station.isUsed == 'N') {
+								st += "<span>" + station.name + "</span>"
+							} else (
+								st += "<span data-station-id=" + station.id + ">" + station.name + "</span>"
+							)
+								st += "</td>"
+							$tr.append(st)
+						})
+					}
 					stationModal.show()
 				}
 			})
+		}
+		
+		// 출발역 div에서 클릭했을 때
+		$("div#departure").click(function() {
+			$('.station-table').attr('id', 'departureStation')	
+			getStationMenu(45207);
 		})
+
+		// 도착역 div에서 클릭했을 때
+		$("div#arrival").click(function() {
+			$('.station-table').attr('id', 'arrivalStation')	
+			getStationMenu(45207);
+		})
+		
+		// 기차역 클릭시 역 입력값에 값을 할당해준다.
+		$(".station-table").on("click", "span[data-station-id]", function(event) {
+			event.preventDefault();
+			let target = $(this).closest('table').attr('id')
+			stationModal.hide()
+			$("input[name="+ target +"]").val($(this).text()).attr('data-station-id' ,$(this).attr('data-station-id'))
+		})
+		
+		// 승객 인원 - 버튼
+		$(".bi-dash-circle").parent().click(function() {
+			let minus = $(this).next().text()
+			let target = $(this).closest('ul').prev().find('input')
+			if (minus != 0) {
+				$(this).next().text(minus-1)
+				let val = target.val()
+				target.val(--val)
+			}
+		})
+		
+		// 승객 인원 + 버튼
+		$(".bi-plus-circle").parent().click(function() {
+			let plus = $(this).prev().text()
+			let target = $(this).closest('ul').prev().find('input')
+			let val = target.val()
+			if (val >= 9) {
+				alert("10명 이상은 선택할 수 없습니다.")
+				target.val(9)
+			} else {
+				$(this).prev().text(++plus)
+				target.val(++val)
+			}
+		})
+		
+		// 날짜 ui 설정
+		$(function() {
+		    $(".datepicker").datepicker({
+		    	dateFormat: 'yy/mm/dd',
+			    minDate: 'D'
+		    	
+		    });
+		});
+/* 		
+		let now = new Date(); 
+		let nowDate = now.getFullYear() + "/" + now.getMonth()+1 + "/" + now.getDate()
+		
+		$(".time select").change(function(){
+			console.log($(".datepicker").val())
+			if ($(".datepicker").val() == nowDate && now.getHours() >= $(this).val()) {
+				alert("이후 시각입력")
+			}
+		}) */
+		
 	})
 </script>
 </body>
