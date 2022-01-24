@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="../common/tags.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,17 +14,17 @@
 <%-- <%@ include file="../manager/common/navbar.jsp" %> --%>
 <div class="container">
 	<div class="row">
-		<div class="col-auto pt-5">
-			<h1>쿠폰관리</h1>
+		<div class="col-auto pt-5 fw-bold">
+			<h1><strong>쿠폰 관리</strong></h1>
 		</div>
 		<div class="col-auto pt-5">
-			<a class="btn btn-dark mt-3" href="#" style="font-size:15px">신규 쿠폰 발급</a>
+			<a class="btn btn-dark mt-3" href="insertform.nadri" style="font-size:15px">신규 쿠폰 발급</a>
 		</div>
 	</div>
 	
 	<div class="row mt-5">
 		<div class="col-auto">
-			<h3>쿠폰 현황</h1>
+			<h3><strong>쿠폰 현황</strong></h3>
 		</div>
 		<div class="col-auto">
 			<form id="form-search-category" class="row" method="get" action="coulist.nadri">
@@ -75,7 +74,7 @@
 									<fmt:formatDate value="${coupon.startDate }" pattern="yyyy-MM-dd"/> 
 									~ <fmt:formatDate value="${coupon.endDate }" pattern="yyyy-MM-dd"/></td>
 								<td style="width: 5%; text-align:center;">
-									<button class="btn btn-outline-primary btn-sm">수정</button>
+									<a class="btn btn-outline-primary btn-sm" href="modiform.nadri?no=${coupon.no }">수정</a>
 								</td>
 								<td style="width: 5%; text-align:center;">
 									<button class="btn btn-outline-danger btn-sm" data-coupon-no="${coupon.no }">삭제</button>
@@ -92,7 +91,7 @@
 	
 		<div class="row">
 			<div class="col-3">
-				<h3>만료된 쿠폰</h3>
+				<h3><strong>만료된 쿠폰</strong></h3>
 			</div>
 		</div>
 	
@@ -146,16 +145,10 @@
 
 	$("#table-coupons .btn-outline-danger").click(function(){
 		var doubleCheck;
-		doubleCheck=confirm("삭제된 쿠폰은 복구 할 수 없습니다. 삭제하시겠습니까?")
+		doubleCheck=confirm("삭제된 쿠폰은 복구 할 수 없습니다. 계속하시겠습니까?")
 		
 		if(doubleCheck){
-			
-			var itemNo = $btn.attr("data-item-no");
-			$.getJSON("/rest/coupon/delete", {no:itemNo}, function(response) {
-				if (response.status == 'OK') {
-					$btn.closest('tr').remove();
-				} else {}
-			}
+			location.href='delete.nadri?no=${coupon.no}'
 			
 		} else{}
 	

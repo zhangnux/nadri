@@ -29,6 +29,15 @@ public class CouponService {
 		couponDao.insertCoupon(coupon);	
 	}
 	
+	public void modifyCoupon(Coupon coupon) {
+		couponDao.updateCoupon(coupon);
+	}
+	
+	public Coupon couponDetail(int no) {
+		Coupon coupon = couponDao.getCouponDetail(no);
+		return coupon;	
+	}
+	
 	public List<Coupon> searchCoupons(Criteria criteria){
 		return couponDao.searchCoupons(criteria);
 	}

@@ -21,26 +21,44 @@
 			select coupon_no_seq.nextval
 			from dual
 		</selectKey>
-		insert into coupons (coupon_no,coupon_quantity,coupon_discountrate,coupon_startdate,
-						coupon_enddate,coupon_category,coupon_name)
+		insert into coupons (coupon_no, coupon_quantity,coupon_discountrate, coupon_startdate,
+						coupon_enddate, coupon_category, coupon_name, coupon_issue_date, coupon_issue_end)
 		values
-		(#{no},#{quantity},#{discountRate},#{startDate},#{endDate},#{category},#{name})
+		(#{no},#{quantity},#{discountRate},#{startDate},#{endDate},#{category},#{name},#{issueDate},#{issueEndDate})
 	</insert>
 	
 	<!-- 쿠폰 정보 수정 -->
 	<update id="updateCoupon" parameterType="com.nadri.coupon.vo.Coupon">
 		update coupons
 		set
-			coupon_no = #{no},
+			coupon_name = #{name},
 			coupon_quantity = #{quantity},
 			coupon_discountrate = #{discountRate},
-			coupon_startdate = #{startDate},
 			coupon_enddate = #{endDate},
 			coupon_category = #{category},
-			coupon_name = #{name}
+			coupon_issue_date = #{issueDate},
+			coupon_issue_end = #{issueEndDate},		
+		form coupons
 		where
 			coupon_no = #{no}
 	</update>
+	
+	<!-- 쿠폰 상세정보 -->
+	<select id="getCouponDetail" parameterType="int" resultType="com.nadri.coupon.vo.Coupon">
+		select
+			coupon_no as no,
+			coupon_quantity as quantity,
+			coupon_discountrate as discount,
+			coupon_startdate as startdate,
+			coupon_enddate as enddate,
+			coupon_category as category,
+			coupon_name as name,
+			coupon_issue_date as issuedate,
+			coupon_deleted as deleted,
+			coupon_issue_end as issueend
+		from coupons
+		where coupon_no = #{no}
+	</select>
 	
 	<!-- 사용가능한 쿠폰조회 -->
 	<select id="getAllCoupons" resultMap="CouponResultMap">
@@ -80,9 +98,8 @@
 					</if>
 				</where>
 			  )
-			  
 	</select>
-	
+
 	<!-- 쿠폰 삭제(deleted를 y로) -->
 	<update id="deleteCoupon" parameterType="int">
 		update coupons
