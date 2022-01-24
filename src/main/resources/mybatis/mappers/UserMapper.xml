@@ -2,31 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nadri.user.mapper.UserMapper">
 
+
 	<!-- 
 		void insertUser 
 	-->
 	<insert id="insertUser" parameterType="com.nadri.user.vo.User">
-		
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select user_no.nextval
+			from dual
+		</selectKey>
+		insert into user_table 
+		(user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, 
+		user_address, user_point, user_email, user_type, user_sms_check, user_email_check)
+		values
+		(#{no}, #{id}, #{password}, #{name}, #{age}, #{gender}, #{tel}, #{address}, #{point}, #{email}, #{type}, #{smsCheck}, #{emailCheck});
 	</insert>
 	
 	<!-- 
 		void updateUser 
 	-->
 	<update id="updateUser" parameterType="com.nadri.user.vo.User">
-	
+		update
+			user_table
+		set
+			user_password = ${password},
+			user_name = ${name},
+			user_age = ${age},
+			user_tel = ${tel},
+			user_address = ${address},
+			user_email = ${email},
+			user_sms_check = ${smsCheck},
+			user_email_check = ${emailCheck}
+		where
+			user_no = #{no}
 	</update>
 	
 	<!--
 		void deleteUser 
 	-->
 	<delete id="deleteUser" parameterType="int">
-	
+		delete from
+			user_table
+		where
+			user_no = #{value}
 	</delete>
 
 	<!-- 
 		User getUserByNo 
 	-->
-	<select id="getUserByNo" parameterType="int" resultType="com.nadri.user.vo.User">
-	
+	<select id="getUserById" parameterType="String" resultType="com.nadri.user.vo.User">
+		select
+			user_no				as no,
+			user_id				as name,
+			user_password		as password,
+			user_name			as name,
+			user_age			as age,
+			user_gender			as gender,
+			user_tel			as tel,
+			user_address		as address,
+			user_point			as point,
+			user_delete_check	as deleteCheck,
+			user_email			as email,
+			user_type			as type,
+			user_created_date	as createdDate,
+			user_sms_check		as smsCheck,
+			user_email_Check	as emailCheck
+		from
+			user_table
+		where 
+			user_no = ${value}
+		order by user_no
 	</select>
 </mapper>
