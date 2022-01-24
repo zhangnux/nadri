@@ -14,10 +14,7 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
-@Setter
-@Getter
+@Data
 public class User {
 
 	private int no;
