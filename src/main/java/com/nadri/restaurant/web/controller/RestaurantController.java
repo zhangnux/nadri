@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,32 @@ public class RestaurantController {
 	RestaurantService rtService;
 	
 	
+	
+	/*
+	 * 요청방식 : GET
+	 * 요청URL : /restaurant/main
+	 * 요청파라미터 : category
+	 * 이동할 뷰페이지 : /WEB-INF/views/restaurant/main.jsp
+	 * 뷰페이지에 전달되는 데이터 : Restaurant
+	 */
+	@GetMapping("/main.nadri")
+	public String main(Model model) {
+		
+		List<Restaurant> restaurants = rtService.getBestRestaurants();
+		model.addAttribute("restaurants", restaurants);
+		
+		
+		return "/restaurant/main";
+	}
+	
+	
+	
 	/*
 	 * 요청방식 : GET
 	 * 요청URL : /restaurant/detail
 	 * 요청파라미터 : no
-	 * 이동할 뷰페이지 : /WEB-INF/views/restaurant/detail.jsp
-	 * 뷰페이지에 전달되는 데이터 : Book
+	 * 이동할 뷰페이지 : /WEB-INF/views/restaurant/detail?no=
+	 * 뷰페이지에 전달되는 데이터 : Restarant
 	 */
 	
 	@GetMapping("/detail.nadri")
@@ -68,9 +89,6 @@ public class RestaurantController {
 			
 			FileCopyUtils.copy(in, out);
 		}
-		
-		
-		
 		
 		BeanUtils.copyProperties(form, rt);
 		
