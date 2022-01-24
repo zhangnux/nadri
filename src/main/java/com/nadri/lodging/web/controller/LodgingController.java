@@ -14,9 +14,15 @@ public class LodgingController {
 	@Autowired
 	private LodgingService lodgingService;
 	
+	@GetMapping
+	public String search() {
+		
+		return "lodging/search";
+	}
+	
 	@GetMapping("/list.nadri")
 	public String list() {
 		
-		return "lodging.list";
+		return "lodging/list";
 	}
 }
