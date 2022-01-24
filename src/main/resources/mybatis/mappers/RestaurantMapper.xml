@@ -7,28 +7,21 @@
 	-->
 	<select id="getAllRestaurants" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			restaurant_no,
-			restaurant_name,
-			restaurant_picture,
-			restaurant_sales,
-			restaurant_content,
-			restaurant_category,
-			restaurant_address,
-			restaurant_city,
-			restaurant_parking,
-			restaurant_restdate,
-			restaurant_tel,
-			restaurant_open_time,
-			restaurant_star_point
+			restaurant_no as no,
+			restaurant_name as name,
+			restaurant_picture	as picture,
+			restaurant_content as content,
+			restaurant_category as category,
+			restaurant_city as city,
+			restaurant_star_point as starPoint
 		from
 			restaurant
-		order by restaurant_star_point
+		order by restaurant_no
 	</select>
 	
 	<!-- 
 		List<Restaurant> getRestaurantsByCategory();
 		
-		5개만 뽑아볼까?
 	-->
 	<select id="getRestaurantsByCategory" parameterType="String" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
@@ -45,31 +38,56 @@
 			restaurant
 		where
 			restaurant_category = #{value}
-		order by restaurant_star_point
+		order by restaurant_no
 	</select>
+	
+	
+	<!--
+		getBestRestaurants()
+	-->
+	<select id="getBestRestaurants" resultType="com.nadri.restaurant.vo.Restaurant">
+		select
+			restaurant_no as no,
+			restaurant_name as name,
+			restaurant_picture as picture,
+			restaurant_category as category
+		from
+			(select
+				restaurant_no,
+				restaurant_name,
+				restaurant_picture,
+				restaurant_category
+			from
+				restaurant
+			order by restaurant_sales
+				)
+		where rownum &lt; to_number(5)
+	</select>
+	
+	
 	
 	<!--
 		Restaurant getRestaurantDetail();
 	-->
 	<select id="getRestaurantDetail" parameterType="int" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			restaurant_no,
-			restaurant_name,
-			restaurant_picture,
-			restaurant_sales,
-			restaurant_content,
-			restaurant_category,
-			restaurant_address,
-			restaurant_city,
-			restaurant_parking,
-			restaurant_restdate,
-			restaurant_tel,
-			restaurant_open_time,
-			restaurant_star_point
+			restaurant_no as no,
+			restaurant_name as name,
+			restaurant_picture as picture,
+			restaurant_sales as sales,
+			restaurant_content as content,
+			restaurant_category as category,
+			restaurant_address as address,
+			restaurant_city as city,
+			restaurant_parking as parking,
+			restaurant_restdate as restDate,
+			restaurant_tel as tel,
+			restaurant_open_time as openTime,
+			restaurant_star_point as starPoint
 		from
 			restaurant
 		where
-			restaurant_no = #{value}
+			restaurant_no = to_number(#{value})
 	
 	</select>
 	
@@ -87,6 +105,65 @@
 		values
 		(#{no}, #{name}, #{picture}, #{content}, #{category}, #{address}, #{city}, #{parking}, #{restDate}, #{tel}, #{openTime})	
 	</insert>
-
+	
+	
+	
+	<select id="getRestaurantsTotalRows" parameterType="com.nadri.restaurant.web.form.Criteria" resultType="int">
+		select count(*)
+		from restaurant
+		<where>
+			<if test="opt != null and value != null">
+				<choose>
+					<when test="opt == '상호'">
+						restaurant_name like '%' || #{value} || '%'
+					</when>
+					<when test="opt == '지역'">
+						restaurant_city = #{value}
+					</when>
+					<when test="opt == '소개'">
+						restaurant_content like '%' || #{value} || '%'
+					</when>
+					<when test="opt == '카테고리'">
+						restaurant_category like '%' || #{value} || '%'
+					</when>
+				</choose>
+			</if>
+		</where>			
+	</select>
+	
+	<!-- 
+		List<Book> searchBooks(Criteria criteria); 메소드와 매핑되는 SQL 구문 정의
+		
+		<where 태그>
+			+ <where> 태그안에 sql문이 포함되면 where 키워드로 변경된다.
+			+ <where> 태그안에 sql문중에서 첫번째 sql문이 "and 컬럼명 = 값" 의 형태면 and를 제거한다. 
+	 -->
+	<select id="searchRestaurants" parameterType="com.nadri.restaurant.web.form.Criteria" resultType="com.nadri.restaurant.vo.Restaurant">
+		select *
+		from (
+			select A.*, row_number() over (order by restaurant_no desc) rn
+			from restaurant A
+			<where>
+				<if test="opt != null and value != null">
+					<choose>
+						<when test="opt == '상호'">
+							restaurant_name like '%' || #{value} || '%'
+						</when>
+						<when test="opt == '지역'">
+							restaurant_city = #{value}
+						</when>
+						<when test="opt == '소개'">
+							restaurant_content like '%' || #{value} || '%'
+						</when>
+						<when test="opt == '카테고리'">
+							restaurant_category like '%' || #{value} || '%'
+						</when>
+					</choose>
+				</if>
+			</where>			
+		)
+		where rn between #{beginIndex} and #{endIndex}
+	</select> 
+	
 
 </mapper>

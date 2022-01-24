@@ -18,10 +18,16 @@
 <!-- ★ -->
 <div class="container">
 	
+	<div class="row mb-3">
+		<div class="col">
+			<h2>예약</h2>
+		</div>
+	</div>
+	
 
 	<div class="row mb-3">
 		<div class="col">
-			<img alt="${restaurant.picture }" src="">
+			<img alt="picture" src="../../resources/images/restaurants/${restaurant.picture}">
 		</div>
 	</div>
 	<div class="row mb-3">
