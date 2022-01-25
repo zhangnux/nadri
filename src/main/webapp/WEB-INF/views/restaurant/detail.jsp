@@ -27,7 +27,7 @@
 
 	<div class="row mb-3">
 		<div class="col">
-			<img alt="picture" src="../../resources/images/restaurants/${restaurant.picture}">
+			<img alt="picture" src="${restaurant.picture}">
 		</div>
 	</div>
 	<div class="row mb-3">

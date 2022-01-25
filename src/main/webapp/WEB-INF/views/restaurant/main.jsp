@@ -69,7 +69,7 @@
 		<c:forEach var="restaurant" items="${restaurants }">
 			<div class="col-3">
 				<div class="card" style="width: 18rem;">
-	  				<img src="../../resources/images/restaurants/${restaurant.picture}" class="card-img-top" alt="picture">
+	  				<img src="${restaurant.picture}" class="card-img-top" alt="picture">
 	  				<div class="card-body">
 	    				<p class="card-text">${restaurant.name }</p>
 	    				<p class="card-text">${restaurant.starPoint } 점</p>

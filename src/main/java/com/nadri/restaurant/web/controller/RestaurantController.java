@@ -31,6 +31,16 @@ public class RestaurantController {
 	
 	
 	/*
+	@GetMapping("/init")
+	public String init() throws Exception {
+		
+		rtService.addNewRestaurant();
+		return "/home";
+	}
+	*/
+	
+	
+	/*
 	 * 요청방식 : GET
 	 * 요청URL : /restaurant/main
 	 * 요청파라미터 : category
@@ -68,12 +78,15 @@ public class RestaurantController {
 	}
 	
 	
-	@GetMapping("/insert.nadri")
+	
+	
+	
+	/*
+	 @GetMapping("/insert.nadri")
 	public String form() {
 		
 		return "restaurant/form";
 	}
-	
 	@PostMapping("/insert.nadri")
 	public String save(RestaurantInsertForm form) throws IOException  {
 		String saveDirectory = "C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\restaurants";
@@ -96,6 +109,8 @@ public class RestaurantController {
 		
 		return "redirect:insert.nadri";
 	}
+	
+	*/
 	
 
 }
