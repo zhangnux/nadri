@@ -41,7 +41,7 @@
 	}
 	div.div-show-station input, div.passenger input {
 		height: 40px;
-		width: 170px;
+		width: 100px;
 		font-size: 18px;
 	}
 	div.time input, select {
@@ -131,11 +131,12 @@
 	<hr>
 	<div class="row">
 		<div class="col">
-			<form action="" method="post" class="border">
+			<form action="train/list.nadri" method="post" class="border" id="trainSearch">
+				<!-- 경로 선택 -->
 				<div class="row">
-					<div class="my-3 ms-4 col-md-2 div-show-station" id="departure">
-						<label style="display: block; font-size: 14px; color: gray;">출발지</label>
-						<input type="text" style="border: none;" name="departureStation" data-station-id="">
+					<div class="my-3 ms-4 col-md-2 div-show-station" id="departure" style="cursor: pointer;">
+						<label style="display: block; font-size: 14px; color: gray; cursor: pointer;">출발지</label>
+						<input class="not" type="text" style="border: none;" name="departureStation" data-station-id="" placeholder="출발역">
 					</div>
 					<div class="m-3 col-md-1 div-show-station" style="width: 40px; padding: 0;">
 						<span id="recycle">
@@ -143,9 +144,9 @@
 							<i class="fa fa-train" aria-hidden="true"></i>
 						</span>
 					</div>
-					<div class="m-3 col-md-2 div-show-station" id="arrival">
-						<label style="display: block; font-size: 14px; color: gray;">도착지</label>
-						<input type="text" style="border: none;" name="arrivalStation">
+					<div class="m-3 col-md-2 div-show-station" id="arrival" style="cursor: pointer;">
+						<label style="display: block; font-size: 14px; color: gray; cursor: pointer;">도착지</label>
+						<input class="not" type="text" style="border: none;" name="arrivalStation" data-station-id="" placeholder="도착역">
 					</div>
 					<div class="col-md-6 text-end" style="margin: auto;">
 						<input type="radio" value="편도" name="way" checked="checked">편도
@@ -153,16 +154,17 @@
 					</div>
 				</div>
 				<hr class="ms-3 my-0">
+				<!-- 가는 열차  -->
 				<div class="row" id="go">
 					<div class="col-md-1" style="display: flex; align-items: center; justify-content: center; width: 140px;">
 						<span id="one"><i class="bi bi-circle-fill mx-2" style="font-size: 5px; color: #4A4A4A;"></i>출발일</span>
 						<span style="display: none"><i class="bi bi-circle-fill mx-2" style="font-size: 5px; color: #4A4A4A;"></i>가는열차</span>
 					</div>
-					<div class="m-3 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da;
+					<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da;
 						border-right: 1px solid; border-right-color: #ced4da; ">
 						<label style="display: block; font-size: 14px; color: gray;">출발시간</label>
 						<div class="time">
-							<input type="text" class="datepicker">
+							<input type="text" class="datepicker" readonly="readonly" name="goDate">
 							<select name="goTime" style="width: 50px;">
 								<c:forEach var="time" begin="0" end="23">
 									<c:choose>
@@ -178,27 +180,28 @@
 							<span>시</span>
 						</div>
 					</div>
+					<!-- 승객 수 입력 -->
 					<div class="col-md-7 passenger" style="display:flex; justify-content:space-between; align-items: center; 
 					width:808px; padding: 0;">
 						  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
 						  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
 							<label style="display: block; font-size: 14px; color: gray;">승객</label>
-							<input type="text" style="border: none;" name="count" readonly="readonly" value="1">명
+							<input type="text" style="border: none;" name="goCount" readonly="readonly" value="1">명
 						  </div>
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
 						    <li>
 						    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
-							    <div id="adult">
+							    <div class="adult">
 							    	<span><i class="bi bi-dash-circle"></i></span>
-							    	<span>1</span>
+							    	<input name="adNo1" value="1" style="width: 15px; border: none;">
 							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
 						    <li>
 						    	<div>어린이</div>
-							    <div>
+							    <div class="childern">
 							    	<span><i class="bi bi-dash-circle"></i></span>
-							    	<span>0</span>
+							    	<input name="cdNo1" value="0" style="width: 15px; border: none;">
 							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
@@ -211,18 +214,19 @@
 					</div>
 				</div>
 				<hr class="ms-3 my-0" style="display: none;">
+				<!-- 오는 열차 -->
 				<div class="row" style="display: none;">
 					<div class="col-md-1" style="display: flex; align-items: center; justify-content: center; width: 140px;">
 						<i class="bi bi-circle-fill mx-2" style="font-size: 5px; color: #4A4A4A;"></i><span>오는열차</span>
 					</div>
-					<div class="m-3 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
+					<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
 						<label style="display: block; font-size: 14px; color: gray;">출발시간</label>
 						<div class="time">
-							<input type="text" class="datepicker">
-							<select name="goTime" style="width: 50px;">
+							<input type="text" class="datepicker" readonly="readonly" name="comeDate">
+							<select name="comeTime" style="width: 50px;">
 								<c:forEach var="time" begin="0" end="23">
 									<c:choose>
-										<c:when test="${time lt 12}">
+										<c:when test="${time lt 10}">
 											<option value="${time }">0${time }</option>
 										</c:when>
 										<c:otherwise>
@@ -238,14 +242,14 @@
 						  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
 						  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
 							<label style="display: block; font-size: 14px; color: gray;">승객</label>
-							<input type="text" style="border: none;" name="count" readonly="readonly" value="1">명
+							<input type="text" style="border: none;" name="comeCount" readonly="readonly" value="1">명
 						  </div>
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
 						    <li>
 						    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
 							    <div id="adult">
 							    	<span><i class="bi bi-dash-circle"></i></span>
-							    	<span>1</span>
+							    	<input name="adNo2" value="1" style="width: 15px; border: none;">
 							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
@@ -253,7 +257,7 @@
 						    	<div>어린이</div>
 							    <div>
 							    	<span><i class="bi bi-dash-circle"></i></span>
-							    	<span>0</span>
+							    	<input name="cdNo2" value="0" style="width: 15px; border: none;">
 							    	<span><i class="bi bi-plus-circle"></i></span>
 							    </div>
 					    	</li>
@@ -270,86 +274,6 @@
 	</div>
 	<div class="row my-4 w-100" id="famous">
 		<div class="border p-0">
-			<div>
-				<img alt="부산" src="../../resources/images/train/busan.jpg">
-			</div>
-			<div>
-				<div class="my-2" style="">
-					<i class="bi bi-arrow-down fs-1" style="vertical-align: top;"></i>
-					<div style="display: inline-block;">
-						<div class="mb-3">서울</div>
-						<div>부산</div>
-					</div>
-				</div>
-			</div>
-			<div class="mt-3" style="text-align-last: justify">
-				<span class="fs-5 fw-bold m-3">12,000원</span>
-				<div style="display: inline-block;">
-					<button class="btn fw-bold m-3">Book Now</button>
-				</div>
-			</div>
-		</div>
-		<div class="border p-0" style="border-radius: 3px;">
-			<div>
-				<img alt="부산" src="../../resources/images/train/busan.jpg">
-			</div>
-			<div>
-				<div class="my-2" style="">
-					<i class="bi bi-arrow-down fs-1" style="vertical-align: top;"></i>
-					<div style="display: inline-block;">
-						<div class="mb-3">서울</div>
-						<div>부산</div>
-					</div>
-				</div>
-			</div>
-			<div class="mt-3" style="text-align-last: justify">
-				<span class="fs-5 fw-bold m-3">12,000원</span>
-				<div style="display: inline-block;">
-					<button class="btn fw-bold m-3">Book Now</button>
-				</div>
-			</div>
-		</div>
-		<div class="border p-0" style="border-radius: 3px;">
-			<div>
-				<img alt="부산" src="../../resources/images/train/busan.jpg">
-			</div>
-			<div>
-				<div class="my-2" style="">
-					<i class="bi bi-arrow-down fs-1" style="vertical-align: top;"></i>
-					<div style="display: inline-block;">
-						<div class="mb-3">서울</div>
-						<div>부산</div>
-					</div>
-				</div>
-			</div>
-			<div class="mt-3" style="text-align-last: justify">
-				<span class="fs-5 fw-bold m-3">12,000원</span>
-				<div style="display: inline-block;">
-					<button class="btn fw-bold m-3">Book Now</button>
-				</div>
-			</div>
-		</div>
-		<div class="border p-0" style="border-radius: 3px;">
-			<div>
-				<img alt="부산" src="../../resources/images/train/busan.jpg">
-			</div>
-			<div>
-				<div class="my-2" style="">
-					<i class="bi bi-arrow-down fs-1" style="vertical-align: top;"></i>
-					<div style="display: inline-block;">
-						<div class="mb-3">서울</div>
-						<div>부산</div>
-					</div>
-				</div>
-			</div>
-			<div class="mt-3" style="text-align-last: justify">
-				<span class="fs-5 fw-bold m-3">12,000원</span>
-				<div style="display: inline-block;">
-					<button class="btn fw-bold m-3">Book Now</button>
-				</div>
-			</div>
-		</div>
-		<div class="border p-0" style="border-radius: 3px;">
 			<div>
 				<img alt="부산" src="../../resources/images/train/busan.jpg">
 			</div>
@@ -437,6 +361,49 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
 	$(function() {
+		let now = new Date(); 
+		let nowDate = now.getFullYear() + "/" + now.getMonth()+1 + "/" + now.getDate()
+		$(".datepicker").val(nowDate)
+		
+		
+		$("#search").click(function() {
+			let valid = true;
+			if ($("[name=departureStation]").val().trim() == '') {
+				alert("출발역을 입력해주세요.")
+				valid = false;
+			} else if ($("[name=arrivalStation]").val().trim() == '') {
+				alert("도착역을 입력해주세요.")
+				valid = false;
+			} 
+			
+			if ($("[name=goCount]").val() == 0) {
+				$("[name=goCount]").val(1)
+				$("[name=adNo1]").val(1)
+			}
+			if ($("[name=comeCount]").val() == 0) {
+				$("[name=comeCount]").val(1)
+				$("[name=adNo2]").val(1)
+			}
+			
+			let goDate = new Date($("[name=goDate]").val())
+			let comeDate = new Date($("[name=comeDate]").val())
+			
+			if ($("[name=way]:checked").val() == '왕복') {
+				/* if (goDate.getTime() == comeDate.getTime() && $("[name=goTime]").val() >= $("[name=comeTime]").val()) {
+					alert("알맞는 시간을 입력해 주세요.")
+				} else  */
+				if (goDate > comeDate) {
+					alert("복편을 왕편보다이전 일자로 선택하셨습니다. 일정을 다시 한번 선택하여 주십시오.")
+					valid = false;
+				}
+			}
+			
+			if (valid) {
+				$("#trainSearch").submit()
+			}
+		})
+		
+		
 		// 누르면 왕복 검색창이 생김
 		$("input[value=왕복]").click(function() {
 			$("#go").nextAll().show()
@@ -496,16 +463,20 @@
 		}
 		
 		// 출발역 div에서 클릭했을 때
-		$("div#departure").click(function() {
-			$('.station-table').attr('id', 'departureStation')	
-			getStationMenu(45207);
-		})
+		$("div#departure").click(function (e) {
+			if (!$(e.target).hasClass("not")) {
+				$('.station-table').attr('id', 'departureStation')	
+				getStationMenu(45207);
+			}
+		});
 
 		// 도착역 div에서 클릭했을 때
-		$("div#arrival").click(function() {
-			$('.station-table').attr('id', 'arrivalStation')	
-			getStationMenu(45207);
-		})
+		$("div#arrival").click(function (e) {
+			if (!$(e.target).hasClass("not")) {
+				$('.station-table').attr('id', 'arrivalStation')	
+				getStationMenu(45207);
+			}
+		});
 		
 		// 기차역 클릭시 역 입력값에 값을 할당해준다.
 		$(".station-table").on("click", "span[data-station-id]", function(event) {
@@ -517,35 +488,59 @@
 		
 		// 승객 인원 - 버튼
 		$(".bi-dash-circle").parent().click(function() {
-			let minus = $(this).next().text()
+			let val1 = parseInt($(this).next().val())
+			let val2 = parseInt($(this).closest('li').siblings().find('input').val())
+			console.log(val1+val2)
 			let target = $(this).closest('ul').prev().find('input')
-			if (minus != 0) {
-				$(this).next().text(minus-1)
-				let val = target.val()
-				target.val(--val)
+			
+			if (val1 != 0) {
+				$(this).next().val(val1-1)
+				target.val(val2+val1-1)
 			}
+			/* let val1 = parseInt($(this).next().text())
+			let val2 = parseInt($(this).closest('li').siblings().find('span').eq(1).text())
+
+			let target = $(this).closest('ul').prev().find('input')
+			
+			if (val1 != 0) {
+				$(this).next().text(val1-1)
+				target.val(val2+val1-1)
+			} */
 		})
 		
 		// 승객 인원 + 버튼
 		$(".bi-plus-circle").parent().click(function() {
-			let plus = $(this).prev().text()
+			let val1 = parseInt($(this).prev().val())
+			let val2 = parseInt($(this).closest('li').siblings().find('input').val())
+			console.log(val1+val2)
 			let target = $(this).closest('ul').prev().find('input')
 			let val = target.val()
 			if (val >= 9) {
 				alert("10명 이상은 선택할 수 없습니다.")
 				target.val(9)
 			} else {
-				$(this).prev().text(++plus)
-				target.val(++val)
+				$(this).prev().val(++val1)
+				target.val(val1+val2)
 			}
+/* 			let val1 = parseInt($(this).prev().text())
+			let val2 = parseInt($(this).closest('li').siblings().find('span').eq(1).text())
+			
+			let target = $(this).closest('ul').prev().find('input')
+			let val = target.val()
+			if (val >= 9) {
+				alert("10명 이상은 선택할 수 없습니다.")
+				target.val(9)
+			} else {
+				$(this).prev().text(++val1)
+				target.val(val1+val2)
+			} */
 		})
 		
 		// 날짜 ui 설정
 		$(function() {
 		    $(".datepicker").datepicker({
 		    	dateFormat: 'yy/mm/dd',
-			    minDate: 'D'
-		    	
+			    minDate: 'D',
 		    });
 		});
 /* 		
