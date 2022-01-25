@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nadri.train.util.SessionUtils;
+
 @Controller
 @RequestMapping("/admin")
 public class ManagerController {
@@ -16,5 +18,11 @@ public class ManagerController {
 	@GetMapping("/index.nadri")
 	public String total() {
 		return "manager/index";
+	}
+	
+	@GetMapping("/logout.nadri")
+	public String logout() {
+		SessionUtils.sessionInvlidate();
+		return "redirect:/admin";
 	}
 }

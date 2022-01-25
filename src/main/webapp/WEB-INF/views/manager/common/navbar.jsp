@@ -67,7 +67,7 @@ html, body {
         <strong class="fs-6">관리자</strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small" aria-labelledby="dropdownUser1">
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
+        <li><a class="dropdown-item" href="logout.nadri">Sign out</a></li>
       </ul>
     </div>
 </div>
