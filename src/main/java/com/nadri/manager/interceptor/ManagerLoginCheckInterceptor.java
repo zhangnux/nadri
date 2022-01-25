@@ -11,8 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.nadri.manager.annotation.LoginedManager;
 import com.nadri.manager.exception.LoginErrorException;
+import com.nadri.manager.util.SessionUtils;
 import com.nadri.manager.vo.Manager;
-import com.nadri.train.util.SessionUtils;
 
 /**
  * 관리자 페이지 들어갈 때 로그인 되어있는 사용자 인지 아닌지 판단하는 intercetor

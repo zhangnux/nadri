@@ -69,11 +69,11 @@
 </style>
 <div class="row">
 	<div class="col">
-		<form action="train/list.nadri" method="post" class="border" id="trainSearch">
+		<form action="train/list.nadri" method="post" id="trainSearch" style="border-bottom: 2px solid #7E5C5E; border-top: 2px solid #7E5C5E;">
 			<!-- 경로 선택 -->
 			<div class="row">
 				<div class="my-3 ms-4 col-md-2 div-show-station" id="departure" style="cursor: pointer;">
-					<label style="display: block; font-size: 14px; color: gray; cursor: pointer;">출발지</label>
+					<label style="display: block; font-size: 14px; cursor: pointer;">출발지</label>
 					<input class="not" type="text" style="border: none;" name="departureStation" data-station-id="" placeholder="출발역">
 				</div>
 				<div class="m-3 col-md-1 div-show-station" style="width: 40px; padding: 0;">
@@ -83,12 +83,12 @@
 					</span>
 				</div>
 				<div class="m-3 col-md-2 div-show-station" id="arrival" style="cursor: pointer;">
-					<label style="display: block; font-size: 14px; color: gray; cursor: pointer;">도착지</label>
+					<label style="display: block; font-size: 14px; cursor: pointer;">도착지</label>
 					<input class="not" type="text" style="border: none;" name="arrivalStation" data-station-id="" placeholder="도착역">
 				</div>
-				<div class="col-md-6 text-end" style="margin: auto;">
-					<input type="radio" value="편도" name="way" checked="checked">편도
-					<input class="ms-3" type="radio" value="왕복" name="way">왕복
+				<div class="col-md-6 text-end" style="margin: auto; font-size: 18px;">
+					<input type="radio" value="편도" name="way" checked="checked"> 편도
+					<input class="ms-3" type="radio" value="왕복" name="way"> 왕복
 				</div>
 			</div>
 			<hr class="ms-3 my-0">
@@ -100,7 +100,7 @@
 				</div>
 				<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da;
 					border-right: 1px solid; border-right-color: #ced4da; ">
-					<label style="display: block; font-size: 14px; color: gray;">출발시간</label>
+					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
 						<input type="text" class="datepicker" readonly="readonly" name="dpDate1">
 						<select name="dpTime1" style="width: 50px;">
@@ -123,7 +123,7 @@
 				width:808px; padding: 0;">
 					  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
 					  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
-						<label style="display: block; font-size: 14px; color: gray;">승객</label>
+						<label style="display: block; font-size: 16px; color: gray;">승객</label>
 						<input type="text" style="border: none;" name="count1" readonly="readonly" value="1">명
 					  </div>
 					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
@@ -158,7 +158,7 @@
 					<i class="bi bi-circle-fill mx-2" style="font-size: 5px; color: #4A4A4A;"></i><span>오는열차</span>
 				</div>
 				<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
-					<label style="display: block; font-size: 14px; color: gray;">출발시간</label>
+					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
 						<input type="text" class="datepicker" readonly="readonly" name="dpDate2">
 						<select name="dpTime2" style="width: 50px;">
@@ -179,7 +179,7 @@
 				<div class="col-md-6 passenger" style="align-items: center; padding: 0;">
 					  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
 					  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
-						<label style="display: block; font-size: 14px; color: gray;">승객</label>
+						<label style="display: block; font-size: 16px; color: gray;">승객</label>
 						<input type="text" style="border: none;" name="count2" readonly="readonly" value="1">명
 					  </div>
 					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
