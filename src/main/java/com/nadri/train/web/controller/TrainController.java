@@ -8,10 +8,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.vo.TrainSchedule;
 
@@ -24,15 +26,31 @@ public class TrainController {
 	@Autowired
 	TrainService service;
 	
+	/**
+	 * 기차 스케줄 검색 창
+	 * @return
+	 */
 	@GetMapping
 	public String search() {
 		return "train/trainSearch";
 	}
 	
+	/**
+	 * 검색 정보를 바탕으로 기차 리스트 불러오기
+	 * @param criteria
+	 * @return
+	 */
 	@PostMapping("/list.nadri")
-	public String list() {
+	public String list(TrainSearchDto criteria, Model model) {
+		
+		/*
+		 * List<TrainSearchDto> schedules1 = service.getSchedulesByCriteria(criteria);
+		 * model.addAttribute("criteria", criteria); model.addAttribute("schedules",
+		 * schedules1);
+		 */
 		return "train/trainList";
 	}
+	
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")
 //	public void insertSchedule() {
