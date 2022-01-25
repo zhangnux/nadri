@@ -13,17 +13,6 @@ public class UserService {
 	@Autowired
 	UserMapper userMapper;
 	
-	public User login(String id, String password) {
-		User user = userMapper.getUserById(id);
-		if(user == null) {
-			
-		} else if (!password.equals(user.getPassword())) {
-			
-		}
-		
-		return user;
-	}
-	
 	public User insertUser(User user) {
 		userMapper.insertUser(user);
 		return userMapper.getUserById(user.getId());
@@ -32,6 +21,25 @@ public class UserService {
 	public User updateUser(User user) {
 		User savedUser = userMapper.getUserById(user.getId());	
 		user.setId(user.getId());
-		return null;
+		user.setPassword(user.getPassword());
+		user.setName(user.getName());
+		user.setAge(user.getAge());
+		user.setTel(user.getTel());
+		user.setAddress(user.getAddress());
+		user.setEmail(user.getEmail());
+		user.setSmsCheck(user.getSmsCheck());
+		user.setEmailCheck(user.getEmailCheck());
+		return savedUser;
+	}
+	
+	public User deleteUser(int no) {
+		User savedUser = userMapper.getUserByNo(no);
+		userMapper.deleteUser(no);
+		return savedUser;
+		
+	}
+	
+	public User getUserDetail(int no) {
+		return userMapper.getUserByNo(no);
 	}
 }
