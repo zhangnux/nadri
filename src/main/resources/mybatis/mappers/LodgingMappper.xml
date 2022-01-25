@@ -6,13 +6,10 @@
 		void insertLodging(LodInformation lodinformation)
 	 -->
 	<insert id="insertLodging" parameterType="com.nadri.lodging.vo.LodInformation">
-		<selectKey keyProperty="no" resultType="int" order="BEFORE">
-        	 select lodging_information_seq.nextval from dual
-      	</selectKey>
 		insert into lodging_information
 		(lod_no, lod_name, lod_address, lod_check_in, lod_check_out, lod_intro, category_no, lod_grade_no, lod_refund, lod_sales)
 		values
-		(#{no}, #{name}, #{address}, #{checkIn}, #{checkOut}, #{intro}, #{categoryNo}, #{GradeNo}, #{lodRefund}, #{lodSales})
+		(#{no}, #{name}, #{address}, #{checkIn}, #{checkOut}, #{intro}, #{category.no}, #{grade.no}, #{lodRefund}, #{lodSales})
 	</insert>
 	
 	<!-- 

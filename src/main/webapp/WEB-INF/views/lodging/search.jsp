@@ -31,24 +31,24 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h2>숙소</h2>	
+			<h2>국내숙소</h2>	
 		</div>
 	</div>
-		<ul class="nav nav-tabs">
-		  <li class="nav-item">
-		    <a class="nav-link active" aria-current="page" href="#">호텔·리조트</a>
-		  </li>
-		  <li class="nav-item">
-		    <a class="nav-link" href="#">Link</a>
-		  </li>
-		  <li class="nav-item">
-		    <a class="nav-link" href="#">Link</a>
-		  </li>
-		  <li class="nav-item">
-		    <a class="nav-link disabled">Disabled</a>
-		  </li>
-		</ul>
-
+	<ul class="nav nav-pills">
+	  	<li class="nav-item">
+	    	<a class="nav-link active" aria-current="page" href="#">호텔·리조트</a>
+	  	</li>
+	 	<li class="nav-item">
+	    	<a class="nav-link" href="#">펜션·풀빌라</a>
+	    </li>
+	 	 <li class="nav-item">
+	   		<a class="nav-link" href="#">Link</a>
+	 	 </li>
+	 	 <li class="nav-item">
+	    	<a class="nav-link disabled">Disabled</a>
+	  	</li>
+	</ul>
+	<div class="css-udihv3--CategoriesTab-style--container"></div>
 </div>
   <!-- Footer-->
 <%@ include file="../common/footer.jsp" %>

@@ -5,32 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.nadri.lodging.service.LodgingService;
+import com.nadri.lodging.service.RoomService;
 
 @Controller
-@RequestMapping("/lodging")
-public class LodgingController {
+@RequestMapping("/lodging/room")
+public class RoomController {
 
 	@Autowired
-	private LodgingService lodgingService;
-	
-	@GetMapping
-	public String search() {
-		
-		return "lodging/search";
-	}
-	
-	@GetMapping("/list.nadri")
-	public String list() {
-		
-		return "lodging/list";
-	}
+	private RoomService roomService;
 	
 	@GetMapping("/insert")
 	public String insert() throws Exception {
-		lodgingService.insertLodging();
+		roomService.insertRoom();
 		return null;
 	}
-	
-	
 }
