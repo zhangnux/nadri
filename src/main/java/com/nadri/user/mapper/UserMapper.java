@@ -13,5 +13,6 @@ public interface UserMapper {
 	void updateUser(User user);
 	void deleteUser(int no);
 	User getUserById(String id);
+	User getUserByNo(int no);
 	
 }
