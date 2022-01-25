@@ -9,45 +9,19 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nadri.lodging.mapper.LodgingMapper;
+import com.nadri.lodging.mapper.RoomMapper;
 import com.nadri.lodging.vo.LodInformation;
 
-
 @Service
-public class LodgingService {
-
+public class RoomService {
+	
 	@Autowired
-	private LodgingMapper lodgingMapper;
-
-	// 모든 정보 가져오기
-	public List<LodInformation> getAllLodgings(){
-		
-		return lodgingMapper.getLodgings();
-	}
+	private RoomMapper roomMapper;
 	
-	// 번호로 정보 가져오기
-	public int getLodgingByNo(int no){
-		
-		return lodgingMapper.getLodgingByNo(no);
-	}
-	
-	
-	// 숙소 정보 수정
-	public void updateLodging(LodInformation lodInformation) {
-		
-		lodgingMapper.updateLodging(lodInformation);
-	}
-	
-	// 숙소 정보 삭제
-	public void deleteLodging(int no) {
-		
-		lodgingMapper.deleteLodging(no);
-	}
-	// 등록하기
 	@SuppressWarnings("unchecked")
-	public void insertLodging() throws Exception {
-
-		String url ="http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchStay?ServiceKey=tSqBlkiohsPm5ZiRD2nuDuBN20x3yzu4jAsPG404aCUwJw9VWrGXICq%2FO3idoWPNwSz1vNC6YuOKtmacJmqADw%3D%3D&areaCode=2&sigunguCode=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=D&numOfRows=12&pageNo=1&_type=json";
+	public void insertRoom() throws Exception {
+		
+		String url = "";
 		InputStream in = new URL(url).openStream();
 		
 		JSONParser parser = new JSONParser(in);
@@ -67,13 +41,8 @@ public class LodgingService {
 			information.setCheckOut("오전 11시");
 			information.setLodSales(0);
 			
-			lodgingMapper.insertLodging(information);
+			roomMapper.insertRoom(null);;
 		}	
 	
-		
 	}
-	
-	
-	
-	
 }

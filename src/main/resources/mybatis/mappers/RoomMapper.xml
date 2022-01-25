@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.lodging.mapper.RoomMapper">
+	
+	<!-- 
+		void insertRoom(LodRoom lodRoom)
+	 -->
+	<insert id="insertRoom" parameterType="com.nadri.lodging.vo.LodRoom">
+		insert into lodging_information
+		(room_no, lod_no, room_name, room_per_person, room_max_person, room_price, room_discount_price, room_category_no, room_form_no)
+		values
+		(#{no}, #{lodinformation.no}, #{name}, #{roomPerPerson}, #{roomMaxPerson}, #{price}, #{discountPrice}, #{lodRoomCategory.no}, #{lodRoomForm.no})
+	</insert>
+
+</mapper>

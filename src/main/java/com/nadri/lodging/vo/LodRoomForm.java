@@ -15,6 +15,6 @@ import lombok.ToString;
 public class LodRoomForm {
 
 	private int no;                 // 룸유형번호
-	private int name;               // 룸유형이름
+	private String name;               // 룸유형이름
 	
 }
