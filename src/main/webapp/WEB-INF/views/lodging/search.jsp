@@ -31,18 +31,24 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h2>국내숙소</h2>	
+			<h2>숙소</h2>	
 		</div>
 	</div>
-	<div class="row">
-		<div class="col">
-			<form action="" method="post">
-				<div class="mb-3">
-					<label class="form-class"></label>
-				</div>
-			</form>
-		</div>			
-	</div>
+		<ul class="nav nav-tabs">
+		  <li class="nav-item">
+		    <a class="nav-link active" aria-current="page" href="#">호텔·리조트</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" href="#">Link</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" href="#">Link</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link disabled">Disabled</a>
+		  </li>
+		</ul>
+
 </div>
   <!-- Footer-->
 <%@ include file="../common/footer.jsp" %>
