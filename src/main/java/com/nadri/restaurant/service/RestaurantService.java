@@ -1,6 +1,5 @@
 package com.nadri.restaurant.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nadri.restaurant.mapper.RestaurantMapper;
 import com.nadri.restaurant.vo.Restaurant;
+import com.nadri.restaurant.vo.RestaurantReview;
 
 @Service
 public class RestaurantService {
@@ -41,6 +41,23 @@ public class RestaurantService {
 		return rtMapper.getBestRestaurants();
 	}
 	
+	
+	// 리뷰 서비스
+	
+	
+	
+	
+	public void addNewReview(RestaurantReview restaurnatReview) {
+		rtMapper.insertReview(restaurnatReview);
+	}
+	
+	public void updateReview(RestaurantReview restaurantReview) {
+		rtMapper.updateReview(restaurantReview);
+	}
+	
+	public void deleteReview(int reviewNo) {
+		rtMapper.deleteReview(reviewNo);
+	}
 	
 	
 	
