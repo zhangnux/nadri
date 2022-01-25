@@ -20,8 +20,9 @@ public interface RestaurantMapper {
 	
 	
 	Restaurant getRestaurantDetail(int no);
+	/*
 	void insertRestaurant(Restaurant restaurant);
-	
+	*/
 	int getRestaurantsTotalRows(RestaurantCriteria criteria);
 	List<Restaurant> searchRestaurants(RestaurantCriteria criteria);
 	

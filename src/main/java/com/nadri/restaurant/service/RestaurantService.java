@@ -1,11 +1,15 @@
 package com.nadri.restaurant.service;
 
+import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nadri.restaurant.mapper.RestaurantMapper;
+import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 
@@ -15,6 +19,45 @@ public class RestaurantService {
 	@Autowired
 	private RestaurantMapper rtMapper;
 	
+	/*
+	public void addNewRestaurant () throws Exception {
+		// url 지정
+		String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=U8qsjMdizljQtq1Jnkio%2ByXjj2mcv4U6%2B4lD1%2Ft1SZIM64zzJ8PxHmBz8Loej8Kh%2BpCLxA9u4FzGCcKikMwLQw%3D%3D&contentTypeId=39&areaCode=&sigunguCode=&cat1=A05&cat2=A0502&cat3=A05020400&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=P&numOfRows=16&pageNo=1&_type=json";
+		// JSON 텍스트를 Map<String, Object>로 반환하는 JSONParser 객체 생성
+		JSONParser parser = new JSONParser(new URL(url).openStream());
+		// JSON 텍스트를 Map<String, Object>로 변환
+		Map<String, Object> object = parser.parseObject();
+				
+		// 음식점 데이터 찾기
+		Map<String, Object> response = (Map<String, Object>) object.get("response");
+		Map<String, Object> body = (Map<String, Object>) response.get("body");
+		Map<String, Object> items = (Map<String, Object>) body.get("items");
+		List<Map<String, Object>> itemList = (List<Map<String, Object>>) items.get("item");
+				
+		// 각 음식점 정보를 꺼내고, 레스토랑 객체에 저장하고, 매퍼를 이용해서 테이블에 저장
+		for (Map<String, Object> item : itemList) {
+					
+			Restaurant restaurant = new Restaurant();
+			restaurant.setName((String) item.get("title"));
+			restaurant.setTel((String) item.get("tel"));
+			restaurant.setPicture((String) item.get("firstimage"));
+			restaurant.setAddress((String) item.get("addr1"));
+			restaurant.setCityNo(Integer.parseInt(item.get("areacode").toString()));
+			restaurant.setLat(Double.parseDouble(item.get("mapx").toString()));
+			restaurant.setLon(Double.parseDouble(item.get("mapy").toString()));
+			restaurant.setParking("Y");
+			restaurant.setRestDate("연중무휴");
+			restaurant.setOpenTime("11:00~24:00");
+			
+			// 중식
+			restaurant.setCategoryNo(4);
+			rtMapper.insertRestaurant(restaurant);
+
+		}
+		
+	}
+	
+	*/
 	
 	public List<Restaurant> getAllRestaurants(){
 		return rtMapper.getAllRestaurants();
@@ -32,10 +75,7 @@ public class RestaurantService {
 	}
 	
 	
-	public void addNewRestaurant (Restaurant restaurant) {	
-		rtMapper.insertRestaurant(restaurant);
-		
-	}
+	
 	
 	public List<Restaurant> getBestRestaurants(){
 		return rtMapper.getBestRestaurants();
