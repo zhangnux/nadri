@@ -253,10 +253,14 @@
 <script type="text/javascript">
 	$(function() {
 		$("input[name=way]").change(function() {
-			let check = $("#come input").prop('disabled')
+			if ($(this).val() == '왕복') {
+				$("#come input").prop('disabled', false)
+				$("#come select").prop('disabled', false)
+			} else {
+				$("#come input").prop('disabled', true)
+				$("#come select").prop('disabled', true)
+			}
 
-			$("#come input").prop('disabled', !check)
-			$("#come select").prop('disabled', !check)
 		})
 		
 		
