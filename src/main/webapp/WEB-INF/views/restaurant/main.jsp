@@ -21,6 +21,10 @@
 	#best-restaurant{
 		rounded;
 	}
+	
+	#go-list:hover{
+		opacity: 0.4;
+	}
 
 
 </style>
@@ -44,6 +48,7 @@
 	
 	<div class="row mb-3">
 		<div class="col">
+			<h2>레스토랑</h2>
 		</div>
 	</div>
 	<hr>
@@ -80,10 +85,8 @@
 						</c:forEach>
 					</select>
 				</div>
-				<div class="col-12">
+				<div class="col-12 input-group">
 					<input type="search" class="form-control" name="name" value="${param.name }" placeholder="상호를 입력하세요">
-				</div>
-				<div class="col-12">
 					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
 				</div>
 				<div>
@@ -109,7 +112,7 @@
 	  				<div class="card-body">
 	    				<p class="card-text"><strong>${restaurant.name }</strong></p>
 	    				<p class="card-text">${restaurant.starPoint } 점</p>
-	    				<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a>
+	    				<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary"><strong>book now</strong></a>
 	  				</div>
 				</div>
 			</div>
@@ -117,7 +120,7 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col">
-			<a href="list.nadri" class="text-decoration-none text-primary" ><Strong>상세 리스트 보기 ></Strong></a>
+			<a href="list.nadri" class="text-decoration-none text-primary" id="go-list" ><Strong>상세 리스트 보기 ></Strong></a>
 		</div>
 	</div>
 

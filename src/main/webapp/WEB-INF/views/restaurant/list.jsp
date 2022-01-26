@@ -41,59 +41,12 @@
 	
 	<div class="row mb-3 p-3">
 		<div class="col">
-			<h2>List</h2>
+			<h2>목록</h2>
 		</div>
 	</div>
 	
 	<hr>
-	<!-- 검색 -->
-	<!--검색어로 한 다음 content, name, city 모두 걸리게
-		
-		혹은
-		옵션: 지역 //경기도 (city로)
-			 카테고리
-		검색어: 상호
-		order by 매출
-				 별점
-	-->
-	<div class="row mb-3">
-		<div class="col">
-			<form id="form-search" action="" method="get" class="row row-cols-lg-auto g-3 align-items-center p-3">
-				<div class="col-12">
-					<select class="form-select" name="city">
-						<option value="" ${empty param.city ? 'selected' : ''}>전체 지역</option>
-						<c:forEach var="city" items="${cities }">
-							<option value="${city.no }" ${param.city == '${city.no}' ? 'selected' : ''}>
-								${city.cityName }
-							</option>
-						</c:forEach>
-					</select>
-				</div>
-				<div class="col-12">
-					<select class="form-select" name="category">
-						<option value="" ${empty param.category ? 'selected' : ''}>전체 카테고리</option>
-						<c:forEach var="category" items="${categories }">
-							<option value="${category.no }" ${param.category == '${category.no}' ? 'selected' : ''}>
-								${category.categoryName }
-							</option>
-						</c:forEach>
-					</select>
-				</div>
-				<div class="col-12">
-					<input type="search" class="form-control" name="name" value="${param.name }" placeholder="상호를 입력하세요">
-				</div>
-				<div class="col-12">
-					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
-				</div>
-				<div>
-					<select name="sort">
-						<option value="sales" ${param.sort == 'sort' ? 'selected' : ''}>매출순</option>
-						<option value="starPoint" ${param.sort == 'sort' ? 'selected' : ''}>별점순</option>
-					</select>
-				</div>
-			</form>
-		</div>
-	</div>
+
 	
 	
 	<hr>
@@ -110,7 +63,8 @@
 						<td>별점: 5점</td>
 					</tr>
 					<tr>
-						<td>한식 주차가능 <a href="" class="btn btn-primary">book now</a></td>
+						<td>한식 주차가능
+						<a href="" class="btn btn-primary">book now</a></td>
 					</tr>
 				</tbody>
 			</table>

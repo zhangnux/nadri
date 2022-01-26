@@ -81,6 +81,7 @@ public class RestaurantController {
 			RestaurantSearchForm form, Model model) {
 		RestaurantCriteria c = new RestaurantCriteria();
 		
+		
 		if(StringUtils.hasText(form.getCityName())) {
 			c.setCityName(form.getCityName());
 		}
@@ -106,9 +107,13 @@ public class RestaurantController {
 		c.setEndIndex(pagination.getEnd());
 		
 		List<Restaurant> restaurants = rtService.searchRestaurants(c);
+		List<City> cities = rtService.getAllCities();
+		List<Category> categories = rtService.getAllCategories();
 		
 		model.addAttribute("restaurants", restaurants);
 		model.addAttribute("pagination", pagination);
+		model.addAttribute("categories", categories);
+		model.addAttribute("cities", cities);
 		
 		return "/restaurant/list";
 	}
