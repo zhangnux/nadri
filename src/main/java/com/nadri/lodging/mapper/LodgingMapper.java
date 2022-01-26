@@ -17,7 +17,7 @@ public interface LodgingMapper {
 	void deleteLodging(int no);
 	
 	// 숙소 전체 정보
-	List<LodInformation> getLodgings();
+	List<LodInformation> getAllLodgings();
 	
 	// 숙소 번호로 조히
 	int getLodgingByNo(int no);
