@@ -41,7 +41,7 @@
 		where coupon_no = #{no}
 	</update>
 	
-	<!-- 쿠폰 상세정보 -->
+	<!-- 쿠폰 정보 -->
 	<select id="getCouponDetail" parameterType="int" resultType="com.nadri.coupon.vo.Coupon">
 		select
 			coupon_no as no,

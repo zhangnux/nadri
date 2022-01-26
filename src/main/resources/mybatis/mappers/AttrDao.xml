@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.attr.dao.AttrDao">
+
+	<resultMap id="AttrResultMap" type="com.nadri.attr.vo.Attraction">
+		<id column="att_no" property="no"/>
+		<result column="att_name" property="name"/>
+		<result column="att_content" property="content"/>
+		<result column="att_startdate" property="startDate"/>
+		<result column="att_enddate" property="endDate"/>
+		<result column="att_place" property="place"/>
+		<result column="att_sales" property="sales"/>
+		<result column="att_star" property="star"/>
+		<result column="att_price" property="price"/>
+		<result column="att_discountprice" property="discountPrice"/>
+		<result column="att_category" property="category"/>
+		<result column="att_thumbnail" property="thumbnail"/>
+		<result column="att_photo" property="photo"/>
+	</resultMap>
+
+	<!-- 리스트 -->
+	<select id="allAttrList" resultMap="AttrResultMap">
+		<![CDATA[
+		select
+			att_no,
+			att_name,
+			att_content,
+			att_startdate,
+			att_enddate,
+			att_place,
+			att_sales,
+			att_star,
+			att_price,
+			att_discountprice,
+			att_category,
+			att_thumbnail,
+			att_photo
+		from attraction
+        where (att_enddate is null or att_enddate > sysdate)
+		order by att_no desc]]>
+	</select>
+	
+	<select id="attrcount" resultType="int">
+		select count(*)
+		from attraction
+	</select>
+	
+</mapper>
