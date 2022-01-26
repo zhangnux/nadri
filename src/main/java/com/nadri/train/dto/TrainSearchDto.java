@@ -17,6 +17,9 @@ public class TrainSearchDto {
 	private int routeNo;
 	private int typeNo;
 	private String trainName;
-	private int bookingCount;
-	private int seatTotal;
+	private int specialBooking;
+	private int specialSeat;
+	private int normalBooking;
+	private int normalSeat;
+	private long price;
 }

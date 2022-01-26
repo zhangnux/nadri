@@ -34,7 +34,7 @@
 		height: 36px;
 	}
 	
-	.modal li {
+	#modal-station li {
 		text-decoration: none;
 		display: inline-block;
 		padding: 4px 14px;
@@ -66,10 +66,14 @@
 	#trainBooking .dropdown-menu span, span[data-station-id], #word-Menu span, .div-show-station span{
 		cursor: pointer;
 	}
+	.bi-plus-circle, .bi-dash-circle {
+		color: #644043; 
+		font-size: 18px;
+	}
 </style>
 <div class="row">
 	<div class="col">
-		<form action="train/list.nadri" method="post" id="trainSearch" style="border-bottom: 2px solid #7E5C5E; border-top: 2px solid #7E5C5E;">
+		<form action="train/list.nadri" method="post" id="trainSearch" style="border: 2px solid #7E5C5E;">
 			<!-- 경로 선택 -->
 			<div class="row">
 				<div class="my-3 ms-4 col-md-2 div-show-station" id="departure" style="cursor: pointer;">
@@ -119,34 +123,35 @@
 					</div>
 				</div>
 				<!-- 승객 수 입력 -->
-				<div class="col-md-7 passenger" style="display:flex; justify-content:space-between; align-items: center; 
-				width:808px; padding: 0;">
-					  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
-					  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
+				<div class="col-md-6 passenger" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
+					  data-bs-auto-close="outside" aria-expanded="false">
+					  <div class="m-3" style="display: inline-block;">
 						<label style="display: block; font-size: 16px; color: gray;">승객</label>
 						<input type="text" style="border: none;" name="count1" readonly="readonly" value="1">명
 					  </div>
-					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
-					    <li>
-					    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
-						    <div class="adult">
-						    	<span><i class="bi bi-dash-circle"></i></span>
-						    	<input name="adNo1" value="1" style="width: 15px; border: none;">
-						    	<span><i class="bi bi-plus-circle"></i></span>
-						    </div>
-				    	</li>
-					    <li>
-					    	<div>어린이</div>
-						    <div class="childern">
-						    	<span><i class="bi bi-dash-circle"></i></span>
-						    	<input name="cdNo1" value="0" style="width: 15px; border: none;">
-						    	<span><i class="bi bi-plus-circle"></i></span>
-						    </div>
-				    	</li>
-					</ul>
+				</div>
+			  	<ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 250px; border-top: 2px solid #7E5C5E; border-radius: 0;">
+				    <li>
+				    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
+					    <div class="adult">
+					    	<span><i class="bi bi-dash-circle"></i></span>
+					    	<input name="adNo1" value="1" style="width: 15px; border: none;">
+					    	<span><i class="bi bi-plus-circle"></i></span>
+					    </div>
+			    	</li>
+				    <li>
+				    	<div>어린이</div>
+					    <div class="childern">
+					    	<span><i class="bi bi-dash-circle"></i></span>
+					    	<input name="cdNo1" value="0" style="width: 15px; border: none;">
+					    	<span><i class="bi bi-plus-circle"></i></span>
+					    </div>
+			    	</li>
+				</ul>
+				<div class="col-md-1 p-0 text-end" style="width: 146px;">
 					<!-- 검색 버튼 -->
 					<div id="search" class="h-100" style="text-align-last:center; display:inline-block; cursor:pointer;
-						width: 90px; margin-right: 4px; background-color: #7E5C5E;">
+						width: 90px; background-color: #7E5C5E;">
 						<i class="bi bi-search" style="font-size: 30px; color: white; display:flex; padding: 30px;"></i>
 					</div>
 				</div>
@@ -160,8 +165,8 @@
 				<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
 					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
-						<input type="text" class="datepicker" readonly="readonly" name="dpDate2">
-						<select name="dpTime2" style="width: 50px;">
+						<input type="text" class="datepicker" disabled readonly="readonly" name="dpDate2">
+						<select name="dpTime2" disabled style="width: 50px;">
 							<c:forEach var="time" begin="0" end="23">
 								<c:choose>
 									<c:when test="${time lt 10}">
@@ -176,31 +181,31 @@
 						<span>시</span>
 					</div>
 				</div>
-				<div class="col-md-6 passenger" style="align-items: center; padding: 0;">
-					  <div class="m-3 dropdown-toggle"  id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
-					  data-bs-auto-close="outside" aria-expanded="false" style="display: inline-block;">
+				<div class="col-md-6 passenger" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" 
+					  data-bs-auto-close="outside" aria-expanded="false">
+					  <div class="m-3"  style="display: inline-block;">
 						<label style="display: block; font-size: 16px; color: gray;">승객</label>
-						<input type="text" style="border: none;" name="count2" readonly="readonly" value="1">명
+						<input type="text" disabled style="border: none;" name="count2" readonly="readonly" value="1">명
 					  </div>
-					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 200px;">
-					    <li>
-					    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
-						    <div id="adult">
-						    	<span><i class="bi bi-dash-circle"></i></span>
-						    	<input name="adNo2" value="1" style="width: 15px; border: none;">
-						    	<span><i class="bi bi-plus-circle"></i></span>
-						    </div>
-				    	</li>
-					    <li>
-					    	<div>어린이</div>
-						    <div>
-						    	<span><i class="bi bi-dash-circle"></i></span>
-						    	<input name="cdNo2" value="0" style="width: 15px; border: none;">
-						    	<span><i class="bi bi-plus-circle"></i></span>
-						    </div>
-				    	</li>
-					</ul>
 				</div>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 250px; border-top: 2px solid #7E5C5E; border-radius: 0;">
+				  <li>
+				  		<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
+				   		<div id="adult">
+				   		<span><i class="bi bi-dash-circle"></i></span>
+				   		<input name="adNo2" value="1" disabled style="width: 15px; border: none;">
+				   		<span><i class="bi bi-plus-circle"></i></span>
+				   		</div>
+				 	</li>
+					<li>
+				  		<div>어린이</div>
+				   		<div>
+				   		<span><i class="bi bi-dash-circle"></i></span>
+				   		<input name="cdNo2" value="0" disabled style="width: 15px; border: none;">
+					    <span><i class="bi bi-plus-circle"></i></span>
+						</div>
+				   	</li>
+				</ul>
 			</div>
 		</form>
 	</div>
@@ -247,6 +252,14 @@
 </div>
 <script type="text/javascript">
 	$(function() {
+		$("input[name=way]").change(function() {
+			let check = $("#come input").prop('disabled')
+
+			$("#come input").prop('disabled', !check)
+			$("#come select").prop('disabled', !check)
+		})
+		
+		
 		// 누르면 왕복 검색창이 생김
 		$("input[value=왕복]").click(function() {
 			$("#go").nextAll().show()

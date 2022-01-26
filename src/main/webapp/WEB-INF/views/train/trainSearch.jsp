@@ -159,15 +159,10 @@
 					alert("복편을 왕편보다이전 일자로 선택하셨습니다. 일정을 다시 한번 선택하여 주십시오.")
 					valid = false;
 				}
-			} else {
-				// 질문 뒤로 가기누르면 적용 안되게 못하나???
-				$("div#come input").each(function(index, data) {
-					$(this).prop('disabled', true)
-				})
 			}
 			
 			if (valid) {
-//				$("#trainSearch").submit()
+				$("#trainSearch").submit()
 			}
 		})
 		
