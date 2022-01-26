@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.nadri.lodging.mapper.RoomMapper;
 import com.nadri.lodging.vo.LodInformation;
+import com.nadri.lodging.vo.LodRoom;
 
 @Service
 public class RoomService {
@@ -33,13 +34,8 @@ public class RoomService {
 		
 		for (Map<String, Object> item : itemList) {
 		
-			LodInformation information = new LodInformation();
-			information.setNo(Integer.parseInt(String.valueOf(item.get("contentid"))));
-			information.setName(String.valueOf(item.get("title")));
-			information.setAddress(String.valueOf(item.get("addr1")));
-			information.setCheckIn("오후 3시");
-			information.setCheckOut("오전 11시");
-			information.setLodSales(0);
+			LodRoom lodRoom = new LodRoom();
+			
 			
 			roomMapper.insertRoom(null);;
 		}	
