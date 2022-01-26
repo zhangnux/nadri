@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.coupon.form.CouponInsertForm;
 import com.nadri.coupon.service.CouponService;
-import com.nadri.coupon.util.Criteria;
-import com.nadri.coupon.util.Pagination;
 import com.nadri.coupon.vo.Coupon;
 
 @Controller
