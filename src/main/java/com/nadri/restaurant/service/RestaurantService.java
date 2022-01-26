@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.nadri.restaurant.mapper.RestaurantMapper;
 import com.nadri.restaurant.vo.Category;
+import com.nadri.restaurant.vo.City;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
+import com.nadri.restaurant.web.form.RestaurantCriteria;
 
 @Service
 public class RestaurantService {
@@ -63,23 +65,37 @@ public class RestaurantService {
 		return rtMapper.getAllRestaurants();
 	}
 	
-	public List<Restaurant> getRestaurantsByCategory(String category){
-		
-		return rtMapper.getRestaurantsByCategory();
-		
-	}
 	
 	public Restaurant getRestaurantDetail(int no) {
 		
 		return rtMapper.getRestaurantDetail(no);
 	}
 	
-	
-	
-	
 	public List<Restaurant> getBestRestaurants(){
 		return rtMapper.getBestRestaurants();
 	}
+	
+	
+	// search 부분
+	
+	public List<Restaurant> searchRestaurants(RestaurantCriteria criteria){
+		return rtMapper.searchRestaurants(criteria);
+	}
+	
+	public int getRestaurantsTotalRows(RestaurantCriteria criteria) {
+		return rtMapper.getRestaurantsTotalRows(criteria);
+	}
+	
+	public List<City> getAllCities(){
+		return rtMapper.getAllCities();
+	}
+	
+	public List<Category> getAllCategories(){
+		return rtMapper.getAllCategories();
+	}
+	
+	
+	
 	
 	
 	// 리뷰 서비스

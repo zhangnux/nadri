@@ -13,13 +13,12 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class RestaurantCriteria {
+public class RestaurantSearchForm {
 	
 	private String categoryName;
 	private String cityName;
 	private String name;
-	private int beginIndex;
-	private int endIndex;
 	private String sort;
 	
+
 }

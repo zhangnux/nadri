@@ -16,6 +16,6 @@ import lombok.ToString;
 public class City {
 	
 	private int no;
-	private String name;
+	private String cityName;
 
 }

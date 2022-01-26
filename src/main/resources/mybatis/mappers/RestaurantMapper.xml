@@ -17,27 +17,6 @@
 		order by restaurant_no
 	</select>
 	
-	<!-- 
-		List<Restaurant> getRestaurantsByCategory();
-		
-	-->
-	<select id="getRestaurantsByCategory" parameterType="String" resultType="com.nadri.restaurant.vo.Restaurant">
-		select
-			restaurant_no,
-			restaurant_name,
-			restaurant_picture,
-			restaurant_address,
-			restaurant_parking,
-			restaurant_restdate,
-			restaurant_star_point
-		from
-			restaurant
-		where
-			category_no = #{value}
-		order by restaurant_no
-	</select>
-	
-	
 	<!--
 		getBestRestaurants()
 	-->
@@ -45,15 +24,17 @@
 		select
 			restaurant_no as no,
 			restaurant_name as name,
-			restaurant_picture as picture
+			restaurant_picture as picture,
+			restaurant_star_point as starPoint
 		from
 			(select
 				restaurant_no,
 				restaurant_name,
-				restaurant_picture
+				restaurant_picture,
+				restaurant_star_point
 			from
 				restaurant
-			order by restaurant_sales
+			order by restaurant_sales desc
 				)
 		where rownum &lt; to_number(5)
 	</select>
@@ -75,7 +56,8 @@
 			restaurant_restdate as restDate,
 			restaurant_tel as tel,
 			restaurant_open_time as openTime,
-			restaurant_star_point as starPoint
+			restaurant_star_point as starPoint,
+			restaurant_review_count as reviewCount
 		from
 			restaurant
 		where
@@ -121,18 +103,16 @@
 	<select id="getRestaurantsTotalRows" parameterType="com.nadri.restaurant.web.form.RestaurantCriteria" resultType="int">
 		select count(*)
 		from restaurant
-		<where>
-			<if test="opt != null and value != null">
-				<choose>
-					<when test="opt == '상호'">
-						restaurant_name like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '소개'">
-						restaurant_content like '%' || #{value} || '%'
-					</when>
-				</choose>
+		where
+			<if test="name != null">
+					and restaurant_name like '%' || #{name} || '%'
 			</if>
-		</where>			
+			<if test="city != null">
+				and city_no = #{city}
+			</if>
+			<if test="category != null">
+				and category_no = #{category}
+			</if>			
 	</select>
 	
 	<!-- 
@@ -143,24 +123,67 @@
 			+ <where> 태그안에 sql문중에서 첫번째 sql문이 "and 컬럼명 = 값" 의 형태면 and를 제거한다. 
 	 -->
 	<select id="searchRestaurants" parameterType="com.nadri.restaurant.web.form.RestaurantCriteria" resultType="com.nadri.restaurant.vo.Restaurant">
-		select *
+		select
+			A.restaurant_no as no,
+			A.restaurant_name as name,
+			A.restaurant_picture as picture,
+			A.restaurant_star_point as starPoint,
+			A.restaurant_review_count,
+			B.category_name as categoryName,
+			C.city_name as cityName
 		from (
-			select A.*, row_number() over (order by restaurant_no desc) rn
-			from restaurant A
-			<where>
-				<if test="opt != null and value != null">
-					<choose>
-						<when test="opt == '상호'">
-							restaurant_name like '%' || #{value} || '%'
-						</when>
-						<when test="opt == '소개'">
-							restaurant_content like '%' || #{value} || '%'
-						</when>
-					</choose>
+			select
+				A.restaurant_no as no,
+				A.restaurant_name as name,
+				A.restaurant_picture as picture,
+				A.restaurant_star_point as starPoint,
+				A.restaurant_review_count as reviewCount,
+				B.category_name as categoryName,
+				C.city_name as cityName
+			row_number() over (order by restaurant_no desc) rn
+			from restaurant A, restaurant_category B, restaurant_city C
+			where
+				A.category_no = B.category_no and A.city_no = C.city_no
+				<if test="name != null">
+					and restaurant_name like '%' || #{name} || '%'
 				</if>
-			</where>			
+				<if test="city != null">
+					and city_no = #{city}
+				</if>
+				<if test="category != null">
+					and category_no = #{category}
+				</if>
+				<if test="sort == 'sales'">
+					order by restaurant_sales desc
+				</if>
+				<if test="sort == 'starPoint'">
+					order by restaurant_star_point desc
+				</if>
 		)
 		where rn between #{beginIndex} and #{endIndex}
+	</select>
+	
+	
+	<!-- 
+		List<City> getAllCities();
+	-->
+	<select id="getAllCities" resultType="com.nadri.restaurant.vo.City">
+		select
+			city_no no,
+			city_name cityName
+		from
+			restaurant_city
+	</select>
+	
+	<!--
+		List<Category> getAllCategories();
+	-->
+	<select id="getAllCategories" resultType="com.nadri.restaurant.vo.Category">
+		select
+			category_no no,
+			category_name categoryName
+		from
+			restaurant_category
 	</select>
 	
 	
