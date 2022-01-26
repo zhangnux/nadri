@@ -11,14 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.nadri.coupon.util.Pagination;
 import com.nadri.restaurant.service.RestaurantService;
+import com.nadri.restaurant.vo.Category;
+import com.nadri.restaurant.vo.City;
 import com.nadri.restaurant.vo.Restaurant;
+import com.nadri.restaurant.web.form.RestaurantCriteria;
 import com.nadri.restaurant.web.form.RestaurantInsertForm;
+import com.nadri.restaurant.web.form.RestaurantSearchForm;
 
 
 @Controller
@@ -51,11 +58,61 @@ public class RestaurantController {
 	public String main(Model model) {
 		
 		List<Restaurant> restaurants = rtService.getBestRestaurants();
-		model.addAttribute("restaurants", restaurants);
+		List<City> cities = rtService.getAllCities();
+		List<Category> categories = rtService.getAllCategories();
 		
+		model.addAttribute("restaurants", restaurants);
+		model.addAttribute("categories", categories);
+		model.addAttribute("cities", cities);
 		
 		return "/restaurant/main";
 	}
+	
+	
+	@GetMapping("/list.nadri")
+	public String list() {
+		return "/restaurant/list";
+	}
+	
+	
+	/*
+	@GetMapping("/list.nadri")
+	public String list(@RequestParam(name = "page", required = false, defaultValue = "1") String page, 
+			RestaurantSearchForm form, Model model) {
+		RestaurantCriteria c = new RestaurantCriteria();
+		
+		if(StringUtils.hasText(form.getCityName())) {
+			c.setCityName(form.getCityName());
+		}
+		
+		if(StringUtils.hasText(form.getCategoryName())) {
+			c.setCategoryName(form.getCategoryName());
+		}
+		
+		if(StringUtils.hasText(form.getName())) {
+			c.setName(form.getName());
+		}
+		
+		if(StringUtils.hasText(form.getSort())) {
+			c.setSort(form.getSort());
+		}
+
+		int totalRecords = rtService.getRestaurantsTotalRows(c);
+		
+		Pagination pagination = new Pagination(page, totalRecords);
+		
+		
+		c.setBeginIndex(pagination.getBegin());
+		c.setEndIndex(pagination.getEnd());
+		
+		List<Restaurant> restaurants = rtService.searchRestaurants(c);
+		
+		model.addAttribute("restaurants", restaurants);
+		model.addAttribute("pagination", pagination);
+		
+		return "/restaurant/list";
+	}
+	*/
 	
 	
 	

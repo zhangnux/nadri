@@ -16,7 +16,10 @@
 	img {
 		height: 200px;
 		width: 70px;
-		padding: 10px;
+	}
+	
+	#best-restaurant{
+		rounded;
 	}
 
 
@@ -39,39 +42,72 @@
 <!-- ★ -->
 <div class="container">
 	
-	<!-- 검색 -->
-	<!-- 요소: 검색어로 한 다음 content, name, city 모두 걸리게 -->
 	<div class="row mb-3">
 		<div class="col">
-			<form action="" method="post" class="row row-cols-lg-auto g-3 align-items-center">
+		</div>
+	</div>
+	<hr>
+	<!-- 검색 -->
+	<!--검색어로 한 다음 content, name, city 모두 걸리게
+		
+		혹은
+		옵션: 지역 //경기도 (city로)
+			 카테고리
+		검색어: 상호
+		order by 매출
+				 별점
+	-->
+	<div class="row mb-3">
+		<div class="col">
+			<form id="form-search" action="" method="get" class="row row-cols-lg-auto g-3 align-items-center p-3">
 				<div class="col-12">
-					<select class="form-select" name="opt">
-						<option></option>
+					<select class="form-select" name="city">
+						<option value="" ${empty param.city ? 'selected' : ''}>전체 지역</option>
+						<c:forEach var="city" items="${cities }">
+							<option value="${city.no }" ${param.city == '${city.no}' ? 'selected' : ''}>
+								${city.cityName }
+							</option>
+						</c:forEach>
 					</select>
 				</div>
 				<div class="col-12">
-					<input type="search" class="form-control" name="value" value="${param.value }">
+					<select class="form-select" name="category">
+						<option value="" ${empty param.category ? 'selected' : ''}>전체 카테고리</option>
+						<c:forEach var="category" items="${categories }">
+							<option value="${category.no }" ${param.category == '${category.no}' ? 'selected' : ''}>
+								${category.categoryName }
+							</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="col-12">
+					<input type="search" class="form-control" name="name" value="${param.name }" placeholder="상호를 입력하세요">
 				</div>
 				<div class="col-12">
 					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
 				</div>
+				<div>
+					<select name="sort">
+						<option value="sales" ${param.sort == 'sort' ? 'selected' : ''}>매출순</option>
+						<option value="starPoint" ${param.sort == 'sort' ? 'selected' : ''}>별점순</option>
+					</select>
+				</div>
 			</form>
 		</div>
 	</div>
-
-
+	<hr>
 	<div class="row mb-3">
 		<div class="col">
-			<h4>Best Restaurant</h4>
+			<h4><Strong>Best Restaurant</Strong></h4>
 		</div>
 	</div>
 	<div class="row mb-3">
 		<c:forEach var="restaurant" items="${restaurants }">
 			<div class="col-3">
-				<div class="card" style="width: 18rem;">
+				<div class="card shadow" style="width: 18rem;" id="best-restaurant">
 	  				<img src="${restaurant.picture}" class="card-img-top" alt="picture">
 	  				<div class="card-body">
-	    				<p class="card-text">${restaurant.name }</p>
+	    				<p class="card-text"><strong>${restaurant.name }</strong></p>
 	    				<p class="card-text">${restaurant.starPoint } 점</p>
 	    				<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a>
 	  				</div>
@@ -81,7 +117,7 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col">
-			<a href="list.nadri">상세 리스트 보기 ></a>
+			<a href="list.nadri" class="text-decoration-none text-primary" ><Strong>상세 리스트 보기 ></Strong></a>
 		</div>
 	</div>
 
@@ -92,7 +128,9 @@
 <%@ include file="../common/footer.jsp" %>
 </body>
 <script type="text/javascript">
-
+	$("#select-sort").change(function()){
+		document.getElementById("form-search").submit();
+	}
 
 </script>
 </html>
