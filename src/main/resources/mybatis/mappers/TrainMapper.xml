@@ -78,30 +78,38 @@
 	
 	<!-- 검색 정보로 기차 스케줄 조회 sql -->
 	<select id="getSchedulesByCriteria" parameterType="com.nadri.train.dto.TrainCriteria" resultType="com.nadri.train.dto.TrainSearchDto">
-		select 	s.schedule_no as scheduleNo,
-				s.schedule_departure_time as departureTime,
-				s.schedule_arrival_time as arrivalTime,
-				s.train_no as trainNo,
-				s.route_no as routeNo,
-		    	n.type_no as typeNo, 
-		    	p.train_name as trainName, 
-		    	a.cnt as bookingCount, 
-		    	b.total as seatTotal
-		from train_schedule s, train_route r, train_station t1, train_station t2, train n, train_type p,
-		    (select t.schedule_no, count(*) cnt
-		    from train_ticket t
-		    where t.is_canceled = 'N'
-		    group by t.schedule_no) a, (select train_no, sum(root_seat_count) total
-									    from train_room
-									    group by train_no) b
+		with sche
+		as (select s.schedule_no, s.schedule_departure_time, s.schedule_arrival_time, s.train_no,
+		    n.type_no, p.train_name,
+		    s.route_no,
+		    (select count(*) cnt from train_ticket b, train_room m where b.is_canceled = 'n' and b.schedule_no(+) = s.schedule_no and b.room_no = m.room_no and m.room_type = '특실') as booking_s,
+		    (select sum(root_seat_count)  from train_room a where a.train_no = s.train_no and a.room_type = '특실') as special,
+		    (select count(*) cnt from train_ticket b, train_room m where b.is_canceled = 'n' and b.schedule_no(+) = s.schedule_no and b.room_no = m.room_no and m.room_type = '일반실') as booking_n,
+		    (select sum(root_seat_count)  from train_room a where a.train_no = s.train_no and a.room_type = '일반실') as normal
+		from train_schedule s, train_route r, train_station t1, train_station t2, train n, train_type p
 		where t1.station_name = #{departureStation} and t2.station_name = #{arrivalStation}
 		and schedule_departure_time >= #{departureDate} and schedule_departure_time &lt; trunc(#{departureDate}+1)
 		and s.route_no = r.route_no
 		and r.departure_station_id = t1.station_id
 		and r.arrival_station_id = t2.station_id
-		and a.schedule_no(+) = s.schedule_no
-		and b.train_no = s.train_no
 		and n.train_no = s.train_no
 		and n.type_no = p.type_no
+		order by s.schedule_no)
+		select x.schedule_no as scheduleNo, 
+				x.schedule_departure_time as departureTime, 
+				x.schedule_arrival_time as arrivalTime, 
+				x.train_no as trainNo,
+		    	x.type_no as typeNo, 
+		    	x.train_name as trainName,
+		   		x.route_no as routeNo, 
+		   		x.booking_s as specialBooking, 
+		   		x.special as specialSeat, 
+		   		x.booking_n as normalBooking, 
+		   		x.normal as normalSeat, 
+		   		c.price as price
+		from sche x, train_price c
+		where c.seat_grade = '일반실'
+		and x.type_no = c.type_no
+		and x.route_no in (c.down_route_no, c.up_route_no)
 	</select>
 </mapper>
