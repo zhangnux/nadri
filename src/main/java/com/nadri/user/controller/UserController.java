@@ -1,4 +1,4 @@
-package com.nadri.user.web;
+package com.nadri.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,16 +16,19 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@GetMapping("/insert")
-	public String form(User user) {
-		userService.insertUser(user);
-		return "user/form";
+	@GetMapping("/joinForm1")
+	public String joinForm() {
+		return "/user/joinForm1";
 	}
 	
-	@GetMapping("/form")
-	public String formSec(User user) {
-		userService.insertUser(user);
-		return "user/list";
+	@GetMapping("/joinForm2")
+	public String joinForm2() {
+		return "/user/joinForm2";
+	}
+
+	@GetMapping("/loginForm")
+	public String loginForm() {
+		return "/user/loginForm";
 	}
 	
 }
