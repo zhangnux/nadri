@@ -167,7 +167,7 @@
 			}
 			
 			if (valid) {
-				$("#trainSearch").submit()
+//				$("#trainSearch").submit()
 			}
 		})
 		

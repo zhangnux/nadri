@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nadri.manager.service.ManagerService;
+import com.nadri.manager.util.SessionUtils;
 import com.nadri.manager.vo.Manager;
 import com.nadri.manager.web.model.ResponseDto;
-import com.nadri.train.util.SessionUtils;
 
 @RestController
 @RequestMapping("/rest/admin")
