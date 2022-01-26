@@ -22,7 +22,7 @@ public class LodgingService {
 	// 모든 정보 가져오기
 	public List<LodInformation> getAllLodgings(){
 		
-		return lodgingMapper.getLodgings();
+		return lodgingMapper.getAllLodgings();
 	}
 	
 	// 번호로 정보 가져오기
