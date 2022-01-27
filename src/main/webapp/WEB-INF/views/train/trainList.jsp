@@ -18,15 +18,14 @@
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 <style>
-	table {
+	.listTable {
 	  border-collapse: collapse;
 	}
-	table td {
+	.listTable td {
 	  border: 1px solid #E0E0E0;
 	}
 
-
-	#hocha span {
+	#hocha span.can {
 		cursor: pointer;
 		width: 100px;
 		height: 100px;
@@ -35,16 +34,24 @@
 		background-repeat: no-repeat;
 		padding: 15px 5px;
 	}
+	#hocha span.not {
+		width: 100px;
+		height: 100px;
+		background-image: url('../../resources/images/train/icon/nohocha.png');
+		background-size: 50px 50px;
+		background-repeat: no-repeat;
+		padding: 15px 5px;
+	}
 	#hocha li {
 		float: left;
-		margin: 10px;
+		margin: 3px;
 	}
 
-	#seatList li {
+	#seatList ul.can li {
 		float: left;
 		width: 6%;
 	}
-	#seatList span {
+	#seatList ul.can span {
 		cursor: pointer;
 		display: inline-block;
 		width: 35px;
@@ -142,7 +149,7 @@
 	</div>
 	<div class="row">
 		<div class="col">
-			<table class="table text-center">
+			<table class="table text-center listTable">
 				<thead style="border-bottom: inset;">
 					<tr style="background-color: #E1EDFC; border-bottom: none;">
 						<th style="width: 7%;">구분</th>
@@ -160,7 +167,7 @@
 					<c:forEach var="schedule" items="${schedules1 }">
 						<tr>
 							<td>직통</td>
-							<td>${schedule.trainName }
+							<td class="infoTrain">${schedule.trainName }
 								<input type="hidden" name="scheduleNo1" value="${schedule.scheduleNo }">
 								<input type="hidden" name="trainNo1" value="${schedule.trainNo }">
 								<input type="hidden" name="specialBooking1" value="${schedule.specialBooking }">
@@ -209,7 +216,7 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<table class="table text-center">
+				<table class="table text-center listTable">
 					<thead style="border-bottom: inset;">
 						<tr style="background-color: #E1EDFC;">
 							<th style="width: 7%;">구분</th>
@@ -227,7 +234,7 @@
 					<c:forEach var="schedule" items="${schedules2 }">
 						<tr>
 							<td>직통</td>
-							<td>${schedule.trainName }
+							<td class="infoTrain">${schedule.trainName }
 								<input type="hidden" name="scheduleNo2" value="${schedule.scheduleNo }">
 								<input type="hidden" name="trainNo2" value="${schedule.trainNo }">
 								<input type="hidden" name="specialBooking2" value="${schedule.specialBooking }">
@@ -281,9 +288,7 @@
 	    			<div class="border" style="background-color: white;">
 	    				<div class="m-5" id="hocha">
 	    					<ul>
-	    						<li><span>1호차</span></li>
-	    						<li><span>2호차</span></li>
-	    						<li><span>3호차</span></li>
+	    						
 	    					</ul>
 	    				</div>
 	    				<div>
@@ -310,30 +315,7 @@
 	    				</div>
 	    				<hr class="mx-5">
 	    				<div id="seatList">
-	    					<ul>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    					</ul>
-	    					<ul>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    						<li><span>1</span></li>
-	    					</ul>
+
 	    				</div>
 	    				<hr class="mx-5">
 	    				<div class="text-end m-5 justify-content-between">
@@ -350,25 +332,85 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
 	$(function() { 
+		function seatDivide(no, stan) {
+			let four = Math.floor(no/stan);
+			let array = [];
+			let s;
+			
+			for (var i=1; i<=stan; i++) {
+				if ((four*i + (four+1)*(stan-i)) == 49) {
+					s = i;
+				}
+			}
+			for (var i=1; i<=s; i++ ) {
+				array.push(four);
+			}
+			
+			for (var i=1; i<=(4-s); i++) {
+				array.push(++four);
+			}
+			return array;
+		}
+		
+		
+		function hochaInfo(no) {
+		}
+		
 		// 검색창 그래도 가져오기 값 까지		
-		$(".special").click(function() {
+		$(".listTable").on('click', '.normal', function(event) {
+			event.preventDefault();
+			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
+			console.log(searchInfo)
+			let trainNo = searchInfo.children().eq(1).val()
+			console.log(trainNo)
+			let scheduleNo = searchInfo.children().eq(0).val()
+			console.log(scheduleNo)
+			let roomType = '일반실'
 			
-			// trainNo, roomType='특실'을 입력하여 room_no roomName(호차)와 rootSeatCount(개수)를 조회
-			// 호차수 만큼 호차를 늘리고
-			// 호차 버튼을 누르면 rootSeatCount에 해당하는 값을 /3한다. 나머지는 1씩 더하기
-			// 예약 리스트 불러오기 티켓테이블에서 SCHEDULE_NO에 해당하는 값들을 가져온다.
-			// room_no에 해당하는 호차의 좌석 번호를 조회하여 값이 있으면 해당좌석의 선택 불가로 만든다.
-			// getJSON을 두번 불러야 되나??
-/* 			$.getJSON('/api/train/getSeat.do', {}, function() {
-				
-			}); */
 			
+			let $hocha = $("#hocha").children('ul').empty()
+			
+			$.getJSON('/api/train/trainInfo',
+					{roomType: roomType, trainNo: trainNo, schduleNo: scheduleNo},
+					function(response) {
+						console.log(response)
+						$.each(response.rooms, function(index, room) {
+							let ho;
+							// 좌석수가 다 찬 호차는 선택할 수 없다.
+							if (room.bookedSeatNum == room.seatNum) {
+								ho = "<li><span class='not'>" + room.name + "</span></li>"
+							} else {
+								ho = "<li><span class='can'>" + room.name + "</span></li>"
+								let no = room.seatNum;
+								// 분할 어떻게 하지
+								let seatdiv = seatDivide(no, 4);
+								let seatNo = 0;
+								seatdiv.forEach(function(num, index) {
+									let seat;									
+									if (index == 1) {
+										seat = "<ul class='can'>"
+									} else {
+										seat = "<ul class='no' style=''>"
+										
+									}
+									for (var i=1; i<= num; i++) {
+										seat += "<li><span>" + ++seatNo +"</span></li>"										
+									}
+									seat += "</ul>"
+									$("#seatList").append(seat)	
+								})
+							}
+							$hocha.append(ho)
+						})
+					// $(#seatList)
+					// 처음 선택시에 맨 처음 예약된 좌석이 있는 경우
+				})
+
 			seatModal.show()
 		});
 		
-		$("#prev1").click(function() {
-		})
 		
+		// 가는열차 다음, 이전 버튼 페이지네이션
 		$("#btn1").children().click(function() {
 			console.log($(this))
 			let $btn = $(this) 
@@ -392,7 +434,7 @@
 							$.each(response.items, function(index, schedule) {
 								let sh = "<tr>"
 									sh += "<td>직통</td>"
-									sh += "<td>" + schedule.trainName
+									sh += "<td class='infoTrain'>" + schedule.trainName
 									sh += "<input type='hidden' name='scheduleNo1' value=" + schedule.scheduleNo + ">"
 									sh += "<input type='hidden' name='trainNo1' value=" + schedule.trainNo + ">"
 									sh += "<input type='hidden' name='specialBooking1' value=" + schedule.specialBooking + ">"
@@ -428,8 +470,8 @@
 			})
 		});
 		
+		// 오는 열차 다음, 이전 버튼 페이지네이션
 		$("#btn2").children().click(function() {
-			console.log($(this))
 			let $btn = $(this) 
 			let dpStation = $("input[name=arrivalStation]").val();
 			let arStation = $("input[name=departureStation]").val();
@@ -451,7 +493,7 @@
 							$.each(response.items, function(index, schedule) {
 								let sh = "<tr>"
 									sh += "<td>직통</td>"
-									sh += "<td>" + schedule.trainName
+									sh += "<td class='infoTrain'>" + schedule.trainName
 									sh += "<input type='hidden' name='scheduleNo1' value=" + schedule.scheduleNo + ">"
 									sh += "<input type='hidden' name='trainNo1' value=" + schedule.trainNo + ">"
 									sh += "<input type='hidden' name='specialBooking1' value=" + schedule.specialBooking + ">"
@@ -487,7 +529,7 @@
 			})
 		});
 		
-		
+		// 모달창 생성
 		var seatModal = new bootstrap.Modal(document.getElementById('modal-seat'), {
 			keyboard: false
 		});

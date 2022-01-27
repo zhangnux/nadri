@@ -115,6 +115,31 @@
 		        where c.seat_grade = '일반실'
 		        and x.type_no = c.type_no
 		        and x.route_no in (c.down_route_no, c.up_route_no))
-		where rn >= 7*#{rowNo } and rn &lt; 7*(#{rowNo} + 1)
+		where rn >= 7*#{rowNo }+1 and rn &lt; 7*#{rowNo}+8
+	</select>
+	
+	<!-- 열차의 호차 목록을 불러온다. -->
+	<select id="getTrainRoom" parameterType="com.nadri.train.web.model.TrainRoomInfo" resultType="com.nadri.train.vo.TrainRoom">
+		select r.room_no as no, 
+				r.room_name as name, 
+				r.root_seat_count as seatNum,
+				r.train_no as trainNo,
+				(select count(*)
+	             from train_ticket t
+	             where t.room_no(+) = r.room_no
+	             and t.schedule_no = #{schduleNo }
+	             and t.is_canceled = 'N') as bookedSeatNum
+		from train_room r
+		where r.train_no = #{trainNo }
+		and r.room_type = #{roomType }
+	</select>
+	
+	<!-- 예약된 좌석번호목록 -->
+	<select id="getTrainSeatNo" resultType="int">
+		select seat_no
+		from train_ticket
+		where room_no = #{roomNo}
+		and schedule_no = #{scheduleNo}
+		and is_canceled = 'N'
 	</select>
 </mapper>
