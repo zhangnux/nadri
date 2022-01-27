@@ -40,9 +40,37 @@
 		order by att_no desc]]>
 	</select>
 	
+	<!-- 상품 수 -->
 	<select id="attrcount" resultType="int">
 		select count(*)
 		from attraction
+	</select>
+	
+	<!-- 카테고리 -->
+	<select id="searchAttraction" parameterType="com.nadri.attr.vo.Search" resultMap="AttrResultMap">
+		
+		select *
+		from (
+		        select a.*
+		        from attraction a
+		        where att_place like '%' || #{place} || '%'
+		        and (att_enddate is null or att_enddate > sysdate)
+		        <if test="keyword != null">
+		        	and (replace(att_name, ' ', '')  like '%' || #{keyword} || '%'
+		        	or replace(att_content, ' ', '') like '%' || #{keyword} || '%')
+		        </if>
+		        <if test="category != null">
+		        	and att_category like '%' || #{category} || '%'
+		        </if>
+		        <if test="startdate != null">
+		        	and (att_startdate is null or to_char(#{startdate},'YYYY-MM-DD') &gt; att_startdate)
+		        </if>
+		        <if test="enddate != null">
+		        	and (att_startdate is null or to_char(#{enddate},'YYYY-MM-DD') &lt; att_enddate)
+		        </if>
+		     )
+		order by att_no desc
+		
 	</select>
 	
 </mapper>

@@ -48,9 +48,9 @@ public class CouponController {
 	}
 	
 	@GetMapping("/delete.nadri")
-	public String deleteform(@RequestParam()int no, Model model) {
+	public String deleteform(@RequestParam(name="no")int no, Model model) {
 		couponService.removeCoupon(no);
-		return "coupon/delete";
+		return "redirect:coulist.nadri";
 	}
 
 	/* 생성관련 */

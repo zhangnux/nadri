@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.nadri.attr.vo.Attraction;
+import com.nadri.attr.vo.Search;
 
 @Mapper
 public interface AttrDao{
@@ -15,8 +16,7 @@ public interface AttrDao{
 	// 리스트 갯수
 	int attrcount();
 	
-	/*
-	 * // 카테고리별 검색 List<Attraction> getListByCategory(String category); // 가격별 검색
-	 */
+	// 카테고리별 검색
+	List<Attraction> searchAttraction(Search search);
 	
 	}
