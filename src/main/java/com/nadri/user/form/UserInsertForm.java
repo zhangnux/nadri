@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class UserInsertForm {
-
+	
+	private String id;
 	private String name;
 	private String email;
 	private String password;

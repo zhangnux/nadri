@@ -7,15 +7,15 @@ import com.nadri.manager.exception.LoginErrorException;
 import com.nadri.user.mapper.UserMapper;
 import com.nadri.user.vo.User;
 
+// 스프링이 컴포넌트 스캔을 통해 Bean에 등록, IoC 해쥼
 @Service
 public class UserService {
 
 	@Autowired
-	UserMapper userMapper;
+	private UserMapper userMapper;
 	
-	public User insertUser(User user) {
+	public void insertUser(User user) {
 		userMapper.insertUser(user);
-		return userMapper.getUserById(user.getId());
 	}
 	
 	public User updateUser(User user) {
