@@ -41,9 +41,7 @@ public class RoomService {
 			for (Map<String, Object> item : itemList) {
 				
 				LodRoom lodRoom = new LodRoom();
-				LodInformation lodInformation = new LodInformation();
-				//lodRoom.setLodInformation(lodInformation.getNo());
-				lodRoom.setNo(Integer.parseInt(String.valueOf(item.get("roomcode"))));
+				lodRoom.setLodInformationNo(Integer.parseInt(String.valueOf(item.get("contentid"))));
 				lodRoom.setName(String.valueOf(item.get("roomtitle")));
 				lodRoom.setRoomPerPerson(Integer.parseInt(String.valueOf(item.get("roombasecount"))));
 				lodRoom.setRoomMaxPerson(Integer.parseInt(String.valueOf(item.get("roommaxcount"))));
