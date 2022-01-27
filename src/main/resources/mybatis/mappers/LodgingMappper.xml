@@ -11,6 +11,15 @@
 		values
 		(#{no}, #{name}, #{address}, #{checkIn}, #{checkOut}, #{intro}, #{category.no}, #{grade.no}, #{lodRefund}, #{lodSales})
 	</insert>
+	<!-- 
+	<insert id="insertLodgingPictures" parameterType="com.nadri.lodging.vo.LodPictures">
+		insert into lodging_pictures
+		(lod_no, lod_picture)
+		values
+		(#{no}, #{lodPicture})
+	</insert>
+	 -->
+	
 	
 	<!-- 
 		void updateLodging(LodInformation lodinformation)

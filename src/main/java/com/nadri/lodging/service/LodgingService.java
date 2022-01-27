@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.nadri.lodging.mapper.LodgingMapper;
 import com.nadri.lodging.vo.LodInformation;
+import com.nadri.lodging.vo.LodPictures;
 
 
 @Service
@@ -43,7 +44,8 @@ public class LodgingService {
 		
 		lodgingMapper.deleteLodging(no);
 	}
-	// 등록하기
+	/*
+	// 숙소등록하기
 	@SuppressWarnings("unchecked")
 	public void insertLodging() throws Exception {
 
@@ -69,10 +71,31 @@ public class LodgingService {
 			
 			lodgingMapper.insertLodging(information);
 		}	
-	
+	// 숙소등록하기
+	@SuppressWarnings("unchecked")
+	public void insertLodgingPicture() throws Exception {
+
+		String url = "";
+		InputStream in = new URL(url).openStream();
+		
+		JSONParser parser = new JSONParser(in);
+		Map<String, Object> object = parser.parseObject();
+		Map<String, Object> response = (Map<String, Object>)object.get("response");
+		Map<String, Object> body = (Map<String, Object>)response.get("body");
+		Map<String, Object> items = (Map<String, Object>)body.get("items");
+		List<Map<String, Object>> itemList = (List<Map<String, Object>>)items.get("item");
+		
+		for (Map<String, Object> item : itemList) {
+		
+			LodPictures lodPictures = new LodPictures();
+			
+			
+			lodgingMapper.isertLodgingPicture(lodPictures);;
+		}
 		
 		
 	}
+	 * */
 	
 	
 	

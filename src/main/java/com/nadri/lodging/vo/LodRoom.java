@@ -1,4 +1,5 @@
 package com.nadri.lodging.vo;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,8 @@ import lombok.ToString;
 public class LodRoom {
 
 	private int no;                 		 	// 룸번호
-	private LodInformation lodInformation;   	// 숙소번호
+	private int lodInformationNo;   			// 숙소번호
+	private LodInformation lodInformation;
 	private String name;             	 	 	// 룸이름
 	private int roomPerPerson;           		// 룸 기준인원
 	private int roomMaxPerson;           		// 룸 최대인원

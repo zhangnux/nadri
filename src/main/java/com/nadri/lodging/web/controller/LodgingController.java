@@ -25,12 +25,13 @@ public class LodgingController {
 		
 		return "lodging/list";
 	}
-	
+	/*
 	@GetMapping("/insert")
 	public String insert() throws Exception {
 		lodgingService.insertLodging();
 		return null;
 	}
+	 * */
 	
 	
 }

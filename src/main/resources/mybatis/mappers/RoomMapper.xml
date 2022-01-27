@@ -9,7 +9,7 @@
 		insert into lodging_room
 			(room_no, lod_no, room_name, room_per_person, room_max_person, room_price, room_discount_price, room_category_no, room_form_no)
 		values
-			(lodging_room_seq.nextval, #{lodInformation.no}, #{name}, #{roomPerPerson}, #{roomMaxPerson}, #{price}, #{discountPrice}, #{roomCategory.no}, #{roomForm.no})
+			(lodging_room_seq.nextval, #{lodInformationNo}, #{name}, #{roomPerPerson}, #{roomMaxPerson}, #{price}, #{discountPrice}, #{roomCategory.no}, #{roomForm.no})
 	</insert>
 	
 
