@@ -1,20 +1,17 @@
 package com.nadri.train.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.nadri.train.dto.TrainSearchDto;
-import com.nadri.train.exception.TrainException;
 import com.nadri.train.mapper.TrainMapper;
+import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
 import com.nadri.train.vo.TrainStation;
+import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
 
 @Service
@@ -52,9 +49,25 @@ public class TrainService {
 	 * @throws  
 	 */
 	public List<TrainSearchDto> getSchedulesByCriteria(TrainCriteria criteria) {
-		// 시간 차이를 어디서 계산하는게 좋을까???
-		List<TrainSearchDto> dtos = mapper.getSchedulesByCriteria(criteria);
-		
-		return dtos;
+		return mapper.getSchedulesByCriteria(criteria);
+	}
+	
+	/**
+	 * 열차번호와 타입에 해당하는 기차 호차 정보 반환
+	 * @param roomInfo
+	 * @return
+	 */
+	public List<TrainRoom> getTrainRoom(TrainRoomInfo roomInfo) {
+		return mapper.getTrainRoom(roomInfo);
+	}
+	
+	/**
+	 * 스케줄 번호와 객차번호에 해당하는 예약된 좌석목록 조회
+	 * @param scheduleNo
+	 * @param roomNo
+	 * @return
+	 */
+	public List<Integer> getTrainSeatNo(int scheduleNo, int roomNo) {
+		return mapper.getTrainSeatNo(scheduleNo, roomNo);
 	}
 }
