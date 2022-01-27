@@ -18,6 +18,14 @@
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 <style>
+	table {
+	  border-collapse: collapse;
+	}
+	table td {
+	  border: 1px solid #E0E0E0;
+	}
+
+
 	#hocha span {
 		cursor: pointer;
 		width: 100px;
@@ -52,6 +60,16 @@
 		list-style: none;
 		display: flex;
 		place-content: center;
+	}
+	.schedule button {
+	
+		width: 90px;
+		height: 25px;
+		padding: initial;
+		color: white;
+		border-radius: 0;
+		font-size: .875rem;
+		font-weight: bold;
 	}
 </style>
 <body>
@@ -106,85 +124,61 @@
 			</div>
 		</div>
 	</div>
-	<div style="border: 1px solid #D8E5F6; background-color: #7C97B9;">
-		<h6 class="px-3 py-2 m-0 fw-bold" style="color: white;">가는 열차</h6> 
+	<div style="border: 1px solid #D8E5F6; background-color: #7C97B9; text-align-last: justify">
+		<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">가는 열차</h6> 
+		<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate1 }</span>
 	</div>
 	<div class="row">
 		<div class="col">
 			<table class="table text-center">
-				<thead>
-					<tr>
-						<th>열차종류</th>
-						<th>열차번호</th>
-						<th>출발</th>
-						<th>도착</th>
-						<th>특실</th>
-						<th>일반실</th>
-						<th>소요기간</th>
-						<th>운임</th>
+				<thead style="border-bottom: inset;">
+					<tr style="background-color: #E1EDFC; border-bottom: none;">
+						<th style="width: 10%;">열차종류</th>
+						<th style="width: 10%;">열차번호</th>
+						<th style="width: 15%;">출발</th>
+						<th style="width: 15%;">도착</th>
+						<th style="width: 15%;">특실</th>
+						<th style="width: 15%;">일반실</th>
+						<th style="width: 10%;">소요기간</th>
+						<th style="width: *;">운임</th>
 					</tr>
 				</thead>
-				<tbody style="vertical-align: middle;">
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <div>9:00</div></td>
-						<td>부산 <div>10:45</div></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>1:45:00</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
+				<tbody class="schedule" style="vertical-align: middle;">
+					<c:forEach var="schedule" items="${schedules1 }">
+						<tr>
+							<td>${schedule.trainName }
+								<input type="hidden" name="scheduleNo1" value="${schedule.scheduleNo }">
+								<input type="hidden" name="trainNo1" value="${schedule.trainNo }">
+								<input type="hidden" name="specialBooking1" value="${schedule.specialBooking }">
+								<input type="hidden" name="normalBooking1" value="${schedule.normalBooking }">
+								<input type="hidden" name="normalSeat1" value="${schedule.normalSeat }">
+							</td>
+							<td>${schedule.trainNo }</td>
+							<td class="dpTime">${searchForm.departureStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
+							<td class="arTime">${searchForm.arrivalStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
+							<c:choose>
+								<c:when test="${schedule.specialSeat eq 0 }">
+									<td></td>
+								</c:when>
+								<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
+									<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
+								</c:when>
+								<c:otherwise>
+									<td><button class="btn special" style="background-color: #7E5C5E">예매</button></td>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
+									<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
+								</c:when>
+								<c:otherwise>
+									<td><button class="btn normal" style="background-color: #7E5C5E">예매</button></td>
+								</c:otherwise>
+							</c:choose>
+							<td class="runTime">${schedule.diffTime }</td>
+							<td><fmt:formatNumber value="${schedule.price }" pattern="##,###" />원</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
@@ -192,85 +186,62 @@
 	<div class="text-end">
 		<button class="btn btn-secondary btn-sm">다음</button>
 	</div>
-	<div class="mt-5" style="border: 1px solid #D8E5F6; background-color: #7C97B9;">
-		<h6 class="px-3 py-2 m-0 fw-bold" style="color: white;">오는 열차</h6> 
-	</div>
-	<div class="row">
-		<div class="col">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>열차종류</th>
-						<th>열차번호</th>
-						<th>출발</th>
-						<th>도착</th>
-						<th>특실</th>
-						<th>일반실</th>
-						<th>소요기간</th>
-						<th>운임</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
-					<tr>
-						<td>KTX</td>
-						<td>1</td>
-						<td>서울 <span>9:00</span></td>
-						<td>부산 <span>10:45</span></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td><button class="btn btn-secondary btn-sm">예매</button></td>
-						<td>소요기간</td>
-						<td>운임</td>
-					</tr>
+	<c:if test="${not empty schedules2 }">
+		<div class="mt-5" style="border: 1px solid #D8E5F6; background-color: #7C97B9; text-align-last: justify">
+			<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">오는 열차</h6> 
+			<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate2 }</span>
+		</div>
+		<div class="row">
+			<div class="col">
+				<table class="table text-center">
+					<thead style="border-bottom: inset;">
+						<tr style="background-color: #E1EDFC;">
+							<th style="width: 10%;">열차종류</th>
+							<th style="width: 10%;">열차번호</th>
+							<th style="width: 15%;">출발</th>
+							<th style="width: 15%;">도착</th>
+							<th style="width: 15%;">특실</th>
+							<th style="width: 15%;">일반실</th>
+							<th style="width: 10%;">소요기간</th>
+							<th style="width: *;">운임</th>
+						</tr>
+					</thead>
+					<tbody class="schedule2" style="vertical-align: middle;">
+					<c:forEach var="schedule" items="${schedules2 }">
+						<tr>
+							<td>${schedule.trainName }
+								<input type="hidden" name="scheduleNo2" value="${schedule.scheduleNo }">
+								<input type="hidden" name="trainNo2" value="${schedule.trainNo }">
+								<input type="hidden" name="specialBooking2" value="${schedule.specialBooking }">
+								<input type="hidden" name="normalBooking2" value="${schedule.normalBooking }">
+								<input type="hidden" name="normalSeat2" value="${schedule.normalSeat }">
+							</td>
+							<td>${schedule.trainNo }</td>
+							<td class="dpTime">${searchForm.arrivalStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
+							<td class="arTime">${searchForm.departureStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
+							<c:choose>
+								<c:when test="${schedule.specialSeat eq 0 }">
+									<td></td>
+								</c:when>
+								<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
+									<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
+								</c:when>
+								<c:otherwise>
+									<td><button class="btn special" style="background-color: #7E5C5E;">예매</button></td>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
+									<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
+								</c:when>
+								<c:otherwise>
+									<td><button class="btn normal" style="background-color: #7E5C5E;">예매</button></td>
+								</c:otherwise>
+							</c:choose>
+							<td class="runTime">${schedule.diffTime }</td>
+							<td><fmt:formatNumber value="${schedule.price }" pattern="##,###" />원</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
@@ -278,6 +249,7 @@
 	<div class="text-end">
 		<button class="btn btn-secondary btn-sm">다음</button>
 	</div>
+	</c:if>
 	<div class="modal" tabindex="-1" id="modal-seat" style="border: 1px solid #D8E5F6;">
  		<div class="modal-dialog modal-xl">
 	   		<div class="modal-content" style="background-color: #7C97B9;">
@@ -357,22 +329,34 @@
 <!--  -->
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
-	$(function() {
+	$(function() { 
+		// 검색창 그래도 가져오기 값 까지		
+		$(".special").click(function() {
+			
+			// trainNo, roomType='특실'을 입력하여 room_no roomName(호차)와 rootSeatCount(개수)를 조회
+			// 호차수 만큼 호차를 늘리고
+			// 호차 버튼을 누르면 rootSeatCount에 해당하는 값을 /3한다. 나머지는 1씩 더하기
+			// 예약 리스트 불러오기 티켓테이블에서 SCHEDULE_NO에 해당하는 값들을 가져온다.
+			// room_no에 해당하는 호차의 좌석 번호를 조회하여 값이 있으면 해당좌석의 선택 불가로 만든다.
+			// getJSON을 두번 불러야 되나??
+			$.getJSON('/api/train/getSeat.do', {}, function() {
+				
+			})
+			
+			seatModal.show()
+		})
+		
+		
+		
 		var seatModal = new bootstrap.Modal(document.getElementById('modal-seat'), {
 			keyboard: false
 		});
 		
 		$("button:contains('예매')").click(function() {
-		
 			//좌석 수 예약 수 가져 오고 
 			// 해당 좌석을 클릭하면 input : hidden 에 그 값을 넣는다. 
-			let totalSeat = $("")
 			// 사용자가 누른 버튼이 특실인 경우 3으로 나누고 일반실이면 4로 나누고
 			// 3으로 나누고 나머지가 1이면 마지막에 2면 끝에서 2개
-			// 네모를 어떻게 만들지?
-			
-			
-			seatModal.show()
 		})
 		
 		

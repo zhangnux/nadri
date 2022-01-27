@@ -41,27 +41,31 @@ public class TrainController {
 	 * @return
 	 * @throws ParseException 
 	 */
-	@GetMapping("/list.nadri") // 나중에 post로 바꾸기
-	public String list(/* TrainSearchForm searchForm, Model model */) {
-//		TrainCriteria criteria = new TrainCriteria();
-//		criteria.setDepartureStation(searchForm.getDepartureStation());
-//		criteria.setArrivalStation(searchForm.getArrivalStation());
-//		criteria.setDepartureDate(searchForm.getDpDate1(), searchForm.getDpTime1());
-//		
-//		List<TrainSearchDto> schedules1 = service.getSchedulesByCriteria(criteria);
-//		model.addAttribute("schedules1", schedules1);
-//		
-//		if ("왕복".equals(searchForm.getWay())) {
-//			criteria = new TrainCriteria();
-//			criteria.setDepartureStation(searchForm.getArrivalStation());
-//			criteria.setArrivalStation(searchForm.getDepartureStation());
-//			criteria.setDepartureDate(searchForm.getDpDate2(), searchForm.getDpTime2());
-//			
-//			List<TrainSearchDto> schedules2 = service.getSchedulesByCriteria(criteria);
-//			model.addAttribute("schedules2", schedules2);
-//		}
-//		
-//		model.addAttribute("searchForm", searchForm); 
+	@PostMapping("/list.nadri") // 나중에 post로 바꾸기
+	public String list(TrainSearchForm searchForm, Model model) {
+		TrainCriteria criteria = new TrainCriteria();
+		criteria.setDepartureStation(searchForm.getDepartureStation());
+		criteria.setArrivalStation(searchForm.getArrivalStation());
+		criteria.setDepartureDate(searchForm.getDpDate1(), searchForm.getDpTime1());
+		
+		List<TrainSearchDto> schedules1 = service.getSchedulesByCriteria(criteria);
+		model.addAttribute("schedules1", schedules1);
+		
+		if ("왕복".equals(searchForm.getWay())) {
+			criteria = new TrainCriteria();
+			criteria.setDepartureStation(searchForm.getArrivalStation());
+			criteria.setArrivalStation(searchForm.getDepartureStation());
+			criteria.setDepartureDate(searchForm.getDpDate2(), searchForm.getDpTime2());
+			
+			List<TrainSearchDto> schedules2 = service.getSchedulesByCriteria(criteria);
+			model.addAttribute("schedules2", schedules2);
+
+			log.info("스케쥴1: " + schedules2.size());
+		}
+		
+		log.info("스케쥴2: " + schedules1.get(2).getSpecialSeat());
+		
+		model.addAttribute("searchForm", searchForm); 
 		return "train/trainList";
 	}
 	
