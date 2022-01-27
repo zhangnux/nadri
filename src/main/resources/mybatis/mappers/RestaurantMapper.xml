@@ -2,21 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nadri.restaurant.mapper.RestaurantMapper">
 
-	<!--
-		List<Restaurant> getAllRestaurants();
-	-->
-	<select id="getAllRestaurants" resultType="com.nadri.restaurant.vo.Restaurant">
-		select
-			restaurant_no as no,
-			restaurant_name as name,
-			restaurant_picture	as picture,
-			restaurant_content as content,
-			restaurant_star_point as starPoint
-		from
-			restaurant
-		order by restaurant_no
-	</select>
-	
+
 	<!--
 		getBestRestaurants()
 	-->

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../common/tags.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -46,13 +47,73 @@
 	</div>
 	
 	<hr>
-
-	
+	<!-- 검색 -->
+	<div class="row mb-3">
+		<div class="col">
+			<form id="form-search" action="" method="get" class="row row-cols-lg g-3 align-items-center p-3">
+				<div class="col-3">
+					<select class="form-select" name="city">
+						<option value="" ${empty param.city ? 'selected' : ''}>전체 지역</option>
+						<c:forEach var="city" items="${cities }">
+							<option value="${city.no }" ${param.city == '${city.no}' ? 'selected' : ''}>
+								${city.cityName }
+							</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="col-3">
+					<select class="form-select" name="category">
+						<option value="" ${empty param.category ? 'selected' : ''}>전체 카테고리</option>
+						<c:forEach var="category" items="${categories }">
+							<option value="${category.no }" ${param.category == '${category.no}' ? 'selected' : ''}>
+								${category.categoryName }
+							</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="col input-group">
+					<input type="search" class="form-control" name="name" value="${param.name }" placeholder="상호를 입력하세요">
+					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
+				</div>
+				<div class="col-2">
+					<select class="form-select" name="sort">
+						<option value="sales" ${param.sort == 'sort' ? 'selected' : ''}>매출순</option>
+						<option value="starPoint" ${param.sort == 'sort' ? 'selected' : ''}>별점순</option>
+					</select>
+				</div>
+			</form>
+		</div>
+	</div>
 	
 	<hr>
 	
 	<div class="row mb-3">
-		<div class="col">
+	<!-- sideNavbar -->
+		<div class="col-2">
+			<ul class="nav flex-column nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="list.nadri">전체</a>
+				</li>
+				<li class="nav-item dropdown">
+				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
+				    <ul class="dropdown-menu">
+				    	<c:forEach var="city" items="${cities }">
+				    		<li><a class="dropdown-item" href="list.nadri?city=${city.no} ">${city.cityName }</a></li>
+				    	</c:forEach>
+				    </ul>
+				</li>
+				<li class="nav-item dropdown">
+				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
+				    <ul class="dropdown-menu">
+				    	<c:forEach var="category" items="${categories }">
+				    		<li><a class="dropdown-item" href="list.nadri?category=${category.no }">${category.categoryName }</a></li>
+				    	</c:forEach>
+				    </ul>
+				</li>
+			</ul>
+		</div>
+		<!-- list -->
+		<div class="col-10">
 			<table class="table">
 				<tbody>
 					<tr>
@@ -64,41 +125,58 @@
 					</tr>
 					<tr>
 						<td>한식 주차가능
-						<a href="" class="btn btn-primary">book now</a></td>
+						<a href="detail.nadri?no=122" class="btn btn-primary">book now</a></td>
+					</tr>
+					<tr>
+						<td rowspan="3" style="width: 20%"><img alt="" src=""></td>
+						<td style="width: 80%">레스토랑 이름</td>
+					</tr>
+					<tr>
+						<td>별점: 5점</td>
+					</tr>
+					<tr>
+						<td>한식 주차가능
+						<a href="detail.nadri?no=" class="btn btn-primary">book now</a></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	
-	<!--
+	
 	<c:if test="${pagination.totalRecords gt 0 }">
-	-->
-		<!-- 페이지 내비게이션 표시 -->
-		<!-- 
-		<div class="row mb-3">
-			<div class="col">
-				<nav>
-		  			<ul class="pagination justify-content-center">
-		    			<li class="page-item ${pagination.existPrev ? '' : 'disabled' }">
-		      				<a class="page-link" href="list.do?page=${pagination.prevPage }" data-page="${pagination.prevPage }">이전</a>
-		    			</li>
-	
-		    			<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
-			    			<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
-			    				<a class="page-link" href="list.do?page=${num }" data-page="${num }">${num }</a>
-			    			</li>	    			
-		    			</c:forEach>
-	
-		    			<li class="page-item ${pagination.existNext ? '' : 'disabled' }">
-		      				<a class="page-link" href="list.do?page=${pagination.nextPage }" data-page="${pagination.nextPage }">다음</a>
-		    			</li>
-		  			</ul>
-				</nav>
+	<!-- 페이지 내비게이션 표시 -->
+	<div class="row mb-3">
+		<div class="col">
+			<nav>
+		  		<ul class="pagination justify-content-center">
+		    		<li class="page-item ${pagination.existPrev ? '' : 'disabled' }">
+		     			<a class="page-link" href="list.do?page=${pagination.prevPage }" data-page="${pagination.prevPage }">이전</a>
+		    		</li>
+		    		<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
+			   			<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
+			   				<a class="page-link" href="list.do?page=${num }" data-page="${num }">${num }</a>
+			   			</li>	    			
+		    		</c:forEach>
+		    		
+		    		<li class="page-item ${pagination.existNext ? '' : 'disabled' }">
+		      			<a class="page-link" href="list.do?page=${pagination.nextPage }" data-page="${pagination.nextPage }">다음</a>
+		    		</li>
+		  		</ul>
+			</nav>
 			</div>
 		</div>
 	</c:if>
-	-->
+
 </div>
+<%@ include file="../common/footer.jsp" %>
 </body>
+<script type="text/javascript">
+	$("#select-sort").change(function()){
+		document.getElementById("form-search").submit();
+	}
+	
+	
+
+</script>
 </html>

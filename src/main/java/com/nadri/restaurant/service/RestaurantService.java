@@ -60,11 +60,7 @@ public class RestaurantService {
 	}
 	
 	*/
-	
-	public List<Restaurant> getAllRestaurants(){
-		return rtMapper.getAllRestaurants();
-	}
-	
+
 	
 	public Restaurant getRestaurantDetail(int no) {
 		

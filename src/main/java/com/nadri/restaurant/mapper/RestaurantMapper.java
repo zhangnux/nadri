@@ -16,18 +16,17 @@ public interface RestaurantMapper {
 	
 	
 	
-	List<Restaurant> getAllRestaurants();
+	//main.nadri
 	List<Restaurant> getBestRestaurants();
 	
-	
+	//detail.nadri
 	Restaurant getRestaurantDetail(int no);
 	/*
 	void insertRestaurant(Restaurant restaurant);
 	*/
-	// 레스토랑 검색
+	// 레스토랑 검색 list.nadri
 	int getRestaurantsTotalRows(RestaurantCriteria criteria);
 	List<Restaurant> searchRestaurants(RestaurantCriteria criteria);
-	
 	List<City> getAllCities();
 	List<Category> getAllCategories();
 	
