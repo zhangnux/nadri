@@ -2,7 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nadri.user.mapper.UserMapper">
 
-
+	<!-- 유저테이블 컬럼 조회했을때 User객체에 저장되도록 설정 -->
+	<resultMap id="userResultMap" type="com.nadri.user.vo.User">
+		<id column="user_no" property="no"/>
+		<result column="user_password" property="password"/>
+		<result column="user_name" property="name"/>
+		<result column="user_age" property="age"/>
+		<result column="user_gender" property="gender"/>
+		<result column="user_tel" property="tel"/>
+		<result column="user_address" property="address"/>
+		<result column="user_point" property="point"/>
+		<result column="user_delete_check" property="deleteCheck"/>
+		<result column="user_email" property="email"/>
+		<result column="user_type" property="type"/>
+		<result column="user_created_date" property="createdDate"/>
+		<result column="user_sms_check" property="smsCheck"/>
+		<result column="user_email_check" property="emailCheck"/>
+	</resultMap>
+	
 	<!-- 
 		void insertUser 
 	-->
@@ -12,10 +29,10 @@
 			from dual
 		</selectKey>
 		insert into user_table
-		(user_no, user_id, user_password, user_name, user_age, user_gender, user_tel,
+		(user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, 
 		user_address, user_point, user_email, user_type, user_sms_check, user_email_check)
 		values
-		(#{no}, #{id}, #{password}, #{name}, #{age}, #{gender}, #{tel}, #{address}, #{point}, #{email}, #{type}, #{smsCheck}, #{emailCheck})
+		(#{no},#{id},#{password},#{name},#{age},#{gender},#{tel},#{address},#{point},#{email},#{type},#{smsCheck},#{emailCheck})
 	</insert>
 	
 	<!-- 
@@ -26,7 +43,7 @@
 			user_table
 		set
 			user_password = #{password},
-			user_name = ##{name},
+			user_name = #{name},
 			user_age = #{age},
 			user_tel = #{tel},
 			user_address = #{address},
@@ -52,21 +69,21 @@
 	-->
 	<select id="getUserById" parameterType="String" resultType="com.nadri.user.vo.User">
 		select  
-			user_no as no,
-			user_id as name,
-			user_password as password,
-			user_name as name,
-			user_age as age,
-			user_gender as gender,
-			user_tel as tel,
-			user_address as address,
-			user_point as point,
-			user_delete_check as deleteCheck,
-			user_email as email,
-			user_type as type,
-			user_created_date as createdDate,
-			user_sms_check as smsCheck,
-			user_email_Check as emailCheck 
+			user_no 			as no,
+			user_id 			as name,
+			user_password 		as password,
+			user_name 			as name,
+			user_age 			as age,
+			user_gender 		as gender,
+			user_tel 			as tel,
+			user_address 		as address,
+			user_point 			as point,
+			user_delete_check 	as deleteCheck,
+			user_email 			as email,
+			user_type 			as type,
+			user_created_date 	as createdDate,
+			user_sms_check 		as smsCheck,
+			user_email_Check 	as emailCheck 
 		from  
 			user_table
 		where  
@@ -96,7 +113,7 @@
 		from 
 			user_table
 		where 
-			user_no =  to_number(#{value})
+			user_no =  #{value}
 	</select>
 	
 </mapper>
