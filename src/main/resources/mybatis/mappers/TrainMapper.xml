@@ -95,21 +95,26 @@
 		and n.train_no = s.train_no
 		and n.type_no = p.type_no
 		order by s.schedule_no)
-		select x.schedule_no as scheduleNo, 
-				x.schedule_departure_time as departureTime, 
-				x.schedule_arrival_time as arrivalTime, 
-				x.train_no as trainNo,
-		    	x.type_no as typeNo, 
-		    	x.train_name as trainName,
-		   		x.route_no as routeNo, 
-		   		x.booking_s as specialBooking, 
-		   		x.special as specialSeat, 
-		   		x.booking_n as normalBooking, 
-		   		x.normal as normalSeat, 
-		   		c.price as price
-		from sche x, train_price c
-		where c.seat_grade = '일반실'
-		and x.type_no = c.type_no
-		and x.route_no in (c.down_route_no, c.up_route_no)
+		select schedule_no as scheduleNo, 
+				schedule_departure_time as departureTime, 
+				schedule_arrival_time as arrivalTime, 
+				train_no as trainNo,
+		    	type_no as typeNo, 
+		    	train_name as trainName,
+		   		route_no as routeNo, 
+		   		booking_s as specialBooking, 
+		   		special as specialSeat, 
+		   		booking_n as normalBooking, 
+		   		normal as normalSeat, 
+		   		price as price
+		from (select row_number() over(order by x.schedule_no) rn, 
+		        x.schedule_no, x.schedule_departure_time, x.schedule_arrival_time, x.train_no,
+		        x.type_no, x.train_name,
+		        x.route_no, x.booking_s, x.special, x.booking_n, x.normal, c.price
+		        from sche x, train_price c
+		        where c.seat_grade = '일반실'
+		        and x.type_no = c.type_no
+		        and x.route_no in (c.down_route_no, c.up_route_no))
+		where rn >= 7*#{rowNo } and rn &lt; 7*(#{rowNo} + 1)
 	</select>
 </mapper>

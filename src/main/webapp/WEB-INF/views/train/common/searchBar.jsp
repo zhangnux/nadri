@@ -78,7 +78,7 @@
 			<div class="row">
 				<div class="my-3 ms-4 col-md-2 div-show-station" id="departure" style="cursor: pointer;">
 					<label style="display: block; font-size: 14px; cursor: pointer;">출발지</label>
-					<input class="not" type="text" style="border: none;" name="departureStation" data-station-id="" placeholder="출발역">
+					<input class="not" type="text" value="${param.departureStation }" style="border: none;" name="departureStation" data-station-id="" placeholder="출발역">
 				</div>
 				<div class="m-3 col-md-1 div-show-station" style="width: 40px; padding: 0;">
 					<span id="recycle">
@@ -88,11 +88,11 @@
 				</div>
 				<div class="m-3 col-md-2 div-show-station" id="arrival" style="cursor: pointer;">
 					<label style="display: block; font-size: 14px; cursor: pointer;">도착지</label>
-					<input class="not" type="text" style="border: none;" name="arrivalStation" data-station-id="" placeholder="도착역">
+					<input class="not" type="text" value="${param.arrivalStation }" style="border: none;" name="arrivalStation" data-station-id="" placeholder="도착역">
 				</div>
 				<div class="col-md-6 text-end" style="margin: auto; font-size: 18px;">
 					<input type="radio" value="편도" name="way" checked="checked"> 편도
-					<input class="ms-3" type="radio" value="왕복" name="way"> 왕복
+					<input class="ms-3" type="radio" ${param.way eq '왕복'? 'checked' : '' } value="왕복" name="way"> 왕복
 				</div>
 			</div>
 			<hr class="ms-3 my-0">
@@ -106,15 +106,16 @@
 					border-right: 1px solid; border-right-color: #ced4da; ">
 					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
-						<input type="text" class="datepicker" readonly="readonly" name="dpDate1">
+						<input type="text" class="datepicker" value="${param.dpDate1 }" name="dpDate1" readonly="readonly">
+						<input type="hidden" value="0" name="rowNo1" readonly="readonly">
 						<select name="dpTime1" style="width: 50px;">
 							<c:forEach var="time" begin="0" end="23">
 								<c:choose>
 									<c:when test="${time lt 10}">
-										<option value="${time }">0${time }</option>
+										<option ${param.dpTime1 eq time? 'selected' : '' } value="${time }">0${time }</option>
 									</c:when>
 									<c:otherwise>
-										<option value="${time }">${time }</option>
+										<option ${param.dpTime1 eq time? 'selected' : '' } value="${time }">${time }</option>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
@@ -127,7 +128,7 @@
 					  data-bs-auto-close="outside" aria-expanded="false">
 					  <div class="m-3" style="display: inline-block;">
 						<label style="display: block; font-size: 16px; color: gray;">승객</label>
-						<input type="text" style="border: none;" name="count1" readonly="readonly" value="1">명
+						<input type="text" style="border: none;" name="count1" readonly="readonly" value="${empty param.count1 ? 1 : param.count1 }">명
 					  </div>
 				</div>
 			  	<ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 250px; border-top: 2px solid #7E5C5E; border-radius: 0;">
@@ -135,7 +136,7 @@
 				    	<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
 					    <div class="adult">
 					    	<span><i class="bi bi-dash-circle"></i></span>
-					    	<input name="adNo1" value="1" style="width: 15px; border: none;">
+					    	<input name="adNo1" value="${empty param.adNo1? 1 : param.adNo1 }" style="width: 15px; border: none;">
 					    	<span><i class="bi bi-plus-circle"></i></span>
 					    </div>
 			    	</li>
@@ -143,7 +144,7 @@
 				    	<div>어린이</div>
 					    <div class="childern">
 					    	<span><i class="bi bi-dash-circle"></i></span>
-					    	<input name="cdNo1" value="0" style="width: 15px; border: none;">
+					    	<input name="cdNo1" value="${empty param.cdNo1? 0 : param.cdNo1 }" style="width: 15px; border: none;">
 					    	<span><i class="bi bi-plus-circle"></i></span>
 					    </div>
 			    	</li>
@@ -156,24 +157,25 @@
 					</div>
 				</div>
 			</div>
-			<hr class="ms-3 my-0" style="display: none;">
+			<hr class="ms-3 my-0" style="display: ${param.way eq '왕복' ? '' : 'none'};">
 			<!-- 오는 열차 -->
-			<div class="row" style="display: none;" id="come">
+			<div class="row" style="display: ${param.way eq '왕복' ? '' : 'none'};" id="come">
 				<div class="col-md-1" style="display: flex; align-items: center; justify-content: center; width: 140px;">
 					<i class="bi bi-circle-fill mx-2" style="font-size: 5px; color: #4A4A4A;"></i><span>오는열차</span>
 				</div>
 				<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
 					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
-						<input type="text" class="datepicker" disabled readonly="readonly" name="dpDate2">
+						<input type="text" class="datepicker" disabled readonly="readonly" value="${param.dpDate2 }" name="dpDate2">
+						<input type="hidden" value="0" name="rowNo2" disabled>
 						<select name="dpTime2" disabled style="width: 50px;">
 							<c:forEach var="time" begin="0" end="23">
 								<c:choose>
 									<c:when test="${time lt 10}">
-										<option value="${time }">0${time }</option>
+										<option ${param.dpTime2 eq time? 'selected' : '' } value="${time }">0${time }</option>
 									</c:when>
 									<c:otherwise>
-										<option value="${time }">${time }</option>
+										<option ${param.dpTime2 eq time? 'selected' : '' } value="${time }">${time }</option>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
@@ -185,7 +187,7 @@
 					  data-bs-auto-close="outside" aria-expanded="false">
 					  <div class="m-3"  style="display: inline-block;">
 						<label style="display: block; font-size: 16px; color: gray;">승객</label>
-						<input type="text" disabled style="border: none;" name="count2" readonly="readonly" value="1">명
+						<input type="text" disabled style="border: none;" name="count2" readonly="readonly" value="${empty param.count2 ? 1 : param.count2 }">명
 					  </div>
 				</div>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 250px; border-top: 2px solid #7E5C5E; border-radius: 0;">
@@ -193,7 +195,7 @@
 				  		<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
 				   		<div id="adult">
 				   		<span><i class="bi bi-dash-circle"></i></span>
-				   		<input name="adNo2" value="1" disabled style="width: 15px; border: none;">
+				   		<input name="adNo2" value="${empty param.adNo2? 1 : param.adNo2 }" disabled style="width: 15px; border: none;">
 				   		<span><i class="bi bi-plus-circle"></i></span>
 				   		</div>
 				 	</li>
@@ -201,7 +203,7 @@
 				  		<div>어린이</div>
 				   		<div>
 				   		<span><i class="bi bi-dash-circle"></i></span>
-				   		<input name="cdNo2" value="0" disabled style="width: 15px; border: none;">
+				   		<input name="cdNo2" value="${empty param.cdNo2? 0 : param.cdNo2 }" disabled style="width: 15px; border: none;">
 					    <span><i class="bi bi-plus-circle"></i></span>
 						</div>
 				   	</li>
@@ -256,25 +258,17 @@
 			if ($(this).val() == '왕복') {
 				$("#come input").prop('disabled', false)
 				$("#come select").prop('disabled', false)
+				$("#go").nextAll().show()
+				$("#one").hide().next().show()
 			} else {
 				$("#come input").prop('disabled', true)
 				$("#come select").prop('disabled', true)
+				$("#go").nextAll().hide()
+				$("#one").show().next().hide()
 			}
 
 		})
-		
-		
-		// 누르면 왕복 검색창이 생김
-		$("input[value=왕복]").click(function() {
-			$("#go").nextAll().show()
-			$("#one").hide().next().show()
-		}) 
-		
-		// 왕복 검색창 없어짐
-		$("input[value=편도]").click(function() {
-			$("#go").nextAll().hide()
-			$("#one").show().next().hide()
-		})
+
 		
 		// modal에서 단어에 따른 기차역 리스트 출력
 		$("#word-Menu span").click(function() {

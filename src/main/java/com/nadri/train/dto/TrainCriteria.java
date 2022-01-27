@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class TrainCriteria {
 	private String departureStation;
 	private String arrivalStation;
+	private int rowNo;
 	private Date departureDate;
 	
 	private static SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd HH");
