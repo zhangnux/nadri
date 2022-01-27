@@ -56,12 +56,14 @@ public class RestaurantController {
 	 */
 	@GetMapping("/main.nadri")
 	public String main(Model model) {
-		
+		/*
 		List<Restaurant> restaurants = rtService.getBestRestaurants();
+		*/
 		List<City> cities = rtService.getAllCities();
 		List<Category> categories = rtService.getAllCategories();
-		
+		/*
 		model.addAttribute("restaurants", restaurants);
+		*/
 		model.addAttribute("categories", categories);
 		model.addAttribute("cities", cities);
 		
@@ -70,7 +72,11 @@ public class RestaurantController {
 	
 	
 	@GetMapping("/list.nadri")
-	public String list() {
+	public String list(Model model) {
+		List<City> cities = rtService.getAllCities();
+		List<Category> categories = rtService.getAllCategories();
+		model.addAttribute("categories", categories);
+		model.addAttribute("cities", cities);
 		return "/restaurant/list";
 	}
 	
@@ -137,6 +143,12 @@ public class RestaurantController {
 		
 		return "restaurant/detail";	// prefix="/WEB-INF-views/" viewName="home" suffix=".jsp"
 	
+	}
+	
+	@GetMapping("/checkout.nadri")
+	public String checkout() {
+		
+		return "restaurant/checkout";
 	}
 	
 	

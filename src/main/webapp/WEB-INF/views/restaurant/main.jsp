@@ -64,8 +64,8 @@
 	-->
 	<div class="row mb-3">
 		<div class="col">
-			<form id="form-search" action="" method="get" class="row row-cols-lg-auto g-3 align-items-center p-3">
-				<div class="col-12">
+			<form id="form-search" action="" method="get" class="row row-cols-lg g-3 align-items-center p-3">
+				<div class="col-3">
 					<select class="form-select" name="city">
 						<option value="" ${empty param.city ? 'selected' : ''}>전체 지역</option>
 						<c:forEach var="city" items="${cities }">
@@ -75,7 +75,7 @@
 						</c:forEach>
 					</select>
 				</div>
-				<div class="col-12">
+				<div class="col-3">
 					<select class="form-select" name="category">
 						<option value="" ${empty param.category ? 'selected' : ''}>전체 카테고리</option>
 						<c:forEach var="category" items="${categories }">
@@ -85,12 +85,12 @@
 						</c:forEach>
 					</select>
 				</div>
-				<div class="col-12 input-group">
+				<div class="col input-group">
 					<input type="search" class="form-control" name="name" value="${param.name }" placeholder="상호를 입력하세요">
 					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
 				</div>
-				<div>
-					<select name="sort">
+				<div class="col-2">
+					<select class="form-select" name="sort">
 						<option value="sales" ${param.sort == 'sort' ? 'selected' : ''}>매출순</option>
 						<option value="starPoint" ${param.sort == 'sort' ? 'selected' : ''}>별점순</option>
 					</select>
@@ -104,6 +104,7 @@
 			<h4><Strong>Best Restaurant</Strong></h4>
 		</div>
 	</div>
+	
 	<div class="row mb-3">
 		<c:forEach var="restaurant" items="${restaurants }">
 			<div class="col-3">
@@ -118,6 +119,7 @@
 			</div>
 		</c:forEach>
 	</div>
+	
 	<div class="row mb-3">
 		<div class="col">
 			<a href="list.nadri" class="text-decoration-none text-primary" id="go-list" ><Strong>상세 리스트 보기 ></Strong></a>
