@@ -29,7 +29,6 @@
 	          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 	            아이디를 띄워요
 	          </a>
-	          <!-- Here's the magic. Add the .animate and .slideIn classes to your .dropdown-menu and you're all set! -->
 	          <div class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
 	            <a class="dropdown-item" href="#">마이페이지</a>
 	            <a class="dropdown-item" href="#">위시리스트</a>
@@ -43,4 +42,4 @@
   		
   	</div>
 </nav>       
-<script src="js/scripts.js"></script> 
+<script src="../../../resources/js/scripts.js"></script> 

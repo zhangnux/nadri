@@ -17,19 +17,24 @@
 	font-family:'IBM Plex Sans KR';
 	vertical-align: middle;
 	height:50px; 
-	width:150px; 
+	width:100px; 
 	text-align:left;
 	padding-top:15px;
 	border-radius:10%;
 	transition: all 0.5s;
 }
-.btn-link:hover{
-	transform:scale(1.05);
+.btn-link:hover{	
+  	border-left:1px solid #6098FF;
+  	border-right:1px solid #6098FF;	
+}
+.btn-link:hover::after {
+  width:100%;
 }
 .card:hover{
-	transform:scale(1.05);
+	transform:scale(1.01);
 	overflow: hidden;
 	filter: brightness(95%);
+	transition: all 0.5s;
 }
 </style>
 </head>
@@ -60,42 +65,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col col-auto mt-3 mx-auto me-5">
-					<img src="../resources/images/koreamap.jpg">
-					<!-- 팝오버 -->
-	            </div>					
-				<div class="col col-4" style="margin-top:8%;">
-					<div class="row">
-	            		<div class="col-4 mb-4">
-	            			<a class="btn btn-link shadow" href="list.nadri">
-	            				<i class="bi bi-flag"></i> 투어
-	            			</a>
-	            		</div>
-	            	</div>
-					<div class="row">
-	            		<div class="col-4 mb-4">
-	            			<a class="btn btn-link shadow" href="#">
-	            				<i class="bi bi-ticket-detailed"></i> 입장권
-	            			</a>
-	            		</div>
-	            	</div>
-					<div class="row">
-	            		<div class="col-4 mb-4">
-	            			<a class="btn btn-link shadow" href="#">
-	            				<i class="bi bi-send"></i> 액티비티
-	            			</a>
-	            		</div>
-	            	</div>
-					<div class="row">
-	            		<div class="col-4 mb-4">
-	            			<a class="btn btn-link shadow" href="#">
-	            				<i class="bi bi-palette-fill"></i> 클래스
-	            			</a>
-	            		</div>
-	            	</div>
-            	</div>
-            </div>
-            
+			<%@ include file="common/map.jsp" %>
+        	</div>
+          
             <div id="carouselExampleIndicators" class="carousel slide mb-5 mt-5" data-bs-ride="carousel">
 			  <div class="carousel-indicators">
 			    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -126,7 +98,7 @@
             <div class="row row-cols-1 row-cols-md-4 g-4 mt-5">
             <c:forEach var="att" items="${attr }">
 			  <div class="col">
-			    <div class="card h-100">
+			    <div class="card h-100 shadow">
 			      <img src="../resources/images/att/${att.thumbnail }" class="card-img-top" style="height:200px;">
 			      <div class="card-body">
 			      	<p class="card-text">${att.place } / ${att.category }</p>

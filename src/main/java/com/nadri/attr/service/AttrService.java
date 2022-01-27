@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nadri.attr.dao.AttrDao;
 import com.nadri.attr.vo.Attraction;
+import com.nadri.attr.vo.Search;
 
 @Service
 @Transactional
@@ -18,5 +19,5 @@ public class AttrService {
 	
 	public List<Attraction> getAllAttrList(){return attrDao.allAttrList();}
 	public int getListCount() {return attrDao.attrcount();}
-	
+	public List<Attraction> getSearchResult(Search search){return attrDao.searchAttraction(search);}
 }
