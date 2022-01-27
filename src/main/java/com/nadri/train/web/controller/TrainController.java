@@ -41,12 +41,13 @@ public class TrainController {
 	 * @return
 	 * @throws ParseException 
 	 */
-	@PostMapping("/list.nadri") // 나중에 post로 바꾸기
+	@PostMapping("/list.nadri")
 	public String list(TrainSearchForm searchForm, Model model) {
 		TrainCriteria criteria = new TrainCriteria();
 		criteria.setDepartureStation(searchForm.getDepartureStation());
 		criteria.setArrivalStation(searchForm.getArrivalStation());
 		criteria.setDepartureDate(searchForm.getDpDate1(), searchForm.getDpTime1());
+		criteria.setRowNo(searchForm.getRowNo1());
 		
 		List<TrainSearchDto> schedules1 = service.getSchedulesByCriteria(criteria);
 		model.addAttribute("schedules1", schedules1);
@@ -56,6 +57,7 @@ public class TrainController {
 			criteria.setDepartureStation(searchForm.getArrivalStation());
 			criteria.setArrivalStation(searchForm.getDepartureStation());
 			criteria.setDepartureDate(searchForm.getDpDate2(), searchForm.getDpTime2());
+			criteria.setRowNo(searchForm.getRowNo2());
 			
 			List<TrainSearchDto> schedules2 = service.getSchedulesByCriteria(criteria);
 			model.addAttribute("schedules2", schedules2);

@@ -13,13 +13,9 @@ public class TrainSearchForm {
 	private String way;
 	private String dpDate1;
 	private String dpTime1;
+	private int rowNo1;
 	private String dpDate2;
 	private String dpTime2;
-	private int count1;
-	private int count2;
-	private int adNo1;
-	private int adNo2;
-	private int cdNo1;
-	private int cdNo2;
+	private int rowNo2;
 	
 }

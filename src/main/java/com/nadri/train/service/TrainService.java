@@ -55,15 +55,6 @@ public class TrainService {
 		// 시간 차이를 어디서 계산하는게 좋을까???
 		List<TrainSearchDto> dtos = mapper.getSchedulesByCriteria(criteria);
 		
-		for (TrainSearchDto dto : dtos) {
-			long diff = dto.getArrivalTime().getTime() - dto.getDepartureTime().getTime();
-			long hours = (diff / 1000) / 60 / 60 % 24;
-			long minutes = (diff / 1000) / 60 % 60;
-			long seconds = (diff / 1000) % 60;
-			
-			String time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-			dto.setDiffTime(time);
-		}
 		return dtos;
 	}
 }
