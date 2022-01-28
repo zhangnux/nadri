@@ -38,6 +38,8 @@ public class Attraction {
 	private String photo;
 	private String address;
 	private String detail;
+	
+	private AttOption attOption;
 
 	
 }

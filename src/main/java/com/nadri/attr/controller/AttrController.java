@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.nadri.attr.service.AttrService;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
+
+import lombok.extern.slf4j.Slf4j;
+
+import com.nadri.attr.dto.AttOptionDetail;
 import com.nadri.attr.pagination.Pagination;
 
-
+@Slf4j
 @Controller
 @RequestMapping("/attr")
 public class AttrController {
@@ -45,9 +49,11 @@ public class AttrController {
 	}
 	
 	@GetMapping("/detail.nadri")
-	public String detail(@RequestParam(name="no") int no, Search search, Model model) {
+	public String detail(@RequestParam(name="no") int no, Attraction attraction, Model model) {
 		Attraction detail = attrService.getDetailPage(no);
+		List<Attraction> option = attrService.getOptionInfo(no);
 		model.addAttribute("detail",detail);
+		model.addAttribute("option", option);
 		
 		return "attr/attrdetail";
 	}

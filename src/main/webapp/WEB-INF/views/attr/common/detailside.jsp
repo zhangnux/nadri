@@ -7,19 +7,20 @@
 			
 			<div class="border p-4 mt-3" style="background-color:white;">
 				<div class="mb-3">
-				<!-- forEach -->
-					<strong>날짜</strong>
+					<strong>날짜 ${detail.endDate }</strong>
 					<input type="Date" name="attdate" id="startdate">
 				</div>
+				
+				<c:forEach var="opt" items="${option }">
 				<div class="optionselect border rounded p-3">
 					<div class="row mb-2">
 						<div class="col">
-							<h5><strong>대인 주간권</strong></h5>
+							<h5><strong>${opt.option}</strong></h5>
 						</div>
 					</div>
 					<div class="row text-end">
 						<div class="col-8">
-							<a style="font-size:18px;">1인 0000원</a>
+							<a style="font-size:18px;">1인 ${opt.price }원</a>
 						</div>
 						<div class="col-4">
 							<h5>
@@ -30,6 +31,8 @@
 						</div>
 					</div>
 				</div>
+				</c:forEach>
+				
 			</div>
 			<div class="mt-3 text-end">
 				<button class="btn btn-primary btn-lg">결제하기</button>

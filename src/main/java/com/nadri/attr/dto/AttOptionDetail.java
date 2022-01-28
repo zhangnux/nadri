@@ -4,6 +4,9 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.nadri.attr.vo.AttOption;
+import com.nadri.attr.vo.Attraction;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AttOptionDetail {
-	
+
 	private int no;
 	private String name;
 	private String content;
@@ -30,6 +33,9 @@ public class AttOptionDetail {
 	private String photo;
 	private String address;
 	private String detail;	
-	private String option;
 
+	Attraction attraction;
+	AttOption attOption;
+	
+	
 }

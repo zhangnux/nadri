@@ -18,6 +18,14 @@
 		<result column="att_photo" property="photo"/>
 		<result column="att_address" property="address"/>
 		<result column="att_detailcontent" property="detail"/>
+		<collection property="attOption" resultMap="AttrOptionMap" />
+	</resultMap>
+	
+	<resultMap id="AttrOptionMap" type="com.nadri.attr.vo.AttOption">
+		<result column="att_no" property="no"/>
+		<result column="att_option" property="option"/>
+		<result column="att_price" property="price"/>
+		<result column="att_discountprice" property="discountPrice"/>
 	</resultMap>
 
 	<!-- 리스트 -->
@@ -99,11 +107,16 @@
 		order by att_no desc
 	</select>	
 	
-	<select id="getDetailByNo" parameterType="int" resultType="com.nadri.attr.dto.AttOptionDetail">
-		select  a.*,o.*
-		from attraction a, (select * from att_option) o
-		where o.att_no(+) = a.att_no
-		and a.att_no = #{no}
+	<!-- 디테일페이지-설명/옵션 -->
+	<select id="getDetailByNo" parameterType="int" resultMap="AttrResultMap">
+		select  *
+		from attraction 
+		where att_no = #{no}
+	</select>
+	<select id="getOptionByNo" parameterType="int" resultMap="AttrOptionMap">
+		select *
+		from att_option
+		where att_no = #{no}
 	</select>
 	
 </mapper>
