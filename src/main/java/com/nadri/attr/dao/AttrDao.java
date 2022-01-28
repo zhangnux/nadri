@@ -19,4 +19,9 @@ public interface AttrDao{
 	// 카테고리별 검색
 	List<Attraction> searchAttraction(Search search);
 	
-	}
+	// 검색을 완료한 전체 갯수
+	int getSearchedRow(Search search);
+	
+	// 번호로 디테일 불러오기
+	Attraction getDetailByNo(int no);
+}

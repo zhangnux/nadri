@@ -16,6 +16,8 @@
 		<result column="att_category" property="category"/>
 		<result column="att_thumbnail" property="thumbnail"/>
 		<result column="att_photo" property="photo"/>
+		<result column="att_address" property="address"/>
+		<result column="att_detailcontent" property="detail"/>
 	</resultMap>
 
 	<!-- 리스트 -->
@@ -71,6 +73,37 @@
 		     )
 		order by att_no desc
 		
+	</select>
+	
+	<select id="getSearchedRow" parameterType="com.nadri.attr.vo.Search" resultType="int">	
+		select count(*)
+		from (
+		        select a.*
+		        from attraction a
+		        where att_place like '%' || #{place} || '%'
+		        and (att_enddate is null or att_enddate > sysdate)
+		        <if test="keyword != null">
+		        	and (replace(att_name, ' ', '')  like '%' || #{keyword} || '%'
+		        	or replace(att_content, ' ', '') like '%' || #{keyword} || '%')
+		        </if>
+		        <if test="category != null">
+		        	and att_category like '%' || #{category} || '%'
+		        </if>
+		        <if test="startdate != null">
+		        	and (att_startdate is null or to_char(#{startdate},'YYYY-MM-DD') &gt; att_startdate)
+		        </if>
+		        <if test="enddate != null">
+		        	and (att_startdate is null or to_char(#{enddate},'YYYY-MM-DD') &lt; att_enddate)
+		        </if>
+		     )
+		order by att_no desc
+	</select>	
+	
+	<select id="getDetailByNo" parameterType="int" resultType="com.nadri.attr.dto.AttOptionDetail">
+		select  a.*,o.*
+		from attraction a, (select * from att_option) o
+		where o.att_no(+) = a.att_no
+		and a.att_no = #{no}
 	</select>
 	
 </mapper>

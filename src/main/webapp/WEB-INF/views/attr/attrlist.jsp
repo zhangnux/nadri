@@ -54,14 +54,21 @@
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 	            <c:forEach var="cate" items="${category }">
 				  <div class="col">
-				    <div class="card h-100 shadow">
+				    <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${cate.no}';">
 				      <img src="../resources/images/att/${cate.thumbnail }" class="card-img-top" style="height:200px;">
 				      <div class="card-body">
 				      	<p class="card-text">${cate.place } / ${cate.category }</p>
 				        <h5 class="card-title"><strong>${cate.name }</strong></h5>
 				        <p class="card-text">${cate.content }</p>
-				        <p class="card-text">★★★☆ 3.5 / 5.0</p>
-				        <p class="card-text">후기 개</p>
+				        <p class="card-text">★★★☆ 3.5 / 5.0　후기 0개</p>
+				        <c:choose>
+				        	<c:when test="${cate.discountPrice==0 }">
+				        		<p class="card-text">할인이 없을 때</p>
+				        	</c:when>
+				        	<c:otherwise>
+				        		<p class="card-text">할인이 있을 때</p>
+				        	</c:otherwise>
+				        </c:choose>
 				      </div>
 				    </div>
 				  </div>

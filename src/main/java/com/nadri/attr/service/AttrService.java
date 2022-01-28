@@ -20,4 +20,7 @@ public class AttrService {
 	public List<Attraction> getAllAttrList(){return attrDao.allAttrList();}
 	public int getListCount() {return attrDao.attrcount();}
 	public List<Attraction> getSearchResult(Search search){return attrDao.searchAttraction(search);}
+	public int getSearchedRowCount(Search search){ return attrDao.getSearchedRow(search); }
+	public Attraction getDetailPage(int no) { return attrDao.getDetailByNo(no); }
+	
 }
