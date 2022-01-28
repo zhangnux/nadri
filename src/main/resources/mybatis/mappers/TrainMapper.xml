@@ -135,10 +135,11 @@
 	</select>
 	
 	<!-- 예약된 좌석번호목록 -->
-	<select id="getTrainSeatNo" resultType="int">
-		select seat_no
+	<select id="getTrainSeatNo" resultType="com.nadri.train.vo.TrainSeat">
+		select seat_no as seatNo,
+				room_no as roomNo
 		from train_ticket
-		where room_no = #{roomNo}
+		where train_no = #{trainNo}
 		and schedule_no = #{scheduleNo}
 		and is_canceled = 'N'
 	</select>

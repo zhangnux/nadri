@@ -10,6 +10,7 @@ import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.mapper.TrainMapper;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
+import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
@@ -62,12 +63,12 @@ public class TrainService {
 	}
 	
 	/**
-	 * 스케줄 번호와 객차번호에 해당하는 예약된 좌석목록 조회
+	 * 스케줄 번호와 기차번호에 해당하는 예약된 좌석목록 조회
 	 * @param scheduleNo
-	 * @param roomNo
+	 * @param trainNo
 	 * @return
 	 */
-	public List<Integer> getTrainSeatNo(int scheduleNo, int roomNo) {
-		return mapper.getTrainSeatNo(scheduleNo, roomNo);
+	public List<TrainSeat> getTrainSeatNo(int scheduleNo, int trainNo) {
+		return mapper.getTrainSeatNo(scheduleNo, trainNo);
 	}
 }
