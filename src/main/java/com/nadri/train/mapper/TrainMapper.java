@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
+import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
@@ -44,10 +45,10 @@ public interface TrainMapper {
 	List<TrainRoom> getTrainRoom(TrainRoomInfo roomInfo);
 	
 	/**
-	 * 스케줄 번호와 호차 기차객차 번호에 해당하는 예약된자석 목록 반환
+	 * 스케줄 번호와 호차 기차번호에 해당하는 예약된자석 목록 반환
 	 * @param scheduleNo 스케줄 번호
-	 * @param roomNo scheduleNo
+	 * @param trainNo scheduleNo
 	 * @return
 	 */
-	List<Integer> getTrainSeatNo(@Param("scheduleNo") int scheduleNo, @Param("roomNo") int roomNo);
+	List<TrainSeat> getTrainSeatNo(@Param("scheduleNo") int scheduleNo, @Param("trainNo") int trainNo);
 }

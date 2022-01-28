@@ -28,7 +28,7 @@ public class TrainSearchDto {
 	private int normalBooking;
 	private int normalSeat;
 	private long price;
-
+	
 	public String getDiffTime() {
 		long diff = arrivalTime.getTime() - departureTime.getTime();
 		long hours = (diff / 1000) / 60 / 60 % 24;

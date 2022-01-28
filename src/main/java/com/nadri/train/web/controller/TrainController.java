@@ -65,8 +65,6 @@ public class TrainController {
 			log.info("스케쥴1: " + schedules2.size());
 		}
 		
-		log.info("스케쥴2: " + schedules1.get(2).getSpecialSeat());
-		
 		model.addAttribute("searchForm", searchForm); 
 		return "train/trainList";
 	}

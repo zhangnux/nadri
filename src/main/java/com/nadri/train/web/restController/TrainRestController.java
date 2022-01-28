@@ -15,6 +15,7 @@ import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.vo.TrainRoom;
+import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
 import com.nadri.train.web.model.ResponseDto;
 import com.nadri.train.web.model.TrainRoomInfo;
@@ -61,14 +62,7 @@ public class TrainRestController {
 	@GetMapping("/trainInfo") 
 	public Map<String, Object> getTrainInfo(TrainRoomInfo roomInfo) {
 		List<TrainRoom> rooms = service.getTrainRoom(roomInfo);
-		List<Integer> seatList = null;
-		for (TrainRoom room : rooms) {
-			log.info("확인" + room.getBookedSeatNum());
-			if (room.getSeatNum() != room.getBookedSeatNum()) {
-				seatList = service.getTrainSeatNo(roomInfo.getSchduleNo(), room.getNo());
-				break;
-			}
-		}
+		List<TrainSeat> seatList = service.getTrainSeatNo(roomInfo.getSchduleNo(), roomInfo.getTrainNo());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("rooms", rooms);
