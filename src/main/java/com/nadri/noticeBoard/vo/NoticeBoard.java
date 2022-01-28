@@ -1,4 +1,4 @@
-package com.nadri.manager.vo;
+package com.nadri.noticeBoard.vo;
 
 import java.util.Date;
 
@@ -15,11 +15,13 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class CsBoardReply {
+public class NoticeBoard {
 	
-	private int replayNo;			//댓글번호
-	private String replayContent;		//댓글 내용
-	private Date replayCreatedDate;		//댓글 날짜
-	private CsBoard csBoard;		//게시판 CsBoard Fk boardNo
+	
+	private int no; 			//공지사항번호
+	private String title;		//이름
+	private String Content;		//내용
+	private Date CreatedDate;		//작성일
+	
 
 }

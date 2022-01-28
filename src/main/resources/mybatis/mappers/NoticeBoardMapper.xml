@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.noticeBoard.mapper.NoticeBoardMapper">
+	
+	
+	<!-- 
+		int getBoardsTotalRows(Criteria criteria)
+	-->
+	<select id="getBoardsTotalRows()">
+		select count(*)
+		from
+	</select>
+	<!--
+		List<NoticeBoard> searchBoards(Criteria criteria)
+	-->
+	<select id="searchBoards()" resultType="com.nadri.noticeBoard.web.form.Criteria">
+		select
+			board_no no,
+			board_title title,
+			board_created_date createdDate
+		from
+			notice_board
+		<where>
+			
+		</where>
+	</select>
+
+	
+	<!--
+		NoticeBoard getNoticeBoardDetail(int no)
+	-->
+	<select id="getNoticeBoardDetail()" parameterType="int" resultType="com.nadri.noticeBoard.vo.NoticeBoard">
+		select
+			board_no no,
+			board_title title,
+			board_content content,
+			board_created_date createdDate
+		from
+			notice_board
+	</select>
+	
+	<!--
+		void insertNoticeBoard(NoticeBoard noticeBoard)
+	-->
+	<insert id="insertNoticeBoard()" parameterType="com.nadri.noticeBoard.vo.NoticeBoard">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select notice_board_no.nextval
+			from dual
+		</selectKey>
+		insert into notice_board
+		(board_no, board_title, board_content, board_created_date)
+		values
+		(#{no}, #{title}, #{content}, #{createdDate}, sysdate)
+	</insert>
+	
+	<!--
+		void updateNoticeBoard(NoticeBoard noticeBoard)
+	-->
+	
+	<!--
+		void deleteNoticeBoard(int no)
+	-->
+
+
+
+</mapper>

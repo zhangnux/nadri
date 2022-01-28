@@ -1,5 +1,7 @@
 package com.nadri.restaurant.vo;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +15,12 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Timetable {
+public class ReservationCurrentState {
 	
 	private int no;
-	private int startTime;
-	private int capacity;	// 시간대별 수용량. 2시간단위로 예약받고, 그 수용량.
-	
-	
+	private Restaurant restaurant;	// no
+	private Timetable timetable;	// startTime;
+	private Date reservedDate;
+	private int reservedPeople;	// 해당 날짜에 예약한 총 인원수
 
 }
