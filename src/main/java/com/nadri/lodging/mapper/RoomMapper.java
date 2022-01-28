@@ -8,4 +8,6 @@ public interface RoomMapper {
 
 	// 룸 정보등록
 	void insertRoom(LodRoom lodRoom); 
+	
+	// 룸 사진정보 등록
 }

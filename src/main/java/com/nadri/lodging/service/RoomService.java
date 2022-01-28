@@ -22,6 +22,7 @@ public class RoomService {
 	@Autowired
 	private LodgingMapper lodgingMapper;
 	
+	/*
 	@SuppressWarnings("unchecked")
 	public void insertRoom() throws Exception {
 		
@@ -55,7 +56,6 @@ public class RoomService {
 				
 		}
 	 
-		/*
 		@SuppressWarnings("unchecked")
 		public void insertRoom() throws Exception {
 			
@@ -81,8 +81,8 @@ public class RoomService {
 					roomMapper.insertRoom(lodRoom);
 					
 				}	
-		 * */
 	}
+	 * */
 		
 	
 	
