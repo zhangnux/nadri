@@ -22,7 +22,7 @@ public class User {
 	private String name;
 	private int age;
 	private String gender;
-	private int tel;
+	private String tel;
 	private String address;
 	private int point;
 	private String deleteCheck; 

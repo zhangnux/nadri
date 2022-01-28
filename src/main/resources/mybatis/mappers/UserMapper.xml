@@ -3,7 +3,7 @@
 <mapper namespace="com.nadri.user.mapper.UserMapper">
 
 	<!-- 유저테이블 컬럼 조회했을때 User객체에 저장되도록 설정 -->
-	<resultMap id="userResultMap" type="com.nadri.user.vo.User">
+	<resultMap id="UserResultMap" type="com.nadri.user.vo.User">
 		<id column="user_no" property="no"/>
 		<result column="user_password" property="password"/>
 		<result column="user_name" property="name"/>
@@ -67,23 +67,10 @@
 	<!-- 
 		User getUserById 
 	-->
-	<select id="getUserById" parameterType="String" resultType="com.nadri.user.vo.User">
+	<select id="getUserById" parameterType="String" resultType="com.nadri.user.vo.User" resultMap="UserResultMap">
 		select  
-			user_no 			as no,
-			user_id 			as name,
-			user_password 		as password,
-			user_name 			as name,
-			user_age 			as age,
-			user_gender 		as gender,
-			user_tel 			as tel,
-			user_address 		as address,
-			user_point 			as point,
-			user_delete_check 	as deleteCheck,
-			user_email 			as email,
-			user_type 			as type,
-			user_created_date 	as createdDate,
-			user_sms_check 		as smsCheck,
-			user_email_Check 	as emailCheck 
+			user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, user_address, user_point, 
+			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_Check 
 		from  
 			user_table
 		where  
@@ -93,23 +80,10 @@
 	<!-- 
 		User getUserByNo
 	 -->
-	<select id="getUserByNo" parameterType="int" resultType="com.nadri.user.vo.User">
-		select 
-			user_no				as no,
-			user_id				as name,
-			user_password		as password,
-			user_name			as name,
-			user_age			as age,
-			user_gender			as gender,
-			user_tel			as tel,
-			user_address		as address,
-			user_point			as point,
-			user_delete_check	as deleteCheck,
-			user_email			as email,
-			user_type			as type,
-			user_created_date	as createdDate,
-			user_sms_check		as smsCheck,
-			user_email_Check	as emailCheck
+	<select id="getUserByNo" parameterType="int" resultType="com.nadri.user.vo.User" resultMap="UserResultMap">
+		select  
+			user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, user_address, user_point, 
+			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_Check 
 		from 
 			user_table
 		where 
