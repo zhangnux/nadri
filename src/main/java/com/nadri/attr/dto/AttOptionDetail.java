@@ -1,26 +1,18 @@
-package com.nadri.attr.vo;
+package com.nadri.attr.dto;
 
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.nadri.restaurant.vo.Restaurant;
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Builder
-@Setter
-@Getter
-@ToString
-@NoArgsConstructor
 @AllArgsConstructor
-public class Attraction {
-
+@NoArgsConstructor
+@Data
+public class AttOptionDetail {
+	
 	private int no;
 	private String name;
 	private String content;
@@ -37,7 +29,7 @@ public class Attraction {
 	private String thumbnail;
 	private String photo;
 	private String address;
-	private String detail;
+	private String detail;	
+	private String option;
 
-	
 }

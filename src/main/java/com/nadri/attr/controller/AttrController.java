@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.nadri.attr.service.AttrService;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
+import com.nadri.attr.pagination.Pagination;
 
 
 @Controller
@@ -44,17 +45,33 @@ public class AttrController {
 	}
 	
 	@GetMapping("/detail.nadri")
-	public String detail() {
+	public String detail(@RequestParam(name="no") int no, Search search, Model model) {
+		Attraction detail = attrService.getDetailPage(no);
+		model.addAttribute("detail",detail);
+		
 		return "attr/attrdetail";
 	}
 	
+	
+	
+	/*
 	// 테스트용
 	@GetMapping("/test.nadri")
-	public String test(@RequestParam(name="place", defaultValue = "") String category,Search search,Model model) {
+	public String test(@RequestParam(name="place", defaultValue = "") String category, 
+			@RequestParam(name="page",required=false,defaultValue="1") int page,
+			Search search,Model model) {
 		List<Attraction> attraction = attrService.getSearchResult(search);
+		
+		//int totalRecords = attrService.
+		Pagination	pagination = new Pagination(page, totalRecords);
+		search.setBeginIndex(pagination.getBegin());
+		search.setEndIndex(pagination.getEnd());
+		
 		model.addAttribute("category", attraction);
 		model.addAttribute("place",category);
 		
 		return "attr/test";
 	}
+	*/
+	
 }

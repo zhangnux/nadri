@@ -31,4 +31,7 @@ public class Search {
 	 * private int star;
 	 */
 	
+	private int beginIndex;
+	private int endIndex;
+	
 }

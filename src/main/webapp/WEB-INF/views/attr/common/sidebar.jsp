@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div class="col-3 mt-1">
-<form id="form-search" action="#" method="get">
 <div class="sidebar">	
+<form id="form-search" action="list.nadri" method="get">
 	   	<div class="col mb-4">
 	   		<h1><strong>${place==""?'전국':place }</strong></h1>
 	 		<input name="place" value="${place }" type="hidden">
@@ -13,49 +13,50 @@
 		<hr>
 		<ul class="nav flex-column">
 			<li>
-				<a class="btn" class="btn" href="list.nadri?place=" 
-					aria-current="page" style="font-weight:${place==''?'bold':''};">
+				<a class="btn" 
+				href="list.nadri?place=&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
+				aria-current="page" style="font-weight:${place==''?'bold':''};">
 				전국
 				</a>
 			</li>
 			<li class="nav-item place">
-				<a class="btn" href="list.nadri?place=서울" 
+				<a class="btn" href="list.nadri?place=서울&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='서울'?'bold':''};">
 				서울
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="btn active" href="list.nadri?place=경기도" 
+				<a class="btn active" href="list.nadri?place=경기도&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='경기도'?'bold':''};">
 				경기도
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="btn" href="list.nadri?place=강원도" 
+				<a class="btn" href="list.nadri?place=강원도&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='강원도'?'bold':''};">
 				강원도
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="btn" href="list.nadri?place=전라도" 
+				<a class="btn" href="list.nadri?place=전라도&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='전라도'?'bold':''};">
 				전라도
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="btn" href="list.nadri?place=충청도" 
+				<a class="btn" href="list.nadri?place=충청도&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='충청도'?'bold':''};">
 				충청도
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="btn" href="list.nadri?place=경상도" 
+				<a class="btn" href="list.nadri?place=경상도&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='경상도'?'bold':''};">
 				경상도
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="btn" href="list.nadri?place=제주도" 
+				<a class="btn" href="list.nadri?place=제주도&category=${param.category }&keyword=${param.keyword }&startdate=${param.startdate }&enddate=${param.enddate }" 
 					aria-current="page" style="font-weight:${place=='제주도'?'bold':''};">
 				제주도
 				</a>
@@ -72,11 +73,11 @@
 				<li class="mb-2">
 					카테고리&nbsp;&nbsp;&nbsp;
 					<select name="category">
-						<option value="">모두</option>
-						<option value="투어">투어</option>
-						<option value="입장권">입장권</option>
-						<option value="액티비티">액티비티</option>
-						<option value="클래스">클래스</option>			
+						<option value="" ${param.category==""?'selected':'' }>모두</option>
+						<option value="투어" ${param.category=="투어"?'selected':'' }>투어</option>
+						<option value="입장권" ${param.category=="입장권"?'selected':'' }>입장권</option>
+						<option value="액티비티" ${param.category=="액티비티"?'selected':'' }>액티비티</option>
+						<option value="클래스" ${param.category=="클래스"?'selected':'' }>클래스</option>			
 					</select>
 				</li>
 				<li class="mb-2">
@@ -91,11 +92,12 @@
 			</ul>
 		<hr>
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-		  <button class="btn btn-outline-primary me-md-2" type="submit">검색</button>
+			<a class="btn btn-outline-secondary me-md-2" href="list.nadri">초기화</a>
+			<button class="btn btn-outline-primary me-md-2" type="submit">검색</button>
 		</div>
 	</div>
-	</div>
 	</form>	
+	</div>
 </div>
 <script type="text/javascript">
 	var today = new Date();
@@ -112,6 +114,4 @@
 	document.getElementById("startdate").setAttribute("min", today);
 /* 	document.getElementById("startdate").setAttribute("value", today); */
 	document.getElementById("enddate").setAttribute("min", today);	
-	
-	
 </script>

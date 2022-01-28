@@ -94,10 +94,11 @@
 			    <span class="visually-hidden">Next</span>
 			  </button>
 			</div>
-			<h1><strong>전체 리스트</strong></h1>
+			<h1><strong>이런 곳은 어떠세요? 😉</strong></h1>
             <div class="row row-cols-1 row-cols-md-4 g-4 mt-5">
             <c:forEach var="att" items="${attr }">
 			  <div class="col">
+			   <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${att.no}';">
 			    <div class="card h-100 shadow">
 			      <img src="../resources/images/att/${att.thumbnail }" class="card-img-top" style="height:200px;">
 			      <div class="card-body">
@@ -105,8 +106,9 @@
 			        <h5 class="card-title"><strong>${att.name }</strong></h5>
 			        <p class="card-text">${att.content }</p>
 			        <p class="card-text">★★★☆ 3.5 / 5.0</p>
-			        <p class="card-text">후기 개</p>
+			        <p class="card-text">후기 개</p>	    
 			      </div>
+			    </div>
 			    </div>
 			  </div>
 			</c:forEach>
