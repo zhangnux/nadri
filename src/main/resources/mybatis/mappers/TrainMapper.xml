@@ -82,9 +82,9 @@
 		as (select s.schedule_no, s.schedule_departure_time, s.schedule_arrival_time, s.train_no,
 		    n.type_no, p.train_name,
 		    s.route_no,
-		    (select count(*) cnt from train_ticket b, train_room m where b.is_canceled = 'n' and b.schedule_no(+) = s.schedule_no and b.room_no = m.room_no and m.room_type = '특실') as booking_s,
+		    (select count(*) cnt from train_ticket b, train_room m where b.is_canceled = 'N' and b.schedule_no(+) = s.schedule_no and b.room_no = m.room_no and m.room_type = '특실') as booking_s,
 		    (select sum(root_seat_count)  from train_room a where a.train_no = s.train_no and a.room_type = '특실') as special,
-		    (select count(*) cnt from train_ticket b, train_room m where b.is_canceled = 'n' and b.schedule_no(+) = s.schedule_no and b.room_no = m.room_no and m.room_type = '일반실') as booking_n,
+		    (select count(*) cnt from train_ticket b, train_room m where b.is_canceled = 'N' and b.schedule_no(+) = s.schedule_no and b.room_no = m.room_no and m.room_type = '일반실') as booking_n,
 		    (select sum(root_seat_count)  from train_room a where a.train_no = s.train_no and a.room_type = '일반실') as normal
 		from train_schedule s, train_route r, train_station t1, train_station t2, train n, train_type p
 		where t1.station_name = #{departureStation} and t2.station_name = #{arrivalStation}
@@ -107,7 +107,7 @@
 		   		booking_n as normalBooking, 
 		   		normal as normalSeat, 
 		   		price as price
-		from (select row_number() over(order by x.schedule_no) rn, 
+		from (select row_number() over(order by x.schedule_no asc) as rn, 
 		        x.schedule_no, x.schedule_departure_time, x.schedule_arrival_time, x.train_no,
 		        x.type_no, x.train_name,
 		        x.route_no, x.booking_s, x.special, x.booking_n, x.normal, c.price
@@ -115,7 +115,7 @@
 		        where c.seat_grade = '일반실'
 		        and x.type_no = c.type_no
 		        and x.route_no in (c.down_route_no, c.up_route_no))
-		where rn >= 7*#{rowNo }+1 and rn &lt; 7*#{rowNo}+8
+		where rn >= 7*#{rowNo}+1 and rn &lt; 7*#{rowNo}+8
 	</select>
 	
 	<!-- 열차의 호차 목록을 불러온다. -->

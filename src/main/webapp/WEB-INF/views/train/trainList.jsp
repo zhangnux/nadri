@@ -24,7 +24,8 @@
 	.listTable td {
 	  border: 1px solid #E0E0E0;
 	}
-
+	
+	/* 호차 스킨 */
 	#hocha span.can {
 		cursor: pointer;
 		width: 100px;
@@ -51,6 +52,8 @@
 		float: left;
 		width: 6%;
 	}
+
+	/* 좌석 스킨 */
 	#seatList ul span {
 		cursor: pointer;
 		display: inline-block;
@@ -76,6 +79,7 @@
 		background-image: url('../../resources/images/train/icon/chosenchair.png');
 	}
 	
+	/*  */
 	.dpTime div, .arTime div {
 		font-weight: bold;
 	}
@@ -88,6 +92,7 @@
 		display: flex;
 		place-content: center;
 	}
+	
 	#schedule1 button, #schedule2 button {
 		width: 90px;
 		height: 25px;
@@ -104,6 +109,28 @@
 		text-align-last: center;
 		background-color: #003366;
 		color: white;
+	}
+	
+	/* sidebar 스킨 */
+	.btn-s {
+		background: #D8E5F6;
+		position: absolute;
+		top: 10px;
+		left: 223px;
+		width: 30px;
+		padding: 0;
+		height: 52px;
+		border: 1px solid #BECDE4;
+		color: black;
+		font-weight: bold;
+	}
+	.btn-s + div {
+		position: absolute;
+		height: 265px;
+		width: 200px;	
+		background-color: #D8E5F6; 
+		border-radius: 3px; 
+		border: 1px solid #BACBE2;
 	}
 </style>
 <body>
@@ -123,43 +150,43 @@
 	<hr>
 	<%@ include file="common/searchBar.jsp" %>
 	<div class="row">
-		<div class="col my-5">
-			예약은 예약버튼 눌러.......
+		<div class="col m-5">
+			예메 버튼을 눌러 좌석을 선택해 주세요.
 		</div>
 	</div>
 	<div>
 		<form action="" method="post" id="seatBooking">
-			<div class="row" style="position: fixed; left: 0; top: 140px; width: 13%; display:none; 
-			height: 35%; border: 1px solid #BACBE2; background-color: white; border-radius: 3px; min-width: 110px;">
-				<div class="col m-3" style="background-color: #D8E5F6; border-radius: 3px; border: 1px solid #BACBE2;">
+			<!-- 예약 좌석 현황 sidebar -->
+			<div class="row" style="position: fixed; left: 0; top: 140px; width: 13%;
+			height: 300px; border: 1px solid #BACBE2; background-color: white; border-radius: 3px; width: 225px;">
+				<button type="button" class="btn-s"><i class="bi bi-caret-left-fill"></i></button>
+				<div class="col m-3">
 					<h5 class="pt-3" style="font-weight: bolder;">가는 열차</h5>
-					<div class=" mt-3" style="border: 2px solid #BACBE2; background-color: white;">
+					<div class=" mt-3" style="border: 2px solid #BACBE2; background-color: white; height: 175px;">
 						<div class="text-center row p-2">
 							<div class="col">
-								<span >09:00</span>
-								<span style="font-size: 14px;">서울</span>
+								<input type="hidden" name="schduleNo">
+								<input type="hidden" name="trainNo">
+								<span><!-- 출발시간 --></span>
+								<span style="font-size: 14px;"><!-- 출발역 --></span>
 							</div>
-							<div class="col" style="padding: 0;">
+							<div class="col" style="padding: 0; display: none;">
 								<i class="fas fa-long-arrow-alt-right fa-2x"></i>
 							</div>
 							<div class="col">
-								<span >09:40</span>
-								<span style="font-size: 14px;">부산</span>
+								<span ><!-- 도착시간 --></span>
+								<span style="font-size: 14px;"><!-- 도착역 --></span>
 							</div>
 						</div>
 						<div class="row mt-1">
 							<div class="col text-center">
-								KTX - 1
-							</div>
-						</div>
-						<div class="row my-3">
-							<div class="col text-center">
-								좌석  1호차 11 <div style="font-size: 11px;">외 2명</div>
+								예약 정보가 없습니다.<!-- 기차종류, 번호 -->
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<!-- 가는 열차 -->
 			<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify">
 				<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">가는 열차</h6> 
 				<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate1 }</span>
@@ -184,13 +211,7 @@
 							<c:forEach var="schedule" items="${schedules1 }">
 								<tr>
 									<td>직통</td>
-									<td class="infoTrain">${schedule.trainName }
-										<input type="hidden" name="scheduleNo1" value="${schedule.scheduleNo }">
-										<input type="hidden" name="trainNo1" value="${schedule.trainNo }">
-										<input type="hidden" name="specialBooking1" value="${schedule.specialBooking }">
-										<input type="hidden" name="normalBooking1" value="${schedule.normalBooking }">
-										<input type="hidden" name="specialSeat1" value="${schedule.specialSeat }">
-										<input type="hidden" name="normalSeat1" value="${schedule.normalSeat }">
+									<td class="infoTrain" data-schedule-no="${schedule.scheduleNo }" >${schedule.trainName }
 									</td>
 									<td>${schedule.trainNo }</td>
 									<td class="dpTime">${searchForm.departureStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
@@ -251,13 +272,7 @@
 							<c:forEach var="schedule" items="${schedules2 }">
 								<tr>
 									<td>직통</td>
-									<td class="infoTrain">${schedule.trainName }
-										<input type="hidden" name="scheduleNo2" value="${schedule.scheduleNo }">
-										<input type="hidden" name="trainNo2" value="${schedule.trainNo }">
-										<input type="hidden" name="specialBooking2" value="${schedule.specialBooking }">
-										<input type="hidden" name="normalBooking2" value="${schedule.normalBooking }">
-										<input type="hidden" name="specialSeat2" value="${schedule.specialSeat }">
-										<input type="hidden" name="normalSeat2" value="${schedule.normalSeat }">
+									<td class="infoTrain" data-schedule-no="${schedule.scheduleNo }">${schedule.trainName }
 									</td>
 									<td>${schedule.trainNo }</td>
 									<td class="dpTime">${searchForm.arrivalStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
@@ -296,6 +311,7 @@
 		</c:if>
 		</form>
 	</div>
+	<!-- 좌석 선택 모달창 -->
 	<div class="modal" tabindex="-1" id="modal-seat" style="border: 1px solid #D8E5F6;" data-root-type="">
  		<div class="modal-dialog modal-xl">
 	   		<div class="modal-content" style="background-color: #7C97B9;">
@@ -339,9 +355,9 @@
 
 	    				</div>
 	    				<hr class="mx-5">
-	    				<div class="text-end m-5 justify-content-between">
-	    					<span>선택 좌석 <input type="text" readonly="readonly" name="seatNo"></span>
-	    					<button class="btn btn-secondary">선택좌석예약</button>
+	    				<div class="text-end m-5" style="text-align-last: justify;">
+	    					<div style="display: inline-block;">선택 좌석 <span class="chosenSeatList"></span></div>
+	    					<button class="btn btn-secondary" id="btn-booking" style="border-radius: 0;">선택좌석예약</button>
 	    				</div>
 	    			</div>
      			</div>
@@ -353,6 +369,19 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
 	$(function() {
+		// sidebar 토글
+		$('.btn-s').click(function(){
+			let $side = $(this).parent().toggleClass('open');
+
+			if($side.hasClass('open')) {
+				$side.stop(true).animate({left:'0px'}, 200);
+				$(this).children().attr('class', 'bi bi-caret-left-fill');
+			}else{
+				$side.stop(true).animate({left:'-204px'}, 200);
+				$(this).children().attr('class', 'bi bi-caret-right-fill');
+			};
+		});
+		
 		// 좌석 4, 3 분할
 		function seatDivide(no, stan) {
 			let four = Math.floor(no/stan);
@@ -385,8 +414,8 @@
 		    }
 		    return x1 + x2;
 		}
-
-		// 기차의 스케줄, 번호에 해당하는 좌석정보 불러오기
+		// ----------------------------------------------------------------------
+		// 기차의 스케줄, 번호에 해당하는 모든 좌석정보 불러오기
 		function hochaInfo(type, trainNo, scheduleNo, stan) {
 			let $hocha = $("#hocha").children('ul').empty()
 			let $seat = $("#seatList").empty()
@@ -403,7 +432,7 @@
 							} else {
 								ho = "<li><span class='can' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
 							}
-								// 매진이 안된 호차 나열
+							// 매진이 안된 호차 나열
 							let index1 = index;
 							let no = room.seatNum;
 							let seatdiv = seatDivide(no, stan);
@@ -436,11 +465,9 @@
 								let seatNo = item.seatNo - 1
 								$("div[data-seat-no="+hoNo+"] li span:eq("+seatNo+")").addClass('no')
 							})
-							
 							$hocha.append(ho)
 						})
 				})
-
 			seatModal.show()
 		}
 		
@@ -449,16 +476,29 @@
 			keyboard: false
 		});
 		
-		// 모달창이 꺼질때 실행되는 이벤트 // 선택한 좌석 정보 삭제
+		// 사용자가 선택한 인원수 변수로 미리 저장해두기
+		let clickNo1 = $("input[name=count1]").val();
+		let clickNo2 = $("input[name=count2]").val();
+		
+		$("#btn-booking").click(function() {
+			
+		})
+		
+		// 모달창이 꺼질때 실행되는 이벤트 // 선택한 좌석 정보 삭제 
 		 $('#modal-seat').on('hidden.bs.modal', function (event) {
 			let target = $(this).closest('.modal').attr('data-root-type')
 			$("#"+ target).children().filter('input').remove()
+			if (target == 'schedule1') {
+				clickNo1 = $("input[name=count1]").val();
+			} else {
+				clickNo2 = $("input[name=count2]").val();
+			}
 		})
 		
-		let clickNo1 = 0;
-		let clickNo2 = 0;
+		// 좌석을 클릭했을 때 
 		$("#seatList").on('click', 'span', function(event) {
 			event.preventDefault();
+			// 가는 열차 or 오는 열차 좌석이냐 구분해주기
 			let putNo = $(this).closest('.modal').attr('data-root-type')
 			let inputNo;
 			let inputRoomNo;
@@ -494,7 +534,7 @@
 			}
 		});
 		
-		// 좌석 모달창에서 호차를 클릭할 때
+		// 좌석 모달창에서 호차를 클릭할 때 // 호차에 해당하는 좌석이 뜬다. 다른 좌석 정보는 숨겨짐
 		$("#hocha").on('click', 'span.can', function(event) {
 			event.preventDefault();
 			let no = $(this).attr('data-room-no')
@@ -505,33 +545,36 @@
 		$(".listTable").on('click', '.special', function(event) {
 			event.preventDefault();
 			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
-			let trainNo = searchInfo.children().eq(1).val()
-			let scheduleNo = searchInfo.children().eq(0).val()
+			let trainNo = searchInfo.next().text().trim()
+			let scheduleNo = searchInfo.attr('data-schedule-no')
 			let type = '특실'
 			
+			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
+			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
+			
 			let trainName = searchInfo.text().trim()
-			$("#rootInfo").text(trainName + ' ' + trainNo + ' 서울 > 부산' + '행 특실 좌석 정보')
+			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
 			hochaInfo(type, trainNo, scheduleNo, 3) 
 		})
 		
 		// 일반실 예약 클릭시
 		$(".listTable").on('click', '.normal', function(event) {
-			// 
 			event.preventDefault();
 			$("#modal-seat").attr('data-root-type', $(this).closest('tbody').attr('id'))
 			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
-			let trainNo = searchInfo.children().eq(1).val()
-			let scheduleNo = searchInfo.children().eq(0).val()
+			let trainNo = searchInfo.next().text().trim()
+			let scheduleNo = searchInfo.attr('data-schedule-no')
 			let type = '일반실'
 			
-			// 저녁에 할거ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ
+			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
+			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
 			let trainName = searchInfo.text().trim()
-			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong></strong>행 일반실 좌석 정보")
-
+			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
+	
 			hochaInfo(type, trainNo, scheduleNo, 4) 
 		});
 		
-		
+		//-----------------------------------------------------------
 		// 가는열차 다음, 이전 버튼 페이지네이션
 		$("#btn1").children().click(function() {
 			console.log($(this))
@@ -547,7 +590,7 @@
 			
 			let dpDate = $("input[name=dpDate1]").val()
 			let dpTime = $("select[name=dpTime1]").val()
-			$.getJSON('/api/train/schedule', 
+			$.getJSON("/api/train/schedule", 
 					{departureStation:dpStation, arrivalStation:arStation, rowNo1:rowNo, dpDate1:dpDate, dpTime1:dpTime}, 
 					function(response) {
 						if (response.status == 'OK') {
@@ -556,13 +599,7 @@
 							$.each(response.items, function(index, schedule) {
 								let sh = "<tr>"
 									sh += "<td>직통</td>"
-									sh += "<td class='infoTrain'>" + schedule.trainName
-									sh += "<input type='hidden' name='scheduleNo1' value=" + schedule.scheduleNo + ">"
-									sh += "<input type='hidden' name='trainNo1' value=" + schedule.trainNo + ">"
-									sh += "<input type='hidden' name='specialBooking1' value=" + schedule.specialBooking + ">"
-									sh += "<input type='hidden' name='normalBooking1' value=" + schedule.normalBooking + ">"
-									sh += "<input type='hidden' name='normalSeat1' value=" + schedule.normalSeat + ">"
-									sh += "<input type='hidden' name='specialSeat1' value=" + schedule.specialSeat + ">"
+									sh += "<td class='infoTrain' data-schedule-no='"+ schedule.scheduleNo +"'>" + schedule.trainName
 									sh += "</td>"
 									sh += "<td>" + schedule.trainNo + "</td>"
 									sh += "<td class='dpTime'>${searchForm.departureStation}<div>" + schedule.departureTime + "</div></td>"
@@ -615,13 +652,7 @@
 							$.each(response.items, function(index, schedule) {
 								let sh = "<tr>"
 									sh += "<td>직통</td>"
-									sh += "<td class='infoTrain'>" + schedule.trainName
-									sh += "<input type='hidden' name='scheduleNo1' value=" + schedule.scheduleNo + ">"
-									sh += "<input type='hidden' name='trainNo1' value=" + schedule.trainNo + ">"
-									sh += "<input type='hidden' name='specialBooking1' value=" + schedule.specialBooking + ">"
-									sh += "<input type='hidden' name='normalBooking1' value=" + schedule.normalBooking + ">"
-									sh += "<input type='hidden' name='normalSeat1' value=" + schedule.normalSeat + ">"
-									sh += "<input type='hidden' name='specialSeat1' value=" + schedule.specialSeat + ">"
+									sh += "<td class='infoTrain' data-schedule-no='"+ schedule.scheduleNo +"'>" + schedule.trainName
 									sh += "</td>"
 									sh += "<td>" + schedule.trainNo + "</td>"
 									sh += "<td class='dpTime'>${searchForm.arrivalStation}<div>" + schedule.departureTime + "</div></td>"
