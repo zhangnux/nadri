@@ -13,10 +13,11 @@ public class RoomController {
 
 	@Autowired
 	private RoomService roomService;
-	
+	/*
 	@GetMapping("/insert")
 	public String insert() throws Exception {
 		roomService.insertRoom();
 		return null;
 	}
+	 * */
 }

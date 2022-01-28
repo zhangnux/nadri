@@ -34,21 +34,56 @@
 			<h2>국내숙소</h2>	
 		</div>
 	</div>
-	<ul class="nav nav-pills">
-	  	<li class="nav-item">
-	    	<a class="nav-link active" aria-current="page" href="#">호텔·리조트</a>
-	  	</li>
-	 	<li class="nav-item">
-	    	<a class="nav-link" href="#">펜션·풀빌라</a>
-	    </li>
-	 	 <li class="nav-item">
-	   		<a class="nav-link" href="#">Link</a>
-	 	 </li>
-	 	 <li class="nav-item">
-	    	<a class="nav-link disabled">Disabled</a>
-	  	</li>
-	</ul>
-	<div class="css-udihv3--CategoriesTab-style--container"></div>
+	<hr>
+	<div class="row">
+		<div class="col">
+			<ul class="nav nav-pills">
+			  	<li class="nav-item">
+			    	<a class="nav-link active" aria-current="page" href="#">호텔·리조트</a>
+			  	</li>
+			 	<li class="nav-item">
+			    	<a class="nav-link " href="#">펜션·풀빌라</a>
+			    	
+			    </li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<form id="form-search" action="" method="get" class="row row-cols-lg g-3 align-items-center p-3">
+				<div class="col-3">
+					<select class="form-select" name="">
+						<option value="" >어디로 떠나세요?</option>
+						
+					</select>
+				</div>
+				<div class="col-3">
+					<select class="form-select" name="">
+						<option value="" >날짜</option>
+					</select>
+				</div>
+				<div class="col input-group">
+					<select class="form-select" name="">
+						<option value="" >인원</option>
+					</select>
+					<button type="button" class="btn btn-outline-primary btn-sm" id="">검색</button>
+				</div>
+			</form>
+		</div>	
+	</div>
+	<div class="row mb-3">
+		<div class="col">
+			<div class="card" style="width: 18rem;">
+			  	<div class="card-body">
+			   		 <h5 class="card-title"></h5>
+			   		 <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+			   		 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+			   		 <a href="#" class="card-link">Card link</a>
+			  	 	 <a href="#" class="card-link">Another link</a>
+			 	 </div>
+			</div>
+		</div>
+	</div>
 </div>
   <!-- Footer-->
 <%@ include file="../common/footer.jsp" %>
