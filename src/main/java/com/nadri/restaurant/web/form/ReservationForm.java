@@ -2,8 +2,6 @@ package com.nadri.restaurant.web.form;
 
 import java.util.Date;
 
-import com.nadri.user.vo.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,13 +19,20 @@ public class ReservationForm {
 	
 	
 	
-	private User user;
 	private String reservedName;		// 예약자 이름
-	private int usedPoint;
-	private int deposit;
-	private Date reservedDate;
-	private int child;
-	private int adult;
+	private String tel;					// 예약자 전화번호
+	
+	private int deposit;				// 예치금
+	private Date reservedDate;			// 예약 날짜
+	
+	private int child;					// 아이 수
+	private int adult;					// 어른 수
+	private int allPeople;				// 총인원수
+	
+	
+	private int usedPoint;				// 사용된 포인트
+	private int reservedPoint;			// 적립 포인트
+	
 	
 	
 

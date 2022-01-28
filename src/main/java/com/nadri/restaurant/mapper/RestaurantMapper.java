@@ -32,6 +32,12 @@ public interface RestaurantMapper {
 	
 	
 	
+	// 레스토랑 예약(checkout.nadri)
+	
+	
+	void insertReservation();
+	
+	
 	// 리뷰기능
 	
 	// 레스토랑 번호로 리뷰 불러오기
