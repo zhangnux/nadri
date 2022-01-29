@@ -165,8 +165,10 @@
 					<div class=" mt-3" style="border: 2px solid #BACBE2; background-color: white; height: 175px;">
 						<div class="text-center row p-2">
 							<div class="col">
-								<input type="hidden" name="schduleNo">
-								<input type="hidden" name="trainNo">
+								<input type="hidden" name="schduleNo1">
+								<input type="hidden" name="trainNo1">
+								<input type="hidden" name="schduleNo2">
+								<input type="hidden" name="trainNo2">
 								<span><!-- 출발시간 --></span>
 								<span style="font-size: 14px;"><!-- 출발역 --></span>
 							</div>
@@ -224,7 +226,7 @@
 											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn special" style="background-color: #7E5C5E">예매</button></td>
+											<td><button class="btn special" type="button" style="background-color: #7E5C5E">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<c:choose>
@@ -232,7 +234,7 @@
 											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn normal" style="background-color: #7E5C5E">예매</button></td>
+											<td><button class="btn normal" type="button" style="background-color: #7E5C5E">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<td class="runTime">${schedule.diffTime }</td>
@@ -244,8 +246,8 @@
 				</div>
 			</div>
 			<div style="text-align-last: justify" id="btn1">
-				<button class="btn" id="prev1">이전</button>
-				<button class="btn" id="next1">다음</button>
+				<button class="btn" type="button" id="prev1">이전</button>
+				<button class="btn" type="button" id="next1">다음</button>
 			</div>
 			<c:if test="${not empty schedules2 }">
 				<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify; margin-top: 100px;">
@@ -285,7 +287,7 @@
 											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn special" style="background-color: #7E5C5E;">예매</button></td>
+											<td><button class="btn special" type="button" style="background-color: #7E5C5E;">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<c:choose>
@@ -293,7 +295,7 @@
 											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn normal" style="background-color: #7E5C5E;">예매</button></td>
+											<td><button class="btn normal" type="button" style="background-color: #7E5C5E;">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<td class="runTime">${schedule.diffTime }</td>
@@ -305,8 +307,8 @@
 				</div>
 			</div>
 			<div style="text-align-last: justify; margin-bottom: 100px;" id="btn2">
-				<button class="btn" id="prev2">이전</button>
-				<button class="btn" id="next2">다음</button>
+				<button class="btn" type="button" id="prev2">이전</button>
+				<button class="btn" type="button" id="next2">다음</button>
 			</div>
 		</c:if>
 		</form>
@@ -352,12 +354,12 @@
 	    				</div>
 	    				<hr class="mx-5">
 	    				<div id="seatList">
-
+							
 	    				</div>
 	    				<hr class="mx-5">
 	    				<div class="text-end m-5" style="text-align-last: justify;">
-	    					<div style="display: inline-block;">선택 좌석 <span class="chosenSeatList"></span></div>
-	    					<button class="btn btn-secondary" id="btn-booking" style="border-radius: 0;">선택좌석예약</button>
+	    					<div class="chosenSeatList" style="display: inline-block;">선택 좌석 </div>
+	    					<button class="btn btn-secondary" type="button" id="btn-booking" style="border-radius: 0;">선택좌석예약</button>
 	    				</div>
 	    			</div>
      			</div>
@@ -432,7 +434,6 @@
 							} else {
 								ho = "<li><span class='can' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
 							}
-							// 매진이 안된 호차 나열
 							let index1 = index;
 							let no = room.seatNum;
 							let seatdiv = seatDivide(no, stan);
@@ -476,61 +477,62 @@
 			keyboard: false
 		});
 		
-		// 사용자가 선택한 인원수 변수로 미리 저장해두기
-		let clickNo1 = $("input[name=count1]").val();
-		let clickNo2 = $("input[name=count2]").val();
-		
 		$("#btn-booking").click(function() {
 			
 		})
 		
 		// 모달창이 꺼질때 실행되는 이벤트 // 선택한 좌석 정보 삭제 
 		 $('#modal-seat').on('hidden.bs.modal', function (event) {
+			$(".chosenSeatList").find("span").empty()
 			let target = $(this).closest('.modal').attr('data-root-type')
-			$("#"+ target).children().filter('input').remove()
-			if (target == 'schedule1') {
+			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
+			if ($("[data-schedule-no="+ target + "]").closest('tbody').attr('id') == 'schedule1') {
 				clickNo1 = $("input[name=count1]").val();
 			} else {
 				clickNo2 = $("input[name=count2]").val();
 			}
 		})
 		
+		// 선택 횟수만 조율하면 된다. 각각의 tbody의 id의 input의 개수의 /2 개가 count1,2 수 보다 크면 안된다.
 		// 좌석을 클릭했을 때 
 		$("#seatList").on('click', 'span', function(event) {
 			event.preventDefault();
 			// 가는 열차 or 오는 열차 좌석이냐 구분해주기
 			let putNo = $(this).closest('.modal').attr('data-root-type')
+			let target = $("td[data-schedule-no="+ putNo + "]").closest('tbody').attr('id')
 			let inputNo;
 			let inputRoomNo;
-			if (putNo == 'schedule1') {
+			let maxCount;
+			if (target == 'schedule1') {
 				inputNo = "<input type='hidden' name='seatNo1'"
 				inputRoomNo = "<input type='hidden' name='roomNo1'"
+				maxCount = $("[name=count1]").val()
 			} else {
 				inputNo = "<input type='hidden' name='seatNo2'"
 				inputRoomNo = "<input type='hidden' name='roomNo2'"
+				maxCount = $("[name=count2]").val()
 			}
 			
 			if (!$(this).hasClass("no") && !$(this).hasClass("chosen")) {
-				console.log($("input[name=count1]").val())
-/* 				if (putNo == 'schedule1' && ++clickNo1 > $("input[name=count1]").val() ) {
-					alert("더 이상 선택할 수 없습니다.")
-				} else if (putNo == 'schedule1') {
-					++clickNo1;
-				} */
+				// 클릭횟수 제어
+				let count = Math.floor($("td[data-schedule-no="+ putNo + "]").closest('tbody').find('input').length/2)
+				if (count == maxCount) {
+					alert(maxCount + "명 이상 선택할 수 없습니다.")
+					return;
+				}
+				
 				$(this).attr("class", "chosen")
 				inputNo += " value=" + $(this).text() + " />"
 				inputRoomNo += " value=" + $(this).closest('div').attr('data-seat-no') + " />"
-				$("#"+ putNo).append(inputNo).append(inputRoomNo)
+				$("#"+ target).append(inputNo).append(inputRoomNo)
 				
+				//모달창 선택 좌석 표시
+				$(".chosenSeatList").append("<span class='seatlist'>" + $(this).text() +"번</span>")
 			} else if ($(this).hasClass("chosen")) {
 				$(this).removeClass("chosen")
 				$("[value=" + $(this).text() + "]").next().remove()
 				$("[value=" + $(this).text() + "]").remove()
-/* 				if (putNo == 'schedule1' ) {
-					--clickNo1;
-				} else {
-					--clickNo2;
-				} */
+				$(".chosenSeatList").find("span:contains('" + $(this).text() + "')").remove()
 			}
 		});
 		
@@ -539,6 +541,16 @@
 			event.preventDefault();
 			let no = $(this).attr('data-room-no')
 			$("#seatList div").hide().filter("[data-seat-no="+ no +"]").show()
+			console.log($("#seatList div").hide().filter("[data-seat-no="+ no +"]").show().closest('.modal').attr('data-root-type'))
+			// 다른 호차 선택시 클릭 한거 초기화
+			$(".chosenSeatList").find("span").empty()
+			let target = $(this).closest('.modal').attr('data-root-type')
+			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
+			if ($("[data-schedule-no="+ target + "]").closest('tbody').attr('id')== 'schedule1') {
+				clickNo1 = $("input[name=count1]").val();
+			} else {
+				clickNo2 = $("input[name=count2]").val();
+			}
 		})
 		
 		// 특실 예약 클릭시
@@ -548,11 +560,14 @@
 			let trainNo = searchInfo.next().text().trim()
 			let scheduleNo = searchInfo.attr('data-schedule-no')
 			let type = '특실'
+			$("#modal-seat").attr('data-root-type', scheduleNo)
 			
+			// modal창에 표시할 값 설정
 			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
 			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
-			
 			let trainName = searchInfo.text().trim()
+			
+			// 루트 표시
 			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
 			hochaInfo(type, trainNo, scheduleNo, 3) 
 		})
@@ -560,17 +575,18 @@
 		// 일반실 예약 클릭시
 		$(".listTable").on('click', '.normal', function(event) {
 			event.preventDefault();
-			$("#modal-seat").attr('data-root-type', $(this).closest('tbody').attr('id'))
+			console.log($(this).closest('td').attr('id'))
 			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
 			let trainNo = searchInfo.next().text().trim()
 			let scheduleNo = searchInfo.attr('data-schedule-no')
 			let type = '일반실'
+			$("#modal-seat").attr('data-root-type', scheduleNo)
 			
 			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
 			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
 			let trainName = searchInfo.text().trim()
+			
 			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
-	
 			hochaInfo(type, trainNo, scheduleNo, 4) 
 		});
 		
@@ -607,15 +623,15 @@
 								if (schedule.specialSeat == 0) {
 									sh += "<td></td>"
 								} else if (schedule.specialBooking == schedule.specialSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' disabled='disabled'>매진</button></td>"
+									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn special' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn special type='button'' style='background-color: #7E5C5E;'>예매</button></td>"
 								)
 								
 								if (schedule.normalBooking == schedule.normalSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' disabled='disabled'>매진</button></td>"
+									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn normal' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn normal' type='button' style='background-color: #7E5C5E;'>예매</button></td>"
 								)
 									sh += "<td class='runTime'>" + schedule.diffTime + "</td>"
 									sh += "<td>" + addCommas(schedule.price) + "원</td>"
@@ -660,15 +676,15 @@
 								if (schedule.specialSeat == 0) {
 									sh += "<td></td>"
 								} else if (schedule.specialBooking == schedule.specialSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' disabled='disabled'>매진</button></td>"
+									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn special' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn special' type='button' style='background-color: #7E5C5E;'>예매</button></td>"
 								)
 								
 								if (schedule.normalBooking == schedule.normalSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' disabled='disabled'>매진</button></td>"
+									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn normal' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn normal' type='button' style='background-color: #7E5C5E;'>예매</button></td>"
 								)
 									sh += "<td class='runTime'>" + schedule.diffTime + "</td>"
 									sh += "<td>" + addCommas(schedule.price) + "원</td>"
@@ -681,14 +697,6 @@
 						}
 			})
 		});
-		
-/* 		$("button:contains('예매')").click(function() {
-			//좌석 수 예약 수 가져 오고 
-			// 해당 좌석을 클릭하면 input : hidden 에 그 값을 넣는다. 
-			// 사용자가 누른 버튼이 특실인 경우 3으로 나누고 일반실이면 4로 나누고
-			// 3으로 나누고 나머지가 1이면 마지막에 2면 끝에서 2개
-		}) */
-		
 		
 	});
 	
