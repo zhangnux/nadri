@@ -42,6 +42,12 @@ public class TrainRestController {
 
 	@GetMapping("/schedule")
 	public ResponseDto<?> getSchedule(TrainSearchForm search) {
+		log.info("확인date: " + search.getDpDate1());
+		log.info("확인time: " + search.getDpTime1());
+		log.info("확인ar: " + search.getArrivalStation());
+		log.info("확인dp: " + search.getDepartureStation());
+		log.info("확인row: " + search.getRowNo1());
+		
 		TrainCriteria criteria = new TrainCriteria();
 		criteria.setDepartureStation(search.getDepartureStation());
 		criteria.setArrivalStation(search.getArrivalStation());

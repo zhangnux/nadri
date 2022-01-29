@@ -18,7 +18,7 @@ import com.nadri.train.dto.TrainCriteria;
 @Service
 @Transactional
 public class TrainService {
-	Logger log = LogManager.getLogger(TrainService.class);
+	static final Logger log = LogManager.getLogger(TrainService.class);
 	
 	@Autowired
 	TrainMapper mapper;
