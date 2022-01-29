@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.nadri.attr.dto.AttOptionDetail;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
 
@@ -24,4 +25,6 @@ public interface AttrDao{
 	
 	// 번호로 디테일 불러오기
 	Attraction getDetailByNo(int no);
+	List<Attraction> getOptionByNo(int no);
+	
 }
