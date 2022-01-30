@@ -150,11 +150,7 @@
 			let comeDate = new Date($("[name=dpDate2]").val())
 			
 			if ($("[name=way]:checked").val() == '왕복') {
-				/* if (goDate.getTime() == comeDate.getTime() && $("[name=goTime]").val() >= $("[name=comeTime]").val()) {
-					alert("알맞는 시간을 입력해 주세요.")
-				} else  */
-				console.log(goDate)
-				console.log(comeDate)
+
 				if (goDate > comeDate) {
 					alert("복편을 왕편보다이전 일자로 선택하셨습니다. 일정을 다시 한번 선택하여 주십시오.")
 					valid = false;
@@ -165,19 +161,6 @@
 				$("#trainSearch").submit()
 			}
 		})
-		
-		
-/* 		
-		let now = new Date(); 
-		let nowDate = now.getFullYear() + "/" + now.getMonth()+1 + "/" + now.getDate()
-		
-		$(".time select").change(function(){
-			console.log($(".datepicker").val())
-			if ($(".datepicker").val() == nowDate && now.getHours() >= $(this).val()) {
-				alert("이후 시각입력")
-			}
-		}) */
-		
 	})
 </script>
 </body>

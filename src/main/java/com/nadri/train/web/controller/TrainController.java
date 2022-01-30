@@ -41,7 +41,7 @@ public class TrainController {
 	 * @return
 	 * @throws ParseException 
 	 */
-	@PostMapping("/list.nadri")
+	@PostMapping
 	public String list(TrainSearchForm searchForm, Model model) {
 		TrainCriteria criteria = new TrainCriteria();
 		criteria.setDepartureStation(searchForm.getDepartureStation());
@@ -61,8 +61,6 @@ public class TrainController {
 			
 			List<TrainSearchDto> schedules2 = service.getSchedulesByCriteria(criteria);
 			model.addAttribute("schedules2", schedules2);
-
-			log.info("스케쥴1: " + schedules2.size());
 		}
 		
 		model.addAttribute("searchForm", searchForm); 
