@@ -11,6 +11,7 @@ public interface NoticeBoardMapper {
 	List<NoticeBoard> searchBoards(Criteria criteria);
 	
 	NoticeBoard getNoticeBoardDetail(int no);
+	void updateViewCount(NoticeBoard noticeBoard);
 	
 	void insertNoticeBoard(NoticeBoard noticeBoard);
 	void updateNoticeBoard(NoticeBoard noticeBoard);

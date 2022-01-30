@@ -13,7 +13,7 @@
 </head>
 <body>
 <c:set var="menu" value="qna"/>
-<%@ include file="../manager/common/navbar.jsp" %>
+<%-- <%@ include file="../manager/common/navbar.jsp" %> --%>
 <div class="container">
 	<div class="row mb-3">
 		<div class="col">

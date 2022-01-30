@@ -6,9 +6,21 @@
 	<!-- 
 		int getBoardsTotalRows(Criteria criteria)
 	-->
-	<select id="getBoardsTotalRows()">
+	<select id="getBoardsTotalRows()" parameterType="com.nadri.noticeBoard.web.form.Criteria" resultType="int">
 		select count(*)
-		from
+		from notice_Board
+		<where>
+			<if test="opt != null and value != null">
+				<choose>
+					<when test="opt == 제목">
+						board_title like '%' || #{value} || '%'
+					</when>
+					<when test="opt == 내용">
+						board_content like '%' || #{value} || '%'
+					</when>
+				</choose>
+			</if>
+		</where>
 	</select>
 	<!--
 		List<NoticeBoard> searchBoards(Criteria criteria)
@@ -17,12 +29,35 @@
 		select
 			board_no no,
 			board_title title,
+			board_content content,
 			board_created_date createdDate
 		from
-			notice_board
+			(
+			select A.board_no no,
+					A.board_title title,
+					A.board_content content,
+					A.board_created_date createdDate,
+					 row_number() over (order by book_no desc) rn
+			from
+				notice_board A
 		<where>
-			
+			<if test="opt != null and value != null">
+				<choose>
+					<when test="opt == 제목">
+						board_title like '%' || #{value} || '%'
+					</when>
+					<when test="opt == 내용">
+						board_content like '%' || #{value} || '%'
+					</when>
+					<when test="opt == 제목+내용">
+						board_title like '%' || #{value} || '%'
+						 || board_content like '%' || #{value} || '%'
+					</when>
+				</choose>
+			</if>
 		</where>
+		)
+		where rn between #{beginIndex} and #{endIndex}
 	</select>
 
 	

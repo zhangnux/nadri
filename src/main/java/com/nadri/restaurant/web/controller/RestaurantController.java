@@ -33,7 +33,7 @@ import com.nadri.restaurant.web.form.RestaurantSearchForm;
 public class RestaurantController {
 	
 	@Autowired
-	RestaurantService rtService;
+	private RestaurantService rtService;
 	
 	
 	

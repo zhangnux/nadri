@@ -51,6 +51,7 @@
 	<div class="row mb-3">
 		<div class="col">
 			<form id="form-search" action="" method="get" class="row row-cols-lg g-3 align-items-center p-3">
+				<input type="hidden" name="page" value="1" />
 				<div class="col-3">
 					<select class="form-select" name="city">
 						<option value="" ${empty param.city ? 'selected' : ''}>전체 지역</option>
