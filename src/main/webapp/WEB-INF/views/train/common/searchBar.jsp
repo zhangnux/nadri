@@ -73,7 +73,7 @@
 </style>
 <div class="row">
 	<div class="col">
-		<form action="train/list.nadri" method="post" id="trainSearch" style="border: 2px solid #7E5C5E;">
+		<form action="/train" method="post" id="trainSearch" style="border: 2px solid #7E5C5E;">
 			<!-- 경로 선택 -->
 			<div class="row">
 				<div class="my-3 ms-4 col-md-2 div-show-station" id="departure" style="cursor: pointer;">
@@ -91,7 +91,7 @@
 					<input class="not" type="text" value="${param.arrivalStation }" style="border: none;" name="arrivalStation" data-station-id="" placeholder="도착역">
 				</div>
 				<div class="col-md-6 text-end" style="margin: auto; font-size: 18px;">
-					<input type="radio" value="편도" name="way" checked="checked"> 편도
+					<input type="radio" value="편도" name="way" ${param.way eq '왕복'? '' : 'checked'}> 편도
 					<input class="ms-3" type="radio" ${param.way eq '왕복'? 'checked' : '' } value="왕복" name="way"> 왕복
 				</div>
 			</div>
@@ -166,7 +166,7 @@
 				<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
 					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
-						<input type="text" class="datepicker" disabled readonly="readonly" value="${param.dpDate2 }" name="dpDate2">
+						<input type="text" class="datepicker" disabled readonly="readonly" value="${empty param.dpDate2? param.dpDate1 : param.dpDate2 }" name="dpDate2">
 						<input type="hidden" value="0" name="rowNo2" disabled>
 						<select name="dpTime2" disabled style="width: 50px;">
 							<c:forEach var="time" begin="0" end="23">
@@ -255,7 +255,7 @@
 <script type="text/javascript">
 	$(function() {
 		$("input[name=way]").change(function() {
-			if ($(this).val() == '왕복') {
+			if ($("input[name=way]:checked").val() == '왕복') {
 				$("#come input").prop('disabled', false)
 				$("#come select").prop('disabled', false)
 				$("#go").nextAll().show()

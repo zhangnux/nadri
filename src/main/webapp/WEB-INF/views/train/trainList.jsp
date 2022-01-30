@@ -47,13 +47,23 @@
 		float: left;
 		margin: 3px;
 	}
+	.btn-no {
+		width: 90px;
+		height: 25px;
+		padding: initial;
+		color: white;
+		border-radius: 0;
+		font-size: .875rem;
+		font-weight: bold;
+		background-color: #606060;
+	}
 
+	/* 좌석 스킨 */
 	#seatList ul li {
 		float: left;
 		width: 6%;
 	}
 
-	/* 좌석 스킨 */
 	#seatList ul span {
 		cursor: pointer;
 		display: inline-block;
@@ -91,9 +101,16 @@
 		list-style: none;
 		display: flex;
 		place-content: center;
+		padding-right: 50px;
+		padding-left: 50px;
 	}
 	
-	#schedule1 button, #schedule2 button {
+	#seatList strong {
+		color: #C67278;
+		font-size: 20px;
+	}
+	
+	.listTable button.normal, .listTable button.special{
 		width: 90px;
 		height: 25px;
 		padding: initial;
@@ -101,6 +118,7 @@
 		border-radius: 0;
 		font-size: .875rem;
 		font-weight: bold;
+		background-color: #7E5C5E;
 	}
 	#btn1 button, #btn2 button {
 		width: 90px;
@@ -131,6 +149,10 @@
 		background-color: #D8E5F6; 
 		border-radius: 3px; 
 		border: 1px solid #BACBE2;
+	}
+	
+	.fas {
+		color: #C67278;
 	}
 </style>
 <body>
@@ -163,7 +185,7 @@
 				<div class="col m-3">
 					<h5 class="pt-3" style="font-weight: bolder;">가는 열차</h5>
 					<div class=" mt-3" style="border: 2px solid #BACBE2; background-color: white; height: 175px;">
-						<div class="text-center row p-2">
+						<div class="text-center row p-2 mt-3">
 							<div class="col">
 								<input type="hidden" name="schduleNo1">
 								<input type="hidden" name="trainNo1">
@@ -172,7 +194,7 @@
 								<span><!-- 출발시간 --></span>
 								<span style="font-size: 14px;"><!-- 출발역 --></span>
 							</div>
-							<div class="col" style="padding: 0; display: none;">
+							<div class="col" style="padding: 0; display: none;" id="arrow">
 								<i class="fas fa-long-arrow-alt-right fa-2x"></i>
 							</div>
 							<div class="col">
@@ -180,10 +202,15 @@
 								<span style="font-size: 14px;"><!-- 도착역 --></span>
 							</div>
 						</div>
-						<div class="row mt-1">
+						<div class="row mt-3">
 							<div class="col text-center">
-								예약 정보가 없습니다.<!-- 기차종류, 번호 -->
+								<span>예약 정보가 없습니다.</span><!-- 기차종류, 번호 -->
 							</div>
+						</div>
+						<div class="row justify-content-center" style="margin: 26px;">
+							<button type="button" class="btn" onClick="window.location.reload();" id="cancel"
+							style="padding-top: 3px; width: 70px; background-color: #BF787C; color:white; font-weight:bold;
+							height: 25px; font-size: 13px; border-radius: 0;">초기화</button>
 						</div>
 					</div>
 				</div>
@@ -223,18 +250,18 @@
 											<td></td>
 										</c:when>
 										<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
-											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
+											<td><button class="btn btn-no btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn special" type="button" style="background-color: #7E5C5E">예매</button></td>
+											<td><button class="btn special" type="button">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<c:choose>
 										<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
-											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
+											<td><button class="btn btn-no btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn normal" type="button" style="background-color: #7E5C5E">예매</button></td>
+											<td><button class="btn normal" type="button">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<td class="runTime">${schedule.diffTime }</td>
@@ -287,7 +314,7 @@
 											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn special" type="button" style="background-color: #7E5C5E;">예매</button></td>
+											<td><button class="btn special" type="button">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<c:choose>
@@ -295,7 +322,7 @@
 											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
 										</c:when>
 										<c:otherwise>
-											<td><button class="btn normal" type="button" style="background-color: #7E5C5E;">예매</button></td>
+											<td><button class="btn normal" type="button">예매</button></td>
 										</c:otherwise>
 									</c:choose>
 									<td class="runTime">${schedule.diffTime }</td>
@@ -358,7 +385,7 @@
 	    				</div>
 	    				<hr class="mx-5">
 	    				<div class="text-end m-5" style="text-align-last: justify;">
-	    					<div class="chosenSeatList" style="display: inline-block;">선택 좌석 </div>
+	    					<div class="chosenSeatList" style="display: inline-block;">선택 좌석 : </div>
 	    					<button class="btn btn-secondary" type="button" id="btn-booking" style="border-radius: 0;">선택좌석예약</button>
 	    				</div>
 	    			</div>
@@ -369,6 +396,7 @@
 </div>
 <!--  -->
 <%@ include file="../common/footer.jsp" %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		// sidebar 토글
@@ -416,9 +444,9 @@
 		    }
 		    return x1 + x2;
 		}
-		// ----------------------------------------------------------------------
+		
 		// 기차의 스케줄, 번호에 해당하는 모든 좌석정보 불러오기
-		function hochaInfo(type, trainNo, scheduleNo, stan) {
+		function hochaInfo(type, trainNo, scheduleNo, stan, dp, ar) {
 			let $hocha = $("#hocha").children('ul').empty()
 			let $seat = $("#seatList").empty()
 			
@@ -455,7 +483,9 @@
 								}
 								seat += "</ul>"
 								if (index == 1) {
-									seat += "<ul class='m-4'></ul>"
+									seat += "<ul class='m-4 justify-content-between align-items-center'><strong>" + dp 
+									+ "</strong><i class='fas fa-long-arrow-alt-right fa-2x'></i><i class='fas fa-long-arrow-alt-right fa-2x'></i><i class='fas fa-long-arrow-alt-right fa-2x'></i><strong>" + 
+									ar +"</strong></ul>"
 								}
 							})
 							seat += "</div>"
@@ -472,26 +502,152 @@
 			seatModal.show()
 		}
 		
+		let bookIngBtn;
 		// 모달창 생성
 		var seatModal = new bootstrap.Modal(document.getElementById('modal-seat'), {
 			keyboard: false
 		});
 		
-		$("#btn-booking").click(function() {
-			
-		})
-		
 		// 모달창이 꺼질때 실행되는 이벤트 // 선택한 좌석 정보 삭제 
-		 $('#modal-seat').on('hidden.bs.modal', function (event) {
-			$(".chosenSeatList").find("span").empty()
-			let target = $(this).closest('.modal').attr('data-root-type')
+		let handler = function (event) {
+			 // 선택좌석 정보 삭제
+			$(".chosenSeatList").find("span").remove()
+			// input 태그 삭제
+			let target = $('#modal-seat').attr('data-root-type')
+			console.log("타겟 " + target)
 			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
+			// 선택 횟수 초기화
 			if ($("[data-schedule-no="+ target + "]").closest('tbody').attr('id') == 'schedule1') {
 				clickNo1 = $("input[name=count1]").val();
 			} else {
 				clickNo2 = $("input[name=count2]").val();
 			}
+		}
+		
+		// 특별석 일반석 좌석 예약 버튼 클릭
+		$(".listTable").on('click', '.btn', function(event) {
+			event.preventDefault();
+			bookIngBtn = $(this)
+			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
+			let trainNo = searchInfo.next().text().trim()
+			let scheduleNo = searchInfo.attr('data-schedule-no')
+			$("#modal-seat").attr('data-root-type', scheduleNo)
+			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
+			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
+
+			let trainName = searchInfo.text().trim()
+			
+			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
+			// 가는 열차/ 오는 열차?  가는 열차 클릭후 ar의 시간 보다 dp시간이 커야 한다.
+								// 오는 열차 클릭후 dp의 시간보다 ar 시간이 작아야 한다.
+
+			// 이미 루트 하나가 정해져 있을 때
+			let arTime;
+			let dpTime;
+			if ($("[name=schduleNo1]").val() != '' && $(this).closest('tbody').attr('id') == 'schedule2') {
+				arTime = moment($("#arrow").next().children().eq(0).text(), 'hh:mm')
+				if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
+					arTime.add(1, 'days')
+				}	
+				dpTime = moment($(this).parent().prevAll().filter('.dpTime').contents()[1].textContent, 'hh:mm')
+				if (dpTime.diff(arTime) <= 0) {
+					$('#modal-seat').off('hidden.bs.modal', handler)
+					alert("열차가 도착하기 전에 출발하실 수 없습니다.")
+					return;
+				} 
+			} else if ($("[name=schduleNo2]").val() != '' && $(this).closest('tbody').attr('id') == 'schedule1') {
+				arTime = moment($(this).parent().prevAll().filter('.arTime').contents()[1].textContent, 'hh:mm')
+				dpTime = moment($("#arrow").prev().children().eq(4).text(), 'hh:mm')
+				if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
+					arTime.add(1, 'days')
+				}	
+				if (dpTime.diff(arTime) <= 0) {
+					$('#modal-seat').off('hidden.bs.modal', handler)
+					alert("열차가 도착하기 전에 출발하실 수 없습니다.")
+					return;
+				} 
+			}
+			
+			
+			if ($(this).attr('class') == 'btn normal') {
+				let type = '일반실'
+				hochaInfo(type, trainNo, scheduleNo, 4, dp, ar) 
+				
+			} else if ($(this).attr('class') == 'btn special') {
+				let type = '특실'
+				hochaInfo(type, trainNo, scheduleNo, 3, dp, ar) 
+			} else {
+				alert("이미 열차를 선택하셨습니다.")
+			}
 		})
+
+		// 수정 // 예약 버튼 클릭시
+		$("#btn-booking").click(function() {
+			// 모달창이 꺼질때 실행되는 이벤트처리 삭제 // 좌석 정보는 input에 이미 넣었으니 스케줄 번호 기차 번호 등등만 넣으면 된다.
+			let scheduleNo = $(this).closest(".modal").attr('data-root-type')
+			let sway = $("[data-schedule-no="+ scheduleNo + "]").closest('tbody').attr('id')
+			let trainNo = $("#rootInfo").contents()[0].textContent.split(" ")
+			// [name=way]:checked 되어 있는 값이 편도면 바로 post로 제출되는 거고
+			// 왕복이면 예약 현황에 들어가는 것
+			// 왕복일때 예약 현황에 값이 없으면 값을 넣는 거고
+			// 값이 있으면 바로 post로 제출 price id는 어케 하지
+			let way = $("[name=way]:checked").val()
+			let $sheduleInfo = $("[data-schedule-no="+ scheduleNo + "]").nextAll()
+			
+			let count = Math.floor($("td[data-schedule-no="+ scheduleNo + "]").closest('tbody').find('input').length/2)
+			if (count <  $("input[name=count1]").val() &&  sway == 'schedule1') {
+				alert("요청하신 승객수와 선택하신 좌석수가 일치하지 않습니다.")
+				return;
+			} else if (count <  $("input[name=count2]").val() &&  sway == 'schedule2') {
+				alert("요청하신 승객수와 선택하신 좌석수가 일치하지 않습니다.")
+				return;
+			}
+			
+			if (way == '편도') {
+				$("[name=schduleNo1]").val(scheduleNo)
+				$("[name=trainNo1]").val(trainNo[1])
+				// submit
+			}
+			let $span = $(".btn-s + div").find('span')
+			// 왕복
+			if ($span.eq(0).text() == '') {
+				$span.eq(0).text($sheduleInfo.filter(".dpTime").contents()[1].textContent)
+				$span.eq(1).text($sheduleInfo.filter(".dpTime").contents()[0].textContent)
+				$("#arrow").show()
+				$span.eq(2).text($sheduleInfo.filter(".arTime").contents()[1].textContent)
+				$span.eq(3).text($sheduleInfo.filter(".arTime").contents()[0].textContent)
+				$span.eq(4).text($("#rootInfo").contents()[0].textContent)
+				
+				bookIngBtn.text('접수').closest('tbody').find('button').each(function(index, element) {
+					$(this).attr('class', 'btn btn-sm btn-no')
+				})
+				if (sway == 'schedule1') {
+					$("[name=schduleNo1]").val(scheduleNo)
+					$("[name=trainNo1]").val(trainNo[1])
+					
+				} else {
+					$("[name=schduleNo2]").val(scheduleNo)
+					$("[name=trainNo2]").val(trainNo[1])
+				}
+				
+			} else {
+				if (sway == 'schedule1') {
+					$("[name=schduleNo1]").val(scheduleNo)
+					$("[name=trainNo1]").val(trainNo[1])
+				} else {
+					$("[name=schduleNo2]").val(scheduleNo)
+					$("[name=trainNo2]").val(trainNo[1])
+				}
+				// submit
+			}
+			$('#modal-seat').off('hidden.bs.modal', handler)
+			seatModal.hide()
+			$('#modal-seat').on('hidden.bs.modal', handler)
+			
+		})
+		
+		// 모달창이 꺼질때 실행되는 이벤트
+		$('#modal-seat').on('hidden.bs.modal', handler)
 		
 		// 선택 횟수만 조율하면 된다. 각각의 tbody의 id의 input의 개수의 /2 개가 count1,2 수 보다 크면 안된다.
 		// 좌석을 클릭했을 때 
@@ -520,14 +676,13 @@
 					alert(maxCount + "명 이상 선택할 수 없습니다.")
 					return;
 				}
-				
 				$(this).attr("class", "chosen")
 				inputNo += " value=" + $(this).text() + " />"
 				inputRoomNo += " value=" + $(this).closest('div').attr('data-seat-no') + " />"
 				$("#"+ target).append(inputNo).append(inputRoomNo)
 				
 				//모달창 선택 좌석 표시
-				$(".chosenSeatList").append("<span class='seatlist'>" + $(this).text() +"번</span>")
+				$(".chosenSeatList").append("<span class='seatlist px-1'>" + $(this).text() +"번</span>")
 			} else if ($(this).hasClass("chosen")) {
 				$(this).removeClass("chosen")
 				$("[value=" + $(this).text() + "]").next().remove()
@@ -543,7 +698,7 @@
 			$("#seatList div").hide().filter("[data-seat-no="+ no +"]").show()
 			console.log($("#seatList div").hide().filter("[data-seat-no="+ no +"]").show().closest('.modal').attr('data-root-type'))
 			// 다른 호차 선택시 클릭 한거 초기화
-			$(".chosenSeatList").find("span").empty()
+			$(".chosenSeatList").find("span").remove()
 			let target = $(this).closest('.modal').attr('data-root-type')
 			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
 			if ($("[data-schedule-no="+ target + "]").closest('tbody').attr('id')== 'schedule1') {
@@ -553,44 +708,6 @@
 			}
 		})
 		
-		// 특실 예약 클릭시
-		$(".listTable").on('click', '.special', function(event) {
-			event.preventDefault();
-			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
-			let trainNo = searchInfo.next().text().trim()
-			let scheduleNo = searchInfo.attr('data-schedule-no')
-			let type = '특실'
-			$("#modal-seat").attr('data-root-type', scheduleNo)
-			
-			// modal창에 표시할 값 설정
-			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
-			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
-			let trainName = searchInfo.text().trim()
-			
-			// 루트 표시
-			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
-			hochaInfo(type, trainNo, scheduleNo, 3) 
-		})
-		
-		// 일반실 예약 클릭시
-		$(".listTable").on('click', '.normal', function(event) {
-			event.preventDefault();
-			console.log($(this).closest('td').attr('id'))
-			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
-			let trainNo = searchInfo.next().text().trim()
-			let scheduleNo = searchInfo.attr('data-schedule-no')
-			let type = '일반실'
-			$("#modal-seat").attr('data-root-type', scheduleNo)
-			
-			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
-			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
-			let trainName = searchInfo.text().trim()
-			
-			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
-			hochaInfo(type, trainNo, scheduleNo, 4) 
-		});
-		
-		//-----------------------------------------------------------
 		// 가는열차 다음, 이전 버튼 페이지네이션
 		$("#btn1").children().click(function() {
 			console.log($(this))
@@ -625,13 +742,13 @@
 								} else if (schedule.specialBooking == schedule.specialSeat) {
 									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn special type='button'' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn special' type='button' >예매</button></td>"
 								)
 								
 								if (schedule.normalBooking == schedule.normalSeat) {
 									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn normal' type='button' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn normal' type='button' >예매</button></td>"
 								)
 									sh += "<td class='runTime'>" + schedule.diffTime + "</td>"
 									sh += "<td>" + addCommas(schedule.price) + "원</td>"
@@ -678,13 +795,13 @@
 								} else if (schedule.specialBooking == schedule.specialSeat) {
 									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn special' type='button' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn special' type='button'>예매</button></td>"
 								)
 								
 								if (schedule.normalBooking == schedule.normalSeat) {
 									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
 								} else (
-									sh += "<td><button class='btn normal' type='button' style='background-color: #7E5C5E;'>예매</button></td>"
+									sh += "<td><button class='btn normal' type='button'>예매</button></td>"
 								)
 									sh += "<td class='runTime'>" + schedule.diffTime + "</td>"
 									sh += "<td>" + addCommas(schedule.price) + "원</td>"
@@ -697,6 +814,42 @@
 						}
 			})
 		});
+		
+		$("#search").click(function() {
+			let valid = true;
+			if ($("[name=departureStation]").val().trim() == '') {
+				alert("출발역을 입력해주세요.")
+				valid = false;
+				return;
+			} else if ($("[name=arrivalStation]").val().trim() == '') {
+				alert("도착역을 입력해주세요.")
+				valid = false;
+				return;
+			} 
+			
+			if ($("[name=count1]").val() == 0) {
+				$("[name=count1]").val(1)
+				$("[name=adNo1]").val(1)
+			}
+			if ($("[name=count2]").val() == 0) {
+				$("[name=count2]").val(1)
+				$("[name=adNo2]").val(1)
+			}
+			
+			let goDate = new Date($("[name=dpDate1]").val())
+			let comeDate = new Date($("[name=dpDate2]").val())
+			
+			if ($("[name=way]:checked").val() == '왕복') {
+				if (goDate > comeDate) {
+					alert("복편을 왕편보다이전 일자로 선택하셨습니다. 일정을 다시 한번 선택하여 주십시오.")
+					valid = false;
+				}
+			}
+			if (valid) {
+				
+				$("#trainSearch").submit()
+			}
+		})
 		
 	});
 	
