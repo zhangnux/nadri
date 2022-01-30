@@ -19,7 +19,6 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col">
-			<p>등록할 책정보를 폼에 입력하세요</p>
 			<!-- 
 				폼 입력요소에 <input type="file" />인 입력요소(첨부파일 업로드)가 있을 경우
 				method는 반드시 post로 설정한다.
