@@ -2,6 +2,8 @@ package com.nadri.csBoard.vo;
 
 import java.util.Date;
 
+import com.nadri.user.vo.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +22,7 @@ public class CsBoard {
 	
 	private int boardNo;			//번호
 	private String boradTitle;		//이름
-	// private User user;			//유저 User FK :userno
+	private User user;			//유저 User FK :userno
 	private int password;			//비밀번호
 	private int boradView;			//게시판 조회수
 	private String boardContent;		//내용

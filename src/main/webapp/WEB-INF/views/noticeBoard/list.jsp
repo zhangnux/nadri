@@ -32,24 +32,35 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td><a href="#">서버 정상화 안내</a></td>
-						<td>2022/01/28</td>
-						<td>4934</td>
-					</tr>
+				<c:choose>
+					<c:when test="${empty noticeBoards }">
+						<tr>
+							<td class="text-center" colspan="6">등록된 공지가 없습니다.</td>
+						</tr>
+					</c:when>
+					<c:otherwise>                            
+						<c:forEach var="noticeBoard" items="${noticeBoards }" varStatus="loop">
+							<tr>
+								<td>${loop.count }</td>
+								<td><a href="detail.nadri?no=${noticeBoard.no }">${noticeBoard.title }</a></td>
+								<td><fmt:formatDate value="${noticeBoard.createdDate }" pattern="yyyy-MM-dd" /></td>
+								<td>${noticeBoard.viewCount }</td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<div class="row mb-3 p-3">
-		<div class="col">
+		<div class="col d-flex justify-content-end">
 			<a href="insert.nadri" class="btn btn-primary">공지 등록</a>
 		</div>
 	</div>
 	<div class="row mb-3 p-3">
-		<div class="col">
-			<form action="#" class="row row-cols-lg-auto g-3 align-items-center" method="get">
+		<div class="col d-flex justify-content-center">
+			<form action="list.nadri" class="row row-cols-lg-auto g-3 align-items-center" method="get">
 				<input type="hidden" name="page" value="1" />
 				<div class="col-12">
 					<select class="form-select" name="opt">
@@ -62,7 +73,7 @@
 					<input type="text" class="form-control" name="value" value="${param.value }">
 				</div>
 				<div class="col-12">
-					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-notice">검색</button>
+					<button type="submit" class="btn btn-outline-primary btn-sm" id="btn-search-notice">검색</button>
 				</div>
 			</form>
 		</div>

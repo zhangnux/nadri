@@ -7,6 +7,7 @@ public class ExceptionHandler {
 
 	@org.springframework.web.bind.annotation.ExceptionHandler
 	public String handleException(Exception e) {
+		e.printStackTrace();
 		return "error/serverError";
 	}
 }
