@@ -166,9 +166,9 @@
 				<div class="m-3 px-4 col-md-3" style="border-left: 1px solid; border-left-color: #ced4da; border-right: 1px solid; border-right-color: #ced4da;">
 					<label style="display: block; font-size: 16px; color: gray;">출발시간</label>
 					<div class="time">
-						<input type="text" class="datepicker" disabled readonly="readonly" value="${empty param.dpDate2? param.dpDate1 : param.dpDate2 }" name="dpDate2">
-						<input type="hidden" value="0" name="rowNo2" disabled>
-						<select name="dpTime2" disabled style="width: 50px;">
+						<input type="text" class="datepicker" readonly="readonly" value="${empty param.dpDate2? param.dpDate1 : param.dpDate2 }" name="dpDate2">
+						<input type="hidden" value="0" name="rowNo2">
+						<select name="dpTime2" style="width: 50px;">
 							<c:forEach var="time" begin="0" end="23">
 								<c:choose>
 									<c:when test="${time lt 10}">
@@ -187,7 +187,7 @@
 					  data-bs-auto-close="outside" aria-expanded="false">
 					  <div class="m-3"  style="display: inline-block;">
 						<label style="display: block; font-size: 16px; color: gray;">승객</label>
-						<input type="text" disabled style="border: none;" name="count2" readonly="readonly" value="${empty param.count2 ? 1 : param.count2 }">명
+						<input type="text" style="border: none;" name="count2" readonly="readonly" value="${empty param.count2 ? 1 : param.count2 }">명
 					  </div>
 				</div>
 				<ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" style="width: 250px; border-top: 2px solid #7E5C5E; border-radius: 0;">
@@ -195,7 +195,7 @@
 				  		<div>어른<p style="font-size: 14px; color: gray;">만 13세 이상</p></div>
 				   		<div id="adult">
 				   		<span><i class="bi bi-dash-circle"></i></span>
-				   		<input name="adNo2" value="${empty param.adNo2? 1 : param.adNo2 }" disabled style="width: 15px; border: none;">
+				   		<input name="adNo2" value="${empty param.adNo2? 1 : param.adNo2 }" style="width: 15px; border: none;">
 				   		<span><i class="bi bi-plus-circle"></i></span>
 				   		</div>
 				 	</li>
@@ -203,7 +203,7 @@
 				  		<div>어린이</div>
 				   		<div>
 				   		<span><i class="bi bi-dash-circle"></i></span>
-				   		<input name="cdNo2" value="${empty param.cdNo2? 0 : param.cdNo2 }" disabled style="width: 15px; border: none;">
+				   		<input name="cdNo2" value="${empty param.cdNo2? 0 : param.cdNo2 }" style="width: 15px; border: none;">
 					    <span><i class="bi bi-plus-circle"></i></span>
 						</div>
 				   	</li>
@@ -254,19 +254,38 @@
 </div>
 <script type="text/javascript">
 	$(function() {
-		$("input[name=way]").change(function() {
-			if ($("input[name=way]:checked").val() == '왕복') {
+		if ($("input[name=way]:checked").val() == '왕복') {
+			$("input[value=편도]").prop('checked', false)
+			$("input[value=왕복]").prop('checked', true)
+			$("#come input").prop('disabled', false)
+			$("#come select").prop('disabled', false)
+			$("#go").nextAll().show()
+			$("#one").hide().next().show()
+		} else if ($("input[name=way]:checked").val() == '편도') {
+			$("input[value=왕복]").prop('checked', false)
+			$("input[value=편도]").prop('checked', true)
+			$("#come input").prop('disabled', true)
+			$("#come select").prop('disabled', true)
+			$("#go").nextAll().hide()
+			$("#one").show().next().hide()
+		}
+		$("input[name=way]:radio").change(function() {
+			if ($(this).val() == '왕복') {
+				console.log($("input[value=편도]"))
+				$("input[value=편도]").prop('checked', false)
+				$("input[value=왕복]").prop('checked', true)
 				$("#come input").prop('disabled', false)
 				$("#come select").prop('disabled', false)
 				$("#go").nextAll().show()
 				$("#one").hide().next().show()
-			} else {
+			} else if ($(this).val() == '편도') {
+				$("input[value=왕복]").prop('checked', false)
+				$("input[value=편도]").prop('checked', true)
 				$("#come input").prop('disabled', true)
 				$("#come select").prop('disabled', true)
 				$("#go").nextAll().hide()
 				$("#one").show().next().hide()
 			}
-
 		})
 
 		

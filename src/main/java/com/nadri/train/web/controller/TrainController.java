@@ -67,6 +67,21 @@ public class TrainController {
 		return "train/trainList";
 	}
 	
+	/**
+	 * 예약 확인 페이지
+	 * @return
+	 */
+	@PostMapping("/confirmReservation.nadri")
+	public String reservedTrain() {
+		// 모달창에서 예약 버튼을 누르면 
+		// input값을 db에 저장하고, 예약 페이지가 뜬다.
+		/*
+		 * //schduleNo1: 11117 trainNo1: 1502 schduleNo2: trainNo2: seatNo1: 12 roomNo1: 8354
+		 */
+		
+		return "train/confirmReservation";
+	}
+	
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")
 //	public void insertSchedule() {
