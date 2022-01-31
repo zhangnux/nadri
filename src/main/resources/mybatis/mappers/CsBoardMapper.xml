@@ -2,4 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nadri.csBoard.mapper.CsBoardMapper">
 
+
+	<!--
+		int getCsBoardsTotalRows(Criteria criteria);
+	-->
+	<select id="getCsBoardsTotalRows" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="int">
+	
+	</select>
+	
+	
+	<!--
+		List<CsBoard> searchCsBoards(Criteria criteria)
+	-->
+	<select id="searchCsBoards" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="com.nadri.csBoard.vo.CsBoard">
+
+			
+	</select>
+	
+	<!--
+		CsBoard getCsBoardDetailByNo(int no)
+	-->
+	
+	<!--
+		CsBoardReply getReplyByNo(int no)
+	-->
+	
+	<!--
+		void insertCsBoard();
+	-->
+	
+	<!--
+		void updateCsBoard();
+	-->
+	
+	<!--
+		void deleteCsBoard();
+	-->
+	
+	<!--
+		void insertCsBoardReply();
+	-->
+	
+	<!--
+		void updateCsBoardReply();
+	-->
+	
+	<!--
+		void deleteCsBoardReply();
+	-->
+
 </mapper>

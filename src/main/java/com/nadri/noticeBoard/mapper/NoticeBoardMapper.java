@@ -2,16 +2,20 @@ package com.nadri.noticeBoard.mapper;
 
 import java.util.List;
 
-import com.nadri.coupon.util.Criteria;
-import com.nadri.noticeBoard.vo.NoticeBoard;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.nadri.noticeBoard.vo.NoticeBoard;
+import com.nadri.noticeBoard.web.form.Criteria;
+
+@Mapper
 public interface NoticeBoardMapper {
 	
 	int getBoardsTotalRows(Criteria criteria);
 	List<NoticeBoard> searchBoards(Criteria criteria);
 	
 	NoticeBoard getNoticeBoardDetail(int no);
-	void updateViewCount(NoticeBoard noticeBoard);
+	
+	void updateViewCount(int viewCount);
 	
 	void insertNoticeBoard(NoticeBoard noticeBoard);
 	void updateNoticeBoard(NoticeBoard noticeBoard);

@@ -6,17 +6,21 @@
 	<!-- 
 		int getBoardsTotalRows(Criteria criteria)
 	-->
-	<select id="getBoardsTotalRows()" parameterType="com.nadri.noticeBoard.web.form.Criteria" resultType="int">
+	<select id="getBoardsTotalRows" parameterType="com.nadri.noticeBoard.web.form.Criteria" resultType="int">
 		select count(*)
 		from notice_Board
 		<where>
 			<if test="opt != null and value != null">
 				<choose>
-					<when test="opt == 제목">
+					<when test="opt == '제목'">
 						board_title like '%' || #{value} || '%'
 					</when>
-					<when test="opt == 내용">
+					<when test="opt == '내용'">
 						board_content like '%' || #{value} || '%'
+					</when>
+					<when test="opt == '제목+내용'">
+						(board_title like '%' || #{value} || '%' 
+						or board_content like '%' || #{value} || '%')
 					</when>
 				</choose>
 			</if>
@@ -25,33 +29,35 @@
 	<!--
 		List<NoticeBoard> searchBoards(Criteria criteria)
 	-->
-	<select id="searchBoards()" resultType="com.nadri.noticeBoard.web.form.Criteria">
+	<select id="searchBoards" parameterType="com.nadri.noticeBoard.web.form.Criteria" resultType="com.nadri.noticeBoard.vo.NoticeBoard">
 		select
 			board_no no,
 			board_title title,
 			board_content content,
-			board_created_date createdDate
+			board_created_date createdDate,
+			board_view_count viewCount
 		from
 			(
-			select A.board_no no,
-					A.board_title title,
-					A.board_content content,
-					A.board_created_date createdDate,
-					 row_number() over (order by book_no desc) rn
+			select A.board_no,
+					A.board_title ,
+					A.board_content ,
+					A.board_created_date ,
+					A.board_view_count,
+					 row_number() over (order by board_no desc) rn
 			from
 				notice_board A
 		<where>
 			<if test="opt != null and value != null">
 				<choose>
-					<when test="opt == 제목">
+					<when test="opt == '제목'">
 						board_title like '%' || #{value} || '%'
 					</when>
-					<when test="opt == 내용">
+					<when test="opt == '내용'">
 						board_content like '%' || #{value} || '%'
 					</when>
-					<when test="opt == 제목+내용">
-						board_title like '%' || #{value} || '%'
-						 || board_content like '%' || #{value} || '%'
+					<when test="opt == '제목+내용'">
+						(board_title like '%' || #{value} || '%' 
+						or board_content like '%' || #{value} || '%')
 					</when>
 				</choose>
 			</if>
@@ -64,38 +70,54 @@
 	<!--
 		NoticeBoard getNoticeBoardDetail(int no)
 	-->
-	<select id="getNoticeBoardDetail()" parameterType="int" resultType="com.nadri.noticeBoard.vo.NoticeBoard">
+	<select id="getNoticeBoardDetail" parameterType="int" resultType="com.nadri.noticeBoard.vo.NoticeBoard">
 		select
 			board_no no,
 			board_title title,
 			board_content content,
-			board_created_date createdDate
+			board_created_date createdDate,
+			board_view_count viewCount
 		from
 			notice_board
+		where
+			board_no = #{value}
 	</select>
 	
 	<!--
 		void insertNoticeBoard(NoticeBoard noticeBoard)
 	-->
-	<insert id="insertNoticeBoard()" parameterType="com.nadri.noticeBoard.vo.NoticeBoard">
+	<insert id="insertNoticeBoard" parameterType="com.nadri.noticeBoard.vo.NoticeBoard">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
 			select notice_board_no.nextval
 			from dual
 		</selectKey>
 		insert into notice_board
-		(board_no, board_title, board_content, board_created_date)
+		(board_no, board_title, board_content)
 		values
-		(#{no}, #{title}, #{content}, #{createdDate}, sysdate)
+		(#{no}, #{title}, #{content})
 	</insert>
 	
 	<!--
 		void updateNoticeBoard(NoticeBoard noticeBoard)
 	-->
+		<update id="updateNoticeBoard" parameterType="com.nadri.noticeBoard.vo.NoticeBoard">
+			update notice_board
+			set
+				board_title = #{title},
+				board_content = #{content},
+				board_view_count = #{viewCount}
+			where
+				board_no = #{no}
+		</update>
 	
 	<!--
 		void deleteNoticeBoard(int no)
 	-->
-
+		<delete id="deleteNoticeBoard">
+			delete form notice_board
+			where
+				board_no = #{value}
+		</delete>
 
 
 </mapper>

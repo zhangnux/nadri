@@ -19,14 +19,18 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col">
-			<form class="border bg-light p-3" action="#" method="post">
+			<form class="border bg-light p-3" action="insert.nadri" method="post">
 				<div class="mb-3">
 					<label class="form-label">제목</label>
 					<input type="text" class="form-control" name="title" />
 				</div>
 				<div class="mb-3">
-					<label class="form-label">내용</label>
-					<input type="text" class="form-control" name="content" />
+  					<label class="form-label">내용</label>
+ 					<textarea class="form-control" rows="10" name="content"></textarea>
+				</div>
+				<div class="text-end">
+					<a href="list.nadri" class="btn btn-secondary">취소</a>
+					<button type="submit" class="btn btn-primary">등록</button>
 				</div>
 			</form>
 		</div>

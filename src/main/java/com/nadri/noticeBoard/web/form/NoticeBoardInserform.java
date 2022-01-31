@@ -1,6 +1,4 @@
-package com.nadri.noticeBoard.vo;
-
-import java.util.Date;
+package com.nadri.noticeBoard.web.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,14 +13,9 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class NoticeBoard {
+public class NoticeBoardInserform {
 	
-	
-	private int no; 			//공지사항번호
 	private String title;		//이름
 	private String content;		//내용
-	private Date createdDate;		//작성일
-	private int viewCount;
-	
 
 }
