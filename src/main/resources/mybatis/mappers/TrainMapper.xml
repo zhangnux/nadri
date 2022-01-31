@@ -106,15 +106,21 @@
 		   		special as specialSeat, 
 		   		booking_n as normalBooking, 
 		   		normal as normalSeat, 
-		   		price as price
-		from (select row_number() over(order by x.schedule_no asc) as rn, 
+		   		normal_price as normalPrice, 
+		   		special_price as specialPrice
+		from (select row_number() over(order by x.schedule_no) rn, 
 		        x.schedule_no, x.schedule_departure_time, x.schedule_arrival_time, x.train_no,
-		        x.type_no, x.train_name,
-		        x.route_no, x.booking_s, x.special, x.booking_n, x.normal, c.price
-		        from sche x, train_price c
+		        x.type_no, x.train_name, 
+		        x.route_no, x.booking_s, x.special, x.booking_n, x.normal,
+		        (select price_id from train_price c
 		        where c.seat_grade = '일반실'
 		        and x.type_no = c.type_no
-		        and x.route_no in (c.down_route_no, c.up_route_no))
+		        and x.route_no in (c.down_route_no, c.up_route_no)) normal_price, 
+		        (select price_id from train_price c
+		        where c.seat_grade = '특실'
+		        and x.type_no = c.type_no
+		        and x.route_no in (c.down_route_no, c.up_route_no)) special_price
+		        from sche x)
 		where rn >= 7*#{rowNo}+1 and rn &lt; 7*#{rowNo}+8
 	</select>
 	

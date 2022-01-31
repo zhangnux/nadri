@@ -1,11 +1,7 @@
 package com.nadri.train.dto;
 
 import java.util.Date;
-
-import org.springframework.format.annotation.NumberFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +23,8 @@ public class TrainSearchDto {
 	private int specialSeat;
 	private int normalBooking;
 	private int normalSeat;
-	private long price;
+	private int normalPrice;
+	private int specialPrice;
 	
 	public String getDiffTime() {
 		long diff = arrivalTime.getTime() - departureTime.getTime();
