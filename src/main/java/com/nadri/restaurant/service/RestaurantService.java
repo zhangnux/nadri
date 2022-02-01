@@ -24,7 +24,8 @@ public class RestaurantService {
 	/*
 	public void addNewRestaurant () throws Exception {
 		// url 지정
-		String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=U8qsjMdizljQtq1Jnkio%2ByXjj2mcv4U6%2B4lD1%2Ft1SZIM64zzJ8PxHmBz8Loej8Kh%2BpCLxA9u4FzGCcKikMwLQw%3D%3D&contentTypeId=39&areaCode=&sigunguCode=&cat1=A05&cat2=A0502&cat3=A05020400&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=P&numOfRows=16&pageNo=1&_type=json";
+		String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=U8qsjMdizljQtq1Jnkio%2ByXjj2mcv4U6%2B4lD1%2Ft1SZIM64zzJ8PxHmBz8Loej8Kh%2BpCLxA9u4FzGCcKikMwLQw%3D%3D&contentTypeId=39&areaCode=&sigunguCode=&cat1=A05&cat2=A0502&cat3=A05020500&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=P&numOfRows=20&pageNo=1&_type=json";
+		
 		// JSON 텍스트를 Map<String, Object>로 반환하는 JSONParser 객체 생성
 		JSONParser parser = new JSONParser(new URL(url).openStream());
 		// JSON 텍스트를 Map<String, Object>로 변환
@@ -49,17 +50,17 @@ public class RestaurantService {
 			restaurant.setLon(Double.parseDouble(item.get("mapy").toString()));
 			restaurant.setParking("Y");
 			restaurant.setRestDate("연중무휴");
-			restaurant.setOpenTime("11:00~24:00");
+			restaurant.setOpenTime("11:00~23:00");
 			
-			// 중식
-			restaurant.setCategoryNo(4);
+			// 기타
+			restaurant.setCategoryNo(5);
 			rtMapper.insertRestaurant(restaurant);
 
 		}
 		
 	}
-	
 	*/
+	
 
 	
 	public Restaurant getRestaurantDetail(int no) {

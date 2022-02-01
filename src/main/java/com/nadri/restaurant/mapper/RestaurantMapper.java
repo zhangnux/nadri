@@ -21,9 +21,11 @@ public interface RestaurantMapper {
 	
 	//detail.nadri
 	Restaurant getRestaurantDetail(int no);
+	
 	/*
 	void insertRestaurant(Restaurant restaurant);
 	*/
+	
 	// 레스토랑 검색 list.nadri
 	int getRestaurantsTotalRows(RestaurantCriteria criteria);
 	List<Restaurant> searchRestaurants(RestaurantCriteria criteria);
