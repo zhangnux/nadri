@@ -100,7 +100,7 @@
 		</div>
 	</div>
 	<hr>
-	<div class="row mb-3">
+	<div class="row mb-3 pt-5">
 		<div class="col">
 			<h4><Strong>Best Restaurant</Strong></h4>
 		</div>
@@ -121,7 +121,7 @@
 		</c:forEach>
 	</div>
 	
-	<div class="row mb-3">
+	<div class="row mb-3 pt-2">
 		<div class="col">
 			<a href="list.nadri" class="text-decoration-none text-primary" id="go-list" ><Strong>상세 리스트 보기 ></Strong></a>
 		</div>

@@ -15,7 +15,12 @@
 		List<CsBoard> searchCsBoards(Criteria criteria)
 	-->
 	<select id="searchCsBoards" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="com.nadri.csBoard.vo.CsBoard">
-
+		select
+			cs_board_no no,
+			cs_board_title title,
+			user_no userNo,
+			
+			
 			
 	</select>
 	
@@ -30,6 +35,16 @@
 	<!--
 		void insertCsBoard();
 	-->
+	<insert id="insertCsBoard" parameterType="com.nadri.csBoard.vo.CsBoard">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select cs_board_no.nextval
+			from dual
+		</selectKey>
+		insert into cs_board
+		(cs_board_no, cs_board_title, user_no, cs_board_content, cs_type)
+		values
+		(#{no}, #{title}, #{userNo}, #{content}, #{type})
+	</insert>
 	
 	<!--
 		void updateCsBoard();

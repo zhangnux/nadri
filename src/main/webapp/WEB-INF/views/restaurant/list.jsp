@@ -116,30 +116,21 @@
 		<!-- list -->
 		<div class="col-10">
 			<table class="table">
+				<c:forEach var="restaurant" items="${restaurants }">
 				<tbody>
-					<tr>
-						<td rowspan="3" style="width: 20%"><img alt="" src=""></td>
-						<td style="width: 80%">레스토랑 이름</td>
-					</tr>
-					<tr>
-						<td>별점: 5점</td>
-					</tr>
-					<tr>
-						<td>한식 주차가능
-						<a href="detail.nadri?no=122" class="btn btn-primary">book now</a></td>
-					</tr>
-					<tr>
-						<td rowspan="3" style="width: 20%"><img alt="" src=""></td>
-						<td style="width: 80%">레스토랑 이름</td>
-					</tr>
-					<tr>
-						<td>별점: 5점</td>
-					</tr>
-					<tr>
-						<td>한식 주차가능
-						<a href="detail.nadri?no=" class="btn btn-primary">book now</a></td>
-					</tr>
+						<tr>
+							<td rowspan="3" style="width: 20%"><img alt="" src="${restaurant.picture }"></td>
+							<td style="width: 80%">${restaurant.name }</td>
+						</tr>
+						<tr>
+							<td>별점: ${restaurant.starPoint }점</td>
+						</tr>
+						<tr>
+							<td>${restaurant.categoryName } 주차:${restaurant.parking }
+							<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a></td>
+						</tr>
 				</tbody>
+				</c:forEach>
 			</table>
 		</div>
 	</div>

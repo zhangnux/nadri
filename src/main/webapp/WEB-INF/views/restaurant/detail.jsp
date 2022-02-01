@@ -48,7 +48,7 @@
 
 	<div id="restaurant-detail" class="row mb-3">
 		<div class="col-9 p-1">
-			<img id="rt-img" alt="picture" src="../../resources/images/restaurants/${restaurant.picture }">
+			<img id="rt-img" alt="picture" src="${restaurant.picture }">
 			<h1 class="p-3"><strong>${restaurant.name }</strong></h1>
 			<p>서울 청담에 위치한 분위기 좋은 레스토랑</p>
 		</div>

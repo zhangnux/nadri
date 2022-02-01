@@ -87,7 +87,7 @@ public class NoticeBoardController {
 		return "/noticeBoard/detail";
 	}
 	
-	@DeleteMapping("/delete.nadri")
+	@GetMapping("/delete.nadri")
 	public String delete(int no) {
 		
 		nbService.deleteNoticeBoard(no);

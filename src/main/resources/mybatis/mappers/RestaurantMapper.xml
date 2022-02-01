@@ -53,7 +53,8 @@
 	
 	<!--
 		void insertRestaurant(); json 사용
-	
+	-->
+	<!--
 	<insert id="insertRestaurant" parameterType="com.nadri.restaurant.vo.Restaurant">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
 			select restaurant_no.nextval
