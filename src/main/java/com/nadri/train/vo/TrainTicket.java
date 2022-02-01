@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrainTickect {
+public class TrainTicket {
 	private int no;
 	private String customerName;
-	private int type;
+	private String type;
 	private String isCanceled;
 	private int reservationNo;
 	private int scheduleNo;

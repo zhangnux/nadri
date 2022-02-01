@@ -19,7 +19,7 @@ import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
-import com.nadri.train.vo.TrainTickect;
+import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.ResponseDto;
 import com.nadri.train.web.model.TrainReservationDto;
 import com.nadri.train.web.model.TrainRoomInfo;
@@ -91,18 +91,59 @@ public class TrainRestController {
 		return map;
 	}
 	
-	
 	@GetMapping("/reservation")
 	public ResponseDto<?> insertReservation(TrainReservationDto dto) {
-		int totalCount = dto.getCount1()+dto.getCount2();
-		for (int i=0; i<totalCount; i++) {
-			TrainTickect tickect = new TrainTickect();
-			
+		TrainReservation reservation1 = new TrainReservation();
+		List<TrainTicket> ticketList1 = new ArrayList<>();
+		int ad = dto.getAdNo1();
+		int ch = dto.getCdNo1();
+		for (int i=0; i<dto.getCount1(); i++) {
+
+			TrainTicket ticket = new TrainTicket();
+			ticket.setScheduleNo(dto.getSchduleNo1());
+			ticket.setTrainNo(dto.getTrainNo1());
+			ticket.setRoomNo(dto.getRoomNo1());
+			ticket.setPriceId(dto.getPriceIdschedule1());
+			if (ad > 0) {
+				ticket.setType("어른");
+				ticket.setSeatNo(dto.getSeatNo1().get(i));
+				--ad;
+			} else if (ch > 0) {
+				ticket.setType("어린이");
+				ticket.setSeatNo(dto.getSeatNo1().get(i));
+				--ch;
+			}
+			log.info("티켓 확인 : " + ticket.toString());
+			ticketList1.add(ticket);
 		}
-		
-		List<TrainReservation> reservationList = new ArrayList<TrainReservation>();
+		reservation1.setTotalCount(dto.getCount1());
+		// dto.getPriceschedule1() 로 가격정보 불러오기 
+		//service.addNewReservation(reservation1, ticketList1);
 		if ("왕복".equals(dto.getWay() )) {
-			TrainReservation reservation = new TrainReservation();
+			List<TrainTicket> ticketList2 = new ArrayList<>();
+			TrainReservation reservation2 = new TrainReservation();
+			ad = dto.getAdNo2();
+			ch = dto.getCdNo2();
+			for (int i=0; i<dto.getCount2(); i++) {
+				TrainTicket ticket = new TrainTicket();
+				ticket.setScheduleNo(dto.getSchduleNo2());
+				ticket.setTrainNo(dto.getTrainNo2());
+				ticket.setRoomNo(dto.getRoomNo2());
+				ticket.setPriceId(dto.getPriceIdschedule2());
+				if (ad > 0) {
+					ticket.setType("어른");
+					ticket.setSeatNo(dto.getSeatNo2().get(i));
+					--ad;
+				} else if (ch > 0) {
+					ticket.setType("어린이");
+					ticket.setSeatNo(dto.getSeatNo2().get(i));
+					--ch;
+				}
+				log.info("티켓 확인 : " + ticket.toString());
+				ticketList2.add(ticket);
+			}
+			reservation2.setTotalCount(dto.getCount2());
+			//service.addNewReservation(reservation2, ticketList2);
 		}
 		
 		// 예약 번호 가져오기 // Controller에서 예약 번호로 티켓 정보도 가져올 수 있다.

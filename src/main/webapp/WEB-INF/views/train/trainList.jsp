@@ -21,7 +21,7 @@
 	.listTable {
 	  border-collapse: collapse;
 	}
-	.listTable td {
+	.listTable td, #modal-price td, #modal-price th {
 	  border: 1px solid #E0E0E0;
 	}
 	
@@ -110,7 +110,7 @@
 		font-size: 20px;
 	}
 	
-	.listTable button.normal, .listTable button.special{
+	.listTable button.normal, .listTable button.special, .btn-look-price{
 		width: 90px;
 		height: 25px;
 		padding: initial;
@@ -153,6 +153,19 @@
 	
 	.fas {
 		color: #C67278;
+	}
+	
+	.btn-look-price {
+		background-color: white;
+		color: gray;
+		font-weight: normal;
+		border: 1px solid #C0C0C0;
+	}
+	
+	#modal-price th, #modal-price td {
+		padding: 4px 10px;
+		font-size: 15px;
+		font-weight: normal;
 	}
 </style>
 <body>
@@ -245,27 +258,30 @@
 									<td>${schedule.trainNo }</td>
 									<td class="dpTime">${searchForm.departureStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
 									<td class="arTime">${searchForm.arrivalStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
-									<c:choose>
-										<c:when test="${schedule.specialSeat eq 0 }">
-											<td></td>
-										</c:when>
-										<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
-											<td><button class="btn btn-no btn-sm" disabled="disabled">매진</button></td>
-										</c:when>
-										<c:otherwise>
-											<td data-price-no="${schedule.specialPrice}"><button class="btn special" type="button">예매</button></td>
-										</c:otherwise>
-									</c:choose>
-									<c:choose>
-										<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
-											<td><button class="btn btn-no btn-sm" disabled="disabled">매진</button></td>
-										</c:when>
-										<c:otherwise>
-											<td data-price-no="${schedule.normalPrice}"><button class="btn normal" type="button">예매</button></td>
-										</c:otherwise>
-									</c:choose>
+									<td data-price-no="${schedule.specialPriceId }" data-price="${schedule.specialPrice }">
+										<c:choose>
+											<c:when test="${schedule.specialSeat eq 0 }">
+											</c:when>
+											<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
+												<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
+											</c:when>
+											<c:otherwise>
+												<button class="btn special" type="button">예매</button>
+											</c:otherwise>
+										</c:choose>
+									</td>
+									<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
+										<c:choose>
+											<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
+												<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
+											</c:when>
+											<c:otherwise>
+												<button class="btn normal" type="button">예매</button>
+											</c:otherwise>
+										</c:choose>
+									</td>
 									<td class="runTime">${schedule.diffTime }</td>
-									<td><button class="btn btn-outline-btn" type="button">보기</button></td>
+									<td><button class="btn-look-price" type="button">보기</button></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -306,27 +322,30 @@
 									<td>${schedule.trainNo }</td>
 									<td class="dpTime">${searchForm.arrivalStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
 									<td class="arTime">${searchForm.departureStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
-									<c:choose>
-										<c:when test="${schedule.specialSeat eq 0 }">
-											<td></td>
-										</c:when>
-										<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
-											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
-										</c:when>
-										<c:otherwise>
-											<td data-price-no="${schedule.specialPrice}"><button class="btn special" type="button">예매</button></td>
-										</c:otherwise>
-									</c:choose>
-									<c:choose>
-										<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
-											<td><button class="btn btn-secondary btn-sm" disabled="disabled">매진</button></td>
-										</c:when>
-										<c:otherwise>
-											<td data-price-no="${schedule.normalPrice}"><button class="btn normal" type="button">예매</button></td>
-										</c:otherwise>
-									</c:choose>
+									<td data-price-no="${schedule.specialPriceId }" data-price="${schedule.specialPrice }">
+										<c:choose>
+											<c:when test="${schedule.specialSeat eq 0 }">
+											</c:when>
+											<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
+												<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
+											</c:when>
+											<c:otherwise>
+												<button class="btn special" type="button">예매</button>
+											</c:otherwise>
+										</c:choose>
+									</td>
+									<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
+										<c:choose>
+											<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
+												<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
+											</c:when>
+											<c:otherwise>
+												<button class="btn normal" type="button">예매</button>
+											</c:otherwise>
+										</c:choose>
+									</td>
 									<td class="runTime">${schedule.diffTime }</td>
-									<td><button class="btn btn-outline-btn" type="button">보기</button></td>
+									<td><button class="btn-look-price" type="button">보기</button></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -393,12 +412,103 @@
    			</div>
  		</div>
 	</div>
+	<!-- 가격 모달창 -->
+	<div class="modal" tabindex="-1" id="modal-price" style="border: 1px solid #D8E5F6;">
+ 		<div class="modal-dialog modal-lg">
+	   		<div class="modal-content" style="background-color: #7C97B9;">
+	    		<div class="modal-body pt-2">
+	    			<div style="display: flex; justify-content: space-between;">
+		       			<h6 class="modal-title mb-2 fw-bold" style="color: white;">운임 요금</h6>
+	    	   			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+		    		</div>
+    				<div style="background-color: white;">
+    					<div class="mx-4 pt-3" id="price-trainInfo">
+    						열차 정보 : <span></span>
+    					</div>
+	    				<div class="mx-4" >
+	    					<table style="margin: 0; width: 100%; text-align: center;">
+	    						<thead>
+	    							<tr>
+	    								<th scope="col" colspan="2">특실</th>
+	    								<th scope="col" colspan="2">일반실</th>
+	    							</tr>
+	    							<tr style="background-color: #ECF5FF">
+	    								<th>어른</th>
+	    								<th>어린이</th>
+	    								<th>어른</th>
+	    								<th>어린이</th>
+	    							</tr>
+	    						</thead>
+	    						<tbody>
+	    							<tr>
+	    								<td></td>
+	    								<td></td>
+	    								<td></td>
+	    								<td></td>
+	    							</tr>
+	    						</tbody>
+	    					</table>
+	    				</div>
+		    			<div class="px-4 py-3" style="font-size: 15px; text-align: end;">
+							<div class="py-2" style="background-color: #ECF5FF">예상요금 : 특실 이용시 <strong></strong>원, 일반실 이용시 <strong></strong>원</div>
+							<div class="mt-2">어른 <span>2</span> 명, 어린이 <span>1</span> 명</div>
+		    			</div>
+	    			</div>
+				</div>
+   			</div>
+ 		</div>
+	</div>
 </div>
 <!--  -->
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		var priceModal = new bootstrap.Modal(document.getElementById('modal-price'), {
+			keyboard: false
+		});
+		
+		// 요금 출력
+		$(".listTable").on('click', '.btn-look-price', function() {
+			let dpStation = $(this).parent().prevAll().eq(4).contents()[0].textContent
+			let arStation = $(this).parent().prevAll().eq(3).contents()[0].textContent
+			let trainNo = $(this).parent().prevAll().eq(5).text()
+			let type = $(this).parent().prevAll().eq(6).text()
+			let special = $(this).parent().prevAll().eq(2).attr("data-price")
+			let normal = $(this).parent().prevAll().eq(1).attr("data-price")
+			
+			let $target = $("#price-trainInfo")
+			// 열차 정보
+			$target.children().text(dpStation + " → " + arStation + "  " + type + "-" + trainNo)
+			let adCount;
+			let chCount;
+			if ($(this).closest('tbody').attr('id') == 'schedule1') {
+				adCount = parseInt($("[name=adNo1]").val())
+				chCount = parseInt($("[name=cdNo1]").val())
+			} else {
+				adCount = parseInt($("[name=adNo2]").val())
+				chCount = parseInt($("[name=cdNo2]").val())
+			}
+			// 요금 정보
+			if (special == 0) {
+				$target.next().find('td').eq(0).text("-")
+				$target.next().find('td').eq(1).text("-")
+				$target.nextAll().eq(1).find('strong').eq(0).text("-")
+			} else {
+				$target.next().find('td').eq(0).text(addCommas(special))
+				$target.next().find('td').eq(1).text(addCommas(Math.floor(special/2)))
+				$target.nextAll().eq(1).find('strong').eq(0).text(addCommas(adCount*special + chCount*Math.floor(special/2)))
+			}
+			$target.next().find('td').eq(2).text(addCommas(normal))
+			$target.next().find('td').eq(3).text(addCommas(Math.floor(normal/2)))
+			$target.nextAll().eq(1).find('strong').eq(1).text(addCommas(adCount*normal + chCount*Math.floor(normal/2)))
+			
+			// 인원 정보
+			$target.nextAll().eq(1).find('span').eq(0).text(adCount)
+			$target.nextAll().eq(1).find('span').eq(1).text(chCount)
+			priceModal.show();
+		})
+		
 		// sidebar 토글
 		$('.btn-s').click(function(){
 			let $side = $(this).parent().toggleClass('open');
@@ -524,7 +634,7 @@
 			}
 		}
 		
-		// 특별석 일반석 좌석 예약 버튼 클릭
+		// 좌석 예매 버튼 클릭
 		$(".listTable").on('click', '.btn', function(event) {
 			event.preventDefault();
 			bookIngBtn = $(this)
@@ -534,7 +644,9 @@
 			$("#modal-seat").attr('data-root-type', scheduleNo)
 			// 선택한 기차의 가격id
 			if ($(this).hasClass('normal') || $(this).hasClass('special')) {
-				let price = bookIngBtn.parent().attr('data-price-no')
+				let priceId = bookIngBtn.parent().attr('data-price-no')
+				let price = bookIngBtn.parent().attr('data-price')
+				$(this).closest('tbody').append("<input type='hidden' name='priceId" + $(this).closest('tbody').attr('id') + "' value='" + priceId + "'/>")
 				$(this).closest('tbody').append("<input type='hidden' name='price" + $(this).closest('tbody').attr('id') + "' value='" + price + "'/>")
 			}
 			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
@@ -543,10 +655,8 @@
 			let trainName = searchInfo.text().trim()
 			
 			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
-			// 가는 열차/ 오는 열차?  가는 열차 클릭후 ar의 시간 보다 dp시간이 커야 한다.
-								// 오는 열차 클릭후 dp의 시간보다 ar 시간이 작아야 한다.
-
-			// 이미 루트 하나가 정해져 있을 때
+			
+			
 			let arTime;
 			let dpTime;
 			if ($("[name=schduleNo1]").val() != '' && $(this).closest('tbody').attr('id') == 'schedule2') {
@@ -573,7 +683,6 @@
 				} 
 			}
 			
-			
 			if ($(this).attr('class') == 'btn normal') {
 				let type = '일반실'
 				hochaInfo(type, trainNo, scheduleNo, 4, dp, ar) 
@@ -586,13 +695,13 @@
 			}
 		})
 
-		// 예약 버튼 클릭시
+		// 선택 예약 버튼 클릭시
 		$("#btn-booking").click(function() {
 			// 모달창이 꺼질때 실행되는 이벤트처리 삭제 // 좌석 정보는 input에 이미 넣었으니 스케줄 번호 기차 번호 등등만 넣으면 된다.
+			$(".chosenSeatList").find("span").remove()
 			let scheduleNo = $(this).closest(".modal").attr('data-root-type')
 			let sway = $("[data-schedule-no="+ scheduleNo + "]").closest('tbody').attr('id')
 			let trainNo = $("#rootInfo").contents()[0].textContent.split(" ")
-			// price id는 어케 하지
 			let way = $("[name=way]:checked").val()
 			let $sheduleInfo = $("[data-schedule-no="+ scheduleNo + "]").nextAll()
 			
@@ -608,10 +717,17 @@
 			if (way == '편도') {
 				$("[name=schduleNo1]").val(scheduleNo)
 				$("[name=trainNo1]").val(trainNo[1])
-				$("#trainSearch").attr("action", "/train/confirmReservation.nadri")
 				console.log($('form').serialize())
+				$("[name=schduleNo2]").prop('disabled', true)
+				$("[name=trainNo2]").prop('disabled', true)
 				// ajax로 보낸 뒤에 db에 저장후 예약 번호를 전달받아서 
 				// controller로 예약번호와 함께 get방식으로 load하기
+				$.getJSON('/api/train/reservation', $('form').serialize(),
+						function(response) {
+							if (response.status == 'OK') {
+								location.replace("http://localhost/train/confirmReservation.nadri")
+							}
+				})
 			}
 			let $span = $(".btn-s + div").find('span')
 			// 왕복
@@ -623,14 +739,16 @@
 				$span.eq(3).text($sheduleInfo.filter(".arTime").contents()[0].textContent)
 				$span.eq(4).text($("#rootInfo").contents()[0].textContent)
 				
-				bookIngBtn.text('접수').closest('tbody').find('button').each(function(index, element) {
+				bookIngBtn.text('접수').closest('tbody').find('.btn').each(function(index, element) {
 					$(this).attr('class', 'btn btn-sm btn-no')
 				})
 				if (sway == 'schedule1') {
+					$("#btn1").children().prop('disabled', true);
 					$("[name=schduleNo1]").val(scheduleNo)
 					$("[name=trainNo1]").val(trainNo[1])
 					
 				} else {
+					$("#btn2").children().prop('disabled', true);
 					$("[name=schduleNo2]").val(scheduleNo)
 					$("[name=trainNo2]").val(trainNo[1])
 				}
@@ -704,6 +822,7 @@
 		// 좌석 모달창에서 호차를 클릭할 때 // 호차에 해당하는 좌석이 뜬다. 다른 좌석 정보는 숨겨짐
 		$("#hocha").on('click', 'span.can', function(event) {
 			event.preventDefault();
+			$("#seatList").find('.chosen').removeClass("chosen").addClass("can")
 			let no = $(this).attr('data-room-no')
 			$("#seatList div").hide().filter("[data-seat-no="+ no +"]").show()
 			console.log($("#seatList div").hide().filter("[data-seat-no="+ no +"]").show().closest('.modal').attr('data-root-type'))
@@ -747,21 +866,23 @@
 									sh += "<td>" + schedule.trainNo + "</td>"
 									sh += "<td class='dpTime'>${searchForm.departureStation}<div>" + schedule.departureTime + "</div></td>"
 									sh += "<td class='arTime'>${searchForm.arrivalStation}<div>" + schedule.arrivalTime + "</div></td>"
+									sh += "<td data-price-no='"+ schedule.specialPriceId +"' data-price='" + schedule.specialPrice + "'>"
 								if (schedule.specialSeat == 0) {
-									sh += "<td></td>"
 								} else if (schedule.specialBooking == schedule.specialSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
+									sh += "<button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button>"
 								} else (
-									sh += "<td data-price-no='"+ schedule.specialPrice +"'><button class='btn special' type='button' >예매</button></td>"
+									sh += "<button class='btn special' type='button' >예매</button>"
 								)
-								
+									sh += "</td>"
+									sh += "<td data-price-no='"+ schedule.normalPriceId +"' data-price='" + schedule.normalPrice + "' >"
 								if (schedule.normalBooking == schedule.normalSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
+									sh += "<button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button>"
 								} else (
-									sh += "<td data-price-no='"+ schedule.normalPrice +"'><button class='btn normal' type='button' >예매</button></td>"
+									sh += "<button class='btn normal' type='button' >예매</button>"
 								)
+									sh += "</td>"
 									sh += "<td class='runTime'>" + schedule.diffTime + "</td>"
-									sh += "<td><button class='btn btn-outline-btn' type='button'>보기</button></td>"
+									sh += "<td><button class='btn-look-price' type='button'>보기</button></td>"
 									sh += "</tr>"
 								$("#schedule1").append(sh)
 							})
@@ -772,7 +893,6 @@
 			})
 		});
 		
-		// 버튼을 눌러도 변하게 하고 싶다.===========================
 		// 오는 열차 다음, 이전 버튼 페이지네이션
 		$("#btn2").on('click', 'button', function() {
 			let $btn = $(this) 
@@ -801,21 +921,23 @@
 									sh += "<td>" + schedule.trainNo + "</td>"
 									sh += "<td class='dpTime'>${searchForm.arrivalStation}<div>" + schedule.departureTime + "</div></td>"
 									sh += "<td class='arTime'>${searchForm.departureStation}<div>" + schedule.arrivalTime + "</div></td>"
+									sh += "<td data-price-no='"+ schedule.specialPriceId +"' data-price='" + schedule.specialPrice + "'>"
 								if (schedule.specialSeat == 0) {
-									sh += "<td></td>"
 								} else if (schedule.specialBooking == schedule.specialSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
+									sh += "<button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button>"
 								} else (
-									sh += "<td data-price-no='"+ schedule.specialPrice +"'><button class='btn special' type='button'>예매</button></td>"
+									sh += "<button class='btn special' type='button'>예매</button>"
 								)
-								
+									sh += "</td>"
+									sh += "<td data-price-no='"+ schedule.normalPriceId +"' data-price='" + schedule.normalPrice + "'>"
 								if (schedule.normalBooking == schedule.normalSeat) {
-									sh += "<td><button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button></td>"
+									sh += "<button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button>"
 								} else (
-									sh += "<td data-price-no='"+ schedule.normalPrice +"'><button class='btn normal' type='button'>예매</button></td>"
+									sh += "<button class='btn normal' type='button'>예매</button>"
 								)
+									sh += "</td>"
 									sh += "<td class='runTime'>" + schedule.diffTime + "</td>"
-									sh += "<td><button class='btn btn-outline-btn' type='button'>보기</button></td>"
+									sh += "<td><button class='btn-look-price' type='button'>보기</button></td>"
 									sh += "</tr>"
 								$("#schedule2").append(sh)
 							})
@@ -857,7 +979,6 @@
 				}
 			}
 			if (valid) {
-				
 				$("#trainSearch").submit()
 			}
 		})

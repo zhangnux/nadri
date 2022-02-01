@@ -106,7 +106,9 @@
 		   		special as specialSeat, 
 		   		booking_n as normalBooking, 
 		   		normal as normalSeat, 
-		   		normal_price as normalPrice, 
+		   		normal_price_id as normalPriceId, 
+		   		normal_price as normalPrice,
+		   		special_price_id as specialPriceId,
 		   		special_price as specialPrice
 		from (select row_number() over(order by x.schedule_no) rn, 
 		        x.schedule_no, x.schedule_departure_time, x.schedule_arrival_time, x.train_no,
@@ -115,8 +117,16 @@
 		        (select price_id from train_price c
 		        where c.seat_grade = '일반실'
 		        and x.type_no = c.type_no
-		        and x.route_no in (c.down_route_no, c.up_route_no)) normal_price, 
+		        and x.route_no in (c.down_route_no, c.up_route_no)) normal_price_id, 
 		        (select price_id from train_price c
+		        where c.seat_grade = '특실'
+		        and x.type_no = c.type_no
+		        and x.route_no in (c.down_route_no, c.up_route_no)) special_price_id,
+		        (select c.price from train_price c
+		        where c.seat_grade = '일반실'
+		        and x.type_no = c.type_no
+		        and x.route_no in (c.down_route_no, c.up_route_no)) normal_price, 
+		        (select c.price from train_price c
 		        where c.seat_grade = '특실'
 		        and x.type_no = c.type_no
 		        and x.route_no in (c.down_route_no, c.up_route_no)) special_price
@@ -149,4 +159,26 @@
 		and schedule_no = #{scheduleNo}
 		and is_canceled = 'N'
 	</select>
+	
+	<!-- 예약 정보 추가 -->
+	<insert id="insertReservation" parameterType="com.nadri.train.vo.TrainReservation">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select train_reservation_seq.nextval
+			from dual
+		</selectKey>
+		insert into train_reservation(reservation_no, total_passengers_count, ticketing_status, reservation_date)
+		values
+		(#{no}, #{totalCount}, '예약', sysdate)
+	</insert>
+	
+	<!-- 티켓 정보 추가 -->
+	<insert id="insertTicket" parameterType="java.util.List">
+		insert into train_ticket(ticket_no, passenger_type, reservation_no, schedule_no, room_no, train_no, price_id, seat_no)
+		select train_ticket_seq.nextval, A.* from (
+		<foreach collection="list" item="ticket" separator="UNION ALL ">
+			select #{ticket.type}, #{ticket.reservationNo}, #{ticket.scheduleNo}, #{ticket.roomNo}, #{ticket.trainNo}, #{ticket.priceId}, #{ticket.seatNo}
+			from dual
+		</foreach> ) A
+	</insert>
+	
 </mapper>

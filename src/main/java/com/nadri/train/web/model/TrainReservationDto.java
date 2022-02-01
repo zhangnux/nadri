@@ -18,7 +18,8 @@ public class TrainReservationDto {
 	private int trainNo1;
 	private List<Integer> seatNo1;
 	private int roomNo1;
-	private int priceschedule1;
+	private int priceIdschedule1;
+	private long priceschedule1;
 	
 	private int count2;
 	private int adNo2;
@@ -27,7 +28,8 @@ public class TrainReservationDto {
 	private int trainNo2;
 	private List<Integer> seatNo2;
 	private int roomNo2;
-	private int priceschedule2;
+	private int priceIdschedule2;
+	private long priceschedule2;
 
 	// count1 - 예약 TOTAL_PASSENGERS_COUNT
 	// adNo1 - 티켓 PASSENGER_TYPE
