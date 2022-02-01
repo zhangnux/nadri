@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.mapper.TrainMapper;
+import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
 import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
+import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
 
@@ -70,5 +72,18 @@ public class TrainService {
 	 */
 	public List<TrainSeat> getTrainSeatNo(int scheduleNo, int trainNo) {
 		return mapper.getTrainSeatNo(scheduleNo, trainNo);
+	}
+	
+	/**
+	 * 예약된 정보와 예약 번호에 해당하는 티켓 정보를 추가
+	 * @param reservation
+	 * @param ticketList
+	 */
+	public void addNewReservation(TrainReservation reservation, List<TrainTicket> ticketList) {
+		mapper.insertReservation(reservation);
+		for (TrainTicket ticket : ticketList) {
+			ticket.setReservationNo(reservation.getNo());
+		}
+		mapper.insertTicket(ticketList);
 	}
 }

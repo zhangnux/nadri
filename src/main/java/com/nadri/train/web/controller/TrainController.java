@@ -71,7 +71,7 @@ public class TrainController {
 	 * 예약 확인 페이지
 	 * @return
 	 */
-	@PostMapping("/confirmReservation.nadri")
+	@GetMapping("/confirmReservation.nadri")
 	public String reservedTrain() {
 		// 모달창에서 예약 버튼을 누르면 
 		// input값을 db에 저장하고, 예약 페이지가 뜬다.

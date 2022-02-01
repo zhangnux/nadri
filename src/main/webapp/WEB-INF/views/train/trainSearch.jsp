@@ -122,7 +122,8 @@
 	$(function() {
 		
 		let now = new Date(); 
-		let nowDate = now.getFullYear() + "/" + now.getMonth()+1 + "/" + now.getDate()
+		console.log(now.getMonth())
+		let nowDate = now.getFullYear() + "/" + (now.getMonth()+1) + "/" + now.getDate()
 		$(".datepicker").val(nowDate)
 		
 		$("#search").click(function() {

@@ -6,10 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
 import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
+import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
 
@@ -51,4 +53,16 @@ public interface TrainMapper {
 	 * @return
 	 */
 	List<TrainSeat> getTrainSeatNo(@Param("scheduleNo") int scheduleNo, @Param("trainNo") int trainNo);
+	
+	/**
+	 * 예약 정보 등록
+	 * @param reservation
+	 */
+	void insertReservation(TrainReservation reservation);
+	
+	/**
+	 * 티켓 정보 등록
+	 * @param ticketList
+	 */
+	void insertTicket(List<TrainTicket> ticketList);
 }

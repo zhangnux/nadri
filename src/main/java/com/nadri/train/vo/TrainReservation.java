@@ -13,7 +13,7 @@ public class TrainReservation {
 	
 	private int no;
 	private int totalCount;
-	private int totalPrice;
+	private long totalPrice;
 	private String tickectStatus;
 	private Date canceledDate;
 	private Date soldDate;

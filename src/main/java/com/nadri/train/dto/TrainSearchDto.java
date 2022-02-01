@@ -23,8 +23,10 @@ public class TrainSearchDto {
 	private int specialSeat;
 	private int normalBooking;
 	private int normalSeat;
-	private int normalPrice;
-	private int specialPrice;
+	private int normalPriceId;
+	private long normalPrice;
+	private int specialPriceId;
+	private long specialPrice;
 	
 	public String getDiffTime() {
 		long diff = arrivalTime.getTime() - departureTime.getTime();
