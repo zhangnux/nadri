@@ -39,52 +39,13 @@
 	
 	<hr>
 	
-	<div class = "row mb-3 border">
-			<div class="col-1">
-					<p>1</p>
-			</div>
-			<div class="col-1">
-					<p>1</p>
-			</div>
-			<div class="col-1">
-					<p>1</p>
-			</div>
-	
-	<hr>
-	
-		<div class="row mb-3">
-			<div class="col-4">
-				<select class="form-select" aria-label="Default select example">
-				  	<option selected>Open this select menu</option>
-				  	<option value="1">One</option>
-				 	<option value="2">Two</option>
-				  	<option value="3">Three</option>
-				</select>
-			</div>
-			<div class="col-4">
-				<select class="form-select" aria-label="Default select example">
-				  	<option selected>Open this select menu</option>
-				  	<option value="1">One</option>
-				 	<option value="2">Two</option>
-				  	<option value="3">Three</option>
-				</select>
-			</div>
-			<div class="col-4">
-				<select class="form-select" aria-label="Default select example">
-				  	<option selected>Open this select menu</option>
-				  	<option value="1">One</option>
-				 	<option value="2">Two</option>
-				  	<option value="3">Three</option>
-				</select>
-			</div>
-			
-		</div>
-	</div>
+<%@ include file = "common/searchbar.jsp" %>	
 
 	<!-- 사진  -->
 	<div class="row mb-3">
 		<div class="col">
 			<div class="card" style="width: 18rem;">
+			  	<!-- 경로 -->
 			  	<img src="http://tong.visitkorea.or.kr/cms/resource/33/1896033_image2_1.jpg" class="card-img-top" alt="...">
 			  	<div class="card-body">
 			    	<p class="card-text">사진</p>
