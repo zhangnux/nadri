@@ -15,7 +15,18 @@ public class TrainTicket {
 	private int reservationNo;
 	private int scheduleNo;
 	private int roomNo;
+	private String roomName; 
+	private String roomType;
 	private int trainNo;
 	private int priceId;
+	private long price;
 	private int seatNo;
+	
+	public long getPrice() {
+		if ("어린이".equals(type)) {
+			return price/2;
+		} else {
+			return price;
+		}
+	}
 }

@@ -123,7 +123,7 @@
 		
 		let now = new Date(); 
 		console.log(now.getMonth())
-		let nowDate = now.getFullYear() + "/" + (now.getMonth()+1) + "/" + now.getDate()
+		let nowDate = now.getFullYear() + "/" + (("00"+(now.getMonth()+1)).slice(-2)) + "/" + (("00"+now.getDate()).slice(-2))
 		$(".datepicker").val(nowDate)
 		
 		$("#search").click(function() {

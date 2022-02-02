@@ -18,4 +18,10 @@ public class TrainReservation {
 	private Date canceledDate;
 	private Date soldDate;
 	private Date reservationDate;
+	private String trainName; 
+	private int trainNo;
+	private String departureStation; 
+	private String arrivalStation;
+	private Date departureTime;
+	private Date arrivalTime;
 }

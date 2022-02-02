@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 페이지로 부터 좌석 예약 정보를 가져오는 객체
+ * @author song
+ *
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,31 +35,4 @@ public class TrainReservationDto {
 	private int roomNo2;
 	private int priceIdschedule2;
 	private long priceschedule2;
-
-	// count1 - 예약 TOTAL_PASSENGERS_COUNT
-	// adNo1 - 티켓 PASSENGER_TYPE
-	// cdNo1 - 티켓 PASSENGER_TYPE
-	// schduleNo1 - 티켓 
-	// trainNo1 - 티켓 
-	// seatNo1 - 티켓 
-	// roomNo1 - 티켓 
-	// priceschedule1 - 티켓
-	
-	// count2 - 예약 TOTAL_PASSENGERS_COUNT
-	// adNo2 - 티켓 PASSENGER_TYPE
-	// cdNo2 - 티켓 PASSENGER_TYPE
-	// schduleNo2 - 티켓 
-	// trainNo2 - 티켓 
-	// seatNo2 - 티켓 
-	// roomNo2 - 티켓 
-	// seatNo2 - 티켓 
-	// roomNo2 - 티켓 
-	// priceschedule2 - 티켓
-//	TICKET_NO
-//	RESERVATION_NO
-	
-// TOTAL_PAYMENT_AMOUNT
-	
-// 예약 넣을거 하나
-// 티켓 넣을거 하나 -> list seat1, seat2의 수만큼 티켓 객체를 만들어 List로 db에 넣기 
 }

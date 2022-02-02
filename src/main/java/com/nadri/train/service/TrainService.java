@@ -1,6 +1,8 @@
 package com.nadri.train.service;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,11 +81,20 @@ public class TrainService {
 	 * @param reservation
 	 * @param ticketList
 	 */
-	public void addNewReservation(TrainReservation reservation, List<TrainTicket> ticketList) {
+	public int addNewReservation(TrainReservation reservation, List<TrainTicket> ticketList) {
 		mapper.insertReservation(reservation);
 		for (TrainTicket ticket : ticketList) {
 			ticket.setReservationNo(reservation.getNo());
 		}
 		mapper.insertTicket(ticketList);
+		return reservation.getNo();
+	}
+	
+	public List<TrainReservation> getReservationByNo(int reservedNo1, int reservedNo2) {
+		return mapper.getReservationByNo(reservedNo1, reservedNo2);
+	}
+	
+	public List<TrainTicket> getTicketByReservedNo(int reservedNo1, int reservedNo2) {
+		return mapper.getTicketByReservedNo(reservedNo1, reservedNo2); 
 	}
 }
