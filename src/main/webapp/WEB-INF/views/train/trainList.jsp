@@ -619,19 +619,13 @@
 		});
 		
 		// 모달창이 꺼질때 실행되는 이벤트 // 선택한 좌석 정보 삭제 
-		let handler = function (event) {
+		let handler = function () {
 			 // 선택좌석 정보 삭제
 			$(".chosenSeatList").find("span").remove()
 			// input 태그 삭제
 			let target = $('#modal-seat').attr('data-root-type')
 			console.log("타겟 " + target)
 			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
-			// 선택 횟수 초기화
-			if ($("[data-schedule-no="+ target + "]").closest('tbody').attr('id') == 'schedule1') {
-				clickNo1 = $("input[name=count1]").val();
-			} else {
-				clickNo2 = $("input[name=count2]").val();
-			}
 		}
 		
 		// 좌석 예매 버튼 클릭
@@ -642,19 +636,6 @@
 			let trainNo = searchInfo.next().text().trim()
 			let scheduleNo = searchInfo.attr('data-schedule-no')
 			$("#modal-seat").attr('data-root-type', scheduleNo)
-			// 선택한 기차의 가격id
-			if ($(this).hasClass('normal') || $(this).hasClass('special')) {
-				let priceId = bookIngBtn.parent().attr('data-price-no')
-				let price = bookIngBtn.parent().attr('data-price')
-				$(this).closest('tbody').append("<input type='hidden' name='priceId" + $(this).closest('tbody').attr('id') + "' value='" + priceId + "'/>")
-				$(this).closest('tbody').append("<input type='hidden' name='price" + $(this).closest('tbody').attr('id') + "' value='" + price + "'/>")
-			}
-			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
-			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
-
-			let trainName = searchInfo.text().trim()
-			
-			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
 			
 			
 			let arTime;
@@ -682,6 +663,19 @@
 					return;
 				} 
 			}
+			// 선택한 기차의 가격id
+			if ($(this).hasClass('normal') || $(this).hasClass('special')) {
+				let priceId = bookIngBtn.parent().attr('data-price-no')
+				let price = bookIngBtn.parent().attr('data-price')
+				$(this).closest('tbody').append("<input type='hidden' name='priceId" + $(this).closest('tbody').attr('id') + "' value='" + priceId + "'/>")
+				$(this).closest('tbody').append("<input type='hidden' name='price" + $(this).closest('tbody').attr('id') + "' value='" + price + "'/>")
+			}
+			let dp = $(this).parent('td').prevAll().filter('.dpTime').contents()[0].textContent
+			let ar = $(this).parent('td').prevAll().filter('.arTime').contents()[0].textContent
+
+			let trainName = searchInfo.text().trim()
+			
+			$("#rootInfo").text(trainName + ' ' + trainNo + ' ').append("<strong class='mx-2 text-primary'>" + dp + ">" + ar + "</strong>행 일반실 좌석 정보")
 			
 			if ($(this).attr('class') == 'btn normal') {
 				let type = '일반실'
@@ -693,19 +687,20 @@
 			} else {
 				alert("이미 열차를 선택하셨습니다.")
 			}
+
 		})
 
 		// 선택 예약 버튼 클릭시
 		$("#btn-booking").click(function() {
 			// 모달창이 꺼질때 실행되는 이벤트처리 삭제 // 좌석 정보는 input에 이미 넣었으니 스케줄 번호 기차 번호 등등만 넣으면 된다.
-			$(".chosenSeatList").find("span").remove()
 			let scheduleNo = $(this).closest(".modal").attr('data-root-type')
 			let sway = $("[data-schedule-no="+ scheduleNo + "]").closest('tbody').attr('id')
 			let trainNo = $("#rootInfo").contents()[0].textContent.split(" ")
 			let way = $("[name=way]:checked").val()
 			let $sheduleInfo = $("[data-schedule-no="+ scheduleNo + "]").nextAll()
 			
-			let count = Math.floor($("td[data-schedule-no="+ scheduleNo + "]").closest('tbody').find('input').length/2)
+			let count = Math.floor($("td[data-schedule-no="+ scheduleNo + "]").closest('tbody').find('input').filter(index => index > 1).length/2)
+			console.log(count)
 			if (count <  $("input[name=count1]").val() &&  sway == 'schedule1') {
 				alert("요청하신 승객수와 선택하신 좌석수가 일치하지 않습니다.")
 				return;
@@ -713,6 +708,8 @@
 				alert("요청하신 승객수와 선택하신 좌석수가 일치하지 않습니다.")
 				return;
 			}
+
+			$(".chosenSeatList").find("span").remove()
 			
 			if (way == '편도') {
 				$("[name=schduleNo1]").val(scheduleNo)
@@ -722,10 +719,11 @@
 				$("[name=trainNo2]").prop('disabled', true)
 				// ajax로 보낸 뒤에 db에 저장후 예약 번호를 전달받아서 
 				// controller로 예약번호와 함께 get방식으로 load하기
-				$.getJSON('/api/train/reservation', $('form').serialize(),
+ 				$.getJSON('/api/train/reservation', $('form').serialize(),
 						function(response) {
 							if (response.status == 'OK') {
-								location.replace("http://localhost/train/confirmReservation.nadri")
+								console.log(response.items)
+								location.replace("http://localhost/train/confirmReservation.nadri?reservedNo1=" + response.items[0])
 							}
 				})
 			}
@@ -764,11 +762,11 @@
 				$.getJSON('/api/train/reservation', $('form').serialize(),
 						function(response) {
 							if (response.status == 'OK') {
-								location.replace("http://localhost/train/confirmReservation.nadri")
+								location.replace("http://localhost/train/confirmReservation.nadri?reservedNo1=" + response.items[0] + "&reservedNo2=" + response.items[1])
 							}
 				})
 			}
-			$('#modal-seat').off('hidden.bs.modal', handler)
+ 			$('#modal-seat').off('hidden.bs.modal', handler)
 			seatModal.hide()
 			$('#modal-seat').on('hidden.bs.modal', handler)
 			
@@ -799,7 +797,7 @@
 			
 			if (!$(this).hasClass("no") && !$(this).hasClass("chosen")) {
 				// 클릭횟수 제어
-				let count = Math.floor($("td[data-schedule-no="+ putNo + "]").closest('tbody').find('input').length/2)
+				let count = Math.floor($("td[data-schedule-no="+ putNo + "]").closest('tbody').find('input').filter(index => index > 1).length/2)
 				if (count == maxCount) {
 					alert(maxCount + "명 이상 선택할 수 없습니다.")
 					return;
@@ -825,16 +823,10 @@
 			$("#seatList").find('.chosen').removeClass("chosen").addClass("can")
 			let no = $(this).attr('data-room-no')
 			$("#seatList div").hide().filter("[data-seat-no="+ no +"]").show()
-			console.log($("#seatList div").hide().filter("[data-seat-no="+ no +"]").show().closest('.modal').attr('data-root-type'))
 			// 다른 호차 선택시 클릭 한거 초기화
 			$(".chosenSeatList").find("span").remove()
 			let target = $(this).closest('.modal').attr('data-root-type')
-			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
-			if ($("[data-schedule-no="+ target + "]").closest('tbody').attr('id')== 'schedule1') {
-				clickNo1 = $("input[name=count1]").val();
-			} else {
-				clickNo2 = $("input[name=count2]").val();
-			}
+			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').filter(index => index > 1).remove()
 		})
 		
 		// 가는열차 다음, 이전 버튼 페이지네이션

@@ -166,9 +166,9 @@
 			select train_reservation_seq.nextval
 			from dual
 		</selectKey>
-		insert into train_reservation(reservation_no, total_passengers_count, ticketing_status, reservation_date)
+		insert into train_reservation(reservation_no, total_passengers_count, total_payment_amount, ticketing_status, reservation_date)
 		values
-		(#{no}, #{totalCount}, '예약', sysdate)
+		(#{no}, #{totalCount}, #{totalPrice}, '예약', sysdate)
 	</insert>
 	
 	<!-- 티켓 정보 추가 -->
@@ -181,4 +181,51 @@
 		</foreach> ) A
 	</insert>
 	
+	<!-- 예약정보 조회 -->
+	<select id="getReservationByNo" resultType="com.nadri.train.vo.TrainReservation">
+		select distinct r.reservation_no as no, 
+						r.ticketing_status as tickectStatus,
+						r.canceled_date as canceledDate,
+						r.sold_date as soldDate,
+						r.reservation_date as reservationDate, 
+						p.train_name as trainName, 
+						t.train_no as trainNo,
+        				t1.station_name as departureStation, 
+        				t2.station_name as arrivalStation, 
+        				s.schedule_departure_time as departureTime, 
+        				s.schedule_arrival_time as arrivalTime, 
+        				r.total_passengers_count as totalCount, 
+        				r.total_payment_amount as totalPrice
+		from train_reservation r, train_ticket t, train_schedule s, train_route e, train_station t1, train_station t2, train n, train_type p
+		where r.reservation_no in (#{reservedNo1}, #{reservedNo2})
+		and r.reservation_no = t.reservation_no
+		and t.schedule_no = s.schedule_no
+		and s.route_no = e.route_no
+		and e.departure_station_id = t1.station_id
+		and e.arrival_station_id = t2.station_id
+		and t.train_no = n.train_no
+		and n.type_no = p.type_no
+		order by r.reservation_no
+	</select>
+	
+	<!-- 티켓정보 조회 -->
+	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket">
+		select t.ticket_no as no, 
+				t.customer_name as customerName, 
+				t.passenger_type as type, 
+				t.is_canceled as isCanceled, 
+				t.reservation_no as reservationNo, 
+        		t.schedule_no as scheduleNo,
+        		t.train_no as trainNo, 
+        		t.price_id as priceId,  
+        		p.price as price,
+        		t.room_no as roomNo, 
+        		r.room_name as roomName, 
+        		r.room_type as roomType, 
+        		t.seat_no as seatNo
+		from train_ticket t, train_room r, train_price p
+		where reservation_no in (#{reservedNo1}, #{reservedNo2})
+		and t.room_no = r.room_no
+		and p.price_id = t.price_id
+	</select>
 </mapper>

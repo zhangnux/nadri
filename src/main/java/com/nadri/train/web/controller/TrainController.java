@@ -1,6 +1,7 @@
 package com.nadri.train.web.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,10 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
+import com.nadri.train.vo.TrainReservation;
+import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainSearchForm;
 
 @Controller
@@ -72,13 +76,25 @@ public class TrainController {
 	 * @return
 	 */
 	@GetMapping("/confirmReservation.nadri")
-	public String reservedTrain() {
-		// 모달창에서 예약 버튼을 누르면 
-		// input값을 db에 저장하고, 예약 페이지가 뜬다.
-		/*
-		 * //schduleNo1: 11117 trainNo1: 1502 schduleNo2: trainNo2: seatNo1: 12 roomNo1: 8354
-		 */
+	public String reservedTrain(int reservedNo1, @RequestParam(name="reservedNo2", required=false, defaultValue= "0") int reservedNo2, Model model) {
+		List<TrainReservation> reservationList = service.getReservationByNo(reservedNo1, reservedNo2);
+		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservedNo1, reservedNo2);
+		model.addAttribute("reservation1", reservationList.get(0));
+		List<TrainTicket> ticket1 = new ArrayList<>();
+		List<TrainTicket> ticket2 = new ArrayList<>();
+		for (TrainTicket ticket : ticketList) {
+			if (ticket.getReservationNo() == reservationList.get(0).getNo()) {
+				ticket1.add(ticket);
+			} else {
+				ticket2.add(ticket);
+			}
+		}
+		model.addAttribute("ticket1", ticket1);
 		
+		if (reservedNo2 != 0) {
+			model.addAttribute("reservation2", reservationList.get(1));
+			model.addAttribute("ticket2", ticket2);
+		}
 		return "train/confirmReservation";
 	}
 	

@@ -65,4 +65,20 @@ public interface TrainMapper {
 	 * @param ticketList
 	 */
 	void insertTicket(List<TrainTicket> ticketList);
+	
+	/**
+	 * 예약번호에 해당하는 예약 정보 조회
+	 * @param reservedNo1
+	 * @param reservedNo2
+	 * @return
+	 */
+	List<TrainReservation> getReservationByNo(@Param("reservedNo1") int reservedNo1, @Param("reservedNo2") int reservedNo2);
+	
+	/**
+	 * 예약번호에 해당하는 티켓 정보 조회
+	 * @param reservedNo1
+	 * @param reservedNo2
+	 * @return
+	 */
+	List<TrainTicket> getTicketByReservedNo(@Param("reservedNo1") int reservedNo1, @Param("reservedNo2") int reservedNo2);
 }

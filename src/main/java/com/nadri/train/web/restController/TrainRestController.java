@@ -93,10 +93,16 @@ public class TrainRestController {
 	
 	@GetMapping("/reservation")
 	public ResponseDto<?> insertReservation(TrainReservationDto dto) {
+		log.info("파라 확인 : " + dto.toString());
+		
+		List<Integer> reservedNo = new ArrayList<>();
 		TrainReservation reservation1 = new TrainReservation();
 		List<TrainTicket> ticketList1 = new ArrayList<>();
 		int ad = dto.getAdNo1();
 		int ch = dto.getCdNo1();
+		reservation1.setTotalPrice(ad*dto.getPriceschedule1() + ch*(dto.getPriceschedule1()/2));
+		reservation1.setTotalCount(dto.getCount1());
+		log.info("티켓 확인 : " + reservation1.toString());
 		for (int i=0; i<dto.getCount1(); i++) {
 
 			TrainTicket ticket = new TrainTicket();
@@ -116,14 +122,15 @@ public class TrainRestController {
 			log.info("티켓 확인 : " + ticket.toString());
 			ticketList1.add(ticket);
 		}
-		reservation1.setTotalCount(dto.getCount1());
-		// dto.getPriceschedule1() 로 가격정보 불러오기 
-		//service.addNewReservation(reservation1, ticketList1);
+		reservedNo.add(service.addNewReservation(reservation1, ticketList1));
 		if ("왕복".equals(dto.getWay() )) {
 			List<TrainTicket> ticketList2 = new ArrayList<>();
 			TrainReservation reservation2 = new TrainReservation();
 			ad = dto.getAdNo2();
 			ch = dto.getCdNo2();
+			reservation2.setTotalPrice(ad*dto.getPriceschedule2() + ch*(dto.getPriceschedule2()/2));
+			reservation2.setTotalCount(dto.getCount2());
+			log.info("티켓 확인 : " + reservation2.toString());
 			for (int i=0; i<dto.getCount2(); i++) {
 				TrainTicket ticket = new TrainTicket();
 				ticket.setScheduleNo(dto.getSchduleNo2());
@@ -142,13 +149,12 @@ public class TrainRestController {
 				log.info("티켓 확인 : " + ticket.toString());
 				ticketList2.add(ticket);
 			}
-			reservation2.setTotalCount(dto.getCount2());
-			//service.addNewReservation(reservation2, ticketList2);
+			reservedNo.add(service.addNewReservation(reservation2, ticketList2));
 		}
-		
 		// 예약 번호 가져오기 // Controller에서 예약 번호로 티켓 정보도 가져올 수 있다.
-		ResponseDto<?> response = new ResponseDto<>();
+		ResponseDto<Integer> response = new ResponseDto<>();
 		response.setStatus("OK");
+		response.setItems(reservedNo);
 		return response;
 	}
 }
