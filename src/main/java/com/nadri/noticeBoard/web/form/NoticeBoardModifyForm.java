@@ -1,4 +1,4 @@
-package com.nadri.csBoard.web.form;
+package com.nadri.noticeBoard.web.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +13,10 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Criteria {
+public class NoticeBoardModifyForm {
 
-	private int userNo;
-	private String opt;
-	private String type;
-	private String value;
-	private int beginIndex;
-	private int endIndex;
-	
+	private int no;
+	private String title;		//이름
+	private String content;		//내용
+
 }

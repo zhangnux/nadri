@@ -1,5 +1,7 @@
 package com.nadri.csBoard.web.form;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,13 +15,12 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Criteria {
-
-	private int userNo;
-	private String opt;
-	private String type;
-	private String value;
-	private int beginIndex;
-	private int endIndex;
+public class CsBoardInsertForm {
 	
+	private int no;			//번호
+	private String title;		//제목
+	private int userNo;
+	private String content;		//내용
+	private Date createdDate;		//작성일
+	private String csType;
 }

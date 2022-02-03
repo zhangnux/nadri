@@ -12,8 +12,6 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<c:set var="menu" value="qna"/>
-<%-- <%@ include file="../manager/common/navbar.jsp" %> --%>
 <div class="container">
 	<div class="row mb-3 p-3">
 		<div class="col">
@@ -61,7 +59,7 @@
 					<tr>
 						<td>예약/취소/환불</td>
 						<td>1</td>
-						<td><a href="detail.nadri">환불이 안 돼요</a></td>
+						<td><a href="#">환불이 안 돼요</a></td>
 						<td>홍길동</td>
 						<td>2022/01/28</td>
 						<td>4</td>
@@ -70,6 +68,13 @@
 			</table>
 		</div>
 	</div>
+	
+	<div class="row mb-3 p-3">
+		<div class="col d-flex justify-content-end">
+			<a href="insert.nadri" class="btn btn-primary">공지 등록</a>
+		</div>
+	</div>
+	
 	<div class="row mb-3 p-3">
 		<div class="col d-flex justify-content-center">
 			<form action="list.nadri" class="row row-cols-lg-auto g-3 align-items-center" method="get">
