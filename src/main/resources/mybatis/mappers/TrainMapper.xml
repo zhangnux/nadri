@@ -181,7 +181,7 @@
 		</foreach> ) A
 	</insert>
 	
-	<!-- 예약정보 조회 -->
+	<!-- 예약 후 바로 예약정보 조회 -->
 	<select id="getReservationByNo" resultType="com.nadri.train.vo.TrainReservation">
 		select distinct r.reservation_no as no, 
 						r.ticketing_status as tickectStatus,
@@ -208,7 +208,7 @@
 		order by r.reservation_no
 	</select>
 	
-	<!-- 티켓정보 조회 -->
+	<!-- 예약 후 바로 티켓정보 조회 -->
 	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket">
 		select t.ticket_no as no, 
 				t.customer_name as customerName, 
@@ -228,4 +228,29 @@
 		and t.room_no = r.room_no
 		and p.price_id = t.price_id
 	</select>
+	
+	<!-- 인기노선 검색 -->
+	<select id="getFavoriteRoute" resultType="com.nadri.train.dto.TrainFavoriteRouteDto">
+		select t1.station_name as departureStation, 
+				t2.station_name as arrivalStation,
+				a.rn as rowNo, 
+				a.route_no as routeNo, 
+				r.route_image as image, 
+		        (select min(p.price)
+		         from train_price p
+		         where a.route_no in (p.down_route_no, p.up_route_no)
+		         group by a.route_no) as minPrice
+		from train_route r, train_station t1, train_station t2,
+		    (select row_number() over (order by count(*) desc) rn, s.route_no
+		     from train_ticket t, train_schedule s
+		     where t.schedule_no = s.schedule_no
+		     group by s.route_no) a
+		where r.route_no = a.route_no
+		and a.rn >=1 and a.rn &lt; 10
+		and r.departure_station_id = t1.station_id
+		and r.arrival_station_id = t2.station_id
+		order by a.rn
+	</select>
+	
+	
 </mapper>

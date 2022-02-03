@@ -43,6 +43,15 @@
 		background-repeat: no-repeat;
 		padding: 15px 5px;
 	}
+	#hocha span.chosen {
+		width: 100px;
+		height: 100px;
+		background-image: url('../../resources/images/train/icon/chosenhocha.png');
+		background-size: 50px 50px;
+		background-repeat: no-repeat;
+		padding: 15px 5px;
+	}
+	
 	#hocha li {
 		float: left;
 		margin: 3px;
@@ -229,69 +238,78 @@
 				</div>
 			</div>
 			<!-- 가는 열차 -->
-			<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify">
-				<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">가는 열차</h6> 
-				<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate1 }</span>
-			</div>
-			<div class="row">
-				<div class="col">
-					<table class="table text-center listTable">
-						<thead style="border-bottom: inset;">
-							<tr style="background-color: #E1EDFC; border-bottom: none;">
-								<th style="width: 7%;">구분</th>
-								<th style="width: 10%;">열차종류</th>
-								<th style="width: 10%;">열차번호</th>
-								<th style="width: 15%;">출발</th>
-								<th style="width: 15%;">도착</th>
-								<th style="width: 11%;">특실</th>
-								<th style="width: 11%;">일반실</th>
-								<th style="width: 10%;">소요기간</th>
-								<th style="width: *;">운임</th>
-							</tr>
-						</thead>
-						<tbody id="schedule1" style="vertical-align: middle;">
-							<c:forEach var="schedule" items="${schedules1 }">
-								<tr>
-									<td>직통</td>
-									<td class="infoTrain" data-schedule-no="${schedule.scheduleNo }" >${schedule.trainName }
-									</td>
-									<td>${schedule.trainNo }</td>
-									<td class="dpTime">${searchForm.departureStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
-									<td class="arTime">${searchForm.arrivalStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
-									<td data-price-no="${schedule.specialPriceId }" data-price="${schedule.specialPrice }">
-										<c:choose>
-											<c:when test="${schedule.specialSeat eq 0 }">
-											</c:when>
-											<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
-												<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
-											</c:when>
-											<c:otherwise>
-												<button class="btn special" type="button">예매</button>
-											</c:otherwise>
-										</c:choose>
-									</td>
-									<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
-										<c:choose>
-											<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
-												<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
-											</c:when>
-											<c:otherwise>
-												<button class="btn normal" type="button">예매</button>
-											</c:otherwise>
-										</c:choose>
-									</td>
-									<td class="runTime">${schedule.diffTime }</td>
-									<td><button class="btn-look-price" type="button">보기</button></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div style="text-align-last: justify" id="btn1">
-				<button class="btn" type="button" id="prev1">이전</button>
-				<button class="btn" type="button" id="next1">다음</button>
-			</div>
+			<c:choose>
+				<c:when test="${empty schedules1 }">
+					<div class="border p-5 text-center">
+						기차역 정보가 존재하지 않습니다.
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify">
+						<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">가는 열차</h6> 
+						<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate1 }</span>
+					</div>
+					<div class="row">
+						<div class="col">
+							<table class="table text-center listTable">
+								<thead style="border-bottom: inset;">
+									<tr style="background-color: #E1EDFC; border-bottom: none;">
+										<th style="width: 7%;">구분</th>
+										<th style="width: 10%;">열차종류</th>
+										<th style="width: 10%;">열차번호</th>
+										<th style="width: 15%;">출발</th>
+										<th style="width: 15%;">도착</th>
+										<th style="width: 11%;">특실</th>
+										<th style="width: 11%;">일반실</th>
+										<th style="width: 10%;">소요기간</th>
+										<th style="width: *;">운임</th>
+									</tr>
+								</thead>
+								<tbody id="schedule1" style="vertical-align: middle;">
+									<c:forEach var="schedule" items="${schedules1 }">
+										<tr>
+											<td>직통</td>
+											<td class="infoTrain" data-schedule-no="${schedule.scheduleNo }" >${schedule.trainName }
+											</td>
+											<td>${schedule.trainNo }</td>
+											<td class="dpTime">${searchForm.departureStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
+											<td class="arTime">${searchForm.arrivalStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
+											<td data-price-no="${schedule.specialPriceId }" data-price="${schedule.specialPrice }">
+												<c:choose>
+													<c:when test="${schedule.specialSeat eq 0 }">
+													</c:when>
+													<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
+														<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
+													</c:when>
+													<c:otherwise>
+														<button class="btn special" type="button">예매</button>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
+												<c:choose>
+													<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
+														<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
+													</c:when>
+													<c:otherwise>
+														<button class="btn normal" type="button">예매</button>
+													</c:otherwise>
+												</c:choose>
+											</td>
+											<td class="runTime">${schedule.diffTime }</td>
+											<td><button class="btn-look-price" type="button">보기</button></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div style="text-align-last: justify" id="btn1">
+						<button class="btn" type="button" id="prev1">이전</button>
+						<button class="btn" type="button" id="next1">다음</button>
+					</div>
+				</c:otherwise>
+			</c:choose>
 			<c:if test="${not empty schedules2 }">
 				<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify; margin-top: 100px;">
 					<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">오는 열차</h6> 
@@ -463,6 +481,11 @@
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
+/* 	var info = sessionStorage.getItem("LOGIN_USER")
+	/// 예매 버튼 누를때 로그인 안되어있으면 로그인 창으로 보내기
+	if (info != null) {
+		alert("회원")
+	} */
 	$(function() {
 		var priceModal = new bootstrap.Modal(document.getElementById('modal-price'), {
 			keyboard: false
@@ -560,17 +583,22 @@
 			let $hocha = $("#hocha").children('ul').empty()
 			let $seat = $("#seatList").empty()
 			
-			$.getJSON('/api/train/trainInfo',
+				$.getJSON('/api/train/trainInfo',
 					{roomType: type, trainNo: trainNo, schduleNo: scheduleNo},
 					function(response) {
 						console.log(response)
+						let sort = 0;
 						$.each(response.rooms, function(index, room) {
 							let ho;
 							// 호차 나열
 							if (room.bookedSeatNum == room.seatNum) {
 								ho = "<li><span class='not'>" + room.name + "</span></li>"
 							} else {
-								ho = "<li><span class='can' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
+								if (++sort == 1) {
+									ho = "<li><span class='chosen' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
+								} else {
+									ho = "<li><span class='can' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
+								}
 							}
 							let index1 = index;
 							let no = room.seatNum;
@@ -579,7 +607,7 @@
 							let seatNo = 0;
 
 							let seat;
-							if (index1 == 0) {
+							if (sort == 1) {
 								seat = "<div data-seat-no='"+ room.no +"'>"
 							} else {
 								seat = "<div data-seat-no='"+ room.no +"' style='display:none'>"
@@ -820,7 +848,10 @@
 		// 좌석 모달창에서 호차를 클릭할 때 // 호차에 해당하는 좌석이 뜬다. 다른 좌석 정보는 숨겨짐
 		$("#hocha").on('click', 'span.can', function(event) {
 			event.preventDefault();
+			$("#hocha span").removeClass("chosen").addClass("can")
+			$(this).removeClass("can").addClass("chosen")
 			$("#seatList").find('.chosen').removeClass("chosen").addClass("can")
+			
 			let no = $(this).attr('data-room-no')
 			$("#seatList div").hide().filter("[data-seat-no="+ no +"]").show()
 			// 다른 호차 선택시 클릭 한거 초기화
