@@ -30,7 +30,6 @@ public class Attraction {
 	private Date endDate;
 	private String place;
 	private int sales;
-	private int star;
 	private int price;
 	private int discountPrice;
 	private String category;
@@ -38,6 +37,8 @@ public class Attraction {
 	private String photo;
 	private String address;
 	private String detail;
+	private int count;
+	private int star;
 	
 	private AttOption attOption;
 

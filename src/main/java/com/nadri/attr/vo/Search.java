@@ -30,7 +30,6 @@ public class Search {
 	 * private int price; 
 	 * private int star;
 	 */
-	
 	private int beginIndex;
 	private int endIndex;
 	
