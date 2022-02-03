@@ -35,7 +35,13 @@ public class TrainController {
 	 * @return
 	 */
 	@GetMapping
-	public String search() {
+	public String search(Model model) {
+		// 인기 열차 루트
+		// 9개,,, 출발지 도착지, 운임 (일반실), 출발일은 당일, 승객1, 편도 버튼 클릭시 form값 제출
+		// 티켓팅된 티켓의 스케줄의 rootNo에 따라서 순위를 지정한다.
+		// 사진은 어떻게 배분하지? 루트마다 다 정해져 잇는 건가?
+		model.addAttribute("favoriteList", service.getFavoriteRoute());
+		
 		return "train/trainSearch";
 	}
 	
