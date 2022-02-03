@@ -15,8 +15,8 @@ import lombok.ToString;
 @ToString
 public class RestaurantSearchForm {
 	
-	private String categoryName;
-	private String cityName;
+	private String category;
+	private String city;
 	private String name;
 	private String sort;
 	

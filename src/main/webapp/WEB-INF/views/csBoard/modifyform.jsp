@@ -14,29 +14,38 @@
 <div class="container">
 	<div class="row mb-3">
 		<div class="col">
-			<h1>공지사항 등록</h1>
+			<h1>Q&A 등록</h1>
 		</div>
 	</div>
 	<div class="row mb-3">
 		<div class="col">
 			<form class="border bg-light p-3" action="modify.nadri" method="post">
-				<input type="hidden" name="no" value="${noticeBoard.no }" />
+				<input class="hidden" name="no" value="">
+				<div class="mb-3">
+					<label class="form-label">타입</label>
+					<select class="form-select">
+						<option>사이트이용</option>
+						<option>프로모션</option>
+						<option>예약/취소/환불</option>
+						<option>쿠폰/포인트</option>
+						<option>기타</option>
+					</select>
+				</div>
 				<div class="mb-3">
 					<label class="form-label">제목</label>
-					<input type="text" class="form-control" name="title" value="${noticeBoard.title }" />
+					<input type="text" class="form-control" name="title" />
 				</div>
 				<div class="mb-3">
   					<label class="form-label">내용</label>
- 					<textarea class="form-control" rows="10" name="content">${noticeBoard.content }</textarea>
+ 					<textarea class="form-control" rows="10" name="content"></textarea>
 				</div>
 				<div class="text-end">
-					<a href="list.nadri" class="btn btn-secondary">취소</a>
+					<a href="detail.nadri?no=" class="btn btn-secondary">취소</a>
 					<button type="submit" class="btn btn-primary">등록</button>
 				</div>
 			</form>
 		</div>
 	</div>
-
 </div>
 </body>
 </html>
