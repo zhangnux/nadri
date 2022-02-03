@@ -5,9 +5,10 @@
 	<!-- 유저테이블 컬럼 조회했을때 User객체에 저장되도록 설정 -->
 	<resultMap id="UserResultMap" type="com.nadri.user.vo.User">
 		<id column="user_no" property="no"/>
+		<result column="user_id" property="id"/>
 		<result column="user_password" property="password"/>
 		<result column="user_name" property="name"/>
-		<result column="user_age" property="age"/>
+		<result column="user_birth" property="birth"/>
 		<result column="user_gender" property="gender"/>
 		<result column="user_tel" property="tel"/>
 		<result column="user_address" property="address"/>
@@ -29,10 +30,10 @@
 			from dual
 		</selectKey>
 		insert into user_table
-		(user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, 
+		(user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, 
 		user_address, user_point, user_email, user_type, user_sms_check, user_email_check)
 		values
-		(#{no},#{id},#{password},#{name},#{age},#{gender},#{tel},#{address},#{point},#{email},#{type},#{smsCheck},#{emailCheck})
+		(#{no},#{id},#{password},#{name},#{birth},#{gender},#{tel},#{address},#{point},#{email},#{type},#{smsCheck},#{emailCheck})
 	</insert>
 	
 	<!-- 
@@ -44,7 +45,7 @@
 		set
 			user_password = #{password},
 			user_name = #{name},
-			user_age = #{age},
+			user_birth = #{birth},
 			user_tel = #{tel},
 			user_address = #{address},
 			user_email = #{email},
@@ -67,9 +68,9 @@
 	<!-- 
 		User getUserById 
 	-->
-	<select id="getUserById" parameterType="String" resultType="com.nadri.user.vo.User" resultMap="UserResultMap">
+	<select id="getUserById" parameterType="String" resultMap="UserResultMap">
 		select  
-			user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, user_address, user_point, 
+			user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, user_address, user_point, 
 			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_Check 
 		from  
 			user_table
@@ -80,9 +81,9 @@
 	<!-- 
 		User getUserByNo
 	 -->
-	<select id="getUserByNo" parameterType="int" resultType="com.nadri.user.vo.User" resultMap="UserResultMap">
+	<select id="getUserByNo" parameterType="int" resultMap="UserResultMap">
 		select  
-			user_no, user_id, user_password, user_name, user_age, user_gender, user_tel, user_address, user_point, 
+			user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, user_address, user_point, 
 			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_Check 
 		from 
 			user_table
