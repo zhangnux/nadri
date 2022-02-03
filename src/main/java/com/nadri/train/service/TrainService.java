@@ -2,7 +2,6 @@ package com.nadri.train.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import com.nadri.train.vo.TrainStation;
 import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
+import com.nadri.train.dto.TrainFavoriteRouteDto;
 
 @Service
 @Transactional
@@ -90,11 +90,31 @@ public class TrainService {
 		return reservation.getNo();
 	}
 	
+	/**
+	 * 예약 번호에 해당하는 예약 정보 반환
+	 * @param reservedNo1 가는 기차 예약번호
+	 * @param reservedNo2 오는 기차 예약번호
+	 * @return
+	 */
 	public List<TrainReservation> getReservationByNo(int reservedNo1, int reservedNo2) {
 		return mapper.getReservationByNo(reservedNo1, reservedNo2);
 	}
 	
+	/**
+	 * 예약 번호에 해당하는 티켓 정보 반환
+	 * @param reservedNo1 가는 기차 예약번호
+	 * @param reservedNo2 오는 기차 예약번호
+	 * @return
+	 */
 	public List<TrainTicket> getTicketByReservedNo(int reservedNo1, int reservedNo2) {
 		return mapper.getTicketByReservedNo(reservedNo1, reservedNo2); 
+	}
+	
+	/**
+	 * 인기 노선 반환
+	 * @return
+	 */
+	public List<TrainFavoriteRouteDto> getFavoriteRoute() {
+		return mapper.getFavoriteRoute();
 	}
 }

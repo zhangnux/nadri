@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.attr.service.AttrService;
+import com.nadri.attr.service.ReviewService;
+import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
 
@@ -19,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.nadri.attr.dto.AttOptionDetail;
 import com.nadri.attr.pagination.Pagination;
 
-@Slf4j
 @Controller
 @RequestMapping("/attr")
 public class AttrController {
@@ -40,7 +41,9 @@ public class AttrController {
 	}
 	
 	@GetMapping("/list.nadri")
-	public String searching(@RequestParam(name="place", defaultValue = "") String category,Search search,Model model) {
+	public String searching(@RequestParam(name="place", defaultValue = "") String category,
+							@RequestParam(name="page", defaultValue="1") int page,Search search,Model model) 
+	{
 		List<Attraction> attraction = attrService.getSearchResult(search);
 		model.addAttribute("category", attraction);
 		model.addAttribute("place",category);
@@ -49,16 +52,19 @@ public class AttrController {
 	}
 	
 	@GetMapping("/detail.nadri")
-	public String detail(@RequestParam(name="no") int no, Attraction attraction, Model model) {
+	public String detail(@RequestParam(name="no") int no, Attraction attraction, AttrReview attrReview,Model model) {
 		Attraction detail = attrService.getDetailPage(no);
 		List<Attraction> option = attrService.getOptionInfo(no);
 		model.addAttribute("detail",detail);
 		model.addAttribute("option", option);
 		
+		int count = attrService.getReviewCount(no);
+		double star = attrService.getStarCount(no);
+		model.addAttribute("count", count);
+		model.addAttribute("star", star);
+		
 		return "attr/attrdetail";
 	}
-	
-	
 	
 	/*
 	// 테스트용

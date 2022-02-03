@@ -20,11 +20,36 @@
 			<h1>Q&A</h1>
 		</div>
 	</div>
+	<div class="mb-3 p-3">
+	<ul class="nav justify-content-center">
+		<li class="nav-item">
+			<a class="nav-link active" aria-current="page" href="list.nadri">전체</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="list.nadri?type=사이트이용">사이트이용</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="list.nadri?type=프로모션">프로모션</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="list.nadri?type=예약/취소/환불">예약/취소/환불</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="list.nadri?type=쿠폰/포인트">쿠폰/포인트</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="list.nadri?type=기타">기타</a>
+		</li>
+	</ul>
+	
+	</div>
+	
 	<div class="row mb-3">
 		<div class="col">
 			<table class="table">
 				<thead>
 					<tr>
+						<th>타입</th>
 						<th>번호</th>
 						<th>제목</th>
 						<th>작성자</th>
@@ -34,8 +59,9 @@
 				</thead>
 				<tbody>
 					<tr>
+						<td>예약/취소/환불</td>
 						<td>1</td>
-						<td><a href="#">환불이 안 돼요</a></td>
+						<td><a href="detail.nadri">환불이 안 돼요</a></td>
 						<td>홍길동</td>
 						<td>2022/01/28</td>
 						<td>4</td>

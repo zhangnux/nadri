@@ -88,12 +88,13 @@ public class RestaurantController {
 		RestaurantCriteria c = new RestaurantCriteria();
 		
 		
-		if(StringUtils.hasText(form.getCityName())) {
-			c.setCityName(form.getCityName());
+		
+		if(StringUtils.hasText(form.getCity())) {
+			c.setCity(form.getCity());
 		}
 		
-		if(StringUtils.hasText(form.getCategoryName())) {
-			c.setCategoryName(form.getCategoryName());
+		if(StringUtils.hasText(form.getCategory())) {
+			c.setCategory(form.getCategory());
 		}
 		
 		if(StringUtils.hasText(form.getName())) {

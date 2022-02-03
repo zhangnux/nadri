@@ -14,6 +14,7 @@ import com.nadri.train.vo.TrainStation;
 import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
+import com.nadri.train.dto.TrainFavoriteRouteDto;
 
 @Mapper
 public interface TrainMapper {
@@ -81,4 +82,10 @@ public interface TrainMapper {
 	 * @return
 	 */
 	List<TrainTicket> getTicketByReservedNo(@Param("reservedNo1") int reservedNo1, @Param("reservedNo2") int reservedNo2);
+	
+	/**
+	 * 인기 노선 조회
+	 * @return 인기 노선 9개
+	 */
+	List<TrainFavoriteRouteDto> getFavoriteRoute();
 }

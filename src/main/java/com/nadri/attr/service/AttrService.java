@@ -24,5 +24,7 @@ public class AttrService {
 	public int getSearchedRowCount(Search search){ return attrDao.getSearchedRow(search); }
 	public Attraction getDetailPage(int no) { return attrDao.getDetailByNo(no); }
 	public List<Attraction> getOptionInfo(int no) { return attrDao.getOptionByNo(no); }
+	public int getReviewCount(int attNo) { return attrDao.reviewCount(attNo); }
+	public double getStarCount(int attNo) { return attrDao.star(attNo); }
 	
 }

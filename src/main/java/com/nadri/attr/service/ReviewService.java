@@ -1,15 +1,21 @@
 package com.nadri.attr.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nadri.attr.dao.ReviewDao;
+import com.nadri.attr.dao.AttrReviewDao;
+import com.nadri.attr.vo.AttrReview;
 
 @Service
 public class ReviewService {
 
 	@Autowired
-	ReviewDao reviewDao;
+	AttrReviewDao reviewDao;
 	
-	public int getReviewCount(int attNo) {return reviewDao.reviewcount(attNo);}
+	public List<AttrReview> getReviewList(int attNo, int beginIndex, int endIndex) { 
+		return reviewDao.getListByNo(attNo, beginIndex, endIndex); 
+	}
+	
 }

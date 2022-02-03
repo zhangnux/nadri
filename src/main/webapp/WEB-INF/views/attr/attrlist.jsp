@@ -54,13 +54,13 @@
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 	            <c:forEach var="cate" items="${category }">
 				  <div class="col">
-				    <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${cate.no}';">
+				    <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${cate.no}&page=1';">
 				      <img src="../resources/images/att/${cate.thumbnail }" class="card-img-top" style="height:200px;">
 				      <div class="card-body">
 				      	<p class="card-text">${cate.place } / ${cate.category }</p>
 				        <h5 class="card-title"><strong>${cate.name }</strong></h5>
 				        <p class="card-text">${cate.content }</p>
-				        <p class="card-text">★★★☆ 3.5 / 5.0　후기 0개</p>
+				        <p class="card-text">★★★☆ ${cate.star } / 5.0　후기 ${cate.count }개</p>
 				        <c:choose>
 				        	<c:when test="${cate.discountPrice==0 }">
 				        		<p class="card-text">할인이 없을 때</p>
@@ -78,7 +78,8 @@
 			</c:choose>
 			<a style="display:scroll;position:fixed;bottom:100px;right:100px; text-decoration-line : none; color:black;"
 				href="javascript:window.scrollTo(0,0);"><i class="bi bi-arrow-up-square">
-				</i><strong>위로</strong></a>
+				</i><strong>위로</strong>
+			</a>
 			</div>
 		</div>
 	</div>

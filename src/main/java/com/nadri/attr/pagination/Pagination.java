@@ -11,11 +11,10 @@ import lombok.ToString;
 @ToString
 public class Pagination {
 
-	private int rowsPerPage = 9;			// 한 페이지당 표시할 데이터의 갯수
+	private int rowsPerPage = 5;			// 한 페이지당 표시할 데이터의 갯수
 	private int pagesPerBlock = 5;			// 한 블록당 표시할 페이지번호 숫자
 	private int currentPageNo;				// 현재 페이지번호
-	private int totalRecords;				// 총 데이터 갯수
-	
+	private int totalRecords;				// 총 데이터 갯수	
 	private int totalPages;					// 총 페이지 갯수
 	private int totalBlocks;				// 총 페이지블록 갯수
 	private int currentBlock;				// 현재 페이지 번호에 해당하는 현재 블록 번호
@@ -91,70 +90,6 @@ public class Pagination {
 	}
 	
 	/**
-	 * 계산된 현재 페이지번호를 반환한다.
-	 * @return 페이지번호
-	 */
-	public int getPageNo() {
-		return currentPageNo;
-	}
-
-	/**
-	 * 총 게시글 갯수를 반환한다.
-	 * @return 총 게시글 갯수
-	 */
-	public int getTotalRecords() {
-		return totalRecords;
-	}
-
-	/**
-	 * 총 페이지 갯수를 반환한다.
-	 * @return 총 페이지 갯수
-	 */
-	public int getTotalPages() {
-		return totalPages;
-	}
-
-	/**
-	 * 시작 페이지번호를 반환한다.
-	 * @return 시작 페이지번호
-	 */
-	public int getBeginPage() {
-		return beginPage;
-	}
-
-	/**
-	 * 끝 페이지번호를 반환한다.
-	 * @return 끝 페이지번호
-	 */
-	public int getEndPage() {
-		return endPage;
-	}
-
-	/**
-	 * 조회 시작 순번을 반환한다.
-	 * @return  조회 시작 순번
-	 */
-	public int getBegin() {
-		return begin;
-	}
-	
-	/**
-	 * 조회 끝 순번을 반환한다.
-	 * @return 조회 끝 순번
-	 */
-	public int getEnd() {
-		return end;
-	}
-	
-	/**
-	 * 이전 블록의 페이지번호를 반환한다.
-	 * @return 페이지번호
-	 */
-	public int getPrevPage() {
-		return prevPage;
-	}
-	
-	/**
 	 * 이전 블록 존재여부를 반환한다.
 	 * @return 이전 블록 존재 여부
 	 */
@@ -175,16 +110,6 @@ public class Pagination {
 		}
 		
 		return currentBlock < totalBlocks;
-	}
-	
-	/**
-	 * 다음 블록의 페이지번호를 반환한다.
-	 * @return 페이지번호
-	 */
-	public int getNextPage() {
-		return nextPage;
-	}
-
-	
+	}	
 
 }

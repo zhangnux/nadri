@@ -10,6 +10,9 @@ import com.nadri.lodging.vo.LodPictures;
 @Mapper
 public interface LodgingMapper {
 	
+	// 
+	List<LodInformation> getBestLodgings();
+	
 	// 숙소 정보 등록
 	void insertLodging(LodInformation lodinformation);
 	// 숙소 사진 등록

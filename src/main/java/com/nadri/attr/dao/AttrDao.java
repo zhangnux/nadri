@@ -27,4 +27,7 @@ public interface AttrDao{
 	Attraction getDetailByNo(int no);
 	List<Attraction> getOptionByNo(int no);
 	
+	// 후기 갯수+별점 평균
+	int reviewCount(int attNo);
+	double star(int attNo);
 }

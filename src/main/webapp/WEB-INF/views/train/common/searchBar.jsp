@@ -254,6 +254,7 @@
 </div>
 <script type="text/javascript">
 	$(function() {
+		
 		if ($("input[name=way]:checked").val() == '왕복') {
 			$("input[value=편도]").prop('checked', false)
 			$("input[value=왕복]").prop('checked', true)

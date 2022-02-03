@@ -63,8 +63,9 @@
 				 별점
 	-->
 	<div class="row mb-3">
+	<!-- 검색하면 제출되게 스크립트 설정하기 '검색어를 입력하세요' -->
 		<div class="col">
-			<form id="form-search" action="" method="get" class="row row-cols-lg g-3 align-items-center p-3">
+			<form id="form-search" action="list.nadri" method="get" class="row row-cols-lg g-3 align-items-center p-3">
 				<input type="hidden" name="page" value="1" />
 				<div class="col-3">
 					<select class="form-select" name="city">
@@ -87,8 +88,7 @@
 					</select>
 				</div>
 				<div class="col input-group">
-					<input type="search" class="form-control" name="name" value="${param.name }" placeholder="상호를 입력하세요">
-					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
+					<input type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
 				</div>
 				<div class="col-2">
 					<select class="form-select" name="sort">
