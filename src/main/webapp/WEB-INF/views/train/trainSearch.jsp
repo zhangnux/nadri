@@ -126,7 +126,7 @@
 			$("[name="+name+"]").next().next().children().filter(":not(:disabled):first").prop('selected', true);
 		}
 		
-		$("[name=dpDate1], [name=dpDate1]").change(function() {
+		$("[name=dpDate1], [name=dpDate2]").change(function() {
 			setTimeOptions($(this).attr("name"));
 		})
 		

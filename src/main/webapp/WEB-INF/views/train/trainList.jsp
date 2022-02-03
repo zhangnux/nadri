@@ -664,11 +664,26 @@
 			let trainNo = searchInfo.next().text().trim()
 			let scheduleNo = searchInfo.attr('data-schedule-no')
 			$("#modal-seat").attr('data-root-type', scheduleNo)
+			let $tbody = $(this).closest('tbody').attr('id')
+			// 확인하기 ------------------------------------------
+			let now = new Date();
+			let nowTarget = now.getFullYear() + "/" + (("00"+(now.getMonth()+1)).slice(-2)) + "/" + (("00"+now.getDate()).slice(-2))
+			if ($tbody == 'schedule1' && $("[name=dpDate1]").val() == nowTarget) {
+				let time = moment($(this).parent().prevAll().filter('.dpTime').contents()[1].textContent, 'hh:mm')
+				if (moment('02:00', 'hh:mm').diff(time) >= 0) {
+					time.add(1, 'days')
+				}
+				
+				if (moment().diff(time, 'minutes') >= -20) {
+					alert("열차출발 20분전에는 예약할 수 없습니다.")
+					return;
+				}
+			}
 			
 			
 			let arTime;
 			let dpTime;
-			if ($("[name=schduleNo1]").val() != '' && $(this).closest('tbody').attr('id') == 'schedule2') {
+			if ($("[name=schduleNo1]").val() != '' && $tbody == 'schedule2') {
 				arTime = moment($("#arrow").next().children().eq(0).text(), 'hh:mm')
 				if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
 					arTime.add(1, 'days')
