@@ -7,39 +7,7 @@
 		int getCsBoardsTotalRows(Criteria criteria);
 	-->
 	<select id="getCsBoardsTotalRows" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="int">
-		select count(*)
-		from cs_board
-		<where>
-			<if test="opt != null and value != null">
-				<choose>
-					<when test="opt == '제목'">
-						cs_board_title like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '내용'">
-						cs_board_content like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '제목+내용'">
-						(cs_board_title like '%' || #{value} || '%' 
-						or cs_board_content like '%' || #{value} || '%')
-					</when>
-				</choose>
-			</if>
-			<if test="type == '사이트이용'">
-				cs_type = 사이트이용
-			</if>
-			<if test="type == '프로모션'">
-				cs_type = 프로모션
-			</if>
-			<if test="type == '예약/취소/환불'">
-				cs_type = 예약/취소/환불
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				cs_type = 쿠폰/포인트
-			</if>
-			<if test="type == '기타'">
-				cs_type = 기타
-			</if>
-		</where>
+	
 	</select>
 	
 	
@@ -48,173 +16,17 @@
 	-->
 	<select id="searchCsBoards" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="com.nadri.csBoard.vo.CsBoard">
 		select
-			no,
-			title,
-			userNo,
-			createdDate,
-			replyCheck,
-			csType
-		from (
-			select
-				A.cs_board_no no,
-				A.cs_board_title title,
-				A.user_no userNo,
-				A.cs_board_created_date createdDate,
-				A.cs_reply_check replyCheck,
-				A.cs_type csType,
-				row_number() over (order by board_no desc) rn
-				
-			from cs_board A			
-		)
-		<where>
-			<if test="opt != null and value != null">
-				<choose>
-					<when test="opt == '제목'">
-						cs_board_title like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '내용'">
-						cs_board_content like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '제목+내용'">
-						(cs_board_title like '%' || #{value} || '%' 
-						or cs_board_content like '%' || #{value} || '%')
-					</when>
-				</choose>
-			</if>
-			<if test="type == '사이트이용'">
-				cs_type = 사이트이용
-			</if>
-			<if test="type == '프로모션'">
-				cs_type = 프로모션
-			</if>
-			<if test="type == '예약/취소/환불'">
-				cs_type = 예약/취소/환불
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				cs_type = 쿠폰/포인트
-			</if>
-			<if test="type == '기타'">
-				cs_type = 기타
-			</if>
-		</where>
-		)
-		where rn between #{beginIndex} and #{endIndex}
-
-	</select>
-	
-	
-	<!--
-		int getCsBoardsTotalRowsByUserNo(Criteria criteria)
-	-->
-	<select id="getCsBoardsTotalRowsByUserNo" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="int">
-		select count(*)
-		from cs_board
-		where user_no = #{value}
-			<if test="opt != null and value != null">
-				<choose>
-					<when test="opt == '제목'">
-						and cs_board_title like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '내용'">
-						and cs_board_content like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '제목+내용'">
-						and (cs_board_title like '%' || #{value} || '%' 
-						or cs_board_content like '%' || #{value} || '%')
-					</when>
-				</choose>
-			</if>
-			<if test="type == '사이트이용'">
-				and cs_type = 사이트이용
-			</if>
-			<if test="type == '프로모션'">
-				and cs_type = 프로모션
-			</if>
-			<if test="type == '예약/취소/환불'">
-				and cs_type = 예약/취소/환불
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				and cs_type = 쿠폰/포인트
-			</if>
-			<if test="type == '기타'">
-				and cs_type = 기타
-			</if>
-	</select>
-	
-	<!--
-		List<CsBoard> searchCsBoardsByUserNo(Criteria criteria)
-	-->
-	<select id="searchCsBoardsByUserNo" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="com.nadri.csBoard.vo.CsBoard">
-		select
-			no,
-			title,
-			userNo,
-			createdDate,
-			replyCheck,
-			csType
-		from (
-			select
-				A.cs_board_no no,
-				A.cs_board_title title,
-				A.user_no userNo,
-				A.cs_board_created_date createdDate,
-				A.cs_reply_check replyCheck,
-				A.cs_type csType,
-				row_number() over (order by board_no desc) rn
-				
-			from cs_board A			
-		)
-		where user_no = #{value}
-			<if test="opt != null and value != null">
-				<choose>
-					<when test="opt == '제목'">
-						and cs_board_title like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '내용'">
-						and cs_board_content like '%' || #{value} || '%'
-					</when>
-					<when test="opt == '제목+내용'">
-						and (cs_board_title like '%' || #{value} || '%' 
-						or cs_board_content like '%' || #{value} || '%')
-					</when>
-				</choose>
-			</if>
-			<if test="type == '사이트이용'">
-				and cs_type = '사이트이용'
-			</if>
-			<if test="type == '프로모션'">
-				and cs_type = '프로모션'
-			</if>
-			<if test="type == '예약/취소/환불'">
-				and cs_type = '예약/취소/환불'
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				and cs_type = '쿠폰/포인트'
-			</if>
-			<if test="type == '기타'">
-				and cs_type = '기타'
-			</if>
-		)
-		where rn between #{beginIndex} and #{endIndex}
-
+			cs_board_no no,
+			cs_board_title title,
+			user_no userNo,
+			
+			
+			
 	</select>
 	
 	<!--
 		CsBoard getCsBoardDetailByNo(int no)
 	-->
-	<select id="getCsBoardDetailByNo" parameterType="int" resultType="com.nadri.csBoard.vo.CsBoard">
-		select
-			cs_board_no no,
-			cs_board_title title,
-			user_no userNo,
-			cs_board_content content,
-			cs_board_created_date createdDate,
-			cs_reply_check replyCheck,
-			cs_type type
-		from cs_board
-		where cs_board_no = #{value}
-	
-	</select>
 	
 	<!--
 		CsBoardReply getReplyByNo(int no)
@@ -231,44 +43,27 @@
 		insert into cs_board
 		(cs_board_no, cs_board_title, user_no, cs_board_content, cs_type)
 		values
-		(cs_board_no.nextval, #{title}, #{userNo}, #{content}, #{type})
+		(#{no}, #{title}, #{userNo}, #{content}, #{type})
 	</insert>
 	
 	<!--
 		void updateCsBoard();
 	-->
-	<update id="updateCsBoard">
-		update
-		set
-	</update>
+	
 	<!--
 		void deleteCsBoard();
 	-->
-	<delete id="deleteCsBoard"></delete>
 	
 	<!--
 		void insertCsBoardReply();
 	-->
-	<insert id="insertCsBoardReply">
-		
-	</insert>
 	
 	<!--
 		void updateCsBoardReply();
 	-->
-	<update id="updateCsBoardReply">
-		update
-		set
-			cs_reply_content replyContent,
-			cs_reply_check replyCheck
-		where
-			
-	
-	</update>
 	
 	<!--
 		void deleteCsBoardReply();
 	-->
-	<delete id="deleteCsBoardReply"></delete>
 
 </mapper>

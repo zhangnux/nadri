@@ -50,14 +50,13 @@
 	<!-- 검색 -->
 	<div class="row mb-3">
 		<div class="col">
-		<!-- 검색하면 제출되게 스크립트 설정하기 -->
-			<form id="form-search" action="list.nadri" method="get" class="row row-cols-lg g-3 align-items-center p-3">
+			<form id="form-search" action="" method="get" class="row row-cols-lg g-3 align-items-center p-3">
 				<input type="hidden" name="page" value="1" />
 				<div class="col-3">
 					<select class="form-select" name="city">
 						<option value="" ${empty param.city ? 'selected' : ''}>전체 지역</option>
 						<c:forEach var="city" items="${cities }">
-							<option value="${city.no }" ${param.city == city.no ? 'selected' : ''}>
+							<option value="${city.no }" ${param.city == '${city.no}' ? 'selected' : ''}>
 								${city.cityName }
 							</option>
 						</c:forEach>
@@ -67,7 +66,7 @@
 					<select class="form-select" name="category">
 						<option value="" ${empty param.category ? 'selected' : ''}>전체 카테고리</option>
 						<c:forEach var="category" items="${categories }">
-							<option value="${category.no }" ${param.category == category.no ? 'selected' : ''}>
+							<option value="${category.no }" ${param.category == '${category.no}' ? 'selected' : ''}>
 								${category.categoryName }
 							</option>
 						</c:forEach>
@@ -117,28 +116,21 @@
 		<!-- list -->
 		<div class="col-10">
 			<table class="table">
-				<c:choose>
-					<c:when test="${empty restaurants }">
-						<div class="col col-12 text-center fw-bold"><h1>일치하는 음식점이 없습니다.</h1></div>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="restaurant" items="${restaurants }">
-							<tbody>
-									<tr>
-										<td rowspan="3" style="width: 20%"><img alt="" src="${restaurant.picture }"></td>
-										<td style="width: 80%">${restaurant.name }</td>
-									</tr>
-									<tr>
-										<td>별점: ${restaurant.starPoint }점</td>
-									</tr>
-									<tr>
-										<td>${restaurant.categoryName } 주차:${restaurant.parking }
-										<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a></td>
-									</tr>
-							</tbody>
+				<c:forEach var="restaurant" items="${restaurants }">
+				<tbody>
+						<tr>
+							<td rowspan="3" style="width: 20%"><img alt="" src="${restaurant.picture }"></td>
+							<td style="width: 80%">${restaurant.name }</td>
+						</tr>
+						<tr>
+							<td>별점: ${restaurant.starPoint }점</td>
+						</tr>
+						<tr>
+							<td>${restaurant.categoryName } 주차:${restaurant.parking }
+							<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a></td>
+						</tr>
+				</tbody>
 				</c:forEach>
-					</c:otherwise>
-				</c:choose>
 			</table>
 		</div>
 	</div>
@@ -175,8 +167,6 @@
 	$("#select-sort").change(function()){
 		document.getElementById("form-search").submit();
 	}
-	
-	
 	
 	
 

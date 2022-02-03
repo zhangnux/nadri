@@ -21,16 +21,6 @@
 		<div class="col">
 			<form class="border bg-light p-3" action="insert.nadri" method="post">
 				<div class="mb-3">
-					<label class="form-label">타입</label>
-					<select class="form-select">
-						<option>사이트이용</option>
-						<option>프로모션</option>
-						<option>예약/취소/환불</option>
-						<option>쿠폰/포인트</option>
-						<option>기타</option>
-					</select>
-				</div>
-				<div class="mb-3">
 					<label class="form-label">제목</label>
 					<input type="text" class="form-control" name="title" />
 				</div>

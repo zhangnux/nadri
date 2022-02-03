@@ -34,22 +34,14 @@ public class NoticeBoardService {
 	}
 	
 	public void updateViewCount(int boardNo, int viewCount) {
-		
 		NoticeBoard noticeBoard = nbMapper.getNoticeBoardDetail(boardNo);
-		
 		noticeBoard.setViewCount(viewCount);
-		
 		nbMapper.updateNoticeBoard(noticeBoard);
 		
 	}
 	
 	public void deleteNoticeBoard(int no) {
 		nbMapper.deleteNoticeBoard(no);
-	}
-	
-	public void updateNoticeBoard(NoticeBoard noticeBoard) {
-	
-		nbMapper.updateNoticeBoard(noticeBoard);
 	}
 	
 

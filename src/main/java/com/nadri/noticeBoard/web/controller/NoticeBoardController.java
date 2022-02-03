@@ -20,7 +20,6 @@ import com.nadri.noticeBoard.util.Pagination;
 import com.nadri.noticeBoard.vo.NoticeBoard;
 import com.nadri.noticeBoard.web.form.Criteria;
 import com.nadri.noticeBoard.web.form.NoticeBoardInserform;
-import com.nadri.noticeBoard.web.form.NoticeBoardModifyForm;
 
 
 @Controller
@@ -48,7 +47,8 @@ public class NoticeBoardController {
 		// 검색조건(opt, value)과 조회범위(beginIndex, endIndex)가 포함된 Criteria를 서비스에 전달해서 데이터 조회
 		List<NoticeBoard> noticeBoards = nbService.searchBoards(criteria);
 		
-		model.addAttribute("noticeBoards", noticeBoards);		
+		model.addAttribute("noticeBoards", noticeBoards);
+		
 		model.addAttribute("pagination", pagination);
 		
 		return "/noticeBoard/list";
@@ -93,31 +93,6 @@ public class NoticeBoardController {
 		nbService.deleteNoticeBoard(no);
 		
 		return "redirect:list.nadri";
-	}
-	
-	@GetMapping("/modify.nadri")
-	public String modifyform(int no, Model model) {
-		NoticeBoard noticeBoard = nbService.getNoticeBoardDetail(no);
-		
-		model.addAttribute("noticeBoard", noticeBoard);
-		
-		return "/noticeBoard/modifyform";
-	}
-	
-
-	@PostMapping("/modify.nadri")
-	public String modify(NoticeBoardModifyForm form) {
-		
-		logger.debug("입력폼 정보: " + form);
-		
-		NoticeBoard noticeBoard = nbService.getNoticeBoardDetail(form.getNo());
-		
-		noticeBoard.setTitle(form.getTitle());
-		noticeBoard.setContent(form.getContent());
-		
-		nbService.updateNoticeBoard(noticeBoard);
-		
-		return "redirect:detail.nadri?no=" + form.getNo();
 	}
 
 }

@@ -90,7 +90,7 @@
 	<select id="getRestaurantsTotalRows" parameterType="com.nadri.restaurant.web.form.RestaurantCriteria" resultType="int">
 		select count(*)
 		from restaurant
-		<where>
+		where
 			<if test="name != null">
 					and restaurant_name like '%' || #{name} || '%'
 			</if>
@@ -99,8 +99,7 @@
 			</if>
 			<if test="category != null">
 				and category_no = #{category}
-			</if>	
-		</where>		
+			</if>			
 	</select>
 	
 	<!-- 
@@ -112,13 +111,13 @@
 	 -->
 	<select id="searchRestaurants" parameterType="com.nadri.restaurant.web.form.RestaurantCriteria" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			no,
-			name,
-			picture,
-			starPoint,
-			reviewCount,
-			categoryName,
-			cityName
+			A.restaurant_no as no,
+			A.restaurant_name as name,
+			A.restaurant_picture as picture,
+			A.restaurant_star_point as starPoint,
+			A.restaurant_review_count,
+			B.category_name as categoryName,
+			C.city_name as cityName
 		from (
 			select
 				A.restaurant_no as no,
@@ -127,25 +126,25 @@
 				A.restaurant_star_point as starPoint,
 				A.restaurant_review_count as reviewCount,
 				B.category_name as categoryName,
-				C.city_name as cityName,
+				C.city_name as cityName
 			row_number() over (order by restaurant_no desc) rn
 			from restaurant A, restaurant_category B, restaurant_city C
 			where
 				A.category_no = B.category_no and A.city_no = C.city_no
 				<if test="name != null">
-					and A.restaurant_name like '%' || #{name} || '%'
+					and restaurant_name like '%' || #{name} || '%'
 				</if>
 				<if test="city != null">
-					and A.city_no = #{city}
+					and city_no = #{city}
 				</if>
 				<if test="category != null">
-					and A.category_no = #{category}
+					and category_no = #{category}
 				</if>
 				<if test="sort == 'sales'">
-					order by A.restaurant_sales desc
+					order by restaurant_sales desc
 				</if>
 				<if test="sort == 'starPoint'">
-					order by A.restaurant_star_point desc
+					order by restaurant_star_point desc
 				</if>
 		)
 		where rn between #{beginIndex} and #{endIndex}

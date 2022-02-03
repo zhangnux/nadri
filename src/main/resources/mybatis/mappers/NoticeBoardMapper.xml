@@ -114,7 +114,7 @@
 		void deleteNoticeBoard(int no)
 	-->
 		<delete id="deleteNoticeBoard">
-			delete from notice_board
+			delete form notice_board
 			where
 				board_no = #{value}
 		</delete>

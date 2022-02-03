@@ -15,8 +15,8 @@ import lombok.ToString;
 @ToString
 public class RestaurantCriteria {
 	
-	private String category;
-	private String city;
+	private String categoryName;
+	private String cityName;
 	private String name;
 	private int beginIndex;
 	private int endIndex;
