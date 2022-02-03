@@ -25,6 +25,54 @@
 	right: 6%;
 	padding: 0;
 }
+.card:hover{
+	transform:scale(1.01);
+	overflow: hidden;
+	filter: brightness(95%);
+	transition: all 0.3s;
+}
+/* component */
+
+.star-rating {
+  display:flex;
+  flex-direction: row-reverse;
+  font-size:1.5em;
+  justify-content:space-around;
+  padding:0 .2em;
+  text-align:center;
+  width:5em;
+}
+
+.star-rating input {
+  display:none;
+}
+
+.star-rating label {
+  color:#ccc;
+  cursor:pointer;
+}
+
+.star-rating :checked ~ label {
+  color:#fc0;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color:#f90;
+}
+
+/* explanation */
+
+article {
+  background-color:#ffe;
+  box-shadow:0 0 1em 1px rgba(0,0,0,.25);
+  color:#006;
+  font-family:cursive;
+  font-style:italic;
+  margin:4em;
+  max-width:30em;
+  padding:2em;
+}
 </style>
 </head>
 <body>
@@ -140,84 +188,120 @@
 				</div>
 				<div class="border-top mt-5 mb-5 pt-4">
 					<h5>
-						<strong>후기 ${count }</strong>
+						<strong>후기</strong>
 					</h5>
-					<div class="row p-4">
-						<div class="col-4 text-center" style="background-color:#f8f9fa;">
-							<div class="mt-4">					
+					<div class="row">
+						<div class="col-2 text-end">
+							<div class="mt-3" style="font-size:60px;">					
 								<c:choose>
 									<c:when test="${empty star }">
-										<h2><strong>0.0</strong></h2>
+										<strong>0.0</strong>
 									</c:when>
 									<c:otherwise>
-										<h2><strong>${star }</strong></h2>
+										<strong>${star }</strong>
 									</c:otherwise>
 								</c:choose>
 							</div>
-							<div><h2>★★★☆☆</h2></div>
 						</div>
-						<div class="col-6 ms-3 p-2" style="background-color:#f8f9fa; color:gold;">
-							<div>★★★★★</div>
-							<div>★★★★☆</div>
-							<div>★★★☆☆</div>
-							<div>★★☆☆☆</div>
-							<div>★☆☆☆☆</div>
+						<div class="col-6 ms-3 p-2">
+						<span style="color:gold;font-size:40px;">★★★★★</span><br>
+						<span style="color:black;font-size:30px;"><strong>후기 ${count }개</strong></span>
 						</div>
 					</div>
 					
-					<div id="review"></div>
+					<div id="review"><%-- 리뷰 출력되는 곳(ajax) --%></div>
 					
-					<div class="row border rounded mb-5 p-3">
-						<h5>
-							<strong>후기 작성</strong>
-						</h5>
-						<div class="col-10 form-floating">
-						  <textarea class="form-control" id="floatingTextarea2" 
-						  			style="height: 200px;resize: none;" maxlength="500"></textarea>
-						  <label for="floatingTextarea2">500자까지 작성 가능합니다.</label>
+					<c:choose>
+						<c:when test="${empty LOGIN_USER }">
+						</c:when>
+						<c:otherwise>
+						<form name="reviewform" class="border rounded p-4 mb-4">
+						<div class="row">
+							<div class="col-auto mt-2">
+								<h5>
+									<strong>후기 작성</strong>
+								</h5>
+							</div>
+							<div class="col-auto star-rating">
+								  <input type="radio" id="5-stars" name="star" value="5" />
+								  <label for="5-stars" class="star">&#9733;</label>
+								  <input type="radio" id="4-stars" name="star" value="4" />
+								  <label for="4-stars" class="star">&#9733;</label>
+								  <input type="radio" id="3-stars" name="star" value="3" />
+								  <label for="3-stars" class="star">&#9733;</label>
+								  <input type="radio" id="2-stars" name="star" value="2" />
+								  <label for="2-stars" class="star">&#9733;</label>
+								  <input type="radio" id="1-star" name="star" value="1" />
+								  <label for="1-star" class="star">&#9733;</label>
+							</div>
 						</div>
-						<div class="col-2 d-flex align-items-end flex-column bd-highlight">
-							  <button type="button" class="btn btn-outline-danger mt-auto mb-2" style="height:50px;width:50px">
-							  	<i class="bi bi-camera"></i>
-							  </button>
-							  <button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
-							  	<i class="bi bi-pencil-square"></i>
-							  </button>
+						<div class="row">
+							<div class="col-10 form-floating">
+							  <textarea class="form-control" id="textarea" name="content"
+							  			style="height: 200px;resize: none;" maxlength="500"></textarea>
+							  <label for="floatingTextarea2">500자까지 작성 가능합니다.</label>
+							</div>
+							<div class="col-2 d-flex align-items-end flex-column bd-highlight register">
+								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
+										style="padding-top:12px;height:50px;width:50px">
+									<i class="bi bi-camera"></i>
+								</label>
+								<input type="file" name="photo" id="rphoto" onchange="setThumbnail(event);"
+										style="display:none;" accept="image/*" multiple/>
+								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
+									<i class="bi bi-pencil-square"></i>
+								</button>
+							  <input type="hidden" name="attNo" value=${param.no }>
+							  <input type="hidden" name="id" value=${LOGIN_USER.no }>
+							</div>
 						</div>
-					</div>
-					
-					<%-- 
-<c:if test="${pagination.totalRecords gt 0 }">
-	<div class="row mb-3">
-		<div class="col">
-			<nav>
-	  			<ul class="pagination justify-content-center">
-	    			<li class="page-item ${pagination.existPrev ? '' : 'disabled' }">
-	      				<a class="page-link" href="list.do?page=${pagination.prevPage }" data-page="${pagination.prevPage }">이전</a>
-	    			</li>
+						<div class="mt-4 mb-5" id="image_container"></div>
+						</form>
+						</c:otherwise>
+					</c:choose>
 
-	    			<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
-		    			<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
-		    				<a class="page-link" href="list.do?page=${num }" data-page="${num }">${num }</a>
-		    			</li>	    			
-	    			</c:forEach>
-
-	    			<li class="page-item ${pagination.existNext ? '' : 'disabled' }">
-	      				<a class="page-link" href="list.do?page=${pagination.nextPage }" data-page="${pagination.nextPage }">다음</a>
-	    			</li>
-	  			</ul>
-			</nav>
-		</div>
-	</div>
-</c:if>
-				--%>
-
-				<div class="row">
+				<div class="row mt-5 mb-3">
 					<h3>
 						<strong>${detail.place }의 다른 즐길거리</strong>
 					</h3>
 				</div>
-			<a style="display:scroll;position:fixed;bottom:100px;right:100px; text-decoration-line : none; color:black;"
+				<div class="row">
+	            <c:forEach var="rd" items="${random }">
+				  <div class="col">
+				    <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${rd.no}&page=1';">
+				      <img src="../resources/images/att/${rd.thumbnail }" class="card-img-top" style="height:200px;">
+				      <div class="card-body">
+				      	<p class="card-text">${rd.place } / ${rd.category }</p>
+				        <h5 class="card-title"><strong>${rd.name }</strong></h5>
+				        <p class="card-text">${rd.content }</p>
+				        <p class="card-text">★★★☆ ${rd.star } / 5.0　후기 ${rd.count }개</p>
+				        <c:choose>
+				        	<c:when test="${rd.price==0 }">
+				        		<p class="text-end"><strong>옵션 별 상이</strong></p>
+				        	</c:when>
+				        	<c:when test="${rd.discountPrice==0 }">
+				        		<p class="card-text text-end"><strong>
+				        			<fmt:formatNumber value="${rd.price }" pattern="###,###" />원
+				        		</strong></p>
+				        	</c:when>
+				        	<c:otherwise>
+				        		<div class="card-text text-end">
+				        			<span class="text-decoration-line-through">
+				        				<fmt:formatNumber value="${rd.price }" pattern="0,000" />원
+				        			</span>
+				        			<span style="color:red"><strong>&nbsp;
+				        				<fmt:formatNumber value="${rd.discountPrice }" pattern="0,000" />원
+				        			</strong></span>
+				        		</div>
+				        	</c:otherwise>
+				        </c:choose>
+				      </div>
+				    </div>
+				  </div>
+				</c:forEach>
+				</div>
+			
+			<a style="display:scroll;position:fixed;bottom:2%;right:100px; text-decoration-line : none; color:black;"
 				href="javascript:window.scrollTo(0,0);"><i class="bi bi-arrow-up-square">
 				</i><strong>위로</strong>
 			</a>
@@ -225,10 +309,41 @@
 			</div>
 		</div>
 	</div>
-	<%@ include file="../common/footer.jsp"%>
-	<script type="text/javascript">
-	// 로딩시점에 자동실행
+<%@ include file="../common/footer.jsp"%>
+<script type="text/javascript">
+/* 썸네일 */
+function setThumbnail(event) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      var img = document.createElement("img");
+      img.setAttribute("src", event.target.result);
+      document.querySelector("div #image_container").appendChild(img);
+      
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+// 로딩 완료시점에 자동실행
 $(function() {
+	
+	/* 후기등록 */
+	$(".register .btn-outline-primary").click(function(){
+		var textarea = document.getElementById("textarea");
+		var form = document.reviewform;
+		if(textarea.value.trim()==""){
+			alert("내용을 입력해주세요");
+			return false;
+		}
+		var doubleCheck = confirm("등록하시겠습니까?")		
+		if(doubleCheck){
+			form.action="home.nadri";
+			form.method="get";
+			form.submit();
+		} else{}	
+	})
+	
+	/* 달력 설정 */
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1;
@@ -257,7 +372,8 @@ $(function() {
 				var list = result.reviewList;
                	var htmls = "";
 				if(list.length == 0){
-					htmls += '<br>등록된 후기가 없습니다.</br>'
+					htmls += '<div class="row p-4 mb-5 text-center">'
+					htmls += '<br><strong>등록된 후기가 없습니다.</strong></br>'
 				} else {
                     $(list).each(function(){	
 						htmls += '<div class="row p-4 border-bottom">'
@@ -268,7 +384,7 @@ $(function() {
 						case 4: htmls += '<div><a style="color:gold;">★★★★☆&nbsp;</a>'; break;
 						case 5: htmls += '<div><a style="color:gold;">★★★★★&nbsp;</a>'; break;
 						}
-						htmls += this.star+'　'+this.userNo+'</div>'
+						htmls += this.star+'　'+this.userId+'</div>'
 						htmls += '<div>'+this.date+'</div>'
 						htmls += '<div class="col-11 mt-2">'+this.content+'</div>'
 						htmls += '<div class="col-1">'

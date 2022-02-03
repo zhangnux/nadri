@@ -62,11 +62,23 @@
 				        <p class="card-text">${cate.content }</p>
 				        <p class="card-text">★★★☆ ${cate.star } / 5.0　후기 ${cate.count }개</p>
 				        <c:choose>
+				        	<c:when test="${cate.price==0 }">
+				        		<p class="text-end"><strong>옵션 별 상이</strong></p>
+				        	</c:when>
 				        	<c:when test="${cate.discountPrice==0 }">
-				        		<p class="card-text">할인이 없을 때</p>
+				        		<p class="card-text text-end"><strong>
+				        			<fmt:formatNumber value="${cate.price }" pattern="###,###" />원
+				        		</strong></p>
 				        	</c:when>
 				        	<c:otherwise>
-				        		<p class="card-text">할인이 있을 때</p>
+				        		<div class="card-text text-end">
+				        			<span class="text-decoration-line-through">
+				        				<fmt:formatNumber value="${cate.price }" pattern="0,000" />원
+				        			</span>
+				        			<span style="color:red"><strong>&nbsp;
+				        				<fmt:formatNumber value="${cate.discountPrice }" pattern="0,000" />원
+				        			</strong></span>
+				        		</div>
 				        	</c:otherwise>
 				        </c:choose>
 				      </div>

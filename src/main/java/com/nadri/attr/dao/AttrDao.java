@@ -3,6 +3,7 @@ package com.nadri.attr.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.nadri.attr.dto.AttOptionDetail;
 import com.nadri.attr.vo.Attraction;
@@ -30,4 +31,7 @@ public interface AttrDao{
 	// 후기 갯수+별점 평균
 	int reviewCount(int attNo);
 	double star(int attNo);
+	
+	// 같은 place 상품 랜덤 4개 출력
+	List<Attraction> random(@Param("no")int attNo, @Param("place")String place);
 }

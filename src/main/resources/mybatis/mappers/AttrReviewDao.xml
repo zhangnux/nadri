@@ -9,20 +9,20 @@
 		<result column="review_date" property="date"/>
 		<result column="att_no" property="attNo"/>
 		<result column="user_no" property="userNo"/>
-		<result column="user_no" property="userNo"/>
+		<result column="user_id" property="userId"/>
 	</resultMap>
 	
-	<!-- 	
-			select review_no, review_star, review_content, review_photo, review_date, user_no
-			from att_review
-			where att_no = #{no}
-	-->
 	<select id="getListByNo" resultMap="ReviewMap">
 		<![CDATA[
-			select review_no, review_star, review_content, review_photo, review_date, user_no 
-			from (select row_number() over(order by review_no desc) rn, r.* from att_review r)
+			select r.review_no, r.review_star, r.review_content, r.review_photo, r.review_date, r.user_no, u.user_id 
+			from (
+			        select row_number() over(order by review_no desc) rn, 
+			        	   review_no, review_star, review_content, review_photo, review_date, user_no, att_no
+			        from att_review
+			        )r, user_table u
 			where att_no = #{no}
 			and rn between #{beginIndex} and #{endIndex}
+			and r.user_no = u.user_no
 		]]>
 	</select>
 

@@ -104,9 +104,7 @@
 			      <div class="card-body">
 			      	<p class="card-text">${att.place } / ${att.category }</p>
 			        <h5 class="card-title"><strong>${att.name }</strong></h5>
-			        <p class="card-text">${att.content }</p>
-			        <p class="card-text">★★★☆ 3.5 / 5.0</p>
-			        <p class="card-text">후기 개</p>	    
+			        <p class="card-text">${att.content }</p>   
 			      </div>
 			    </div>
 			    </div>
