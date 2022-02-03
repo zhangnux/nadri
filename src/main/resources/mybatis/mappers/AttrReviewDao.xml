@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.attr.dao.AttrReviewDao">
+	<resultMap id="ReviewMap" type="com.nadri.attr.vo.AttrReview">
+		<id column="review_no" property="no"/>
+		<result column="review_star" property="star"/>
+		<result column="review_content" property="content"/>
+		<result column="review_photo" property="photo"/>
+		<result column="review_date" property="date"/>
+		<result column="att_no" property="attNo"/>
+		<result column="user_no" property="userNo"/>
+		<result column="user_no" property="userNo"/>
+	</resultMap>
+	
+	<!-- 	
+			select review_no, review_star, review_content, review_photo, review_date, user_no
+			from att_review
+			where att_no = #{no}
+	-->
+	<select id="getListByNo" resultMap="ReviewMap">
+		<![CDATA[
+			select review_no, review_star, review_content, review_photo, review_date, user_no 
+			from (select row_number() over(order by review_no desc) rn, r.* from att_review r)
+			where att_no = #{no}
+			and rn between #{beginIndex} and #{endIndex}
+		]]>
+	</select>
+
+</mapper>

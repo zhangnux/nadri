@@ -10,7 +10,6 @@
 		<result column="att_enddate" property="endDate"/>
 		<result column="att_place" property="place"/>
 		<result column="att_sales" property="sales"/>
-		<result column="att_star" property="star"/>
 		<result column="att_price" property="price"/>
 		<result column="att_discountprice" property="discountPrice"/>
 		<result column="att_category" property="category"/>
@@ -18,6 +17,9 @@
 		<result column="att_photo" property="photo"/>
 		<result column="att_address" property="address"/>
 		<result column="att_detailcontent" property="detail"/>
+		<result column="att_detailcontent" property="detail"/>
+		<result column="star" property="star"/>
+		<result column="cnt" property="count"/>
 		<collection property="attOption" resultMap="AttrOptionMap" />
 	</resultMap>
 	
@@ -28,26 +30,28 @@
 		<result column="att_discountprice" property="discountPrice"/>
 	</resultMap>
 
-	<!-- 리스트 -->
+	<!-- 전체 리스트 -->
 	<select id="allAttrList" resultMap="AttrResultMap">
 		<![CDATA[
 		select
-			att_no,
-			att_name,
-			att_content,
-			att_startdate,
-			att_enddate,
-			att_place,
-			att_sales,
-			att_star,
-			att_price,
-			att_discountprice,
-			att_category,
-			att_thumbnail,
-			att_photo
-		from attraction
+			b.att_no,
+			b.att_name,
+			b.att_content,
+			b.att_startdate,
+			b.att_enddate,
+			b.att_place,
+			b.att_sales,
+			b.att_price,
+			b.att_discountprice,
+			b.att_category,
+			b.att_thumbnail,
+			b.att_photo,
+			(select nvl(round(avg(x.review_star),1), 0) from att_review x where x.att_no = b.att_no) star,
+			(select count(x.review_no) cnt from att_review x where x.att_no = b.att_no) cnt
+		from attraction b
         where (att_enddate is null or att_enddate > sysdate)
-		order by att_no desc]]>
+		order by att_no desc
+		]]>
 	</select>
 	
 	<!-- 상품 수 -->
@@ -61,7 +65,9 @@
 		
 		select *
 		from (
-		        select a.*
+		        select a.*,
+		        (select nvl(round(avg(x.review_star),1), 0) from att_review x where x.att_no = a.att_no) star,
+				(select count(x.review_no) cnt from att_review x where x.att_no = a.att_no) cnt
 		        from attraction a
 		        where att_place like '%' || #{place} || '%'
 		        and (att_enddate is null or att_enddate > sysdate)
@@ -118,5 +124,20 @@
 		from att_option
 		where att_no = #{no}
 	</select>
+
+	<select id="reviewCount" parameterType="int" resultType="int">
+		<![CDATA[
+			select count(*) cnt
+			from att_review
+			where att_no = #{no}
+		]]>		
+	</select>
 	
+	<select id="star" parameterType="int" resultType="double">
+		<![CDATA[
+			select nvl(round(avg(review_star),1), 0)
+			from att_review
+			where att_no = #{no}
+		]]>		
+	</select>	
 </mapper>

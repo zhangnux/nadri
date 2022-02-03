@@ -12,7 +12,7 @@
 				</div>
 				
 				<c:forEach var="opt" items="${option }">
-				<div class="optionselect border rounded p-3">
+				<div class="optionselect border rounded p-3 mb-2">
 					<div class="row mb-2">
 						<div class="col">
 							<h5><strong>${opt.option}</strong></h5>
@@ -20,7 +20,7 @@
 					</div>
 					<div class="row text-end">
 						<div class="col-8">
-							<a style="font-size:18px;">1인 ${opt.price }원</a>
+							<a style="font-size:18px;">1인 <fmt:formatNumber value="${opt.price }" pattern="0,000" />원</a>
 						</div>
 						<div class="col-4">
 							<h5>
