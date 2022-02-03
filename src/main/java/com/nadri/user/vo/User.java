@@ -20,7 +20,8 @@ public class User {
 	private String id;
 	private String password; 
 	private String name;
-	private int age;
+	@JsonFormat(pattern = "yyyy년 M월 d일")
+	private Date birth;
 	private String gender;
 	private String tel;
 	private String address;

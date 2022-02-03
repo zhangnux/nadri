@@ -1,5 +1,9 @@
 package com.nadri.user.form;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +19,7 @@ public class UserForm {
 	private String name;
 	private String email;
 	private String tel;
-	private String age;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date birth;
 	private String gender;
 }

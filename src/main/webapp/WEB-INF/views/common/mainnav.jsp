@@ -1,5 +1,7 @@
+<%@page import="com.nadri.user.util.SessionUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../common/tags.jsp" %>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
@@ -22,20 +24,25 @@
 	      <ul class="navbar-nav ms-auto">
 	      
 	      	<!-- 로그인 안했을 때 -->
-		        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#">로그인</a></li>
-		        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#">회원가입</a></li>
+	      	
+		    	<c:if test="${empty LOGIN_USER }">
+		        	<li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/user/login.nadri">로그인</a></li>
+		        	<li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/user/insert.nadri">회원가입</a></li>
+		    	</c:if>
 		     <!-- 로그인 했을 때 -->
+          <c:if test="${not empty LOGIN_USER }">
 	        <li class="nav-item dropdown">
 	          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-	            아이디를 띄워요
+				${LOGIN_USER.id }
 	          </a>
-	          <div class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
-	            <a class="dropdown-item" href="#">마이페이지</a>
-	            <a class="dropdown-item" href="#">위시리스트</a>
-	            <div class="dropdown-divider"></div>
-	            <a class="dropdown-item" href="#">로그아웃</a>
-	          </div>
-	        </li>
+		          <div class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
+		          	<a class="dropdown-item" href="#">마이페이지</a>
+		            <a class="dropdown-item" href="#">위시리스트</a>
+		     	<div class="dropdown-divider"></div>
+		            <a class="dropdown-item" href="/user/logout.nadri">로그아웃</a>
+		          </div>
+		    </li>
+	      </c:if>
                  	
 	      </ul>
   		</div>
