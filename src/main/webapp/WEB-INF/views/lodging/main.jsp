@@ -41,18 +41,27 @@
 	
 <%@ include file = "common/searchbar.jsp" %>	
 
+	<hr>
+	<div class="row">
+		<div class="col">
+			<h4><strong>Best 숙소</strong></h4>
+		</div>
+	</div>
 	<!-- 사진  -->
 	<div class="row mb-3">
+		<c:forEach var="lodging" items="${lodgings }">
 		<div class="col">
-			<div class="card" style="width: 18rem;">
+			<div class="card shadow" style="width: 18rem;">
 			  	<!-- 경로 -->
 			  	<img src="http://tong.visitkorea.or.kr/cms/resource/33/1896033_image2_1.jpg" class="card-img-top" alt="...">
 			  	<div class="card-body">
-			    	<p class="card-text">사진</p>
+			    	<p class="card-text">${lodging.name }</p>
 			  	</div>
 			</div>	
 		</div>
+		</c:forEach>
 	</div>
+	
 </div>
   <!-- Footer-->
 <%@ include file="../common/footer.jsp" %>
