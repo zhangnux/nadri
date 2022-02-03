@@ -20,11 +20,6 @@ public class csBoardController {
 	private CsBoardService csService;
 	
 	
-	@GetMapping("/main.nadri")
-	public String main() {
-		
-		return "/csBoard/main";
-	}
 	
 	@GetMapping("/userlist.nadri")
 	public String userList() {
