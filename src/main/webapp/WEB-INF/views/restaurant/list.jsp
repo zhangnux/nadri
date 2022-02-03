@@ -14,7 +14,7 @@
 <style>
 	img {
 		height: 200px;
-		width: 70px;
+		width: 300px;
 	}
 
 
@@ -116,13 +116,13 @@
 		</div>
 		<!-- list -->
 		<div class="col-10">
-			<table class="table">
-				<c:choose>
-					<c:when test="${empty restaurants }">
-						<div class="col col-12 text-center fw-bold"><h1>일치하는 음식점이 없습니다.</h1></div>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="restaurant" items="${restaurants }">
+			<c:choose>
+				<c:when test="${empty restaurants }">
+					<div class="col col-12 text-center fw-bold"><h1>일치하는 음식점이 없습니다.</h1></div>
+				</c:when>
+				<c:otherwise>
+					<c:forEach var="restaurant" items="${restaurants }">
+						<table class="table p-3 border">
 							<tbody>
 									<tr>
 										<td rowspan="3" style="width: 20%"><img alt="" src="${restaurant.picture }"></td>
@@ -136,14 +136,15 @@
 										<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a></td>
 									</tr>
 							</tbody>
-				</c:forEach>
-					</c:otherwise>
-				</c:choose>
-			</table>
+						</table>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	
 	
+
 	<c:if test="${pagination.totalRecords gt 0 }">
 	<!-- 페이지 내비게이션 표시 -->
 	<div class="row mb-3">
@@ -151,16 +152,16 @@
 			<nav>
 		  		<ul class="pagination justify-content-center">
 		    		<li class="page-item ${pagination.existPrev ? '' : 'disabled' }">
-		     			<a class="page-link" href="list.do?page=${pagination.prevPage }" data-page="${pagination.prevPage }">이전</a>
+		     			<a class="page-link" href="list.nadri?page=${pagination.prevPage }" data-page="${pagination.prevPage }">이전</a>
 		    		</li>
 		    		<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
 			   			<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
-			   				<a class="page-link" href="list.do?page=${num }" data-page="${num }">${num }</a>
+			   				<a class="page-link" href="list.nadri?page=${num }" data-page="${num }">${num }</a>
 			   			</li>	    			
 		    		</c:forEach>
 		    		
 		    		<li class="page-item ${pagination.existNext ? '' : 'disabled' }">
-		      			<a class="page-link" href="list.do?page=${pagination.nextPage }" data-page="${pagination.nextPage }">다음</a>
+		      			<a class="page-link" href="list.nadri?page=${pagination.nextPage }" data-page="${pagination.nextPage }">다음</a>
 		    		</li>
 		  		</ul>
 			</nav>
@@ -176,7 +177,17 @@
 		document.getElementById("form-search").submit();
 	}
 	
-	
+	// 페이지내비게이션의 링크를 클릭했을 때 실행될 이벤트핸들러 함수를 등록한다.
+	$(".pagination a").click(function(event) {
+		event.preventDefault();
+		// 클릭한 페이지내비게이션의 페이지번호 조회하기
+		var pageNo = $(this).attr("data-page");
+		// 검색폼의 히든필드에 클릭한 페이지내비게이션의 페이지번호 설정
+		$(":input[name=page]").val(pageNo);
+		
+		// 검색폼에 onsubmit 이벤트 발생시키기
+		$("#form-search").trigger("submit");
+	})
 	
 	
 

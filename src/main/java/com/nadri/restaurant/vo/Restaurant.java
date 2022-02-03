@@ -33,6 +33,5 @@ public class Restaurant {
 	private double lon;			// 경도 mapy
 	private String categoryName;
 	private int categoryNo;
-	private int reviewCount; //리뷰개수
 
 }

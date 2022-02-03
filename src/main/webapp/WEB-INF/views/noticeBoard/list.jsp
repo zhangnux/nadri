@@ -35,7 +35,7 @@
 				<c:choose>
 					<c:when test="${empty noticeBoards }">
 						<tr>
-							<td class="text-center" colspan="6">등록된 공지가 없습니다.</td>
+							<td class="text-center" colspan="4">등록된 공지가 없습니다.</td>
 						</tr>
 					</c:when>
 					<c:otherwise>                            

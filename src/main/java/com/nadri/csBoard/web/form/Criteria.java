@@ -17,7 +17,7 @@ public class Criteria {
 
 	private int userNo;
 	private String opt;
-	private String type;
+	private String csType;
 	private String value;
 	private int beginIndex;
 	private int endIndex;

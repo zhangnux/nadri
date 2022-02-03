@@ -21,12 +21,12 @@ public interface CsBoardMapper {
 	List<CsBoard> searchCsBoardsByUserNo(Criteria criteria);
 	
 	
-	void insertCsBoard();
-	void updateCsBoard();
+	void insertCsBoard(CsBoard csBoard);
+	void updateCsBoard(CsBoard csBoard);
 	void deleteCsBoard();
 	
-	void insertCsBoardReply();
-	void updateCsBoardReply();
+	
+	void updateCsBoardReply();	// 이게 csboard reply 수정과 insert 모두 담당
 	void deleteCsBoardReply();
 
 }

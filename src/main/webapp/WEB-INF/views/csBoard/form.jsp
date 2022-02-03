@@ -17,17 +17,18 @@
 			<h1>Q&A 등록</h1>
 		</div>
 	</div>
+	<!-- 왜 null이라고 나올까요.. ㅜㅜ -->
 	<div class="row mb-3">
 		<div class="col">
 			<form class="border bg-light p-3" action="insert.nadri" method="post">
 				<div class="mb-3">
 					<label class="form-label">타입</label>
 					<select class="form-select">
-						<option>사이트이용</option>
-						<option>프로모션</option>
-						<option>예약/취소/환불</option>
-						<option>쿠폰/포인트</option>
-						<option>기타</option>
+						<option value="사이트이용" ${'사이트이용' eq param.csType ? 'selected' : ''}>사이트이용</option>
+						<option value="프로모션" ${'프로모션' eq param.csType ? 'selected' : ''}>프로모션</option>
+						<option value="예약/취소/환불" ${'예약/취소/환불' eq param.csType ? 'selected' : ''}>예약/취소/환불</option>
+						<option value="쿠폰/포인트" ${'쿠폰/포인트' eq param.csType ? 'selected' : ''}>쿠폰/포인트</option>
+						<option value="기타" ${'기타' eq param.csType ? 'selected' : ''}>기타</option>
 					</select>
 				</div>
 				<div class="mb-3">

@@ -24,19 +24,19 @@
 					</when>
 				</choose>
 			</if>
-			<if test="type == '사이트이용'">
+			<if test="csType == '사이트이용'">
 				cs_type = 사이트이용
 			</if>
-			<if test="type == '프로모션'">
+			<if test="csType == '프로모션'">
 				cs_type = 프로모션
 			</if>
-			<if test="type == '예약/취소/환불'">
+			<if test="csType == '예약/취소/환불'">
 				cs_type = 예약/취소/환불
 			</if>
-			<if test="type == '쿠폰/포인트'">
+			<if test="csType == '쿠폰/포인트'">
 				cs_type = 쿠폰/포인트
 			</if>
-			<if test="type == '기타'">
+			<if test="csType == '기타'">
 				cs_type = 기타
 			</if>
 		</where>
@@ -48,55 +48,59 @@
 	-->
 	<select id="searchCsBoards" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="com.nadri.csBoard.vo.CsBoard">
 		select
-			no,
-			title,
-			userNo,
-			createdDate,
-			replyCheck,
-			csType
+			cs_board_no no,
+			cs_board_title title,
+			user_no userNo,
+			cs_created_date createdDate,
+			cs_reply_check replyCheck,
+			cs_type csType,
+			user_name userName
 		from (
 			select
-				A.cs_board_no no,
-				A.cs_board_title title,
-				A.user_no userNo,
-				A.cs_board_created_date createdDate,
-				A.cs_reply_check replyCheck,
-				A.cs_type csType,
-				row_number() over (order by board_no desc) rn
+				A.cs_board_no,
+				A.cs_board_title,
+				A.user_no,
+				A.cs_created_date,
+				A.cs_reply_check,
+				A.cs_type,
+				B.user_name,
+				row_number() over (order by cs_board_no desc) rn
 				
-			from cs_board A			
-		)
-		<where>
+			from cs_board A, user_table B	
+		where A.user_no = B.user_no
 			<if test="opt != null and value != null">
 				<choose>
 					<when test="opt == '제목'">
-						cs_board_title like '%' || #{value} || '%'
+						and cs_board_title like '%' || #{value} || '%'
 					</when>
 					<when test="opt == '내용'">
-						cs_board_content like '%' || #{value} || '%'
+						and cs_board_content like '%' || #{value} || '%'
 					</when>
 					<when test="opt == '제목+내용'">
-						(cs_board_title like '%' || #{value} || '%' 
+						and (cs_board_title like '%' || #{value} || '%' 
 						or cs_board_content like '%' || #{value} || '%')
 					</when>
 				</choose>
 			</if>
-			<if test="type == '사이트이용'">
-				cs_type = 사이트이용
+			<if test="csType != null">
+				<choose>
+					<when test="csType == '사이트이용'">
+						and cs_type = 사이트이용
+					</when>
+					<when test="csType == '프로모션'">
+						and cs_type = 프로모션
+					</when>
+					<when test="csType == '예약/취소/환불'">
+						and cs_type = 예약/취소/환불
+					</when>
+					<when test="csType == '쿠폰/포인트'">
+						and cs_type = 쿠폰/포인트
+					</when>
+					<when test="csType == '기타'">
+						and cs_type = 기타
+					</when>
+				</choose>
 			</if>
-			<if test="type == '프로모션'">
-				cs_type = 프로모션
-			</if>
-			<if test="type == '예약/취소/환불'">
-				cs_type = 예약/취소/환불
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				cs_type = 쿠폰/포인트
-			</if>
-			<if test="type == '기타'">
-				cs_type = 기타
-			</if>
-		</where>
 		)
 		where rn between #{beginIndex} and #{endIndex}
 
@@ -124,20 +128,24 @@
 					</when>
 				</choose>
 			</if>
-			<if test="type == '사이트이용'">
-				and cs_type = 사이트이용
-			</if>
-			<if test="type == '프로모션'">
-				and cs_type = 프로모션
-			</if>
-			<if test="type == '예약/취소/환불'">
-				and cs_type = 예약/취소/환불
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				and cs_type = 쿠폰/포인트
-			</if>
-			<if test="type == '기타'">
-				and cs_type = 기타
+			<if test="csType != null">
+				<choose>
+					<when test="csType == '사이트이용'">
+						and cs_type = '사이트이용'
+					</when>
+					<when test="csType == '프로모션'">
+						and cs_type = '프로모션'
+					</when>
+					<when test="csType == '예약/취소/환불'">
+						and cs_type = '예약/취소/환불'
+					</when>
+					<when test="csType == '쿠폰/포인트'">
+						and cs_type = '쿠폰/포인트'
+					</when>
+					<when test="csType == '기타'">
+						and cs_type = '기타'
+					</when>
+				</choose>
 			</if>
 	</select>
 	
@@ -146,25 +154,27 @@
 	-->
 	<select id="searchCsBoardsByUserNo" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="com.nadri.csBoard.vo.CsBoard">
 		select
-			no,
-			title,
-			userNo,
-			createdDate,
-			replyCheck,
-			csType
+			cs_board_no no,
+			cs_board_title title,
+			user_no userNo,
+			cs_created_date createdDate,
+			cs_reply_check replyCheck,
+			cs_type csType,
+			user_name userName
 		from (
 			select
-				A.cs_board_no no,
-				A.cs_board_title title,
-				A.user_no userNo,
-				A.cs_board_created_date createdDate,
-				A.cs_reply_check replyCheck,
-				A.cs_type csType,
-				row_number() over (order by board_no desc) rn
+				A.cs_board_no,
+				A.cs_board_title,
+				A.user_no,
+				A.cs_created_date,
+				A.cs_reply_check,
+				A.cs_type,
+				B.user_name,
+				row_number() over (order by cs_board_no desc) rn
 				
-			from cs_board A			
-		)
-		where user_no = #{value}
+			from cs_board A, user_table B	
+			where A.user_no = B.user_no
+			and A.user_no = #{value}
 			<if test="opt != null and value != null">
 				<choose>
 					<when test="opt == '제목'">
@@ -179,20 +189,24 @@
 					</when>
 				</choose>
 			</if>
-			<if test="type == '사이트이용'">
-				and cs_type = '사이트이용'
-			</if>
-			<if test="type == '프로모션'">
-				and cs_type = '프로모션'
-			</if>
-			<if test="type == '예약/취소/환불'">
-				and cs_type = '예약/취소/환불'
-			</if>
-			<if test="type == '쿠폰/포인트'">
-				and cs_type = '쿠폰/포인트'
-			</if>
-			<if test="type == '기타'">
-				and cs_type = '기타'
+			<if test="csType != null">
+				<choose>
+					<when test="csType == '사이트이용'">
+						and cs_type = '사이트이용'
+					</when>
+					<when test="csType == '프로모션'">
+						and cs_type = '프로모션'
+					</when>
+					<when test="csType == '예약/취소/환불'">
+						and cs_type = '예약/취소/환불'
+					</when>
+					<when test="csType == '쿠폰/포인트'">
+						and cs_type = '쿠폰/포인트'
+					</when>
+					<when test="csType == '기타'">
+						and cs_type = '기타'
+					</when>
+				</choose>
 			</if>
 		)
 		where rn between #{beginIndex} and #{endIndex}
@@ -204,21 +218,32 @@
 	-->
 	<select id="getCsBoardDetailByNo" parameterType="int" resultType="com.nadri.csBoard.vo.CsBoard">
 		select
-			cs_board_no no,
-			cs_board_title title,
-			user_no userNo,
-			cs_board_content content,
-			cs_board_created_date createdDate,
-			cs_reply_check replyCheck,
-			cs_type type
-		from cs_board
+			A.cs_board_no no,
+			A.cs_board_title title,
+			A.user_no userNo,
+			A.cs_board_content content,
+			A.cs_created_date createdDate,
+			A.cs_reply_check replyCheck,
+			A.cs_type csType,
+			B.user_name userName
+		from cs_board A, user_table B
 		where cs_board_no = #{value}
+			and A.user_no = B.user_no
 	
 	</select>
 	
 	<!--
 		CsBoardReply getReplyByNo(int no)
 	-->
+	<select id="getReplyByNo" parameterType="int" resultType="com.nadri.csBoard.vo.CsBoardReply">
+		select
+			cs_board_no no,
+			cs_reply_content replyContent,
+			cs_reply_created_date replyCreatedDate,
+		from cs_board
+		where cs_board_no = #{value}
+	
+	</select>
 	
 	<!--
 		void insertCsBoard();
@@ -231,7 +256,7 @@
 		insert into cs_board
 		(cs_board_no, cs_board_title, user_no, cs_board_content, cs_type)
 		values
-		(cs_board_no.nextval, #{title}, #{userNo}, #{content}, #{type})
+		(cs_board_no.nextval, #{title}, #{userNo}, #{content}, #{csType})
 	</insert>
 	
 	<!--
