@@ -20,16 +20,29 @@
 					</select>
 				</div>
 				<div class="col ">
-					<!-- 날짜 -->	
+					<!--당일 날짜 -->	
 					<input type="Date" name="" id="">
+				</div>
+				<div class="col ">
 					<!-- 날짜 -->	
 					<input type="Date" name="" id="">
 				</div>
 				<div class="col">
 					<!-- 인원 -->
+					<div class="dropdown">
+					  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+					  인원
+					  </button>
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					    <li><a class="dropdown-item" href="#">Action</a></li>
+					    <li><a class="dropdown-item" href="#">Another action</a></li>
+					    <li><a class="dropdown-item" href="#">Something else here</a></li>
+					  </ul>
+					</div>
 				</div>
-				<div>
+				<div class="col">
 					<!-- 검색 -->
+					<button class="btn btn-primary" type="submit">검색</button>
 				</div>
 			</div>
 		</form>
