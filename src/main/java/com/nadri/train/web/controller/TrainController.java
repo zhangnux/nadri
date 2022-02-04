@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.nadri.train.annotation.LoginedUser;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainSearchForm;
+import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
 
 @Controller

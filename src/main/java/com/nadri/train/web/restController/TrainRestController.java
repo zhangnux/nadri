@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nadri.train.annotation.LoginedUser;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
@@ -26,6 +25,7 @@ import com.nadri.train.web.model.ResponseDto;
 import com.nadri.train.web.model.TrainReservationDto;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.web.model.TrainSearchForm;
+import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
 
 @RestController

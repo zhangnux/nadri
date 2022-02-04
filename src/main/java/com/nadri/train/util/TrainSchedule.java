@@ -12,7 +12,6 @@ import com.nadri.train.vo.TrainReservation;
 
 @Component
 public class TrainSchedule {
-	/*
 	@Autowired
 	TrainService service;
 	
@@ -36,5 +35,4 @@ public class TrainSchedule {
 		}
 		service.deleteTicket(list);
 	}
-	*/
 }
