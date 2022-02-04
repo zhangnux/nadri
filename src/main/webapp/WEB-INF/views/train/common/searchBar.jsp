@@ -254,6 +254,31 @@
 </div>
 <script type="text/javascript">
 	$(function() {
+		let now = new Date(); 
+		
+		let nowDate = now.getFullYear() + "/" + (("00"+(now.getMonth()+1)).slice(-2)) + "/" + (("00"+now.getDate()).slice(-2))
+		setTimeOptions("dpDate1");
+		setTimeOptions("dpDate2");
+		
+		function setTimeOptions(name) {
+			if ($("[name="+name+"]").val() == nowDate) {
+				$("[name="+name+"]").next().next().children().each(function(index, element) {
+					let hour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), $(this).val())
+					if(hour.getHours() < now.getHours()) {
+						$(this).prop('disabled', true)			
+					}
+				})
+			} else {
+				$("[name="+name+"]").next().next().children().prop('disabled', false);
+			}
+			
+			$("[name="+name+"]").next().next().children().filter(":not(:disabled):first").prop('selected', true);
+		}
+		
+		$("[name=dpDate1], [name=dpDate2]").change(function() {
+			setTimeOptions($(this).attr("name"));
+		})
+		
 		
 		if ($("input[name=way]:checked").val() == '왕복') {
 			$("input[value=편도]").prop('checked', false)

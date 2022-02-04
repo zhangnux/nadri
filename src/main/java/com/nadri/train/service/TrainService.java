@@ -117,4 +117,17 @@ public class TrainService {
 	public List<TrainFavoriteRouteDto> getFavoriteRoute() {
 		return mapper.getFavoriteRoute();
 	}
+	
+	/**
+	 * 예약 목록 반환
+	 * @return
+	 */
+	public List<TrainReservation> getReservationIsReserved() {
+		return mapper.getReservationIsReserved();
+	}
+	
+	public void deleteTicket(List<Integer> deleteList) {
+		mapper.deleteTicket(deleteList);
+		mapper.deleteReservation(deleteList);
+	}
 }

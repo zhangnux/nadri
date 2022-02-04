@@ -88,4 +88,13 @@ public interface TrainMapper {
 	 * @return 인기 노선 9개
 	 */
 	List<TrainFavoriteRouteDto> getFavoriteRoute();
+	
+	/**
+	 * 예약 조회
+	 * @return
+	 */
+	List<TrainReservation> getReservationIsReserved();
+	
+	void deleteReservation(List<Integer> deleteList);
+	void deleteTicket(List<Integer> deleteList);
 }

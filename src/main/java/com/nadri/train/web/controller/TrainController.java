@@ -104,6 +104,22 @@ public class TrainController {
 		return "train/confirmReservation";
 	}
 	
+	@GetMapping("/reservationList.nadri")
+	public String reservatioinList() {
+		// 예약 한거 불러오기 = 유저 아이디와 "예약 이랑 결제된거 가져오기, 결제여도 시간이 지나지 않은것"
+		
+		
+		return "train/reservationList";
+	}
+	
+	@GetMapping("/usedList.nadri")
+	public String usedList() {
+		// 과거에 결제하고 사용한 것들
+		
+		
+		return "train/usedList";
+	}
+	
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")
 //	public void insertSchedule() {
