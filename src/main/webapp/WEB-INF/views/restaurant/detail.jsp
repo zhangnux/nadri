@@ -120,7 +120,7 @@
 					</select>
 				</div>
 				<div class="mb-3">
-					<a href="checkout.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a>
+					<a href="checkout.nadri?no=${restaurant.no }" class="btn btn-primary d-flex justify-content-end">book now</a>
 				</div>
 			</form>
 		</div>
