@@ -24,4 +24,14 @@ public class TrainReservation {
 	private String arrivalStation;
 	private Date departureTime;
 	private Date arrivalTime;
+	private int userNo;
+	
+	public String getDiffTime() {
+		long diff = arrivalTime.getTime() - departureTime.getTime();
+		long hours = (diff / 1000) / 60 / 60 % 24;
+		long minutes = (diff / 1000) / 60 % 60;
+		long seconds = (diff / 1000) % 60;
+		
+		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+	}
 }

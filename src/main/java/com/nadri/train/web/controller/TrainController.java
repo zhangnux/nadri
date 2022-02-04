@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.nadri.train.annotation.LoginedUser;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainSearchForm;
+import com.nadri.user.vo.User;
 
 @Controller
 @RequestMapping("/train")
@@ -82,8 +84,8 @@ public class TrainController {
 	 * @return
 	 */
 	@GetMapping("/confirmReservation.nadri")
-	public String reservedTrain(int reservedNo1, @RequestParam(name="reservedNo2", required=false, defaultValue= "0") int reservedNo2, Model model) {
-		List<TrainReservation> reservationList = service.getReservationByNo(reservedNo1, reservedNo2);
+	public String reservedTrain(@LoginedUser User user, int reservedNo1, @RequestParam(name="reservedNo2", required=false, defaultValue= "0") int reservedNo2, Model model) {
+		List<TrainReservation> reservationList = service.getReservationByNo(user.getNo() ,reservedNo1, reservedNo2);
 		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservedNo1, reservedNo2);
 		model.addAttribute("reservation1", reservationList.get(0));
 		List<TrainTicket> ticket1 = new ArrayList<>();
@@ -104,14 +106,23 @@ public class TrainController {
 		return "train/confirmReservation";
 	}
 	
+	/**
+	 * 사용자 승차권 목록 페이지
+	 * @param user
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/reservationList.nadri")
-	public String reservatioinList() {
-		// 예약 한거 불러오기 = 유저 아이디와 "예약 이랑 결제된거 가져오기, 결제여도 시간이 지나지 않은것"
-		
-		
+	public String reservatioinList(@LoginedUser User user, Model model) {
+		List<TrainReservation> reservationList = service.getReservationByUserNo(user.getNo());
+		model.addAttribute("reservationList", reservationList);
 		return "train/reservationList";
 	}
 	
+	/**
+	 * 사용자 승차권 이용목록 페이지
+	 * @return
+	 */
 	@GetMapping("/usedList.nadri")
 	public String usedList() {
 		// 과거에 결제하고 사용한 것들
@@ -120,6 +131,20 @@ public class TrainController {
 		return "train/usedList";
 	}
 	
+	/**
+	 * 수정 페이지 
+	 * @param reservationNo
+	 * @return
+	 */
+	@GetMapping("/modify.nadri")
+	public String modify(@LoginedUser User user, int reservationNo, Model model) {
+		List<TrainReservation> reservation = service.getReservationByNo(user.getNo(), reservationNo, 0);
+		model.addAttribute("reservation" ,reservation.get(0));
+		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo, 0);
+		model.addAttribute("ticketList", ticketList);
+		
+		return "train/modifyReservation";
+	}
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")
 //	public void insertSchedule() {
