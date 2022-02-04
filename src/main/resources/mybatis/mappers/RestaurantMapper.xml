@@ -43,7 +43,8 @@
 			restaurant_tel as tel,
 			restaurant_open_time as openTime,
 			restaurant_star_point as starPoint,
-			restaurant_review_count as reviewCount
+			restaurant_lat as lat,
+			restaurant_lon as lon
 		from
 			restaurant
 		where
@@ -116,7 +117,6 @@
 			name,
 			picture,
 			starPoint,
-			reviewCount,
 			categoryName,
 			cityName
 		from (
@@ -125,7 +125,6 @@
 				A.restaurant_name as name,
 				A.restaurant_picture as picture,
 				A.restaurant_star_point as starPoint,
-				A.restaurant_review_count as reviewCount,
 				B.category_name as categoryName,
 				C.city_name as cityName,
 			row_number() over (order by restaurant_no desc) rn

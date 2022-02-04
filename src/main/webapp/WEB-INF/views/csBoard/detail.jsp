@@ -23,24 +23,24 @@
 			<table class="table" style="border: 1px solid">
 				<tbody>
 					<tr>
-						<td colspan="3">Q&A</td>
+						<td colspan="2">Q&A</td>
 					</tr>
 					<tr>
-						<td colspan="3">[예약/취소/환불]<strong> 환불이 안 돼요 </strong>답변완료</td>
+						<td colspan="2">[${csBoard.csType }]  <strong> ${csBoard.title } </strong> ${csBoard.replyCheck }</td>
 					</tr>
 					<tr>
-						<td style="text-align: left; width: 8%;">홍길동</td>
-						<td style="text-align: left; width: 10%;">2022/02/03</td>
-						<td style="text-align: left; width: 82%;">조회수: 4</td>
+						<td style="text-align: left; width: 8%;">${csBoard.userName }</td>
+						<td style="text-align: left; width: 92%;"><fmt:formatDate value="${csBoard.createdDate }" pattern="yyyy-MM-dd"/></td>
 					</tr>
 					<tr>
-						<td colspan="3" style="height: 200px; text-align: left;">환불이 안되는데 머선일입니까</td>
+						<td colspan="2" style="height: 200px; text-align: left;">${csBoard.content }</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end ms-3 me-3">
+	<!-- 고객일땐 userlist.nadri -->
 			<a href="list.nadri" class="btn btn-secondary">목록</a>
 			<a href="delete.nadri?no=" class="btn btn-danger">삭제</a>
 			<a href="modify.nadri?no=" class="btn btn-primary">수정</a>

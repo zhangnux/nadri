@@ -17,9 +17,9 @@ import lombok.ToString;
 @ToString
 public class CsBoardReply {
 	
-	private int replayNo;			//댓글번호
-	private String replayContent;		//댓글 내용
-	private Date replayCreatedDate;		//댓글 날짜
-	private CsBoard csBoard;		//게시판 CsBoard Fk boardNo
+	private int no;			//게시글 번호
+	private String replyContent;		//댓글 내용
+	private Date replyCreatedDate;		//댓글 날짜
+	
 
 }

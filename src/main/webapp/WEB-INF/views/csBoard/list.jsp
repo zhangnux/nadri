@@ -26,19 +26,19 @@
 			<a class="nav-link active" aria-current="page" href="list.nadri">전체</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?type=사이트이용">사이트이용</a>
+			<a class="nav-link" href="list.nadri?csType=사이트이용">사이트이용</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?type=프로모션">프로모션</a>
+			<a class="nav-link" href="list.nadri?csType=프로모션">프로모션</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?type=예약/취소/환불">예약/취소/환불</a>
+			<a class="nav-link" href="list.nadri?csType=예약/취소/환불">예약/취소/환불</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?type=쿠폰/포인트">쿠폰/포인트</a>
+			<a class="nav-link" href="list.nadri?csType=쿠폰/포인트">쿠폰/포인트</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?type=기타">기타</a>
+			<a class="nav-link" href="list.nadri?csType=기타">기타</a>
 		</li>
 	</ul>
 	
@@ -49,23 +49,30 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>타입</th>
-						<th>번호</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>등록일</th>
-						<th>조회수</th>
+						<th style="width: 6%;">번호</th>
+						<th style="width: 10%;">유형</th>
+						<th style="width: 64%;">제목</th>
+						<th style="width: 10%;">작성자</th>
+						<th style="width: 10%;">날짜</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>예약/취소/환불</td>
-						<td>1</td>
-						<td><a href="detail.nadri">환불이 안 돼요</a></td>
-						<td>홍길동</td>
-						<td>2022/01/28</td>
-						<td>4</td>
-					</tr>
+					<c:choose>
+					<c:when test="${empty csBoards }">
+						<div class="text-center" colspan="5"><h1>문의 사항이 없습니다.</h1></div>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="csBoard" items="${csBoards }" varStatus="loop">
+								<tr>
+									<td>${loop.count }</td>
+									<td>${csBoard.csType }</td>
+									<td><a href="detail.nadri?no=${csBoard.no }">${csBoard.title }</a> ${csBoard.replyCheck }</td>
+									<td>${csBoard.userName }</td>
+									<td><fmt:formatDate value="${csBoard.createdDate }" pattern="yyyy-MM-dd"/></td>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</tbody>
 			</table>
 		</div>

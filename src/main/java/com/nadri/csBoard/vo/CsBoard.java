@@ -21,6 +21,7 @@ public class CsBoard {
 	private int no;			//번호
 	private String title;		//제목
 	private int userNo;
+	private String userName;
 	private String content;		//내용
 	private Date createdDate;		//작성일
 	private Date updateDate;		//수정일
