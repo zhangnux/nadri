@@ -163,7 +163,7 @@
 	$(function() {
 		$("#modify-div").click(function() {
 			$("#reservationTable").find('th').last().hide()
-			$("#reservationTable").find('td').last().hide()
+			$("#reservationTable").find('td:nth-of-type(10)').hide()
 			$("#credit-btn").children().hide().next().show()
 			$("input[name=reservationNo]").attr('type', 'radio');
 			$(this).addClass('active').siblings().removeClass('active')
@@ -172,7 +172,7 @@
 		
 		$("#cancel-div").click(function() {
 			$("#reservationTable").find('th').last().show()
-			$("#reservationTable").find('td').last().show()
+			$("#reservationTable").find('td:nth-of-type(10)').show()
 			$("#credit-btn").children().show().next().hide()
 			$("input[name=reservationNo]").attr('type', 'checkbox');
 			$(this).addClass('active').siblings().removeClass('active')

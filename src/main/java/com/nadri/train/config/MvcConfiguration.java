@@ -8,8 +8,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.nadri.train.argumentResolver.LoginedUserArgumentResolver;
 import com.nadri.train.interceptor.UserLoginCheckInterceptor;
+import com.nadri.user.argumentResolrver.LoginedUserArgumentResolver;
 
 import lombok.RequiredArgsConstructor;
 

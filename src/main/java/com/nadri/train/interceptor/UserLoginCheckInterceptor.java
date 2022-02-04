@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.nadri.train.annotation.LoginedUser;
 import com.nadri.train.util.SessionUtils;
+import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
 
 @Component
