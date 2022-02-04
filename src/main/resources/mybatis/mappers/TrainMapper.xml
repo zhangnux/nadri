@@ -296,4 +296,61 @@
 		</foreach>
 	</delete>	
 	
+	<delete id="deleteTicketByNo">
+		delete from train_ticket
+		where ticket_no in 
+		<foreach collection="items" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 예약번호로 예약 삭제 -->
+	<delete id="deleteReservationByNo">
+		delete from train_reservation
+		where reservation_no = #{no}
+		and user_no = #{userNo}
+	</delete>
+	
+	<!-- 티켓번호로 티켓 정보 조회 -->
+	<select id="getTicketByNo" parameterType="int" resultType="com.nadri.train.vo.TrainTicket">
+		select  t.ticket_no as no,
+				t.customer_name as customerName,
+				t.passenger_type as type,
+				t.is_canceled as isCanceled,
+				t.reservation_no as reservationNo,
+				t.schedule_no as scheduleNo,
+				t.room_no as roomNo,
+				t.train_no as trainNo,
+				t.price_id as priceId,
+				p.price as price,
+				t.seat_no as seatNo
+		from train_ticket t, train_price p
+		where t.ticket_no = #{value}
+		and t.price_id = p.price_id
+	</select>
+	
+	<update id="updateReservation" parameterType="com.nadri.train.vo.TrainReservation">
+		update train_reservation
+		set
+			total_passengers_count = #{totalCount},
+			total_payment_amount = #{totalPrice},
+			ticketing_status = #{tickectStatus},
+			canceled_date = #{canceledDate},
+			sold_date = #{soldDate}
+		where reservation_no = #{no}
+	</update>
+	
+	<update id="updateTicket" parameterType="com.nadri.train.vo.TrainTicket">
+		update train_ticket
+		set
+			customer_name = #{customerName},
+			passenger_type = #{type},
+			is_canceled = #{isCanceled},
+			schedule_no = #{scheduleNo},
+			room_no = #{roomNo},
+			train_no = #{trainNo},
+			price_id = #{priceId},
+			seat_no = #{seatNo}
+		where ticket_no = #{no}
+	</update>
 </mapper>
