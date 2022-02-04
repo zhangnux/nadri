@@ -112,7 +112,7 @@
 	</div>
 	<div class="row" style="margin-top: 80px;">
 		<div class="col">
-			<form action="" method="post">
+			<form action="#" method="post" id="form-modify">
 				<input type="hidden" name="reservationNo" value="${reservation.no }">
 				<table class="text-center" id="table-seat-modify">
 					<thead>
@@ -125,13 +125,15 @@
 					<tbody>
 						<c:forEach var="ticket" items="${ticketList }" >
 							<tr>
-								<td>${ticket.roomName} - ${ticket.seatNo}</td>
+								<td>${ticket.roomName} - ${ticket.seatNo}
+									<input type="hidden" name="no" value="${ticket.no }">
+								</td>
 								<td>${ticket.roomType}</td>
 								<td>
-									<select style="width: 300px; border: 1px solid #C0C0C0;">
+									<select name="type" style="width: 300px; border: 1px solid #C0C0C0;">
 										<option value="어른" ${ticket.type == '어른'? 'selected':'' }>어른</option>
 										<option value="어린이" ${ticket.type == '어린이'? 'selected':'' }>어린이</option>
-										<option></option>
+										<option value="선택안함">선택안함</option>
 									</select>
 								</td>
 							</tr>
@@ -142,7 +144,7 @@
 		</div>
 	</div>
 	<div class="text-end mt-5">
-		<button class="btn btn-dark">수정</button>
+		<button class="btn btn-dark" id="btn-modify">수정</button>
 	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
@@ -151,8 +153,46 @@
 		$("#cancel-div").click(function() {
 			location.replace("http://localhost/train/reservationList.nadri")
 		})
+		let jsonData;
+		// rest에 넣을 객체 만들기
+		$("[name=type]").change(function() {
+			let noList = [];
+			$("[name=no]").each(function() {
+				noList.push($(this).val())
+			})
+			
+			let typeList = [];
+			$(":selected").each(function() {
+				typeList.push($(this).val())
+			})
+			console.log(typeList)
+			console.log(noList)
+			let result = [];
+			for (var i=1; i<=noList.length+1; i++) {
+				result.push({no:noList.shift(), type:typeList.shift()})
+			}
+			console.log({ticket:result})
+			// 객체 직렬화
+			jsonData = JSON.stringify(result)
+		})
 		
-		
+		$("#btn-modify").click(function() {
+			// json으로 보내고 
+			$.ajax({type:"PUT",
+				url:"/api/train/reservation/" + $("[name=reservationNo]").val(),
+				data:{'jsonData':jsonData},
+				dataType:"json",
+				traditional:true,
+				success:function() {
+					alert("성공")
+				},
+				error:function() {
+					alert("실패")
+				}
+			})
+		})
+
+	
 	})
 </script>
 </body>

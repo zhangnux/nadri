@@ -639,7 +639,6 @@
 			seatModal.show()
 		}
 		
-		let bookIngBtn;
 		// 모달창 생성
 		var seatModal = new bootstrap.Modal(document.getElementById('modal-seat'), {
 			keyboard: false
@@ -655,11 +654,12 @@
 			$("[data-schedule-no="+ target + "]").closest('tbody').find('input').remove()
 		}
 		
+		let bookIngBtn;
 		// 좌석 예매 버튼 클릭
 		$(".listTable").on('click', '.btn', function(event) {
 			event.preventDefault();
 			
-			let bookIngBtn = $(this)
+			bookIngBtn = $(this)
 			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
 			let trainNo = searchInfo.next().text().trim()
 			let scheduleNo = searchInfo.attr('data-schedule-no')

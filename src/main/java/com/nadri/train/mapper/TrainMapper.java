@@ -107,4 +107,36 @@ public interface TrainMapper {
 	 * @param deleteList
 	 */
 	void deleteTicket(@Param("items") List<Integer> deleteList);
+	
+	/**
+	 * 티켓 번호에 해당하는 티켓 삭제
+	 * @param ticketNo
+	 */
+	void deleteTicketByNo(@Param("items") List<Integer> ticketNo);
+	
+	/**
+	 * 예약 번호에 해당하는 예약 삭제
+	 * @param userNo
+	 * @param no
+	 */
+	void deleteReservationByNo(@Param("userNo") int userNo, @Param("no") int no);
+	
+	/**
+	 * 티켓번호에 해당하는 티켓 조회
+	 * @param no
+	 * @return
+	 */
+	TrainTicket getTicketByNo(int no);
+	
+	/**
+	 * 예약 정보 수정
+	 * @param reservation
+	 */
+	void updateReservation(TrainReservation reservation);
+	
+	/**
+	 * 티켓 정보 수정
+	 * @param ticket
+	 */
+	void updateTicket(TrainTicket ticket);
 }

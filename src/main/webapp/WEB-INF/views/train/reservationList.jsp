@@ -18,7 +18,7 @@
 	}
 	
 	#reservationTable td {
-		height: 80px;
+		height: 70px;
 	}
 	
 	#reservationTable {
@@ -98,7 +98,7 @@
 	</div>
 	<div class="row mt-4">
 		<div class="col">
-			<form action="" method="get" id="form-modify">
+			<form action="#" method="get" id="form-modify">
 				<table class="text-center" id="reservationTable">
 					<thead>
 						<tr style="background-color: #D6DEE8; ">
@@ -163,7 +163,7 @@
 	$(function() {
 		$("#modify-div").click(function() {
 			$("#reservationTable").find('th').last().hide()
-			$("#reservationTable").find('td:nth-of-type(10)').hide()
+			$("#reservationTable").find('td:nth-of-type(10)').hide().prev().find('button').hide()
 			$("#credit-btn").children().hide().next().show()
 			$("input[name=reservationNo]").attr('type', 'radio');
 			$(this).addClass('active').siblings().removeClass('active')
@@ -172,7 +172,7 @@
 		
 		$("#cancel-div").click(function() {
 			$("#reservationTable").find('th').last().show()
-			$("#reservationTable").find('td:nth-of-type(10)').show()
+			$("#reservationTable").find('td:nth-of-type(10)').show().prev().find('button').show()
 			$("#credit-btn").children().show().next().hide()
 			$("input[name=reservationNo]").attr('type', 'checkbox');
 			$(this).addClass('active').siblings().removeClass('active')
@@ -180,11 +180,11 @@
 		})
 
 		$("#credit-btn > button:first-child").click(function() {
-/* 			if ($(":checked").val() != null) {
-				$("#form-modify").attr('action', '/train/modify.nadri')
-				$("#form-modify").submit()
-			} else {
+			$("#form-modify").submit()
+ 			if ($(":checked").val() == null) {
 				alert("결제하실 표를 선택해 주세요.")
+			} /* else {
+				$("#form-modify").attr('action', '/train/modify.nadri')
 			} */
 		})
 

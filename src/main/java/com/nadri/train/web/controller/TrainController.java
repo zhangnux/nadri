@@ -138,12 +138,15 @@ public class TrainController {
 	 */
 	@GetMapping("/modify.nadri")
 	public String modify(@LoginedUser User user, int reservationNo, Model model) {
-		List<TrainReservation> reservation = service.getReservationByNo(user.getNo(), reservationNo, 0);
-		model.addAttribute("reservation" ,reservation.get(0));
-		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo, 0);
-		model.addAttribute("ticketList", ticketList);
-		
-		return "train/modifyReservation";
+		try {
+			List<TrainReservation> reservation = service.getReservationByNo(user.getNo(), reservationNo, 0);
+			model.addAttribute("reservation" ,reservation.get(0));
+			List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo, 0);
+			model.addAttribute("ticketList", ticketList);
+			return "train/modifyReservation";
+		} catch (IndexOutOfBoundsException e) {
+			return "train/reservationList.nadri";
+		}
 	}
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")

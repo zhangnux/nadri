@@ -148,11 +148,56 @@ public class TrainService {
 		return mapper.getReservationIsReserved();
 	}
 	
+	/**
+	 * 티켓 번호에 해당하는 티켓 정보들을 삭제
+	 * @param deleteList
+	 */
 	public void deleteTicket(List<Integer> deleteList) {
 		if (deleteList.size() !=0) {
 			log.info("삭제 리스트 길이 : " + deleteList.size());
 			mapper.deleteTicket(deleteList);
 			mapper.deleteReservation(deleteList);
 		}
+	}
+	
+	/**
+	 * 티켓번호로 티켓 삭제
+	 * @param ticketNo
+	 */
+	public void deleteTicketByNo(List<Integer> ticketNo) {
+		mapper.deleteTicketByNo(ticketNo);
+	}
+	
+	/**
+	 * 예약번호로 해당 예약정보 반환
+	 * @param no
+	 */
+	public void deleteReservationByNo(int userNo, int no) {
+		mapper.deleteReservationByNo(userNo, no);
+	}
+	
+	/**
+	 * 티켓 번호에 해당하는 티켓 정보 반환
+	 * @param no
+	 * @return
+	 */
+	public TrainTicket getTicketByNo(int no) {
+		return mapper.getTicketByNo(no);
+	}
+	
+	/**
+	 * 예약 정보를 입력받아 수정
+	 * @param reservation
+	 */
+	public void updateReservation(TrainReservation reservation) {
+		mapper.updateReservation(reservation);
+	}
+	
+	/**
+	 * 티켓정보를 입력받아 수정
+	 * @param ticket
+	 */
+	public void updateTicket(TrainTicket ticket) {
+		mapper.updateTicket(ticket);
 	}
 }
