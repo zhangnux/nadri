@@ -9,6 +9,7 @@
 <style>
 
 </style>
+<title>::나드리::</title>
 </head>
 <body>
 	<%@ include file="common/mainnav.jsp" %>
