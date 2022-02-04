@@ -30,6 +30,7 @@
 	        <c:if test="${not empty LOGIN_USER }">
 		        <li class="nav-item dropdown">
 		          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+		          ${LOGIN_USER.id }
 		          </a>
 			      	<div class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
 			        	<a class="dropdown-item" href="#">마이페이지</a>

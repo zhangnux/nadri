@@ -1,7 +1,5 @@
 package com.nadri.user.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import com.nadri.user.vo.User;
@@ -20,4 +18,7 @@ public interface UserMapper {
 	// 유저 번호로 조회
 	User getUserByNo(int no);
 	
+	void register(User user) throws Exception;
+	
+	void idCnt(User user) throws Exception;
 }

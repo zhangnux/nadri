@@ -1,7 +1,5 @@
 package com.nadri.user.controller;
 
-import java.io.IOException;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,14 +62,23 @@ public class UserController {
 	}
 
 	@PostMapping("/insert.nadri")
-	public String join(UserForm form) throws IOException {
+	public String join(UserForm form, Model model) {
 
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
 
-		userService.insertUser(user);
-		System.out.println(user.toString());
-		return "redirect:/home.nadri";
+		try {
+			userService.insertUser(user);
+			return "redirect:joinCompleted.nadri";
+		} catch (RuntimeException e) {
+			model.addAttribute("error", e.getMessage());
+			return "user/joinForm";
+		}
+	}
+	
+	@GetMapping("/joinCompleted.nadri")
+	public String joinCompleted() {
+		return "user/joinCompleted";
 	}
 	
 }
