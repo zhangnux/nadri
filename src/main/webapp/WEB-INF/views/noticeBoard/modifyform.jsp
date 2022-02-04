@@ -14,7 +14,7 @@
 <div class="container">
 	<div class="row mb-3">
 		<div class="col">
-			<h1>공지사항 등록</h1>
+			<h1>공지사항 수정</h1>
 		</div>
 	</div>
 	<div class="row mb-3">

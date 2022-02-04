@@ -1,6 +1,4 @@
-package com.nadri.restaurant.web.form;
-
-import org.springframework.web.multipart.MultipartFile;
+package com.nadri.csBoard.web.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +13,11 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class RestaurantReviewInsertForm {
+public class ReplyInserForm {
 	
-	private int restaurantNo;
-	private int rating;
-	private String content;
-	private MultipartFile upfile;
+	private int boardNo;
+	private String replyContent;
+	private String replyCheck;
+	
 
 }

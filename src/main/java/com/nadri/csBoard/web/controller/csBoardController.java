@@ -84,14 +84,10 @@ public class csBoardController {
 	public String detail(int no, Model model) {
 		
 		CsBoard csBoard = csService.getCsBoardDetailByNo(no);
-		
 		model.addAttribute("csBoard", csBoard);
 		
 		return "/csBoard/detail";
 	}
-	
-	
-	
 	
 	@GetMapping("/insert.nadri")
 	public String form() {
@@ -119,5 +115,42 @@ public class csBoardController {
 
 		return "redirect:userlist.nadri";
 	}
+	
+	@GetMapping("/modify.nadri")
+	public String modifyform(int no, Model model) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		CsBoard csBoard = csService.getCsBoardDetailByNo(no);
+		model.addAttribute("csBoard", csBoard);
+		
+		return "/csBoard/modifyform";
+	}
+	
+	@PostMapping("/modify.nadri")
+	public String modify(CsBoardInsertForm form) {
+		
+		CsBoard csBoard = csService.getCsBoardDetailByNo(form.getNo());
+		
+		csBoard.setCsType(form.getCsType());
+		csBoard.setTitle(form.getTitle());
+		csBoard.setContent(form.getContent());
+		
+		
+		csService.updateCsBoard(csBoard);
+		
+		return "redirect:detail.nadri?no=" + form.getNo();
+	}
+	
+	@GetMapping("/delete.nadri")
+	public String delete(int no) {
+		
+		csService.deleteCsBoard(no);
+		
+		return "redirect:userlist.nadri";
+	}
+	
+	
+	
+	
 
 }

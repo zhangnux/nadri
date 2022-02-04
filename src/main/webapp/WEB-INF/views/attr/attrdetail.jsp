@@ -73,6 +73,19 @@ article {
   max-width:30em;
   padding:2em;
 }
+
+#thumb {
+    display: block;
+    overflow: hidden;
+}
+/*
+#thumb img{
+    display: block;
+    min-width: 100%;
+    min-height: 100%; 
+    -ms-interpolation-mode: bicubic;
+}
+*/
 </style>
 </head>
 <body>
@@ -191,20 +204,19 @@ article {
 						<strong>후기</strong>
 					</h5>
 					<div class="row">
-						<div class="col-2 text-end">
+						<div class="col-3 text-end">
 							<div class="mt-3" style="font-size:60px;">					
 								<c:choose>
 									<c:when test="${empty star }">
 										<strong>0.0</strong>
 									</c:when>
 									<c:otherwise>
-										<strong>${star }</strong>
+										<strong><span style="color:gold;">★</span>&nbsp;${star }</strong>
 									</c:otherwise>
 								</c:choose>
 							</div>
 						</div>
-						<div class="col-6 ms-3 p-2">
-						<span style="color:gold;font-size:40px;">★★★★★</span><br>
+						<div class="col-6 ms-3 p-2 mt-4">
 						<span style="color:black;font-size:30px;"><strong>후기 ${count }개</strong></span>
 						</div>
 					</div>
@@ -215,7 +227,7 @@ article {
 						<c:when test="${empty LOGIN_USER }">
 						</c:when>
 						<c:otherwise>
-						<form name="reviewform" class="border rounded p-4 mb-4">
+						<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data">
 						<div class="row">
 							<div class="col-auto mt-2">
 								<h5>
@@ -246,7 +258,7 @@ article {
 										style="padding-top:12px;height:50px;width:50px">
 									<i class="bi bi-camera"></i>
 								</label>
-								<input type="file" name="photo" id="rphoto" onchange="setThumbnail(event);"
+								<input type="file" name="photo" id="rphoto"
 										style="display:none;" accept="image/*" multiple/>
 								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
 									<i class="bi bi-pencil-square"></i>
@@ -255,7 +267,7 @@ article {
 							  <input type="hidden" name="id" value=${LOGIN_USER.no }>
 							</div>
 						</div>
-						<div class="mt-4 mb-5" id="image_container"></div>
+						<div class="mt-4" id="thumb"></div>
 						</form>
 						</c:otherwise>
 					</c:choose>
@@ -311,30 +323,105 @@ article {
 	</div>
 <%@ include file="../common/footer.jsp"%>
 <script type="text/javascript">
-/* 썸네일 */
+
+/*
+// 썸네일
 function setThumbnail(event) {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      var img = document.createElement("img");
-      img.setAttribute("src", event.target.result);
-      document.querySelector("div #image_container").appendChild(img);
-      
-    };
+    for (var image of event.target.files) {
+      var reader = new FileReader();
 
-    reader.readAsDataURL(event.target.files[0]);
+      reader.onload = function(event) {
+        var img = document.createElement("img");
+        img.setAttribute("src", event.target.result);
+        document.querySelector("#thumb").appendChild(img);
+      };
+
+      console.log(image);
+      reader.readAsDataURL(image);
+    }
   }
-
+*/
 // 로딩 완료시점에 자동실행
 $(function() {
+	/**
+	 * 첨부파일로직
+	 */
+	 $("#rphoto").on("change", fileCheck);
+	// 파일 현재 필드 숫자 totalCount랑 비교값
+	var fileCount = 0;
+	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
+	var totalCount = 3;
+	// 파일 고유넘버
+	var fileNum = 0;
+	// 첨부파일 배열
+	var content_files = new Array();
+	function fileCheck(e) {
+	    var files = event.target.files;
+	    
+	    // 파일 배열 담기
+	    var filesArr = Array.prototype.slice.call(files);
+	    
+	    // 파일 개수 확인 및 제한
+	    if (fileCount + filesArr.length > totalCount) {
+	      alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
+	      return;
+	    } else {
+	    	 fileCount = fileCount + filesArr.length;
+	    }
+	    
+	    // 각각의 파일 배열담기 및 기타
+	    filesArr.forEach(function (f) {
+	      var reader = new FileReader();
+	      reader.onload = function (e) {
+	        content_files.push(f);
+	        $('#thumb').append(
+	       		'<div id="file' + fileNum + '">'
+	       		+ '<font style="font-size:12px">' + f.name + '</font>'  
+	       		+ '&nbsp;<img src=\"https://cdn-icons-png.flaticon.com/512/75/75519.png" style="width:10px; height:10px; cursor: pointer;" onclick="fileDelete(\'file' + fileNum + '\')"/>' 
+	       		+ '<div/>'
+			);
+	        fileNum ++;
+	      };
+	      reader.readAsDataURL(f);
+	    });
+	    console.log(content_files);
+	    //초기화
+	    $("#rphoto").val("");
+	  }
+
+	// 파일 부분 삭제 함수
+	function fileDelete(fileNum){
+	    var no = fileNum.replace(/[^0-9]/g, "");
+	    content_files[no].is_delete = true;
+		$('#' + fileNum).remove();
+		fileCount --;
+	    console.log(content_files);
+	}
 	
 	/* 후기등록 */
 	$(".register .btn-outline-primary").click(function(){
 		var textarea = document.getElementById("textarea");
 		var form = document.reviewform;
+
+		// 별점 여부 확인
+		var star = document.getElementsByName("star");
+		var starvalue = null;
+		for(var i=0;i<star.length;i++){
+			if(star[i].checked == true){ 
+				starvalue = star[i].value;
+			}
+		}
+		if(starvalue == null){
+            alert("별점을 선택하세요"); 
+			return false;
+		}
+		
+		// 내용 유무 확인
 		if(textarea.value.trim()==""){
 			alert("내용을 입력해주세요");
 			return false;
 		}
+		
 		var doubleCheck = confirm("등록하시겠습니까?")		
 		if(doubleCheck){
 			form.action="home.nadri";
@@ -358,7 +445,6 @@ $(function() {
 	document.getElementById("startdate").setAttribute("min", today);
 	
 	/* 리뷰 */
-
 	var currentPage = '${param.page}'
 	var no = '${param.no}'
 	getReviewList();
