@@ -175,10 +175,24 @@
 	
 	
 	<!--
-		List<RestaurantReview> getReviewsByRestaurantNo()
-		페이지네이션 넣고 하기
+		List<RestaurantReview> getReviewsByRestaurantNo(int no);
 	-->
-
+	<select id="getReviewsByRestaurantNo" parameterType="int" resultType="com.nadri.restaurant.vo.RestaurantReview">
+		select
+			restaurant_no restaurantNo,
+			user_no userNo,
+			rt_review_no no,
+			rt_review_title title,
+			rt_review_picture picture,
+			rt_review_content content,
+			rt_review_star_point rating,
+			rt_review_created_date createdDate
+		from
+			restaurant_review
+		where
+			restaurant_no = #{value}
+	
+	</select>
 	
 	<!--
 		void insertReview(RestaurantReview restaurnatReview)
@@ -190,10 +204,9 @@
 			from dual
 		</selectKey>
 		insert into restaurant_review
-		()
+		(restaurant_no, user_no, rt_review_no, rt_review_title, rt_review_picture, rt_review_content, rt_review_star_point)
 		values
-		()
-		where restaurant_no = #{value}
+		(#{restaurantNo}, #{userNo}, #{no}, #{title}, #{picture}, #{content}, #{rating})
 	
 	</insert>
 	
@@ -214,9 +227,13 @@
 	<!--
 		void deleteReview(int ReviewNo)
 	-->
-	<delete id="deleteReview" parameterType="com.nadri.restaurant.vo.RestaurantReview">
+	<delete id="deleteReview" parameterType="int">
 		delete from restaurant_review
 		where review_no = #{value}
 	</delete>
+	
+	<!--
+		예약
+	-->
 
 </mapper>

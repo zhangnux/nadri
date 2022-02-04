@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nadri.csBoard.mapper.CsBoardMapper;
 import com.nadri.csBoard.vo.CsBoard;
+import com.nadri.csBoard.vo.CsBoardReply;
 import com.nadri.csBoard.web.form.Criteria;
 
 @Service
@@ -39,12 +40,27 @@ public class CsBoardService {
 	public CsBoard getCsBoardDetailByNo(int no) {
 		return csMapper.getCsBoardDetailByNo(no);
 	}
-	
-	
-	
+
 	
 	public void addNewCsBoard(CsBoard csBoard) {
 		csMapper.insertCsBoard(csBoard);
 	}
-
+	
+	public void updateCsBoard(CsBoard csBoard) {
+		csMapper.updateCsBoard(csBoard);
+	}
+	
+	public void deleteCsBoard(int no) {
+		csMapper.deleteCsBoard(no);
+	}
+	
+	public void addNewReply(CsBoardReply reply) {
+		csMapper.insertCsBoardReply(reply);
+	}
+	
+	public void updateReply(CsBoardReply reply) {
+		csMapper.updateCsBoardReply(reply);
+	}
+	
+	
 }

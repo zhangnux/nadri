@@ -32,6 +32,47 @@
 		border: 1px solid;
 	}
 	
+	.star-rating {
+	  border:solid 1px #ccc;
+	  display:flex;
+	  flex-direction: row-reverse;
+	  font-size:1.5em;
+	  justify-content:space-around;
+	  padding:0 .2em;
+	  text-align:center;
+	  width:5em;
+	}
+	
+	.star-rating input {
+	  display:none;
+	}
+	
+	.star-rating label {
+	  color:#ccc;
+	  cursor:pointer;
+	}
+	
+	.star-rating :checked ~ label {
+	  color:#f90;
+	}
+	
+	.star-rating label:hover,
+	.star-rating label:hover ~ label {
+	  color:#fc0;
+	}
+	
+	/* explanation */
+	
+	article {
+	  background-color:#ffe;
+	  box-shadow:0 0 1em 1px rgba(0,0,0,.25);
+	  color:#006;
+	  font-family:cursive;
+	  font-style:italic;
+	  margin:4em;
+	  max-width:30em;
+	  padding:2em;
+	}
 </style>
 <body>
 <%@ include file="../common/navbar.jsp" %>
@@ -50,7 +91,7 @@
 		<div class="col-9 p-1" id="restaurant-picture">
 			<img id="rt-img" alt="picture" src="${restaurant.picture }">
 		</div>
-		<div class="col-3 border p-1">
+		<div class="col-3 border p-1 position-sticky">
 			<form action="">
 				<div class="mb-3">
 					<label class="form-labeL">날짜</label>
@@ -86,7 +127,7 @@
 	</div>
 	<div class="row mb-3">
 		<div class="col-12">
-			<h1 class="p-3"><strong>${restaurant.name }</strong> 별점: 5점</h1>
+			<h1 class="p-3"><strong>${restaurant.name }</strong> ★ 5.0/5.0점</h1>
 			<p>${restaurant.content }</p>
 		</div>
 		<div class="col-12 p-3">
@@ -153,101 +194,141 @@
 		페이지 변경이 없으니 ajax로 해야함
 		0개 count도 ajax로 하면 됨!
 	-->
-
-	<div class="row mb-3" id="review-insertform">
+	<div class="row mb-5" style="border-bottom: 1px solid;">
+		<div class="col p-3">
+			<h3>리뷰</h3>
+		</div>
+	</div>
+	<!-- 리뷰 작성 -->
+	<div class="row m-3" id="review-insertform">
 		<div class="col">
-			<form id="review-insert" action="" method="get">
-				<div class="mb-3">
-					<label class="form-label">별점</label>
-					<select class="form-select">
-						<option value="5">5점</option>
-						<option value="4.5">4.5점</option>
-						<option value="4">4점</option>
-						<option value="3.5">3.5점</option>
-						<option value="3">3점</option>
-						<option value="2.5">2.5점</option>
-						<option value="2">2점</option>
-						<option value="1.5">1.5점</option>
-						<option value="1">1점</option>
-					</select>
+			<form id="review-insert" action="" method="get" enctype="multipart/form-data">
+				<input type="hidden" name="restaurantNo" value=""/>
+				<div class="col-auto star-rating mt-3 mb-3">
+				  <input type="radio" id="5-stars" name="rating" value="5" />
+				  <label for="5-stars" class="star">&#9733;</label>
+				  <input type="radio" id="4-stars" name="rating" value="4" />
+				  <label for="4-stars" class="star">&#9733;</label>
+				  <input type="radio" id="3-stars" name="rating" value="3" />
+				  <label for="3-stars" class="star">&#9733;</label>
+				  <input type="radio" id="2-stars" name="rating" value="2" />
+				  <label for="2-stars" class="star">&#9733;</label>
+				  <input type="radio" id="1-star" name="rating" value="1" />
+				  <label for="1-star" class="star">&#9733;</label>
+				</div>
+				<div class="row">
+					<div class="mb-3">
+	 					<textarea name="content" class="form-control" id="reviewContent" rows="3"></textarea>
+					</div>				
 				</div>
 				<div class="mb-3">
-  					<label for="exampleFormControlTextarea1" class="form-label">댓글 내용</label>
- 					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					<input type="file" class="form-control" name="upfile" id=""/>
 				</div>
-				<!-- c:if로 이미 내용이 있으면 수정과 삭제 버튼 -->
-				<div class="mb-3">
-					<button class="btn btn-primary">등록</button>
+				<!-- c:choose로 이미 내용이 있으면 수정과 삭제 버튼 -->
+				<div class="mb-3 d-flex justify-content-end">
+					<button class="btn btn-primary" id="btn-add-review">등록</button>
 				</div>
 			</form>
 		</div>
 	</div>
-	<div class="row mb-3" style="border-bottom: 1px solid;">
-		<div class="col p-3">
-			<h3>리뷰(0개)</h3>
+	<div class="row mt-5 ms-3" style="border-bottom: 1px solid;">
+		<div class="col">
+			<h4>전체(0개)</h4>
 		</div>
 	</div>
-	<div class="row mb-3">
+	<div class="row m-3">
 		<div class="col">
 		<!-- c:foreach -->
 			<table id="user-review" class="table pt-3 pb-3 border">
 				<tbody>
 					<tr>
-						<td id="username" style="text-align: left; width: 8%;">홍길동</td>
-						<td id="starPoint" style="text-align: left; width: 10%;">별점: 5점</td>
-						<td id="createdDate" style="text-align: right; width: 82%;">2022/02/03</td>
+						<td rowspan="2" style="text-align: left; width: 10%;">
+							<p id="starPoint">★ 5점</p>
+							<p id="username"><strong>홍길동</strong></p>
+						</td>
+						<td rowspan="3" style="width: 70;">
+							<p id="reviewContent">맛있어요. 믿고 먹는 맛집</p>
+						</td>
+						<td rowspan="3" style="width: 20;">
+							<img alt="" src="">
+						</td>
 					</tr>
 					<tr>
-						<td id="reviewContent" colspan="3">리뷰 내용</td>
-					</tr>
-				</tbody>
-				<!-- c:if로 사진 있음과 없음 가르기. 다음 음식점 리뷰 보여드리고 어떻게 하는지 여쭙기 -->
-				<tbody>
-					<tr>
-						<td id="username" style="text-align: left; width: 8%;">홍길동</td>
-						<td id="starPoint" style="text-align: left; width: 10%;">별점: 5점</td>
-						<td id="createdDate" style="text-align: right; width: 82%;">2022/02/03</td>
 					</tr>
 					<tr>
-						<td id="reviewContent" colspan="3">리뷰 내용</td>
+						<td><p id="reviewCreatedDate">2022/02/02</p></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
-	<!--
-	<c:if test="${pagination.totalRecords gt 0 }">
-	-->
-	<!-- 페이지 내비게이션 표시 -->
-	<!--
-	<div class="row mb-3">
-		<div class="col">
-			<nav>
-		  		<ul class="pagination justify-content-center">
-		    		<li class="page-item ${pagination.existPrev ? '' : 'disabled' }">
-		     			<a class="page-link" href="list.nadri?page=${pagination.prevPage }" data-page="${pagination.prevPage }">이전</a>
-		    		</li>
-		    		<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
-			   			<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
-			   				<a class="page-link" href="list.nadri?page=${num }" data-page="${num }">${num }</a>
-			   			</li>	    			
-		    		</c:forEach>
-		    		
-		    		<li class="page-item ${pagination.existNext ? '' : 'disabled' }">
-		      			<a class="page-link" href="list.nadri?page=${pagination.nextPage }" data-page="${pagination.nextPage }">다음</a>
-		    		</li>
-		  		</ul>
-			</nav>
-			</div>
-		</div>
-	</c:if>
-	-->
 </div>
 <script type="text/javascript">
-	$(function() {
+
+
+	$("#btn-add-review").click(function() {
+		
+		// 내용 입력
+//		if(textarea.value.trim()==""){
+//			alert("내용을 입력해주세요");
+//			return false;
+//		}
+		
+		// 로그인 안 되었을때, 로그인 해주세요
+		
+		// 등록 확인
 		
 		
-	}
+		var $tbody = $("#user-review tbody").empty();
+		
+		// 별점 조회
+		var star = $(":input[name=rating]:checked").val();
+		// 리뷰내용 조회
+		var content = $(":input[name=content]").val();
+	
+		// 첨부파일 입력필드 조회
+		var input = document.getElementById("up-file");	
+		// 첨부파일 조회하기
+		var upfile = input.files[0]; 	// 첨부파일 input 엘리먼트에 첨부된 파일중에서 첫번째 파일을 FormData에 저장	
+	
+		// 첨부파일 업로드를 지원하는 FormData 객체를 생성한다.
+		var formData = new FormData();
+		// FormData객체에 name,value의 쌍으로 값을 추가한다.
+		formData.append("star", star);
+		formData.append("content", content);
+		formData.append("upfile", upfile);	
+	
+		$.ajax({
+			type:"post",				// 첨부파일이 업로드 되기 때문에 post 방식으로 지정한다.
+			url:"/review/insert.do",
+			data: formData,
+			processData: false,			// processData를 false로 지정하면 name=value&name=value의 형태가 아닌 다른 방식으로 전달된다.
+			contentType: false,			// contentType를 false로 지정하면 기본값으로 지정된 "application/x-www-form-urlencoded"가 적용되지 않는다.
+			success: function(data) {
+				// data <--- [{no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}, {no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}]
+				$.each(data, function(index, review) {
+					var htmlContent = '<tr>'
+					htmlContent += '<td rowspan="2" style="text-align: left; width: 10%;">'
+					htmlContent += '</td>'
+					htmlContent += '<td rowspan="3" style="width: 70;">'
+					htmlContent += '</td>'
+					htmlContent += '<td rowspan="3" style="width: 20;">'					
+					htmlContent += '<img alt="" src="'++'">'
+					htmlContent += '</td>'
+					htmlContent += '</tr>'
+					htmlContent += '<tr></tr>'
+					htmlContent += '<tr>'
+					htmlContent += '<td>'
+					htmlContent += '</td>'					
+					htmlContent += '</tr>'			
+	
+					$tbody.append(htmlContent);
+				})
+				
+			}
+		});
+	
+	});
 
 
 </script>

@@ -113,7 +113,7 @@
 	<!--
 		void deleteNoticeBoard(int no)
 	-->
-		<delete id="deleteNoticeBoard">
+		<delete id="deleteNoticeBoard" parameterType="int">
 			delete from notice_board
 			where
 				board_no = #{value}

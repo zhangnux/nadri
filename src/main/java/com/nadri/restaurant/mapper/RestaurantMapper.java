@@ -43,7 +43,7 @@ public interface RestaurantMapper {
 	// 리뷰기능
 	
 	// 레스토랑 번호로 리뷰 불러오기
-	List<RestaurantReview> getAllReviewsByRestaurantNo();
+	List<RestaurantReview> getAllReviewsByRestaurantNo(int no);
 	
 	// 리뷰 작성
 	void insertReview(RestaurantReview restaurantReview);

@@ -2,8 +2,6 @@ package com.nadri.restaurant.vo;
 
 import java.util.Date;
 
-import com.nadri.user.vo.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,13 +18,12 @@ import lombok.ToString;
 public class RestaurantReview {
 	
 	private int no;
-	private Restaurant restaurant;	//fk키 restaurant_no
-	private User user;
+	private int restaurantNo;
+	private int userNo;
 	private String title;
-	private String pricture;
+	private String picture;
 	private String content;
-	private int likeCount;
-	private int starPoint;
+	private int rating;
 	private Date createdDate;
 	
 	

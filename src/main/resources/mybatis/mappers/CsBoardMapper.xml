@@ -25,19 +25,19 @@
 				</choose>
 			</if>
 			<if test="csType == '사이트이용'">
-				cs_type = 사이트이용
+				cs_type = '사이트이용'
 			</if>
 			<if test="csType == '프로모션'">
-				cs_type = 프로모션
+				cs_type = '프로모션'
 			</if>
 			<if test="csType == '예약/취소/환불'">
-				cs_type = 예약/취소/환불
+				cs_type = '예약/취소/환불'
 			</if>
 			<if test="csType == '쿠폰/포인트'">
-				cs_type = 쿠폰/포인트
+				cs_type = '쿠폰/포인트'
 			</if>
 			<if test="csType == '기타'">
-				cs_type = 기타
+				cs_type = '기타'
 			</if>
 		</where>
 	</select>
@@ -85,19 +85,19 @@
 			<if test="csType != null">
 				<choose>
 					<when test="csType == '사이트이용'">
-						and cs_type = 사이트이용
+						and cs_type = '사이트이용'
 					</when>
 					<when test="csType == '프로모션'">
-						and cs_type = 프로모션
+						and cs_type = '프로모션'
 					</when>
 					<when test="csType == '예약/취소/환불'">
-						and cs_type = 예약/취소/환불
+						and cs_type = '예약/취소/환불'
 					</when>
 					<when test="csType == '쿠폰/포인트'">
-						and cs_type = 쿠폰/포인트
+						and cs_type = '쿠폰/포인트'
 					</when>
 					<when test="csType == '기타'">
-						and cs_type = 기타
+						and cs_type = '기타'
 					</when>
 				</choose>
 			</if>
@@ -113,7 +113,7 @@
 	<select id="getCsBoardsTotalRowsByUserNo" parameterType="com.nadri.csBoard.web.form.Criteria" resultType="int">
 		select count(*)
 		from cs_board
-		where user_no = #{value}
+		where user_no = #{userNo}
 			<if test="opt != null and value != null">
 				<choose>
 					<when test="opt == '제목'">
@@ -174,7 +174,7 @@
 				
 			from cs_board A, user_table B	
 			where A.user_no = B.user_no
-			and A.user_no = #{value}
+			and A.user_no = #{userNo}
 			<if test="opt != null and value != null">
 				<choose>
 					<when test="opt == '제목'">
@@ -262,38 +262,49 @@
 	<!--
 		void updateCsBoard();
 	-->
-	<update id="updateCsBoard">
-		update
+	<update id="updateCsBoard" parameterType="com.nadri.csBoard.vo.CsBoard">
+		update cs_board
 		set
+			cs_type = #{csType},
+			cs_board_title = #{title},
+			cs_board_content = #{content}
+		where cs_board_no = #{no}
 	</update>
 	<!--
 		void deleteCsBoard();
 	-->
-	<delete id="deleteCsBoard"></delete>
+	<delete id="deleteCsBoard" parameterType="int">
+		delete from cs_board
+		where cs_board_no = #{value}
+	</delete>
+	
 	
 	<!--
-		void insertCsBoardReply();
+		void insertCsBoardReply(CsBoardReply reply)
 	-->
-	<insert id="insertCsBoardReply">
-		
-	</insert>
+	<update id="insertCsBoardReply" parameterType="com.nadri.csBoard.vo.CsBoardReply">
+		update cs_board
+		set
+			cs_reply_content = #{replyContent},
+			cs_reply_created_date = sysdate,
+			cs_reply_check = '답변완료'
+		where
+			cs_board_no = #{no}
+	
+	</update>
+
 	
 	<!--
 		void updateCsBoardReply();
 	-->
-	<update id="updateCsBoardReply">
-		update
+	<update id="updateCsBoardReply" parameterType="com.nadri.csBoard.vo.CsBoardReply">
+		update cs_board
 		set
-			cs_reply_content replyContent,
-			cs_reply_check replyCheck
+			cs_reply_content = #{replyContent},
+			cs_reply_check = #{replyCheck}
 		where
-			
+			cs_board_no = #{no}
 	
 	</update>
 	
-	<!--
-		void deleteCsBoardReply();
-	-->
-	<delete id="deleteCsBoardReply"></delete>
-
 </mapper>

@@ -173,6 +173,7 @@
 <%@ include file="../common/footer.jsp" %>
 </body>
 <script type="text/javascript">
+
 	$("#select-sort").change(function()){
 		document.getElementById("form-search").submit();
 	}

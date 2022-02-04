@@ -23,10 +23,10 @@ public interface CsBoardMapper {
 	
 	void insertCsBoard(CsBoard csBoard);
 	void updateCsBoard(CsBoard csBoard);
-	void deleteCsBoard();
+	void deleteCsBoard(int no);
 	
 	
-	void updateCsBoardReply();	// 이게 csboard reply 수정과 insert 모두 담당
-	void deleteCsBoardReply();
+	void insertCsBoardReply(CsBoardReply reply);
+	void updateCsBoardReply(CsBoardReply reply);	// 이게 csboard reply 수정과 insert 모두 담당 delete 처리는 어케해야하지
 
 }
