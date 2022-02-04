@@ -60,7 +60,7 @@
 	</div>
 	<div class="row mb-3 p-3">
 		<div class="col d-flex justify-content-center">
-			<form action="list.nadri" class="row row-cols-lg-auto g-3 align-items-center" method="get">
+			<form id="form-search" action="list.nadri" class="row row-cols-lg-auto g-3 align-items-center" method="get">
 				<input type="hidden" name="page" value="1" />
 				<div class="col-12">
 					<select class="form-select" name="opt">
@@ -104,5 +104,18 @@
 		</div>
 	</c:if>
 </div>
+<script type="text/javascript">
+	// 페이지내비게이션의 링크를 클릭했을 때 실행될 이벤트핸들러 함수를 등록한다.
+	$(".pagination a").click(function(event) {
+		event.preventDefault();
+		// 클릭한 페이지내비게이션의 페이지번호 조회하기
+		var pageNo = $(this).attr("data-page");
+		// 검색폼의 히든필드에 클릭한 페이지내비게이션의 페이지번호 설정
+		$(":input[name=page]").val(pageNo);
+		
+		// 검색폼에 onsubmit 이벤트 발생시키기
+		$("#form-search").trigger("submit");
+	})
+</script>
 </body>
 </html>

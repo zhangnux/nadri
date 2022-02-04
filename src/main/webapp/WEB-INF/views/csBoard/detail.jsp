@@ -40,35 +40,59 @@
 		</div>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end ms-3 me-3">
-	<!-- 고객일땐 userlist.nadri -->
-			<a href="list.nadri" class="btn btn-secondary">목록</a>
-			<a href="delete.nadri?no=" class="btn btn-danger">삭제</a>
-			<a href="modify.nadri?no=" class="btn btn-primary">수정</a>
+		<c:choose>
+			<c:when test="${!empty LOGIN_MANAGER }">
+				<a href="list.nadri" class="btn btn-secondary">목록</a>
+			</c:when>
+			<c:when test="${!empty LOGIN_USER }">
+				<a href="userlist.nadri" class="btn btn-secondary">목록</a>
+			</c:when>			
+		</c:choose>
+			<a href="delete.nadri?no=${csBoard.no }" class="btn btn-danger">삭제</a>
+			<a href="modify.nadri?no=${csBoard.no }" class="btn btn-primary">수정</a>
 	</div>
-	
-	<!-- 댓글입력은 매니저만 보이게 restcontroller-->
-	<div class="row mb-3 p-3">
+	<div class="row mb-3 ms-2 me-2" style="border-bottom: 1px solid;">
 		<div class="col">
-			<form action="" class="border bg-light p-3">
-				<div class="mb-3">
- 					<textarea class="form-control" rows="5" name="content"></textarea>
-				</div>
-				<div class="text-end">
-					<button type="submit" class="btn btn-primary">등록</button>
-				</div>
-			</form>
+			<h2>답변</h2>
 		</div>
 	</div>
+	<!-- 댓글입력은 매니저만 보이게 restcontroller-->
+	<c:if test="${!empty LOGIN_MANAGER }">
+		<div class="row mb-3 p-3">
+			<div class="col">
+				<form action="" class="border bg-light p-3">
+					<div class="mb-3">
+	 					<textarea class="form-control" rows="5" name="content"></textarea>
+					</div>
+					<div class="d-flex justify-content-end">
+						<button type="submit" class="btn btn-primary">등록</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</c:if>
 	<!-- c:if로 -->
 	<div class="row mb-3">
 		<div class="col">
 			<table class="table">
-				<tr></tr>
+				<tr>
+					<td rowspan="2">
+						<p>관리자</p>
+						<p></p>
+					</td>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+				</tr>
 			</table>
 		</div>
 	</div>
 
 
 </div>
+<script type="text/javascript">
+
+
+</script>
 </body>
 </html>

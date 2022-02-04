@@ -98,6 +98,10 @@ public class RestaurantService {
 	// 리뷰 서비스
 	
 	
+	public List<RestaurantReview> getAllReviewsByRestaurantNo(int no){
+		return rtMapper.getAllReviewsByRestaurantNo(no);
+	}
+	
 	
 	
 	public void addNewReview(RestaurantReview restaurnatReview) {
