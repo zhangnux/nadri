@@ -15,15 +15,43 @@
 	::placeholder {
 		font-size: 0.8em;
 	}
-	.id_re_1{
-		color : green;
-		display : none;
-	}
-	/* 중복아이디 존재하는 경우 */
-	.id_re_2{
-		color : red;
-		display : none;
-	}
+	/*벤치마킹 - 박스 디자인*/
+.box {
+   margin : 0px auto;
+   display: block;
+   width: 60%;
+   height: 51px;
+   padding-top: 10px;
+   padding-right: 110px;
+   padding-bottom: 10px;
+   padding-left: 14px;
+   background: #fff;
+   box-sizing: border-box;
+   vertical-align: top;
+   vertical-align: top;
+}
+/*벤치마킹 - input 디자인*/
+.int {
+   display: block;
+   position: relative;
+   width: 100%;
+   height: 29px;
+   border: solid 1px #dadada;
+   padding-right: 25px;
+   line-height: 29px;
+   border: none;
+   background: #fff;
+   font-size: 15px;
+   box-sizing: border-box;
+   z-index: 10;
+}
+.check {
+}
+body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
+   legend, li, ol, p, select, option, div, table, label, td, textarea, th, ul {
+   margin: 3px;
+   padding: 3px;
+}
 </style>
 </head>
 <body>
@@ -31,7 +59,7 @@
 <div class="container">
 	<div class="row mb-3">
 		<div class="col-8">
-			<h1>로그인 폼</h1>
+			<h1>회원가입 폼</h1>
 		</div>
 	</div>
 	<div class="row">
@@ -40,141 +68,189 @@
 				<strong>오류</strong> ${error }
 			</div>
 		</c:if>
-		<form class="p-5 border bg-white p-3 col-sm-4 mx-auto" method="post" action="home.nadri" name="insertForm" enctype="multipart/form-data">
-			<div class="mb-3">
-				<label class="form-label" style="font-size: 14px;">아이디 *</label> 
-				<input type="text" class="id_input form-control" name="id" id="id" placeholder="아이디를 입력해주세요." />
-				<span class="id_re_1">사용 가능한 아이디 입니다.</span>
-				<span class="id_re_2">아이디가 이미 존재합니다.</span>
+		<form class="p-5 border bg-white p-3 col-sm-4 mx-auto" method="post" action="insert.nadri" name="insertForm" >
+			<div class="userInput">
+				<h6 class="list">아이디<span id="idError"></span></h6>
+				<input type="text" class="check form-control" name="id" id="id" placeholder="아이디를 입력해주세요." minlength="5" maxlength="20" />
 			</div>
-			<div class="mb-3">
-				<label class="form-label" for="password" style="font-size: 14px;">비밀번호 *</label> 
-				<input type="password" class="form-control" name="password" id="password" placeholder="영문, 숫자, 특수문자 2가지 조합 6~15자" />
+			<div class="userInput">
+				<h6 class="list">비밀번호<span id="pwError"></span></h6>
+				<input type="password" class="check form-control" name="password" id="password" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" minlength="4" maxlength="20" />
 			</div>
-			<div class="mb-3">
-				<label class="form-label" for="password" style="font-size: 14px;">비밀번호 재확인 *</label> 
-				<input type="password" class="form-control" name="repassword" id="repassword" placeholder="영문, 숫자, 특수문자 2가지 조합 6~15자" />
+			<div class="userInput">
+				<h6 class="list">비밀번호 재확인<span id="pwCheckError"></span></h6> 
+				<input type="password" class="check form-control" name="pwCheck" id="pwCheck" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" minlength="4" maxlength="20" />
 			</div>
-			<div class="mb-3">
-				<label class="form-label" style="font-size: 14px;">이름 *</label> 
-				<input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력해주세요." />
+			<div class="userInput">
+				<h6 class="list">이름<span id="nameError"></span></h6> 
+				<input type="text" class="check form-control" name="name" id="name" placeholder="이름을 입력해주세요." maxlength="15" />
 			</div>
-			<div class="mb-3">
-				<label class="form-label" style="font-size: 14px;">이메일 *</label> 
-				<input type="email" class="form-control" name="email" id="email" placeholder="ID@example.com" />
+			<div class="userInput">
+				<h6 class="list">이메일<span id="emailError"></span></h6> 
+				<input type="email" class="check form-control" name="email" id="email" placeholder="ID@example.com" maxlength="20" />
 			</div>
-			<div class="mb-3">
-				<label class="form-label" style="font-size: 14px;">전화번호 *</label> 
-				<input type="tel" class="form-control" name="tel" id="tel" placeholder="010-1234-1234" />
+			<div class="userInput">
+				<h6 class="list">전화번호<span id="telError"></span></h6> 
+				<input type="tel" class="check form-control" name="tel" id="tel" placeholder="-를 제외한 11자리" />
 			</div>
-			<div class="mb-3">
+			<div class="userInput">
 				<label class="form-label" style="font-size: 14px;">성별 *</label> 
 				<input type="radio" name="gender" value="남자" id="male" checked>남자
 				<input type="radio" name="gender" value="여자" id="female" >여자
 			</div>
-			<div class="mb-3">
+			<div class="userInput">
 				<label class="form-label" style="font-size: 14px;">생일 *</label> 
-				<input type="date" class="form-control" name="birth" id="birth" placeholder="생일을 입력해주세요." />
+				<input type="date" class="check form-control" name="birth" id="birth" placeholder="생일을 선택해주세요." />
 			</div>
 			<div class="d-grid gap-2">
-				<!-- <button type="button" class="btn btn-dark" onclick="history.back()">이전페이지</button>
-				<button type="button" class="btn btn-primary" onclick="joinCheck()">회원가입</button> -->
-				<input type="button" class="join_button" value="가입하기">
+				<button type="button" class="btn btn-dark" onclick="history.back()">이전페이지</button>
+				<button type="submit" class="btn btn-primary">회원가입</button>
 			</div>
 		</form>
 	</div>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-	// 회원가입 버튼
-	$(".join_button").click(function(){
-		$("#join_form").attr("action", "/login.nadri");
-		$("#join_form").submit();
-	});
-});
-
-$('.id_input').on("propertychange change keyup paste input", function() {
-	//console.log("키업 test")
-});
-
-var id = $('.id_input').val();			// .id_input에 입력되는 값
-var data = {id : id}				// '컨트롤에 넘길 데이터 이름' : '데이터(.id_input에 입력되는 값)'
-
-$.ajax({
-	type : "post",
-	url : "/member/memberIdChk",
-	data : data
-}); // ajax 종료	
-
-
+/* $(function() {
+	$("[name=insertForm]").submit(function() {
+		var idLimit = /^[a-zA-Z0-9-_]{5,20}$/;
+		var id = $("#id").val();
+		if (id == "") {
+			$("#idError").text("아이디는 필수 입력값입니다.");
+			return false;
+		}
+		if (!idLimit.test(id)) {
+			$("#idError").text("5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.");
+			return false;
+		}
+		
+	})
+}) */
+//       <div class="userInput">
+//                 <h3 class="list">성명<span id="nameError"></span></h3>
+//                  <span class="box int_id"><input type="text" id="name" class="int check"
+//                     maxlength="20"></span>
+//               </div>
 
 
-/* function joinCheck() {
-	var id = document.getElementById("id");
-	var password = document.getElementById("password");
-	var repassword = document.getElementById("repassword");
-	var name = document.getElementById("name");
-	var email = document.getElementById("email");
-	var tel = document.getElementById("tel");
-	var male = document.getElementById("male");
-	var female = document.getElementById("female");
-	var birth = document.getElementById("birth");
-	
-	if (id.value == "") {
-		alert("아이디를 입력하세요")
-		id.focus();
-		return false;
-	};
-	
-	if (password.value == "") {
-		alert("비밀번호를 입력하세요")
-		password.focus();
-		return false;
-	};
-	
-	var passwordCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-	
-	if (!passwordCheck.test(pwd.value)) {
-		alert("비밀번호는 영문자 + 숫자 + 특수문자를 포함한 8~25자리를 입력해야 합니다.");
-		password.focus();
-		return false;
-	};
-	
-	if (repassword.value !== password.value) {
-		alert("비밀번호가 일치하지 않습니다.");
-		repassword.focus();
-		return false;
-	};
-	
-	if (name.value !== "") {
-		alert("이름을 입력하세요.");
-		name.focus();
-		return false;
-	};
-	
-	if (!femail.checked && !male.checked) {
-		alert("성별을 선택하세요.");
-		male.focus();
-		return false;
-	};
-	
-	if (email.value == "") {
-		alert("이메일 주소를 입력하세요.");
-		email.focus();
-		return false;
-	};
-	
-	document.insertForm.submit();
-}
 
-function id_check() {
-	if (id == ) {
-		alert("중복된 아이디 입니다.")
-		id.focus();
+
+
+
+// [ 회원가입 유효성검사 ]
+//자원을 화면에 로드하게 되면 수행할 동작(==function)
+
+window.onload = function() {
+	var join = document.insertForm; //form데이터를 모두 join변수에 저장
+	
+	var input = document.querySelectorAll('.check');
+	
+	var errorId = [ "idError", "pwError", "pwCheckError", "nameError", "telError" ];
+	var error = document.querySelectorAll('.list > span');
+
+		function innerReset(error){
+		for (var i = 0; i < error.length; i++) {
+		error[i].innerHTML = "";
+		}
+	}
+
+	// 초기화 메서드 호출
+	innerReset(error);
+   
+	// [ ID 입력문자 유효성검사 ] 
+	join.id.onkeydown = function(){
+		innerReset(error); // 초기화 메서드 호출
+		var idLimit = /^[a-zA-Z0-9-_]{5,20}$/;
+		if (!idLimit.test(input[0].value)) {
+		document.getElementById(errorId[0]).innerHTML = "5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
+
+		}
+	}
+		// [ PW 입력문자 유효성검사 ]
+		join.password.onkeydown = function(){
+		innerReset(error); // 초기화 메서드 호출
+		var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{8,20}$/; //정규식( a~z, A~Z, 0~9, ~!@#$%^&*()_- )
+		if (!pwLimit.test(input[1].value)) {
+			
+		document.getElementById(errorId[1]).innerHTML = " 4~20자의 영문 소대문자, 숫자와 특수기호 '~!@#$%^&*()_-'만 사용 가능합니다.";
+		}   
+	}
+	// [ PW 재확인 입력문자 초기화 ]
+	//비밀번호 동일여부는 submit 버튼 클릭시 검사해줄 예정
+	join.pwCheck.onkeydown = function(){
+		
+		innerReset(error);// 오류문구 초기화   
+	}
+	
+	// [ 휴대폰번호 입력문자 유효성검사 ]
+	join.tel.onkeydown = function(){
+	innerReset(error);   
+	var telLimit =  /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 정규식(^$--> 문자의미, 01, (6자리중 "1자리"), 0~9--> "8자리")
+	if (!telLimit.test(input[4].value)) {
+		
+		document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
+		}
+	}
+	
+	//submit 실행시 수행할 동작
+	join.onsubmit = function() {           
+		var errorStr = [ " 아이디를", " 비밀번호를", " 비밀번호 확인을", " 성함을", " 휴대폰번호를", " 이메일을" ];
+       
+		innerReset(error);
+       
+		// [ input 공백확인 ]
+		for (var i = 0; i < input.length - 1; i++) { 
+			if (!input[i].value) { 
+				document.getElementById(errorId[i]).innerHTML = errorStr[i]+ " 입력해 주세요.";
+				input[i].focus();
+				return false;
+			}
+		}         
+       
+	//유효성검사) 비밀번호 재확인
+	if (join.pw.value != join.pwCheck.value) {
+		document.getElementById("pwCheckError").innerHTML = " 비밀번호가 일치하지 않습니다.";
+		join.pwCheck.focus();
 		return false;
 	}
+
+	// 정규식 변수 모음     
+	var idLimit = /^[a-zA-Z0-9-_]{5,20}$/; //정규식( a~z, A~Z, 0~9, -, _ )
+	var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{8,20}$/;///[a-zA-Z0-9]{10, 20}/; ( a~z, A~Z, 0~9,~!@#$%^&*()_-특수문자 )
+	var telLimit =  /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 01로 시작, 0,1,6,7,8,9 중 한자리, 0~9에서 8자리 입력
+
+	// [ ID 유효성검사 ]
+	if (!idLimit.test(input[0].value)) {
+		document.getElementById(errorId[0]).innerHTML = " 5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
+		join.id.focus(); // 포커스 이동
+		return false;
+	}
+       
+	// [ PW 유효성검사 ]
+	if (!pwLimit.test(input[1].value)) {
+		document.getElementById(errorId[1]).innerHTML = " 4~20자의 영문 소대문자, 숫자와 특수기호 '~!@#$%^&*()_-'만 사용 가능합니다.";
+		join.pw.focus(); // 포커스 이동
+		return false;
+	}         
+	
+      // [ 휴대폰번호 유효성검사 ]
+	if (!telLimit.test(input[4].value)) { 
+		document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
+		join.tel.focus(); // 포커스 이동
+		return false;
+	}
+       
+//	개인정보 동의박스 체크
+//	var consentCheck = document.getElementById("check");
+//	if(!consentCheck.checked){
+//		document.getElementById("consentError").innerHTML = "개인정보 수집이용 동의를 해주세요.";
+//		return false;
+//		}
+//      
+		alert("회원가입이 완료되었습니다.");
+	}
+
 }
- */
+
 
 </script>
 <%@ include file="../common/footer.jsp" %>	

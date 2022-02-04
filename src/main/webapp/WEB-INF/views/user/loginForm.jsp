@@ -37,7 +37,7 @@
 		<form class="p-5 border bg-white col-sm-4 mx-auto" action="login.nadri" method="post">
 			<div class="form-group p-2">
 				<label class="form-label" style="font-size:13px">아이디 *</label> 
-				<input type="text" class="form-control" placeholder="ID@example.com" name="id" id="id">
+				<input type="text" class="form-control" placeholder="아이디를 입력해주세요." name="id" id="id">
 			</div>
 			<div class="form-group p-2">
 				<label class="form-label" style="font-size:13px">비밀번호 *</label> 
