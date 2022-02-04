@@ -307,10 +307,15 @@
 			success: function(data) {
 				// data <--- [{no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}, {no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}]
 				$.each(data, function(index, review) {
+					
+					
 					var htmlContent = '<tr>'
 					htmlContent += '<td rowspan="2" style="text-align: left; width: 10%;">'
+					htmlContent += '<p id="starPoint">★ '++'점</p>'
+					htmlContent += '<p id="username"><strong>'++'</strong></p>'
 					htmlContent += '</td>'
 					htmlContent += '<td rowspan="3" style="width: 70;">'
+					htmlContent += '<p id="reviewContent">'++'</p>'
 					htmlContent += '</td>'
 					htmlContent += '<td rowspan="3" style="width: 20;">'					
 					htmlContent += '<img alt="" src="'++'">'

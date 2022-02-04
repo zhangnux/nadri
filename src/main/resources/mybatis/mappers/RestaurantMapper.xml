@@ -179,18 +179,19 @@
 	-->
 	<select id="getReviewsByRestaurantNo" parameterType="int" resultType="com.nadri.restaurant.vo.RestaurantReview">
 		select
-			restaurant_no restaurantNo,
-			user_no userNo,
-			rt_review_no no,
-			rt_review_title title,
-			rt_review_picture picture,
-			rt_review_content content,
-			rt_review_star_point rating,
-			rt_review_created_date createdDate
+			A.restaurant_no restaurantNo,
+			A.user_no userNo,
+			A.rt_review_no no,
+			A.rt_review_title title,
+			A.rt_review_picture picture,
+			A.rt_review_content content,
+			A.rt_review_star_point rating,
+			A.rt_review_created_date createdDate,
+			B.user_name userName
 		from
-			restaurant_review
+			restaurant_review A, user_table B
 		where
-			restaurant_no = #{value}
+			A.restaurant_no = #{value}
 	
 	</select>
 	
