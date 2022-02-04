@@ -139,5 +139,20 @@
 			from att_review
 			where att_no = #{no}
 		]]>		
-	</select>	
+	</select>
+	
+	<select id="random" resultMap="AttrResultMap">
+		<![CDATA[
+		select *
+		from(
+		    select * from attraction
+		    order by DBMS_RANDOM.RANDOM
+			)
+		where rownum<4
+		and att_no != #{no}
+		and att_place = #{place}
+		]]>	
+	</select>
+	
+	
 </mapper>

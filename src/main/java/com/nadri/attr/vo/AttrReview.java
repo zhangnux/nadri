@@ -29,6 +29,7 @@ public class AttrReview {
 	private Date date;
 	private int attNo;
 	private int userNo;
+	private String userId;
 	
 	private int cnt;
 	private int avg;

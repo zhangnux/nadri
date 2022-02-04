@@ -26,5 +26,6 @@ public class AttrService {
 	public List<Attraction> getOptionInfo(int no) { return attrDao.getOptionByNo(no); }
 	public int getReviewCount(int attNo) { return attrDao.reviewCount(attNo); }
 	public double getStarCount(int attNo) { return attrDao.star(attNo); }
+	public List<Attraction> getRandom(int attNo, String place) { return attrDao.random(attNo, place); }
 	
 }

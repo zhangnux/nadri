@@ -63,6 +63,10 @@ public class AttrController {
 		model.addAttribute("count", count);
 		model.addAttribute("star", star);
 		
+		String place = detail.getPlace();
+		List<Attraction> random = attrService.getRandom(no, place);
+		model.addAttribute("random", random);
+		
 		return "attr/attrdetail";
 	}
 	
