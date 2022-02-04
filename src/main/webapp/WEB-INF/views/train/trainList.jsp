@@ -481,11 +481,7 @@
 <%@ include file="../common/footer.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
-/* 	var info = sessionStorage.getItem("LOGIN_USER")
-	/// 예매 버튼 누를때 로그인 안되어있으면 로그인 창으로 보내기
-	if (info != null) {
-		alert("회원")
-	} */
+
 	$(function() {
 		var priceModal = new bootstrap.Modal(document.getElementById('modal-price'), {
 			keyboard: false
@@ -583,60 +579,63 @@
 			let $hocha = $("#hocha").children('ul').empty()
 			let $seat = $("#seatList").empty()
 			
-				$.getJSON('/api/train/trainInfo',
-					{roomType: type, trainNo: trainNo, schduleNo: scheduleNo},
-					function(response) {
-						console.log(response)
-						let sort = 0;
-						$.each(response.rooms, function(index, room) {
-							let ho;
-							// 호차 나열
-							if (room.bookedSeatNum == room.seatNum) {
-								ho = "<li><span class='not'>" + room.name + "</span></li>"
+			$.ajax({type : 'GET', url : '/api/train/trainInfo',
+				data : {roomType: type, trainNo: trainNo, schduleNo: scheduleNo},
+				success : function(response) {
+					let sort = 0;
+					$.each(response.rooms, function(index, room) {
+						let ho;
+						// 호차 나열
+						if (room.bookedSeatNum == room.seatNum) {
+							ho = "<li><span class='not'>" + room.name + "</span></li>"
+						} else {
+							if (++sort == 1) {
+								ho = "<li><span class='chosen' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
 							} else {
-								if (++sort == 1) {
-									ho = "<li><span class='chosen' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
-								} else {
-									ho = "<li><span class='can' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
-								}
+								ho = "<li><span class='can' data-room-no='"+ room.no +"'>" + room.name + "</span></li>"
 							}
-							let index1 = index;
-							let no = room.seatNum;
-							let seatdiv = seatDivide(no, stan);
-							console.log(seatdiv)
-							let seatNo = 0;
+						}
+						let no = room.seatNum;
+						let seatdiv = seatDivide(no, stan);
+						let seatNo = 0;
 
-							let seat;
-							if (sort == 1) {
-								seat = "<div data-seat-no='"+ room.no +"'>"
-							} else {
-								seat = "<div data-seat-no='"+ room.no +"' style='display:none'>"
+						let seat;
+						if (sort == 1) {
+							seat = "<div data-seat-no='"+ room.no +"'>"
+						} else {
+							seat = "<div data-seat-no='"+ room.no +"' style='display:none'>"
+						}
+						// 좌석 분할  [10, 10, 10, 10]
+						seatdiv.forEach(function(num, index) {
+							seat += "<ul>"
+							// 좌석 배치 (낱개)
+							for (var i=1; i<= num; i++) {
+								seat += "<li><span>" + ++seatNo +"</span></li>"										
 							}
-							// 좌석 분할  [10, 10, 10, 10]
-							seatdiv.forEach(function(num, index) {
-								seat += "<ul>"
-								// 좌석 배치 (낱개)
-								for (var i=1; i<= num; i++) {
-									seat += "<li><span>" + ++seatNo +"</span></li>"										
-								}
-								seat += "</ul>"
-								if (index == 1) {
-									seat += "<ul class='m-4 justify-content-between align-items-center'><strong>" + dp 
-									+ "</strong><i class='fas fa-long-arrow-alt-right fa-2x'></i><i class='fas fa-long-arrow-alt-right fa-2x'></i><i class='fas fa-long-arrow-alt-right fa-2x'></i><strong>" + 
-									ar +"</strong></ul>"
-								}
-							})
-							seat += "</div>"
-								$seat.append(seat)	
-							// 변화를 따로 빼서 준다.
-							response.seatList.forEach(function(item) {
-								let hoNo =item.roomNo;
-								let seatNo = item.seatNo - 1
-								$("div[data-seat-no="+hoNo+"] li span:eq("+seatNo+")").addClass('no')
-							})
-							$hocha.append(ho)
+							seat += "</ul>"
+							if (index == 1) {
+								seat += "<ul class='m-4 justify-content-between align-items-center'><strong>" + dp 
+								+ "</strong><i class='fas fa-long-arrow-alt-right fa-2x'></i><i class='fas fa-long-arrow-alt-right fa-2x'></i><i class='fas fa-long-arrow-alt-right fa-2x'></i><strong>" + 
+								ar +"</strong></ul>"
+							}
 						})
-				})
+						seat += "</div>"
+							$seat.append(seat)	
+						// 변화를 따로 빼서 준다.
+						response.seatList.forEach(function(item) {
+							let hoNo =item.roomNo;
+							let seatNo = item.seatNo - 1
+							$("div[data-seat-no="+hoNo+"] li span:eq("+seatNo+")").addClass('no')
+						})
+						$hocha.append(ho)
+					})
+				},
+				error : function() {
+					alert("로그인 후 이용하실 수 있습니다.")
+					location.replace("http://localhost/user/login.nadri")
+					return;
+				}
+			})
 			seatModal.show()
 		}
 		
@@ -659,7 +658,8 @@
 		// 좌석 예매 버튼 클릭
 		$(".listTable").on('click', '.btn', function(event) {
 			event.preventDefault();
-			bookIngBtn = $(this)
+			
+			let bookIngBtn = $(this)
 			let searchInfo = $(this).parent('td').siblings().filter(".infoTrain")
 			let trainNo = searchInfo.next().text().trim()
 			let scheduleNo = searchInfo.attr('data-schedule-no')
@@ -679,7 +679,6 @@
 					return;
 				}
 			}
-			
 			
 			let arTime;
 			let dpTime;

@@ -1,6 +1,7 @@
 package com.nadri.train.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -73,7 +74,7 @@ public interface TrainMapper {
 	 * @param reservedNo2
 	 * @return
 	 */
-	List<TrainReservation> getReservationByNo(@Param("reservedNo1") int reservedNo1, @Param("reservedNo2") int reservedNo2);
+	List<TrainReservation> getReservationByNo(Map<String, Object> useing);
 	
 	/**
 	 * 예약번호에 해당하는 티켓 정보 조회
@@ -95,6 +96,15 @@ public interface TrainMapper {
 	 */
 	List<TrainReservation> getReservationIsReserved();
 	
-	void deleteReservation(List<Integer> deleteList);
-	void deleteTicket(List<Integer> deleteList);
+	/**
+	 * 일정시간이 지난 예약 삭제
+	 * @param deleteList
+	 */
+	void deleteReservation(@Param("items") List<Integer> deleteList);
+	
+	/**
+	 * 일정시간이 지난 예약티켓 삭제
+	 * @param deleteList
+	 */
+	void deleteTicket(@Param("items") List<Integer> deleteList);
 }

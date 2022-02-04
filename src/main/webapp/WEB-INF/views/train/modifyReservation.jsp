@@ -12,12 +12,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <style>
-	td, th{
+	#table-modify td, th, #table-seat-modify td, th{
 		border: 1px solid #C0C0C0;
-		height: 55px;
+		height: 50px;
 	}
 	
-	table {
+	#table-modify, #table-seat-modify {
 		text-align: center;
 		width: 100%;
 	}
@@ -44,18 +44,20 @@
 	}
 </style>
 <body>
+<%@ include file="../common/navbar.jsp" %>
 <div class="container">
 	<div class="row my-5">
 		<div class="col">
-			<h2>발권/취소/변경</h2>
+			<h2>인원 변경</h2>
 		</div>
 	</div>
 	<c:set var="menu4" value="reservationList"/>
-	<c:set var="active" value="menu4"/>
+	<c:set var="menu5" value="modify"/>
+	<c:set var="active" value="menu5"/>
 	<%@ include file="common/breadcrumb.jsp" %>
 	<hr>
 	<div class="row text-center" style="padding: 12px 12px; font-size: 20px;">
-		<div class="col-4 p-4">
+		<div class="col-4 p-4" id="cancel-div">
 			발권/취소
 		</div>
 		<div class="col-4 p-4 active">
@@ -80,41 +82,78 @@
 	</div>
 	<div class="row mt-4">
 		<div class="col">
-			<table class="text-center">
+			<table class="text-center" id="table-modify">
 				<thead>
 					<tr style="background-color: #D6DEE8; ">
-						<th width="5%">선택</th>
 						<th width="10%">승차일자</th>
-						<th width="10%">열차</th>
-						<th width="10%">출발</th>
-						<th width="10%">도착</th>
-						<th width="7%">예약매수</th>
-						<th width="11%">총 결제금액</th>
-						<th width="11%">소요시간</th>
-						<th width="13%">결제기한</th>
-						<th width="13%">예약취소/반환</th>
+						<th width="10%">열차이름</th>
+						<th width="10%">열차번호</th>
+						<th width="10%">출발역</th>
+						<th width="10%">출발시간</th>
+						<th width="10%">도착역</th>
+						<th width="10%">도착시간</th>
+						<th width="7%">인원</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td><input type="checkbox"></td>
-						<td>2022-01-15</td>
-						<td>KTX - 1</td>
-						<td>서울 <div>9:00</div></td>
-						<td>부산 <div>10:45</div></td>
-						<td>2</td>
-						<td>40,200</td>
-						<td>1:45:00</td>
-						<td>15시 5분까지</td>
-						<td><button type="button" class="btn" style="background-color: #A0A0A0; color: white;">예약 취소</button></td>
+						<td><fmt:formatDate value="${reservation.departureTime }" pattern="yyyy-MM-dd"/></td>
+						<td>${reservation.trainName }</td>
+						<td>${reservation.trainNo }</td>
+						<td>${reservation.departureStation }</td>
+						<td><fmt:formatDate value="${reservation.departureTime }" pattern="HH:mm"/></td>
+						<td>${reservation.arrivalStation }</td>
+						<td><fmt:formatDate value="${reservation.arrivalTime }" pattern="HH:mm"/></td>
+						<td>${reservation.totalCount }</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+	<div class="row" style="margin-top: 80px;">
+		<div class="col">
+			<form action="" method="post">
+				<input type="hidden" name="reservationNo" value="${reservation.no }">
+				<table class="text-center" id="table-seat-modify">
+					<thead>
+						<tr style="background-color: #D6DEE8; ">
+							<th width="20%">좌석 정보</th>
+							<th width="20%">객실 유형</th>
+							<th width="*%">승객유형</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="ticket" items="${ticketList }" >
+							<tr>
+								<td>${ticket.roomName} - ${ticket.seatNo}</td>
+								<td>${ticket.roomType}</td>
+								<td>
+									<select style="width: 300px; border: 1px solid #C0C0C0;">
+										<option value="어른" ${ticket.type == '어른'? 'selected':'' }>어른</option>
+										<option value="어린이" ${ticket.type == '어린이'? 'selected':'' }>어린이</option>
+										<option></option>
+									</select>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
 	<div class="text-end mt-5">
-		<button class="btn btn-dark">결제하기</button>
+		<button class="btn btn-dark">수정</button>
 	</div>
 </div>
+<%@ include file="../common/footer.jsp" %>
+<script type="text/javascript">
+	$(function() {
+		$("#cancel-div").click(function() {
+			location.replace("http://localhost/train/reservationList.nadri")
+		})
+		
+		
+	})
+</script>
 </body>
 </html>

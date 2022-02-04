@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
 <mapper namespace="com.nadri.train.mapper.TrainMapper">
+
 	<!-- 한글 유니코드로 기차역 조회하기 -->
 	<select id="getStationByWord" parameterType="string" resultType="com.nadri.train.vo.TrainStation">
 		select station_id as id,
@@ -161,18 +163,18 @@
 	</select>
 	
 	<!-- 예약 정보 추가 -->
-	<insert id="insertReservation" parameterType="com.nadri.train.vo.TrainReservation">
+	<insert id="insertReservation" parameterType="com.nadri.train.vo.TrainReservation" >
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
 			select train_reservation_seq.nextval
 			from dual
 		</selectKey>
-		insert into train_reservation(reservation_no, total_passengers_count, total_payment_amount, ticketing_status, reservation_date)
+		insert into train_reservation(reservation_no, total_passengers_count, total_payment_amount, ticketing_status, reservation_date, user_no)
 		values
-		(#{no}, #{totalCount}, #{totalPrice}, '예약', sysdate)
+		(#{no}, #{totalCount}, #{totalPrice}, '예약', sysdate, #{userNo})
 	</insert>
 	
 	<!-- 티켓 정보 추가 -->
-	<insert id="insertTicket" parameterType="java.util.List">
+	<insert id="insertTicket" parameterType="java.util.List" >
 		insert into train_ticket(ticket_no, passenger_type, reservation_no, schedule_no, room_no, train_no, price_id, seat_no)
 		select train_ticket_seq.nextval, A.* from (
 		<foreach collection="list" item="ticket" separator="UNION ALL ">
@@ -182,7 +184,7 @@
 	</insert>
 	
 	<!-- 예약 후 바로 예약정보 조회 -->
-	<select id="getReservationByNo" resultType="com.nadri.train.vo.TrainReservation">
+	<select id="getReservationByNo" parameterType="map" resultType="com.nadri.train.vo.TrainReservation" >
 		select distinct r.reservation_no as no, 
 						r.ticketing_status as tickectStatus,
 						r.canceled_date as canceledDate,
@@ -195,21 +197,34 @@
         				s.schedule_departure_time as departureTime, 
         				s.schedule_arrival_time as arrivalTime, 
         				r.total_passengers_count as totalCount, 
-        				r.total_payment_amount as totalPrice
+        				r.total_payment_amount as totalPrice,
+        				r.user_no as userNo
 		from train_reservation r, train_ticket t, train_schedule s, train_route e, train_station t1, train_station t2, train n, train_type p
-		where r.reservation_no in (#{reservedNo1}, #{reservedNo2})
-		and r.reservation_no = t.reservation_no
-		and t.schedule_no = s.schedule_no
-		and s.route_no = e.route_no
-		and e.departure_station_id = t1.station_id
-		and e.arrival_station_id = t2.station_id
-		and t.train_no = n.train_no
-		and n.type_no = p.type_no
+		<where>
+		
+			r.user_no = #{userNo}
+			<choose>
+				<when test="reservedNo1 != null">
+		 			and r.reservation_no in (#{reservedNo1}, #{reservedNo2})
+				</when>
+				<otherwise>
+					and r.ticketing_status in ('결제', '예약')
+					and s.schedule_departure_time > sysdate
+				</otherwise>
+			</choose>
+			and r.reservation_no = t.reservation_no
+			and t.schedule_no = s.schedule_no
+			and s.route_no = e.route_no
+			and e.departure_station_id = t1.station_id
+			and e.arrival_station_id = t2.station_id
+			and t.train_no = n.train_no
+			and n.type_no = p.type_no
+		</where>
 		order by r.reservation_no
 	</select>
 	
 	<!-- 예약 후 바로 티켓정보 조회 -->
-	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket">
+	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket" >
 		select t.ticket_no as no, 
 				t.customer_name as customerName, 
 				t.passenger_type as type, 
@@ -230,7 +245,7 @@
 	</select>
 	
 	<!-- 인기노선 검색 -->
-	<select id="getFavoriteRoute" resultType="com.nadri.train.dto.TrainFavoriteRouteDto">
+	<select id="getFavoriteRoute" resultType="com.nadri.train.dto.TrainFavoriteRouteDto" >
 		select t1.station_name as departureStation, 
 				t2.station_name as arrivalStation,
 				a.rn as rowNo, 
@@ -253,7 +268,7 @@
 	</select>
 	
 	<!-- 예약 시간 조회 -->
-	<select id="getReservationIsReserved" resultType="com.nadri.train.vo.TrainReservation">
+	<select id="getReservationIsReserved" resultType="com.nadri.train.vo.TrainReservation" >
 		select reservation_no as no, 
 				reservation_date as reservationDate
 		from train_reservation
@@ -263,21 +278,22 @@
 <!-- 		<where>
 			find_in_set(reservation_no, #{value})
 		</where> -->
-	<delete id="deleteReservation" parameterType="java.util.List">
+	<!-- 예약 시간 지난 예약 삭제 -->
+	<delete id="deleteReservation" >
 		delete from train_reservation
-		<where>
-			<foreach collection="list" item="item" open="" close="" separator="OR">
-				reservation_no = #{item}
-			</foreach>
-		</where>
+		where reservation_no in 
+		<foreach collection="items" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
 	</delete>
 	
-	<delete id="deleteTicket" parameterType="java.util.List">
+	<!-- 예약 시간 지난 티켓 삭제 -->
+	<delete id="deleteTicket">
 		delete from train_ticket
-		<where>
-			<foreach collection="list" item="item" open="" close="" separator="OR">
-			reservation_no = #{item}
-			</foreach>
-		</where> 
-	</delete>
+		where reservation_no in 
+		<foreach collection="items" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>	
+	
 </mapper>

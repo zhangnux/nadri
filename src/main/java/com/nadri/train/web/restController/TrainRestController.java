@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.nadri.train.annotation.LoginedUser;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
@@ -24,6 +26,7 @@ import com.nadri.train.web.model.ResponseDto;
 import com.nadri.train.web.model.TrainReservationDto;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.web.model.TrainSearchForm;
+import com.nadri.user.vo.User;
 
 @RestController
 @RequestMapping("/api/train")
@@ -51,12 +54,7 @@ public class TrainRestController {
 	 */
 	@GetMapping("/schedule")
 	public ResponseDto<?> getSchedule(TrainSearchForm search) {
-		log.info("확인date: " + search.getDpDate1());
-		log.info("확인time: " + search.getDpTime1());
-		log.info("확인ar: " + search.getArrivalStation());
-		log.info("확인dp: " + search.getDepartureStation());
-		log.info("확인row: " + search.getRowNo1());
-		
+
 		TrainCriteria criteria = new TrainCriteria();
 		criteria.setDepartureStation(search.getDepartureStation());
 		criteria.setArrivalStation(search.getArrivalStation());
@@ -80,7 +78,7 @@ public class TrainRestController {
 	 * @return
 	 */
 	@GetMapping("/trainInfo") 
-	public Map<String, Object> getTrainInfo(TrainRoomInfo roomInfo) {
+	public Map<String, Object> getTrainInfo(@LoginedUser User user, TrainRoomInfo roomInfo) {
 		List<TrainRoom> rooms = service.getTrainRoom(roomInfo);
 		List<TrainSeat> seatList = service.getTrainSeatNo(roomInfo.getSchduleNo(), roomInfo.getTrainNo());
 		
@@ -92,8 +90,8 @@ public class TrainRestController {
 	}
 	
 	@GetMapping("/reservation")
-	public ResponseDto<?> insertReservation(TrainReservationDto dto) {
-		log.info("파라 확인 : " + dto.toString());
+	public ResponseDto<?> insertReservation(@LoginedUser User user, TrainReservationDto dto) {
+		log.info("파라 확인 : " + user.getNo());
 		
 		List<Integer> reservedNo = new ArrayList<>();
 		TrainReservation reservation1 = new TrainReservation();
@@ -102,6 +100,7 @@ public class TrainRestController {
 		int ch = dto.getCdNo1();
 		reservation1.setTotalPrice(ad*dto.getPriceschedule1() + ch*(dto.getPriceschedule1()/2));
 		reservation1.setTotalCount(dto.getCount1());
+		reservation1.setUserNo(user.getNo());
 		log.info("티켓 확인 : " + reservation1.toString());
 		for (int i=0; i<dto.getCount1(); i++) {
 
@@ -130,6 +129,7 @@ public class TrainRestController {
 			ch = dto.getCdNo2();
 			reservation2.setTotalPrice(ad*dto.getPriceschedule2() + ch*(dto.getPriceschedule2()/2));
 			reservation2.setTotalCount(dto.getCount2());
+			reservation2.setUserNo(user.getNo());
 			log.info("티켓 확인 : " + reservation2.toString());
 			for (int i=0; i<dto.getCount2(); i++) {
 				TrainTicket ticket = new TrainTicket();

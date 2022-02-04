@@ -1,6 +1,9 @@
 package com.nadri.train.service;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,8 +99,27 @@ public class TrainService {
 	 * @param reservedNo2 오는 기차 예약번호
 	 * @return
 	 */
-	public List<TrainReservation> getReservationByNo(int reservedNo1, int reservedNo2) {
-		return mapper.getReservationByNo(reservedNo1, reservedNo2);
+	public List<TrainReservation> getReservationByNo(int userNo, int reservedNo1, int reservedNo2) {
+		Map<String, Object> useing = new HashMap<String, Object>();
+		useing.put("reservedNo1", reservedNo1);
+		useing.put("reservedNo2", reservedNo2);
+		useing.put("userNo", userNo);
+		return mapper.getReservationByNo(useing);
+	}
+	public List<TrainReservation> getReservationByUserNo(int userNo) {
+		Map<String, Object> useing = new HashMap<String, Object>();
+		useing.put("userNo", userNo);
+		List<TrainReservation> reservationList = mapper.getReservationByNo(useing);
+		
+		Calendar cal = Calendar.getInstance();
+		for (TrainReservation reservation : reservationList) {
+			if ("예약".equals(reservation.getTickectStatus())) {
+				cal.setTime(reservation.getReservationDate());
+				cal.add(Calendar.MINUTE, 10);
+				reservation.setReservationDate(cal.getTime());
+			}
+		}
+		return reservationList;
 	}
 	
 	/**
@@ -127,7 +149,10 @@ public class TrainService {
 	}
 	
 	public void deleteTicket(List<Integer> deleteList) {
-		mapper.deleteTicket(deleteList);
-		mapper.deleteReservation(deleteList);
+		if (deleteList.size() !=0) {
+			log.info("삭제 리스트 길이 : " + deleteList.size());
+			mapper.deleteTicket(deleteList);
+			mapper.deleteReservation(deleteList);
+		}
 	}
 }
