@@ -57,9 +57,9 @@ public class restaurantRestController {
 			review.setPicture(filename);
 		}
 		rtService.addNewReview(review);
-
+		
 		List<RestaurantReview> reviewList = rtService.getAllReviewsByRestaurantNo(form.getRestaurantNo());
-
+		
 		return review;
 	}
 	

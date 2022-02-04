@@ -20,6 +20,7 @@ public class RestaurantReview {
 	private int no;
 	private int restaurantNo;
 	private int userNo;
+	private String userName;
 	private String title;
 	private String picture;
 	private String content;
