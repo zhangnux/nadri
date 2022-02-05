@@ -1,16 +1,26 @@
 package com.nadri.train.web.restController;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,13 +31,16 @@ import com.google.gson.reflect.TypeToken;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainModifyDto;
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.exception.LoginException;
 import com.nadri.train.service.TrainService;
+import com.nadri.train.util.SessionUtils;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSeat;
 import com.nadri.train.vo.TrainStation;
 import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.ResponseDto;
+import com.nadri.train.web.model.TrainPaymentDto;
 import com.nadri.train.web.model.TrainReservationDto;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.web.model.TrainSearchForm;
@@ -167,15 +180,17 @@ public class TrainRestController {
 	@PutMapping("/reservation/{reservationNo}")
 	public ResponseDto<?> update(@LoginedUser User user, @RequestParam String jsonData, @PathVariable(name="reservationNo") int reservationNo) {
 		// json 배열값을 java객체로 옮기는 방법
+		log.info(jsonData);
+		ResponseDto<?> response = new ResponseDto<>();
 		Gson gson = new Gson(); 
 		Type ticketListType = new TypeToken<ArrayList<TrainModifyDto>>(){}.getType();
 		ArrayList<TrainModifyDto> ticketList = gson.fromJson(jsonData, ticketListType);
 		
-		List<TrainReservation> reservationList = service.getReservationByNo(user.getNo(), reservationNo, 0);
-		TrainReservation reservation = reservationList.get(0);
 		List<Integer> ticketNo = new ArrayList<>();
-		int count = reservation.getTotalCount();
 		long totalPrice = 0;
+		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
+		
+		int count = reservation.getTotalCount();
 		
 		for (TrainModifyDto ticket : ticketList) {
 			if ("선택안함".equals(ticket.getType())) {
@@ -185,7 +200,7 @@ public class TrainRestController {
 				TrainTicket target = service.getTicketByNo(ticket.getNo());
 				target.setType(ticket.getType());
 				service.updateTicket(target);
-
+				
 				totalPrice += target.getPrice();
 			} else if ("어린이".equals(ticket.getType())) {
 				TrainTicket target = service.getTicketByNo(ticket.getNo());
@@ -194,13 +209,13 @@ public class TrainRestController {
 				
 				totalPrice += target.getPrice();
 			}
-			// 티켓 번호로 티켓 불러오고 수정한다음 list로 받아 업데이트?
 		}
 		
 		// 삭제하기
 		if (ticketNo.size() != 0) {
 			service.deleteTicketByNo(ticketNo);
 		}
+		
 		if (count == 0) {
 			service.deleteReservationByNo(user.getNo(), reservationNo);
 		} else {
@@ -208,11 +223,66 @@ public class TrainRestController {
 			reservation.setTotalCount(count);
 			service.updateReservation(reservation);
 		}
-		
-		// 예약 번호, 티켓 번호, type값, 만약의 type값중에 사용안함의 개수를 세어 그중에 count수를 뺀다. 뺀값이 0이면 삭제 0이 아니면 count수만 조정
-		// 그만큼 가격도 빼야돼네, 티켓 가격도 가져오고, 예약 총 가격도 가져오고
-		ResponseDto<?> response = new ResponseDto<>();
 		response.setStatus("OK");
 		return response;
 	}
+	
+	@Delete("/reservation/{reservationNo}")
+	public ResponseDto<?> delete(@LoginedUser User user, @PathVariable(name="reservationNo") int reservationNo) {
+		ResponseDto<?> response = new ResponseDto<>();
+		response.setStatus("OK");
+		
+		service.deleteReservationByNo(user.getNo(), reservationNo);
+		
+		return response;
+	}
+	
+	@GetMapping("/kakaoPay")
+	public String kakaoPay(@LoginedUser User user, TrainPaymentDto dto) throws IOException {
+		SessionUtils.addAttribute("reservationNo", dto.getReservationNo());
+		StringBuffer outPutData = new StringBuffer();
+		outPutData.append("cid=TC0ONETIME")
+				.append("&partner_order_id=").append(dto.getReservationNo())
+				.append("&partner_user_id=").append(user.getId())
+				.append("&item_name=trainTicket")
+				.append("&quantity=").append(String.valueOf(dto.getTotalCount()))
+				.append("&total_amount=").append(String.valueOf(dto.getTotalPrice()))
+				.append("&tax_free_amount=0")
+				.append("&approval_url=http://localhost/train/kakaoPayment.nadri")
+				.append("&cancel_url=http://localhost/train/reservationList.nadri")
+				.append("&fail_url=http://localhost/train/failPayment.nadri");
+		
+		URL address = new URL("https://kapi.kakao.com/v1/payment/ready");
+		HttpURLConnection conn = (HttpURLConnection) address.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Authorization", "KakaoAK 5fa0f0222e9a68676ec86330e233e3e7");
+		conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		conn.setDoOutput(true);
+		
+		OutputStream outPut = conn.getOutputStream();
+		DataOutputStream data = new DataOutputStream(outPut);
+		data.writeBytes(outPutData.toString());
+		data.flush();
+		data.close();
+		
+		BufferedReader rd;
+		if(conn.getResponseCode() == 200) {
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		} else {
+			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+		}
+		return rd.readLine();
+	}
+	
+	/**
+	 * tid저장하기
+	 * @param tid
+	 * @return
+	 */
+	@GetMapping("/progress")
+	public String progress(String tid) {
+		SessionUtils.addAttribute("tid", tid);
+		return "";
+	}
+	
 }

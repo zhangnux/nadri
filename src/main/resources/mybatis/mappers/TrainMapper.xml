@@ -204,8 +204,11 @@
 		
 			r.user_no = #{userNo}
 			<choose>
-				<when test="reservedNo1 != null">
+				<when test="reservedNo2 != null">
 		 			and r.reservation_no in (#{reservedNo1}, #{reservedNo2})
+				</when>
+				<when test="reservedNo1 != null">
+		 			and r.reservation_no = #{reservedNo1}
 				</when>
 				<otherwise>
 					and r.ticketing_status in ('결제', '예약')

@@ -80,8 +80,11 @@
 			<li>
 				'${sessionScope.LOGIN_USER.name }' 고객님의 예약 및 발권내역은 아래와 같습니다.
 			</li>
-			<li class="mt-1">
+			<li class="mt-2">
 				출발시각 이전까지 예약한 승차권을 발권받지 않은 경우 자동 예약 좌석이 자동으로 취소되며, 위약금(결제금액의 15%)이 발생하니 반드시 승차권을 발권하시기 바랍니다.
+			</li>
+			<li class="mt-2">
+				최대 <strong>2</strong>개의 예약 건을 결제하실 수 있습니다.
 			</li>
 		</ul>
 		<ul style="display: none;">
@@ -98,7 +101,7 @@
 	</div>
 	<div class="row mt-4">
 		<div class="col">
-			<form action="#" method="get" id="form-modify">
+			<form action="/train/payment.nadri" method="get" id="form-modify">
 				<table class="text-center" id="reservationTable">
 					<thead>
 						<tr style="background-color: #D6DEE8; ">
@@ -119,7 +122,11 @@
 							<c:when test="${not empty reservationList }">
 								<c:forEach var="reservation" items="${reservationList }">
 								<tr>
-									<td><input type="checkbox" name="reservationNo" value="${reservation.no }"></td>
+									<td>
+									<c:if test="${reservation.tickectStatus eq '예약' }">
+										<input type="checkbox" name="reservationNo" value="${reservation.no }">
+									</c:if>
+									</td>
 									<td><fmt:formatDate value="${reservation.departureTime }" pattern="yyyy-MM-dd"/></td>
 									<td>${reservation.trainName } - ${reservation.trainNo }</td>
 									<td>${reservation.departureStation }<div><fmt:formatDate value="${reservation.departureTime }" pattern="HH:mm"/></div></td>
@@ -132,7 +139,7 @@
 											<td class="text-danger fw-bold"><fmt:formatDate value="${reservation.reservationDate }" pattern="HH시 mm분까지" />
 												<button type="button" class="btn" style="border: 1px solid black; height: 25px;">결제하기</button>
 											</td>
-											<td><button type="button" class="btn" style="background-color: #7E5C5E; color: white;">예약 취소</button></td>
+											<td><button type="button" class="btn btn-cancel" style="background-color: #7E5C5E; color: white;">예약 취소</button></td>
 										</c:when>
 										<c:when test="${reservation.tickectStatus eq '결제' }">
 											<td>결제 완료</td>
@@ -144,7 +151,7 @@
 							</c:when>
 							<c:otherwise>
 								<tr>
-									<td>예약된 내역이 없습니다</td>
+									<td colspan="10" class="p-5">예약된 내역이 없습니다</td>
 								</tr>
 							</c:otherwise>
 						</c:choose>
@@ -180,12 +187,18 @@
 		})
 
 		$("#credit-btn > button:first-child").click(function() {
-			$("#form-modify").submit()
  			if ($(":checked").val() == null) {
 				alert("결제하실 표를 선택해 주세요.")
-			} /* else {
-				$("#form-modify").attr('action', '/train/modify.nadri')
-			} */
+				return;
+			} 
+			
+			if ($(":checked").length > 2) {
+				alert("2개 이상은 결제하실 수 없습니다.")
+				return;
+			}
+			
+			$("#form-modify").attr('action', '/train/payment.nadri')
+			$("#form-modify").submit()
 		})
 
 		$("#credit-btn > button:nth-child(2)").click(function() {
@@ -194,6 +207,29 @@
 				$("#form-modify").submit()
 			} else {
 				alert("변경하실 표를 선택해 주세요.")
+			}
+		})
+		
+		$(".btn-cancel").click(function() {
+			let cancel = confirm("예약을 취소하시겠습니까?")
+			if (cancel) {
+				let target = $(this).parent().siblings().eq(0).children().val()
+				$.ajax({type:'DELETE',
+						dataType:'json',
+						url:"/api/train/reservation/" + target,
+						success:function() {
+							alert("취소가 완료되었습니다.")
+						},
+						error:function() {
+							
+						},
+						statusCode:{
+							404:function() {
+								alert("취소된 예약정보 입니다.")
+								location.replace("http://localhost/train/reservationList.nadri");
+							}
+						}
+				})
 			}
 		})
 	
