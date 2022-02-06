@@ -34,14 +34,14 @@
 				<strong>오류</strong> ${error }
 			</div>
 		</c:if>
-		<form class="p-5 border bg-white col-sm-4 mx-auto" action="login.nadri" method="post">
+		<form class="p-5 border bg-white col-sm-4 mx-auto" action="login.nadri" method="post" name="loginForm" id="loginForm">
 			<div class="form-group p-2">
 				<label class="form-label" style="font-size:13px">아이디 *</label> 
 				<input type="text" class="form-control" placeholder="아이디를 입력해주세요." name="id" id="id">
 			</div>
 			<div class="form-group p-2">
 				<label class="form-label" style="font-size:13px">비밀번호 *</label> 
-				<input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="password" id="password">
+				<input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="pw" id="pw">
 			</div>
 			<div class="d-grid gap-3 p-2 col-12 mx-auto">
 				<button type="submit" class="btn btn-primary btn-lg">로그인</button>
@@ -49,13 +49,19 @@
 			<div class="box">
 				<span class="p-2 h-100 align-center" style="font-size:10pt">아직 회원이 아니신가요?&emsp;<a href="../user/insert.nadri">회원가입</a></span>
 			</div>
-			
 		</form>
 	</div>
 </div>
 
 
 <script type="text/javascript">
+/*
+$("#loginForm").submit(function(){
+	var id = $("#id").val();
+	var pw = $("#pw").val();
+	
+})
+*/
 
 </script>
 <%@ include file="../common/footer.jsp" %>
