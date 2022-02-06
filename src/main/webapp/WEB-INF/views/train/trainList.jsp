@@ -238,6 +238,10 @@
 				</div>
 			</div>
 			<!-- 가는 열차 -->
+			<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify">
+				<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">가는 열차</h6> 
+				<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate1 }</span>
+			</div>
 			<c:choose>
 				<c:when test="${empty schedules1 }">
 					<div class="border p-5 text-center">
@@ -245,10 +249,6 @@
 					</div>
 				</c:when>
 				<c:otherwise>
-					<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify">
-						<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">가는 열차</h6> 
-						<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate1 }</span>
-					</div>
 					<div class="row">
 						<div class="col">
 							<table class="table text-center listTable">
@@ -310,71 +310,80 @@
 					</div>
 				</c:otherwise>
 			</c:choose>
-			<c:if test="${not empty schedules2 }">
+			<c:if test="${way eq '왕복'}">
 				<div style="border: 1px solid #D8E5F6; background-color: #094A6B; text-align-last: justify; margin-top: 100px;">
 					<h6 class="px-3 py-2 m-0 fw-bold" style="color: white; display: inline-block;">오는 열차</h6> 
 					<span class="px-3 fs-5" style="color: white;">${searchForm.dpDate2 }</span>
 				</div>
-				<div class="row">
-					<div class="col">
-						<table class="table text-center listTable">
-							<thead style="border-bottom: inset;">
-								<tr style="background-color: #E1EDFC;">
-									<th style="width: 7%;">구분</th>
-									<th style="width: 10%;">열차종류</th>
-									<th style="width: 10%;">열차번호</th>
-									<th style="width: 15%;">출발</th>
-									<th style="width: 15%;">도착</th>
-									<th style="width: 11%;">특실</th>
-									<th style="width: 11%;">일반실</th>
-									<th style="width: 10%;">소요기간</th>
-									<th style="width: *;">운임</th>
-								</tr>
-							</thead>
-							<tbody id="schedule2" style="vertical-align: middle;">
-							<c:forEach var="schedule" items="${schedules2 }">
-								<tr>
-									<td>직통</td>
-									<td class="infoTrain" data-schedule-no="${schedule.scheduleNo }">${schedule.trainName }
-									</td>
-									<td>${schedule.trainNo }</td>
-									<td class="dpTime">${searchForm.arrivalStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
-									<td class="arTime">${searchForm.departureStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
-									<td data-price-no="${schedule.specialPriceId }" data-price="${schedule.specialPrice }">
-										<c:choose>
-											<c:when test="${schedule.specialSeat eq 0 }">
-											</c:when>
-											<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
-												<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
-											</c:when>
-											<c:otherwise>
-												<button class="btn special" type="button">예매</button>
-											</c:otherwise>
-										</c:choose>
-									</td>
-									<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
-										<c:choose>
-											<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
-												<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
-											</c:when>
-											<c:otherwise>
-												<button class="btn normal" type="button">예매</button>
-											</c:otherwise>
-										</c:choose>
-									</td>
-									<td class="runTime">${schedule.diffTime }</td>
-									<td><button class="btn-look-price" type="button">보기</button></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+			</c:if>
+			<c:choose>
+				<c:when test="${not empty schedules2 }">
+					<div class="row">
+						<div class="col">
+							<table class="table text-center listTable">
+								<thead style="border-bottom: inset;">
+									<tr style="background-color: #E1EDFC;">
+										<th style="width: 7%;">구분</th>
+										<th style="width: 10%;">열차종류</th>
+										<th style="width: 10%;">열차번호</th>
+										<th style="width: 15%;">출발</th>
+										<th style="width: 15%;">도착</th>
+										<th style="width: 11%;">특실</th>
+										<th style="width: 11%;">일반실</th>
+										<th style="width: 10%;">소요기간</th>
+										<th style="width: *;">운임</th>
+									</tr>
+								</thead>
+								<tbody id="schedule2" style="vertical-align: middle;">
+								<c:forEach var="schedule" items="${schedules2 }">
+									<tr>
+										<td>직통</td>
+										<td class="infoTrain" data-schedule-no="${schedule.scheduleNo }">${schedule.trainName }
+										</td>
+										<td>${schedule.trainNo }</td>
+										<td class="dpTime">${searchForm.arrivalStation } <div><fmt:formatDate value="${schedule.departureTime }" pattern="HH:mm"/></div></td>
+										<td class="arTime">${searchForm.departureStation }<div><fmt:formatDate value="${schedule.arrivalTime }" pattern="HH:mm"/></div></td>
+										<td data-price-no="${schedule.specialPriceId }" data-price="${schedule.specialPrice }">
+											<c:choose>
+												<c:when test="${schedule.specialSeat eq 0 }">
+												</c:when>
+												<c:when test="${schedule.specialBooking eq schedule.specialSeat }">
+													<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
+												</c:when>
+												<c:otherwise>
+													<button class="btn special" type="button">예매</button>
+												</c:otherwise>
+											</c:choose>
+										</td>
+										<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
+											<c:choose>
+												<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
+													<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
+												</c:when>
+												<c:otherwise>
+													<button class="btn normal" type="button">예매</button>
+												</c:otherwise>
+											</c:choose>
+										</td>
+										<td class="runTime">${schedule.diffTime }</td>
+										<td><button class="btn-look-price" type="button">보기</button></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-			<div style="text-align-last: justify; margin-bottom: 100px;" id="btn2">
-				<button class="btn" type="button" id="prev2">이전</button>
-				<button class="btn" type="button" id="next2">다음</button>
-			</div>
-		</c:if>
+				<div style="text-align-last: justify; margin-bottom: 100px;" id="btn2">
+					<button class="btn" type="button" id="prev2">이전</button>
+					<button class="btn" type="button" id="next2">다음</button>
+				</div>
+			</c:when>
+			<c:when test="${way eq '왕복' && empty schedules2 }">
+				<div class="border p-5 text-center">
+					기차역 정보가 존재하지 않습니다.
+				</div>
+			</c:when>
+		</c:choose>
 		</form>
 	</div>
 	<!-- 좌석 선택 모달창 -->
@@ -682,28 +691,30 @@
 			
 			let arTime;
 			let dpTime;
-			if ($("[name=schduleNo1]").val() != '' && $tbody == 'schedule2') {
-				arTime = moment($("#arrow").next().children().eq(0).text(), 'hh:mm')
-				if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
-					arTime.add(1, 'days')
-				}	
-				dpTime = moment($(this).parent().prevAll().filter('.dpTime').contents()[1].textContent, 'hh:mm')
-				if (dpTime.diff(arTime) <= 0) {
-					$('#modal-seat').off('hidden.bs.modal', handler)
-					alert("열차가 도착하기 전에 출발하실 수 없습니다.")
-					return;
-				} 
-			} else if ($("[name=schduleNo2]").val() != '' && $(this).closest('tbody').attr('id') == 'schedule1') {
-				arTime = moment($(this).parent().prevAll().filter('.arTime').contents()[1].textContent, 'hh:mm')
-				dpTime = moment($("#arrow").prev().children().eq(4).text(), 'hh:mm')
-				if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
-					arTime.add(1, 'days')
-				}	
-				if (dpTime.diff(arTime) <= 0) {
-					$('#modal-seat').off('hidden.bs.modal', handler)
-					alert("열차가 도착하기 전에 출발하실 수 없습니다.")
-					return;
-				} 
+			if ($("[name=dpDate1]").val() == $("[name=dpDate2]").val()) {
+				if ($("[name=schduleNo1]").val() != '' && $tbody == 'schedule2') {
+					arTime = moment($("#arrow").next().children().eq(0).text(), 'hh:mm')
+					if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
+						arTime.add(1, 'days')
+					}	
+					dpTime = moment($(this).parent().prevAll().filter('.dpTime').contents()[1].textContent, 'hh:mm')
+					if (dpTime.diff(arTime) <= 0) {
+						$('#modal-seat').off('hidden.bs.modal', handler)
+						alert("열차가 도착하기 전에 출발하실 수 없습니다.")
+						return;
+					} 
+				} else if ($("[name=schduleNo2]").val() != '' && $(this).closest('tbody').attr('id') == 'schedule1') {
+					arTime = moment($(this).parent().prevAll().filter('.arTime').contents()[1].textContent, 'hh:mm')
+					dpTime = moment($("#arrow").prev().children().eq(4).text(), 'hh:mm')
+					if (moment('02:00', 'hh:mm').diff(arTime) >= 0) {
+						arTime.add(1, 'days')
+					}	
+					if (dpTime.diff(arTime) <= 0) {
+						$('#modal-seat').off('hidden.bs.modal', handler)
+						alert("열차가 도착하기 전에 출발하실 수 없습니다.")
+						return;
+					} 
+				}
 			}
 			// 선택한 기차의 가격id
 			if ($(this).hasClass('normal') || $(this).hasClass('special')) {

@@ -171,7 +171,6 @@
 			for (var i=1; i<=noList.length+1; i++) {
 				result.push({no:noList.shift(), type:typeList.shift()})
 			}
-			console.log({ticket:result})
 			// 객체 직렬화
 			jsonData = JSON.stringify(result)
 		})
@@ -184,14 +183,19 @@
 				dataType:"json",
 				traditional:true,
 				success:function() {
-					alert("성공")
+					alert("수정이 완료되었습니다.")
+					$(location).attr('href', "http://localhost/train/reservationList.nadri");
 				},
 				error:function() {
-					alert("실패")
+				},
+				statusCode: {
+					404:function() {
+						alert("취소된 예약정보 입니다.")
+						location.replace("http://localhost/train/reservationList.nadri");
+					}
 				}
 			})
 		})
-
 	
 	})
 </script>

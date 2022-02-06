@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.nadri.train.exception.LoginException;
 import com.nadri.train.util.SessionUtils;
 import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
@@ -44,7 +45,7 @@ public class UserLoginCheckInterceptor implements HandlerInterceptor {
 		// 로그인 안되어 있으면 exception발생
 		if (user == null) {
 			if (request.getRequestURI().startsWith("/api")) {
-				throw new RuntimeException();
+				throw new LoginException("로그인이 필요한 서비스 입니다.");
 			} else  {
 				response.sendRedirect("/user/login.nadri");
 				return false;

@@ -1,5 +1,6 @@
 package com.nadri.train.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.exception.LoginException;
+import com.nadri.train.exception.ReservationException;
 import com.nadri.train.mapper.TrainMapper;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
@@ -94,7 +97,7 @@ public class TrainService {
 	}
 	
 	/**
-	 * 예약 번호에 해당하는 예약 정보 반환
+	 * 여러개의 예약 번호에 해당하는 예약 정보 반환
 	 * @param reservedNo1 가는 기차 예약번호
 	 * @param reservedNo2 오는 기차 예약번호
 	 * @return
@@ -104,8 +107,42 @@ public class TrainService {
 		useing.put("reservedNo1", reservedNo1);
 		useing.put("reservedNo2", reservedNo2);
 		useing.put("userNo", userNo);
-		return mapper.getReservationByNo(useing);
+		List<TrainReservation> reservationList = mapper.getReservationByNo(useing);
+//		if (reservationList == null) {
+//			throw new ReservationException("예약 정보가 존재하지 않습니다.");
+//		}
+		
+		for (TrainReservation reservation : reservationList) {
+			if (reservation.getUserNo() != userNo) {
+				throw new LoginException("로그인후 사용하실 수 있습니다.");
+			}
+		}
+		return reservationList;
 	}
+	
+	/**
+	 * 예약 번호에 해당하는 예약 정보 반환
+	 * @param userNo
+	 * @param reservationNo
+	 * @return 
+	 */
+	public TrainReservation getReservationOne(int userNo, int reservationNo) {
+		Map<String, Object> useing = new HashMap<String, Object>();
+		useing.put("reservedNo1", reservationNo);
+		useing.put("userNo", userNo);
+		TrainReservation reservation = mapper.getReservationByNo(useing).get(0);
+		
+		if (reservation.getUserNo() != userNo) {
+			throw new LoginException("로그인한 후 사용하실 수 있습니다.");
+		}
+		return reservation;
+	}
+	
+	/**
+	 * 유저 번호에 해당한는 모든 예약 정보 반환
+	 * @param userNo
+	 * @return
+	 */
 	public List<TrainReservation> getReservationByUserNo(int userNo) {
 		Map<String, Object> useing = new HashMap<String, Object>();
 		useing.put("userNo", userNo);
@@ -131,6 +168,30 @@ public class TrainService {
 	public List<TrainTicket> getTicketByReservedNo(int reservedNo1, int reservedNo2) {
 		return mapper.getTicketByReservedNo(reservedNo1, reservedNo2); 
 	}
+	
+	
+//	map안에 list어케 꺼내???	
+//	public Map<String, Object> getTicketAndReservation(int userNo, int reservedNo1, int reservedNo2) {
+//		Map<String, Object> target = new HashMap<String, Object>();
+//		List<TrainReservation> reservationList = getReservationByNo(userNo, reservedNo1, reservedNo2);
+//		List<TrainTicket> ticketList = getTicketByReservedNo(reservedNo1, reservedNo2);
+//		
+//		List<TrainTicket> ticket1 = new ArrayList<>();
+//		List<TrainTicket> ticket2 = new ArrayList<>();
+//		for (TrainTicket ticket : ticketList) {
+//			if (ticket.getReservationNo() == reservationList.get(0).getNo()) {
+//				ticket1.add(ticket);
+//			} else {
+//				ticket2.add(ticket);
+//			}
+//		}
+//		
+//		target.put("reservationList", reservationList);
+//		target.put("ticket1", ticket1);
+//		target.put("ticket2", ticket2);
+//		
+//		return target;
+//	}
 	
 	/**
 	 * 인기 노선 반환
@@ -169,10 +230,14 @@ public class TrainService {
 	}
 	
 	/**
-	 * 예약번호로 해당 예약정보 반환
+	 * 예약번호로 해당 예약정보 삭제
 	 * @param no
 	 */
 	public void deleteReservationByNo(int userNo, int no) {
+		TrainReservation reservation = getReservationOne(userNo, no);
+		if (reservation.getNo() != userNo) {
+			throw new LoginException("로그인 후 사용하실 수 있습니다.");
+		}
 		mapper.deleteReservationByNo(userNo, no);
 	}
 	

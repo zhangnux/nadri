@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>nadri</title>
+    <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,6 +12,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <style>
+	#table-price {
+		width: 100%;
+		height: 45px;
+	}
 	td, th{
 		border: 1px solid #E0E0E0;
 		height: 45px;
@@ -21,35 +25,65 @@
 		text-align: center;
 		width: 100%;
 	}
+	.paymentType button.active {
+		box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%); 
+	}
 </style>
 <body>
 <%@ include file="../common/navbar.jsp" %>
 <div class="container">
 	<div class="row my-5">
 		<div class="col">
-			<h2>예약 확인</h2>
+			<h2>결제하기</h2>
 		</div>
 	</div>
-	<c:set var="menu1" value="search"/>
-	<c:set var="menu3" value="confirmReservation"/>
-	<c:set var="active" value="menu3"/>
+	<c:set var="menu4" value="reservationList"/>
+	<c:set var="menu6" value="payment"/>
+	<c:set var="active" value="menu6"/>
 	<%@ include file="common/breadcrumb.jsp" %>
 	<hr>
-	<div class="border p-4 mt-4">
-		10분 내에 결제하지 않으면 취소됩니다.
+	<div class="border pt-4 pb-2 ps-4 my-3" style="font-size: 15px;">
+		<ul id="explanation">
+			<li>
+				결제수단은 카카오페이가 있습니다.
+			</li>
+			<li class="mt-2">
+				결제수단을 선택하신 후 결제확인 버튼을 클릭해 주시길 바랍니다.
+			</li>
+		</ul>
+	</div>
+	<div>
+		<table class="border" id="table-price">
+			<tbody>
+				<tr>
+					<th class="text-center" style="width: 17%; background-color: #E6ECF3;">결제금액</th>
+					<td class="ps-4 text-start"><fmt:formatNumber value="${reservation1.totalPrice + reservation2.totalPrice}" pattern="##,###"/> 원</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="mt-5">
+		<h4>결제수단 선택</h4>
+	</div>
+	<div class="mt-3 paymentType">
+		<button class="btn text-center p-2 focus" style="width: 200px; height: 80px; border: 1px solid black;" data-payment-type="kakao">
+			<strong style="font-size: 25px;">pay</strong>
+			<div>카카오페이</div>
+		</button>
+	</div>
+	<div class="mt-5">
+		<h4>발권</h4>
 	</div>
 	<div class="row mt-4">
 		<div class="col">
-			<form action="/train/payment.nadri" method="get" id="form-payment">
-				<input name="reservationNo" type="hidden" value="${reservation1.no }">
-				<c:if test="${not empty reservation2 }">
-					<input name="reservationNo" type="hidden" value="${reservation2.no }">
-				</c:if>
+			<form action="#" method="post">
+				<input name="totalPrice" type="hidden" value="${reservation1.totalPrice + reservation2.totalPrice}">
+				<input name="totalCount" type="hidden" value="${reservation1.totalCount + reservation2.totalCount}">
+				<input name="paymentType" type="hidden">
+				<input name="reservationNo1" type="hidden" value="${reservation1.no }">
+				<input name="reservationNo2" type="hidden" value="${reservation2.no }">
 				<table class="text-center" id="train1">
 					<thead>
-						<tr>
-							<th class="text-start px-3" colspan="9" style="background-color: #7E5C5E; color: white;">가는 열차</th>
-						</tr>
 						<tr style="background-color: #FFF7F8;">
 							<th width="11%">승차일자</th>
 							<th width="11%">열차종류</th>
@@ -88,6 +122,7 @@
 						<th>좌석정보</th>
 						<th>승객유형</th>
 						<th>운임</th>
+						<th>승차자명</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -97,6 +132,7 @@
 							<td>${ticket.roomName } <span> ${ticket.seatNo }</span></td>
 							<td>${ticket.type }</td>
 							<td><fmt:formatNumber value="${ticket.price }" pattern="##,###"/>원</td>
+							<td><input type="text" name="name1"/></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -108,9 +144,6 @@
 			<div class="col">
 				<table class="text-center" id="train2">
 					<thead>
-						<tr>
-							<th class="text-start px-3" colspan="9" style="background-color: #577495; color: white;">오는 열차</th>
-						</tr>
 						<tr style="background-color: #EFF7FF;">
 							<th width="11%">승차일자</th>
 							<th width="11%">열차종류</th>
@@ -148,6 +181,7 @@
 							<th>좌석정보</th>
 							<th>승객유형</th>
 							<th>운임</th>
+							<th>승차자명</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -157,6 +191,7 @@
 								<td>${ticket.roomName } <span> ${ticket.seatNo }</span></td>
 								<td>${ticket.type }</td>
 								<td><fmt:formatNumber value="${ticket.price }" pattern="##,###"/>원</td>
+								<td><input type="text" name="name1"/></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -165,15 +200,40 @@
 		</div>
 	</c:if>
 	<div class="text-end mt-3">
-		<button class="btn btn-outline-dark submit-btn" style="border-radius: 0;" type="button">결제하기</button>
+		<button class="btn btn-outline-dark btn-payment" style="border-radius: 0;">결제하기</button>
 	</div>
 </div>
+<%@ include file="../common/footer.jsp" %>
 </body>
 <script type="text/javascript">
 	$(function() {
-		$(".submit-btn").click(function() {
-			$("#form-payment").submit();
+		
+		$(".paymentType button").click(function() {
+			$("[name=paymentType]").val($(this).attr('data-payment-type'))
+			$(this).toggleClass('active')
+			
+		})	
+	
+		$(".btn-payment").click(function() {
+			let paymentNo = $("[name=reservationNo1]").val() + " " + $("[name=reservationNo2]").val()
+			$.getJSON('/api/train/kakaoPay',
+					{totalPrice:$("[name=totalPrice]").val() , totalCount:$("[name=totalCount]").val(),
+						reservationNo:paymentNo},
+					function(response) {
+						
+						if (response.status == "FAIL") {
+							alert(response.error)
+							location.replace("http://localhost/user/login.nadri")
+						} else {
+							$.getJSON(
+								'/api/train/progress',
+								{tid:response.tid}
+							)
+							$(location).attr('href', response.next_redirect_pc_url);
+						}
+					})
 		})
+	
 	})
 </script>
 </html>

@@ -31,20 +31,23 @@
  	</c:if>
  	<c:if test="${not empty menu3 }">
 		<li class="breadcrumb-item ${active eq 'menu3' ? 'active' : '' }">
-			<a href="#">예약</a><!-- 예약 리스트 페이지로 이동 -->
+			<a href="#">예약</a>
 		</li>
  	</c:if>
  	<c:if test="${not empty menu4 }">
 		<li class="breadcrumb-item ${active eq 'menu4' ? 'active' : '' }">
-			<a href="/train/reservationList.nadri">발권/취소/변경</a><!-- 예약 리스트 페이지로 이동 -->
+			<a href="/train/reservationList.nadri">발권/취소/변경</a>
 		</li>
  	</c:if>
  	<c:if test="${not empty menu5 }">
 		<li class="breadcrumb-item ${active eq 'menu5' ? 'active' : '' }">
-			<a href="#">예약변경</a><!-- 예약 리스트 페이지로 이동 -->
+			<a href="#">예약변경</a>
 		</li>
  	</c:if>
-    <%-- <li class="breadcrumb-item ${menu eq 'booking' ? 'active' : '' }"><a href="#">예약</a></li>
-    <li class="breadcrumb-item ${menu eq 'payment' ? 'active' : '' }"><a href="#">결제</a></li> --%>
+ 	<c:if test="${not empty menu6 }">
+		<li class="breadcrumb-item ${active eq 'menu6' ? 'active' : '' }">
+			<a href="#">결제</a>
+		</li>
+ 	</c:if>
   </ol>
 </nav>
