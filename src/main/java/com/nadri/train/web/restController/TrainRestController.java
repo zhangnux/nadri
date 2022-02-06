@@ -18,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -110,7 +111,7 @@ public class TrainRestController {
 	
 	@GetMapping("/reservation")
 	public ResponseDto<?> insertReservation(@LoginedUser User user, TrainReservationDto dto) {
-		log.info("파라 확인 : " + user.getNo());
+		log.info("파라 확인 : " + dto.toString());
 		
 		List<Integer> reservedNo = new ArrayList<>();
 		TrainReservation reservation1 = new TrainReservation();
@@ -185,7 +186,7 @@ public class TrainRestController {
 		Gson gson = new Gson(); 
 		Type ticketListType = new TypeToken<ArrayList<TrainModifyDto>>(){}.getType();
 		ArrayList<TrainModifyDto> ticketList = gson.fromJson(jsonData, ticketListType);
-		
+		log.info("수정확인 : " + ticketList.toString());
 		List<Integer> ticketNo = new ArrayList<>();
 		long totalPrice = 0;
 		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
@@ -196,21 +197,22 @@ public class TrainRestController {
 			if ("선택안함".equals(ticket.getType())) {
 				--count;
 				ticketNo.add(ticket.getNo());
+				log.info("수정확인 : " + "선택안함");
 			} else if ("어른".equals(ticket.getType())) {
 				TrainTicket target = service.getTicketByNo(ticket.getNo());
 				target.setType(ticket.getType());
 				service.updateTicket(target);
-				
 				totalPrice += target.getPrice();
+				log.info("수정확인 : " + "어른");
 			} else if ("어린이".equals(ticket.getType())) {
 				TrainTicket target = service.getTicketByNo(ticket.getNo());
 				target.setType(ticket.getType());
 				service.updateTicket(target);
-				
 				totalPrice += target.getPrice();
+				log.info("수정확인 : " + "어린이");
 			}
 		}
-		
+		log.info("수정확인 : " + totalPrice);
 		// 삭제하기
 		if (ticketNo.size() != 0) {
 			service.deleteTicketByNo(ticketNo);
@@ -227,12 +229,12 @@ public class TrainRestController {
 		return response;
 	}
 	
-	@Delete("/reservation/{reservationNo}")
+	@DeleteMapping("/reservation/{reservationNo}")
 	public ResponseDto<?> delete(@LoginedUser User user, @PathVariable(name="reservationNo") int reservationNo) {
+		service.deleteReservationByNo(user.getNo(), reservationNo);
 		ResponseDto<?> response = new ResponseDto<>();
 		response.setStatus("OK");
 		
-		service.deleteReservationByNo(user.getNo(), reservationNo);
 		
 		return response;
 	}

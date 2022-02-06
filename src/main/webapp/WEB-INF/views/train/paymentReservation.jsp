@@ -216,22 +216,25 @@
 	
 		$(".btn-payment").click(function() {
 			let paymentNo = $("[name=reservationNo1]").val() + " " + $("[name=reservationNo2]").val()
-			$.getJSON('/api/train/kakaoPay',
-					{totalPrice:$("[name=totalPrice]").val() , totalCount:$("[name=totalCount]").val(),
-						reservationNo:paymentNo},
-					function(response) {
-						
-						if (response.status == "FAIL") {
-							alert(response.error)
-							location.replace("http://localhost/user/login.nadri")
-						} else {
-							$.getJSON(
-								'/api/train/progress',
-								{tid:response.tid}
-							)
-							$(location).attr('href', response.next_redirect_pc_url);
-						}
-					})
+			
+			if ($("[name=paymentType]").val() == 'kakao') {
+				$.getJSON('/api/train/kakaoPay',
+						{totalPrice:$("[name=totalPrice]").val() , totalCount:$("[name=totalCount]").val(),
+							reservationNo:paymentNo},
+						function(response) {
+							
+							if (response.status == "FAIL") {
+								alert(response.error)
+								location.replace("http://localhost/user/login.nadri")
+							} else {
+								$.getJSON(
+									'/api/train/progress',
+									{tid:response.tid}
+								)
+								$(location).attr('href', response.next_redirect_pc_url);
+							}
+						})
+			}
 		})
 	
 	})

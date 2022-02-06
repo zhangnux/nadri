@@ -231,11 +231,23 @@ public class TrainController {
 		}
 	}
 	
+	/**
+	 * 결제 후 결과 창
+	 * @param user
+	 * @param reservationNo1
+	 * @param reservationNo2
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/resultPayment.nadri")
 	public String resultPayment(@LoginedUser User user, int reservationNo1, @RequestParam(name="reservationNo2", required=false, defaultValue= "0") int reservationNo2, Model model) {
-		
-		
-		
+		List<TrainReservation> reservationList = service.getReservationByNo(user.getNo(), reservationNo1, reservationNo2);
+		long totalPrice = 0;
+		for(TrainReservation reservation : reservationList) {
+			totalPrice += reservation.getTotalPrice();
+		}
+		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("soldDate", reservationList.get(0).getSoldDate());
 		return "train/resultPayment";
 	}
 
@@ -260,6 +272,16 @@ public class TrainController {
 		} catch (IndexOutOfBoundsException e) {
 			return "train/reservationList.nadri";
 		}
+	}
+	
+	@GetMapping("/refund.nadri")
+	public String refund(@LoginedUser User user, int reservationNo, Model model) {
+		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
+		model.addAttribute("reservation" ,reservation);
+		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo, 0);
+		model.addAttribute("ticketList", ticketList);
+		
+		return "train/refundPayment";
 	}
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")

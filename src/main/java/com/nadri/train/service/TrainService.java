@@ -130,11 +130,13 @@ public class TrainService {
 		Map<String, Object> useing = new HashMap<String, Object>();
 		useing.put("reservedNo1", reservationNo);
 		useing.put("userNo", userNo);
+		log.info("오류확인:" + mapper.getReservationByNo(useing).size());
 		TrainReservation reservation = mapper.getReservationByNo(useing).get(0);
 		
 		if (reservation.getUserNo() != userNo) {
 			throw new LoginException("로그인한 후 사용하실 수 있습니다.");
 		}
+
 		return reservation;
 	}
 	
@@ -234,10 +236,9 @@ public class TrainService {
 	 * @param no
 	 */
 	public void deleteReservationByNo(int userNo, int no) {
-		TrainReservation reservation = getReservationOne(userNo, no);
-		if (reservation.getNo() != userNo) {
-			throw new LoginException("로그인 후 사용하실 수 있습니다.");
-		}
+		// restContoller에서 reservation정보 가져올때 이미 사용자동일 여부 판단해서 할 필요 없다.
+		List<Integer> reservationNo = List.of(no);
+		mapper.deleteTicket(reservationNo);
 		mapper.deleteReservationByNo(userNo, no);
 	}
 	
