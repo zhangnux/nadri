@@ -269,17 +269,16 @@
 	$("#btn-add-review").click(function() {
 		
 		// 내용 입력
-//		if(textarea.value.trim()==""){
-//			alert("내용을 입력해주세요");
-//			return false;
-//		}
+		if(textarea.value.trim()==""){
+			alert("내용을 입력해주세요");
+			return false;
+		}
 		
 		// 로그인 안 되었을때, 로그인 해주세요
 		
 		// 등록 확인
 		
 		
-		var $tbody = $("#user-review tbody").empty();
 		
 		// 별점 조회
 		var star = $(":input[name=rating]:checked").val();
@@ -300,25 +299,23 @@
 	
 		$.ajax({
 			type:"post",				// 첨부파일이 업로드 되기 때문에 post 방식으로 지정한다.
-			url:"/review/insert.do",
+			url:"/review/insert.nadri",
 			data: formData,
 			processData: false,			// processData를 false로 지정하면 name=value&name=value의 형태가 아닌 다른 방식으로 전달된다.
 			contentType: false,			// contentType를 false로 지정하면 기본값으로 지정된 "application/x-www-form-urlencoded"가 적용되지 않는다.
 			success: function(data) {
-				// data <--- [{no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}, {no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}]
-				$.each(data, function(index, review) {
-					
+				// data <--- [{no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}, {no:100, content:"리뷰내용", image:"abc.png", createDated:"2022-02-04", .....}]				
 					
 					var htmlContent = '<tr>'
 					htmlContent += '<td rowspan="2" style="text-align: left; width: 10%;">'
-					htmlContent += '<p id="starPoint">★ '++'점</p>'
-					htmlContent += '<p id="username"><strong>'++'</strong></p>'
+					htmlContent += '<p id="starPoint">★ '+this.rating+'점</p>'
+					htmlContent += '<p id="username"><strong>'+this.userName+'</strong></p>'
 					htmlContent += '</td>'
 					htmlContent += '<td rowspan="3" style="width: 70;">'
-					htmlContent += '<p id="reviewContent">'++'</p>'
+					htmlContent += '<p id="reviewContent">'+this.content+'</p>'
 					htmlContent += '</td>'
 					htmlContent += '<td rowspan="3" style="width: 20;">'					
-					htmlContent += '<img alt="" src="'++'">'
+					htmlContent += '<img alt="" src="'+this.picture+'">'
 					htmlContent += '</td>'
 					htmlContent += '</tr>'
 					htmlContent += '<tr></tr>'
@@ -327,9 +324,7 @@
 					htmlContent += '</td>'					
 					htmlContent += '</tr>'			
 	
-					$tbody.append(htmlContent);
-				})
-				
+					$("#user-review tbody").prepend(htmlContent);
 			}
 		});
 	
