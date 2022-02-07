@@ -5,7 +5,6 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap" rel="stylesheet" type="text/css" />
 <style>
 html, body {
-    height: 100%;
     font-family:'IBM Plex Sans KR', sans-serif;
 }
 
@@ -20,17 +19,17 @@ html, body {
 }
 </style>
 
-<div id="sidebar" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100%;">
+<div id="sidebar" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="height: 100%;">
 	<span class="fs-1 text-center">Nadri</span>
     <hr>
 	    <ul class="nav nav-pills flex-column text-end px-3" style="margin-block:auto;">
 	      <li class="nav-item mt-3">
-	        <a href="#" class="nav-link ${menu eq 'home' ? 'active' : ''}">
+	        <a href="/admin/index.nadri" class="nav-link ${menu eq 'home' ? 'active' : ''}">
 	          Home
 	        </a>
 	      </li>
 	      <li class="nav-item mt-3">
-	        <a href="#" class="nav-link ${menu eq 'user' ? 'active' : ''}">
+	        <a href="/admin/userManagement.nadri" class="nav-link ${menu eq 'user' ? 'active' : ''}">
 	        	사용자관리
 	        </a>
 	      </li>
