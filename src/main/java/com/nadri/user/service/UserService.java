@@ -33,11 +33,12 @@ public class UserService {
 	}
 	
 
+	/*	
 	public void insertUser(User user) {
 		userMapper.insertUser(user);
 	}
-/*	
-	public void insertUsers(User user) {
+	 */
+	public void insertUser(User user) {
 		User savedUser = userMapper.getUserById(user.getId());
 		
 		if (savedUser != null) {
@@ -45,5 +46,14 @@ public class UserService {
 		}
 		
 	}
-*/
+	/*
+	public User detailByNo() {
+		return userMapper.
+	}
+	
+	public void deleteUser(User user) {
+		
+		
+	}
+	*/
 }
