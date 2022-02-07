@@ -156,22 +156,26 @@
 		let jsonData;
 		// rest에 넣을 객체 만들기
 		$("[name=type]").change(function() {
-			let noList = [];
+			let noList = new Array(); 
 			$("[name=no]").each(function() {
 				noList.push($(this).val())
 			})
 			
-			let typeList = [];
+			let typeList = new Array(); 
 			$(":selected").each(function() {
 				typeList.push($(this).val())
 			})
-			console.log(typeList)
 			console.log(noList)
-			let result = [];
-			for (var i=1; i<=noList.length+1; i++) {
-				result.push({no:noList.shift(), type:typeList.shift()})
+			console.log(typeList)
+			let result = new Array(); 
+			console.log(noList.length+1)
+			for (var i=0; i<noList.length; i++) {
+				result.push({no:noList[i], type:typeList[i]})
+				console.log("no" + noList)
+				console.log("type" + typeList)
 			}
 			// 객체 직렬화
+			console.log(result)
 			jsonData = JSON.stringify(result)
 		})
 		

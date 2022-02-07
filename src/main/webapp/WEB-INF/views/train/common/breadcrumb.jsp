@@ -49,5 +49,15 @@
 			<a href="#">결제</a>
 		</li>
  	</c:if>
+ 	<c:if test="${not empty menu7 }">
+		<li class="breadcrumb-item ${active eq 'menu7' ? 'active' : '' }">
+			<a href="#">완료</a>
+		</li>
+ 	</c:if>
+ 	<c:if test="${not empty menu8 }">
+		<li class="breadcrumb-item ${active eq 'menu8' ? 'active' : '' }">
+			<a href="#">반환</a>
+		</li>
+ 	</c:if>
   </ol>
 </nav>

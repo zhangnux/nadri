@@ -86,6 +86,9 @@
 			<li class="mt-2">
 				최대 <strong>2</strong>개의 예약 건을 결제하실 수 있습니다.
 			</li>
+			<li class="mt-2">
+				반환요청 하실 티켓을 선택한 다음 반환요청 버튼을 눌러주세요.
+			</li>
 		</ul>
 		<ul style="display: none;">
 			<li>
@@ -122,7 +125,7 @@
 							<c:when test="${not empty reservationList }">
 								<c:forEach var="reservation" items="${reservationList }">
 								<tr>
-									<td>
+									<td data-reservation-no="${reservation.no }">
 									<c:if test="${reservation.tickectStatus eq '예약' }">
 										<input type="checkbox" name="reservationNo" value="${reservation.no }">
 									</c:if>
@@ -137,13 +140,13 @@
 									<c:choose>
 										<c:when test="${reservation.tickectStatus eq '예약' }">
 											<td class="text-danger fw-bold"><fmt:formatDate value="${reservation.reservationDate }" pattern="HH시 mm분까지" />
-												<button type="button" class="btn" style="border: 1px solid black; height: 25px;">결제하기</button>
+												<button type="button" class="btn btn-payment" style="border: 1px solid black; height: 25px;">결제하기</button>
 											</td>
 											<td><button type="button" class="btn btn-cancel" style="background-color: #7E5C5E; color: white;">예약 취소</button></td>
 										</c:when>
 										<c:when test="${reservation.tickectStatus eq '결제' }">
 											<td>결제 완료</td>
-											<td><button type="button" class="btn" style="background-color: #A0A0A0; color: white;">환불</button></td>
+											<td><button type="button" class="btn btn-refund" style="background-color: #A0A0A0; color: white;">환불</button></td>
 										</c:when>
 									</c:choose>
 								</tr>
@@ -171,8 +174,8 @@
 		$("#modify-div").click(function() {
 			$("#reservationTable").find('th').last().hide()
 			$("#reservationTable").find('td:nth-of-type(10)').hide().prev().find('button').hide()
-			$("#credit-btn").children().hide().next().show()
 			$("input[name=reservationNo]").attr('type', 'radio');
+			$("#credit-btn").children().hide().next().show()
 			$(this).addClass('active').siblings().removeClass('active')
 			$("#explanation").hide().next().show()
 		})
@@ -185,7 +188,8 @@
 			$(this).addClass('active').siblings().removeClass('active')
 			$("#explanation").show().next().hide()
 		})
-
+		
+		// 다중 결제하기 버튼
 		$("#credit-btn > button:first-child").click(function() {
  			if ($(":checked").val() == null) {
 				alert("결제하실 표를 선택해 주세요.")
@@ -200,7 +204,24 @@
 			$("#form-modify").attr('action', '/train/payment.nadri')
 			$("#form-modify").submit()
 		})
+		
+		// 단일 결제하기 버튼
+		$(".btn-payment").click(function() {
+			$(":checked").prop('checked', false)
+			console.log($(this).parent().prevAll().eq(7).children())
+			$(this).parent().prevAll().eq(7).children().prop('checked', true)
+			
+			$("#form-modify").attr('action', '/train/payment.nadri')
+			$("#form-modify").submit()
+		})
+		
+		// 환불 버튼 여기부터ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ
+		$(".btn-refund").click(function() {
+			let target = $(this).parent().prevAll().eq(8).attr('data-reservation-no')
 
+		})
+		
+		// 예약변경 버튼
 		$("#credit-btn > button:nth-child(2)").click(function() {
 			if ($(":checked").val() != null) {
 				$("#form-modify").attr('action', '/train/modify.nadri')
@@ -210,14 +231,17 @@
 			}
 		})
 		
+		// 예약취소버튼
 		$(".btn-cancel").click(function() {
 			let cancel = confirm("예약을 취소하시겠습니까?")
+			let $btn = $(this)
 			if (cancel) {
 				let target = $(this).parent().siblings().eq(0).children().val()
 				$.ajax({type:'DELETE',
 						dataType:'json',
 						url:"/api/train/reservation/" + target,
 						success:function() {
+							$btn.closest('tr').remove()
 							alert("취소가 완료되었습니다.")
 						},
 						error:function() {
@@ -225,8 +249,8 @@
 						},
 						statusCode:{
 							404:function() {
+								$btn.closest('tr').remove()
 								alert("취소된 예약정보 입니다.")
-								location.replace("http://localhost/train/reservationList.nadri");
 							}
 						}
 				})
