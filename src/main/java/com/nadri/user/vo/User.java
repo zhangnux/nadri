@@ -20,7 +20,7 @@ public class User {
 	private String id;
 	private String password; 
 	private String name;
-	@JsonFormat(pattern = "yyyy년 M월 d일")
+	@JsonFormat(pattern = "yyyy년 MM월 dd일")
 	private Date birth;
 	private String gender;
 	private String tel;
@@ -29,8 +29,10 @@ public class User {
 	private String deleteCheck; 
 	private String email;
 	private String type;
-	@JsonFormat(pattern = "yyyy년 M월 d일")
+	@JsonFormat(pattern = "yyyy년 MM월 dd일")
 	private Date createdDate;
 	private String smsCheck;
 	private String emailCheck;
+	@JsonFormat(pattern = "yyyy년 MM월 dd일")
+	private Date deletedDate;
 }

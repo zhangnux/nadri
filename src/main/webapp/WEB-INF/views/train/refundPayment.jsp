@@ -15,7 +15,7 @@
 <div class="container">
 	<div class="row my-5">
 		<div class="col">
-			<h2>결제하기</h2>
+			<h2>반환</h2>
 		</div>
 	</div>
 	<c:set var="menu4" value="reservationList"/>
@@ -26,10 +26,10 @@
 	<div class="border pt-4 pb-2 ps-4 my-3" style="font-size: 15px;">
 		<ul id="explanation">
 			<li>
-				'${sessionScope.LOGIN_USER.name }'고객님의 반환 수수료 내역입니다.
+				'${sessionScope.LOGIN_USER.name }'고객님의 티켓 내역입니다.
 			</li>
 			<li class="mt-2">
-				수수료 내역을 확인하신 후 반환버튼을 눌러주세요.
+				반환하실 티켓을 선택해 주세요
 			</li>
 		</ul>
 	</div>
