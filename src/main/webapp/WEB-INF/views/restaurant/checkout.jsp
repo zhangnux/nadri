@@ -107,6 +107,13 @@
 						<div>
 							<h5>보유 쿠폰</h5>
 						</div>
+						<div class="row">
+							<div class="col">
+								<select class="form-select">
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
 						<div>
 							<h5>보유 포인트: 10000</h5>
 							<label class="form-label">사용 포인트:</label>

@@ -27,6 +27,11 @@ public class CsBoardService {
 		return csMapper.searchCsBoards(criteria);
 	}
 	
+	public CsBoardReply getReplyByNo(int no) {
+		return csMapper.getReplyByNo(no);
+	}
+	
+	
 	
 	
 	public int getCsBoardsTotalRowsByUserNo(Criteria criteria) {
@@ -53,6 +58,7 @@ public class CsBoardService {
 	public void deleteCsBoard(int no) {
 		csMapper.deleteCsBoard(no);
 	}
+	
 	
 	public void addNewReply(CsBoardReply reply) {
 		csMapper.insertCsBoardReply(reply);
