@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class ReplyInserForm {
 	
-	private int boardNo;
+	private int no;
 	private String replyContent;
 	private String replyCheck;
 	

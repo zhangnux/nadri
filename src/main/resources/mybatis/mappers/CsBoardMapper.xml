@@ -237,9 +237,9 @@
 	-->
 	<select id="getReplyByNo" parameterType="int" resultType="com.nadri.csBoard.vo.CsBoardReply">
 		select
-			cs_board_no no,
+			cs_board_no boardNo,
 			cs_reply_content replyContent,
-			cs_reply_created_date replyCreatedDate,
+			cs_reply_created_date replyCreatedDate
 		from cs_board
 		where cs_board_no = #{value}
 	
