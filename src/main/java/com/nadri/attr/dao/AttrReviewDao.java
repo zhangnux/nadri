@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nadri.attr.vo.AttrReview;
+import com.nadri.attr.vo.AttrReviewPic;
 
 @Mapper
 public interface AttrReviewDao {
@@ -15,5 +17,11 @@ public interface AttrReviewDao {
 			@Param("beginIndex") int beginIndex, 
 			@Param("endIndex") int endIndex);
 	
-	// 후기 사진
+	// 후기 등록
+	void insertReview(AttrReview attrReview);
+	void insertReviewPic(AttrReviewPic attrReviewPic); 
+	List<AttrReviewPic> ReviewPicsByNo(int reviewNo);
+	
+	// 후기 삭제
+	void deleteReview(int reviewNo);
 }
