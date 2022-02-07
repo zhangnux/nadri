@@ -100,136 +100,133 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 	</div>
 </div>
 <script type="text/javascript">
-$("#insertForm").submit(function() {
-	var id = $("#id").val();
-	var pw = $("#pw").val();
-	var pwCheck = $("#pwCheck").val();
-	var name = $("#name").val();
-	var email = $("#email").val();
-	var tel = $("#tel").val();
-	var error = $("list > span");
-	
-	console.log(error);
-	
-	
-	var idLimit = /^[a-zA-Z0-9]{5,20}$/;
-	var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{4,20}$/;
-	var nameLimit = /^[가-힣]{2,15}$/;
-	var emailLimit = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
-	var telLimit = /^01[016789]-[^0][0-9]{3,4}-[0-9]{4}/;
-	
-	
-	
-	// 아이디 공백
-	if (id == "") {
-		alert("아이디는 필수입력값입니다.");
-        $("#id").focus();
-        
-		return false;
-	}
-	
-	/*
-	$("#userInput").keyup(function(){
-		$(this).reset();
-	})
-	
-	$("#list").trigger("reset");
-	*/
-	
-	// 아이디 조건
-	if(!idLimit.test(id)) {
-		$("#idError").text("5~20자의 영문 대소문자와 숫자만 사용가능합니다.");
-        $("#id").focus();
-        
-		return false;
-	}
-	
-	// 비번 공백
-	if (pw == "") {
-		alert("비밀번호는 필수입력값입니다.");
-        $("#pw").focus();
-        
-		return false;
-	}
-	
-	// 비번 조건
-	if (!pwLimit.test(pw)) {
-		$("#pwError").text("영문 대소문자, 숫자와 특수기호 '~!@#$%^&*()_-'를 포함한 4~20자의 비밀번호가 사용 가능합니다.")
-		$("#pw").focus();
+$(function() {
+	$("#insertForm").submit(function() {
+		var id = $("#id").val();
+		var pw = $("#pw").val();
+		var pwCheck = $("#pwCheck").val();
+		var name = $("#name").val();
+		var email = $("#email").val();
+		var tel = $("#tel").val();
+		var error = $("list > span");
 		
-		return false;
-	}
-	
-	// 아이디,비번 중복 불가
-	if (id == pw) { 
-		$("#pwError").text("아이디와 비밀번호가 같습니다.");
-		$("#pw").focus(); 
+		console.log(error);
 		
-		return false; 
-	}	
-	
-	// 비번 재확인 검사
-	if (pwCheck == "") {
-		alert("비밀번호를 재확인해주세요.");
-        $("#pwCheck").focus();
-        
-		return false;
-	}
-	
-	// 비번 같은지 
-	if (pw != pwCheck) {
-		$("#pwCheckError").text("비밀번호가 서로 다릅니다.");
-		$("#pwCheck").focus();
 		
-		return false;
-	}
-	
-	if (name == "") {
-		alert("이름을 입력해주세요.")
-		$("#name").focus();
+		var idLimit = /^[a-zA-Z0-9]{5,20}$/;
+		var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{4,20}$/;
+		var nameLimit = /^[가-힣]{2,15}$/;
+		var emailLimit = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+		var telLimit = /^01[016789]-[^0][0-9]{3,4}-[0-9]{4}/;
 		
-		return false;
-	}
-	
-	if (!nameLimit.test(name)) {
-		$("#nameError").text("이름은 한글로 입력 가능합니다.");
-		$("#name").focus();
-		return false;
-	}
-	
-	if (email == "") {
-		alert("이메일을 입력해주세요");
-		$("#email").focus();
-		return false;
-	}
-	
-	if (!emailLimit.test(email)) {
-		$("#emailError").text("이메일 형식이 올바르지 않습니다.");
-		$("#email").focus();
+		$("#userInput").keyup(function(){
+			$(this).reset();
+		})
 		
-		return false;
-	}
-	
-	if (tel == "") {
-		alert("전화번호를 입력해주세요.");
-		$("#tel").focus();
+		// 아이디 공백
+		if (id == "") {
+			alert("아이디는 필수입력값입니다.");
+	        $("#id").focus();
+	        
+			return false;
+		}
 		
-		return false;
-	}
-	
-	if (!telLimit.test(tel)) {
-		$("#telError").text("전화번호 형식이 올바르지 않습니다.");
-		$("tel").focus();
+		/*
+		$("#list").trigger("reset");
+		*/
 		
-		return false;
-	}
-	
-	
-	return true;
-	
-	
-	
-})
+		// 아이디 조건
+		if(!idLimit.test(id)) {
+			$("#idError").text("5~20자의 영문 대소문자와 숫자만 사용가능합니다.");
+	        $("#id").focus();
+	        
+			return false;
+		}
+		
+		// 비번 공백
+		if (pw == "") {
+			alert("비밀번호는 필수입력값입니다.");
+	        $("#pw").focus();
+	        
+			return false;
+		}
+		
+		// 비번 조건
+		if (!pwLimit.test(pw)) {
+			$("#pwError").text("영문 대소문자, 숫자와 특수기호 '~!@#$%^&*()_-'를 포함한 4~20자의 비밀번호가 사용 가능합니다.")
+			$("#pw").focus();
+			
+			return false;
+		}
+		
+		// 아이디,비번 중복 불가
+		if (id == pw) { 
+			$("#pwError").text("아이디와 비밀번호가 같습니다.");
+			$("#pw").focus(); 
+			
+			return false; 
+		}	
+		
+		// 비번 재확인 검사
+		if (pwCheck == "") {
+			alert("비밀번호를 재확인해주세요.");
+	        $("#pwCheck").focus();
+	        
+			return false;
+		}
+		
+		// 비번 같은지 
+		if (pw != pwCheck) {
+			$("#pwCheckError").text("비밀번호가 서로 다릅니다.");
+			$("#pwCheck").focus();
+			
+			return false;
+		}
+		
+		if (name == "") {
+			alert("이름을 입력해주세요.")
+			$("#name").focus();
+			
+			return false;
+		}
+		
+		if (!nameLimit.test(name)) {
+			$("#nameError").text("이름은 한글로 입력 가능합니다.");
+			$("#name").focus();
+			
+			return false;
+		}
+		
+		if (email == "") {
+			alert("이메일을 입력해주세요");
+			$("#email").focus();
+			
+			return false;
+		}
+		
+		if (!emailLimit.test(email)) {
+			$("#emailError").text("이메일 형식이 올바르지 않습니다.");
+			$("#email").focus();
+			
+			return false;
+		}
+		
+		if (tel == "") {
+			alert("전화번호를 입력해주세요.");
+			$("#tel").focus();
+			
+			return false;
+		}
+		
+		if (!telLimit.test(tel)) {
+			$("#telError").text("전화번호 형식이 올바르지 않습니다.");
+			$("tel").focus();
+			
+			return false;
+		}
+		return true;
+	})// submit
+})// function
 
 /* $(function() {
 	$("[name=insertForm]").submit(function() {
@@ -246,133 +243,8 @@ $("#insertForm").submit(function() {
 		
 	})
 }) */
-//       <div class="userInput">
-//                 <h3 class="list">성명<span id="nameError"></span></h3>
-//                  <span class="box int_id"><input type="text" id="name" class="int check"
-//                     maxlength="20"></span>
-//               </div>
 
 
-
-
-
-
-// [ 회원가입 유효성검사 ]
-//자원을 화면에 로드하게 되면 수행할 동작(==function)
-
-/*
-window.onload = function() {
-	var join = document.insertForm; //form데이터를 모두 join변수에 저장
-	
-	var input = document.querySelectorAll('.check');
-	
-	var errorId = [ "idError", "pwError", "pwCheckError", "nameError", "telError" ];
-	var error = document.querySelectorAll('.list > span');
-
-		function innerReset(error){
-		for (var i = 0; i < error.length; i++) {
-		error[i].innerHTML = "";
-		}
-	}
-
-	// 초기화 메서드 호출
-	innerReset(error);
-   
-	// [ ID 입력문자 유효성검사 ] 
-	join.id.onkeydown = function(){
-		innerReset(error); // 초기화 메서드 호출
-		var idLimit = /^[a-zA-Z0-9-_]{5,20}$/;
-		if (!idLimit.test(input[0].value)) {
-		document.getElementById(errorId[0]).innerHTML = "5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
-
-		}
-	}
-		// [ PW 입력문자 유효성검사 ]
-		join.password.onkeydown = function(){
-		innerReset(error); // 초기화 메서드 호출
-		var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{8,20}$/; //정규식( a~z, A~Z, 0~9, ~!@#$%^&*()_- )
-		if (!pwLimit.test(input[1].value)) {
-			
-		document.getElementById(errorId[1]).innerHTML = " 4~20자의 영문 소대문자, 숫자와 특수기호 '~!@#$%^&*()_-'만 사용 가능합니다.";
-		}   
-	}
-	// [ PW 재확인 입력문자 초기화 ]
-	//비밀번호 동일여부는 submit 버튼 클릭시 검사해줄 예정
-	join.pwCheck.onkeydown = function(){
-		
-		innerReset(error);// 오류문구 초기화   
-	}
-	
-	// [ 휴대폰번호 입력문자 유효성검사 ]
-	join.tel.onkeydown = function(){
-	innerReset(error);   
-	var telLimit =  /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 정규식(^$--> 문자의미, 01, (6자리중 "1자리"), 0~9--> "8자리")
-	if (!telLimit.test(input[4].value)) {
-		
-		document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
-		}
-	}
-	
-	//submit 실행시 수행할 동작
-	join.onsubmit = function() {           
-		var errorStr = [ " 아이디를", " 비밀번호를", " 비밀번호 확인을", " 성함을", " 휴대폰번호를", " 이메일을" ];
-       
-		innerReset(error);
-       
-		// [ input 공백확인 ]
-		for (var i = 0; i < input.length - 1; i++) { 
-			if (!input[i].value) { 
-				document.getElementById(errorId[i]).innerHTML = errorStr[i]+ " 입력해 주세요.";
-				input[i].focus();
-				return false;
-			}
-		}         
-       
-	//유효성검사) 비밀번호 재확인
-	if (join.pw.value != join.pwCheck.value) {
-		document.getElementById("pwCheckError").innerHTML = " 비밀번호가 일치하지 않습니다.";
-		join.pwCheck.focus();
-		return false;
-	}
-
-	// 정규식 변수 모음     
-	var idLimit = /^[a-zA-Z0-9-_]{5,20}$/; //정규식( a~z, A~Z, 0~9, -, _ )
-	var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{8,20}$/;///[a-zA-Z0-9]{10, 20}/; ( a~z, A~Z, 0~9,~!@#$%^&*()_-특수문자 )
-	var telLimit =  /^01[0|1|6|7|8|9]{1}[0-9]{8}$/; // 01로 시작, 0,1,6,7,8,9 중 한자리, 0~9에서 8자리 입력
-
-	// [ ID 유효성검사 ]
-	if (!idLimit.test(input[0].value)) {
-		document.getElementById(errorId[0]).innerHTML = " 5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.";
-		join.id.focus(); // 포커스 이동
-		return false;
-	}
-       
-	// [ PW 유효성검사 ]
-	if (!pwLimit.test(input[1].value)) {
-		document.getElementById(errorId[1]).innerHTML = " 4~20자의 영문 소대문자, 숫자와 특수기호 '~!@#$%^&*()_-'만 사용 가능합니다.";
-		join.pw.focus(); // 포커스 이동
-		return false;
-	}         
-	
-      // [ 휴대폰번호 유효성검사 ]
-	if (!telLimit.test(input[4].value)) { 
-		document.getElementById(errorId[4]).innerHTML = " 올바른 형식이 아닙니다. 다시 확인해주세요.";
-		join.tel.focus(); // 포커스 이동
-		return false;
-	}
-       
-//	개인정보 동의박스 체크
-//	var consentCheck = document.getElementById("check");
-//	if(!consentCheck.checked){
-//		document.getElementById("consentError").innerHTML = "개인정보 수집이용 동의를 해주세요.";
-//		return false;
-//		}
-//      
-		alert("회원가입이 완료되었습니다.");
-	}
-
-}
-*/
 
 </script>
 <%@ include file="../common/footer.jsp" %>	

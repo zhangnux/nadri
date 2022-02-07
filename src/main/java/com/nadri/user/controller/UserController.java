@@ -80,5 +80,12 @@ public class UserController {
 	public String joinCompleted() {
 		return "user/joinCompleted";
 	}
-	
+	/*
+	@GetMapping("/detail.nadri")
+	public String detail(int no, Model model) {
+		User user = userService.
+		
+		return "user/detail";
+	}
+	*/
 }
