@@ -58,7 +58,6 @@ public class restaurantRestController {
 		}
 		rtService.addNewReview(review);
 		
-		List<RestaurantReview> reviewList = rtService.getAllReviewsByRestaurantNo(form.getRestaurantNo());
 		
 		return review;
 	}

@@ -65,7 +65,7 @@
 	 					<textarea class="form-control" rows="5" name="content"></textarea>
 					</div>
 					<div class="d-flex justify-content-end">
-						<button type="submit" class="btn btn-primary">등록</button>
+						<button type="button" id="btn-add-answer" class="btn btn-primary">등록</button>
 					</div>
 				</form>
 			</div>
@@ -74,11 +74,11 @@
 	<!-- c:if로 -->
 	<div class="row mb-3">
 		<div class="col">
-			<table class="table">
+			<table class="table" id="answer-table">
 				<tr>
 					<td rowspan="2">
 						<p>관리자</p>
-						<p></p>
+						<p>2022/02/06</p>
 					</td>
 					<td colspan="2"></td>
 				</tr>
@@ -91,7 +91,37 @@
 
 </div>
 <script type="text/javascript">
-
+	$("#btn-add-answer").click(function() {
+		
+		// 답변 내용 조회
+		var content = $(":input[name=content]").val();
+		
+		//
+		
+	
+		$.ajax({
+			type:"post",				// 첨부파일이 업로드 되기 때문에 post 방식으로 지정한다.
+			url:"/reply/insert.nadri",
+			data: 
+			processData: false,			// processData를 false로 지정하면 name=value&name=value의 형태가 아닌 다른 방식으로 전달된다.
+			contentType: false,			// contentType를 false로 지정하면 기본값으로 지정된 "application/x-www-form-urlencoded"가 적용되지 않는다.
+			success: function(data) {
+				// data <--- {no:100, content:"답변내용", createDated:"2022-02-04", .....}
+					var htmlContent = "<tr>"
+					htmlContent += "<td rowspan='2'><p>관리자</p><p>2022/02/06</p></td>";
+					htmlContent += "";
+					htmlContent += "";
+					htmlContent += "";
+					htmlContent += "";
+					htmlContent += "";
+					htmlContent += "";
+					htmlContent += "</th>";
+	
+					$("answer-table tbody").prepend(htmlContent);	
+			}
+		});
+	
+	});
 
 </script>
 </body>

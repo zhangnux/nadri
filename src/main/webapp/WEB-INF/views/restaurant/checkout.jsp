@@ -126,9 +126,9 @@
 	</div>
 
 
-
-
 </div>
+<script type="text/javascript"></script>
+
 <%@ include file="../common/footer.jsp" %>
 </body>
 </html>
