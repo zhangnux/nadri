@@ -13,4 +13,5 @@ public class UserCriteria {
 	private String deleted;
 	private String email;
 	private String sms;
+	private int pageNo;
 }

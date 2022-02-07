@@ -113,6 +113,15 @@
 	#page a {
 		border: 0;
 	}
+	
+	
+	.page {
+		padding: 10px;
+	}
+	a[aria-label] {
+		font-size: 28px;
+		padding: 0px;
+	}
 </style>
 <body>
 <c:set var="menu" value="user"/>
@@ -125,7 +134,7 @@
 		<div class="row mt-5" >
 			<div class="col border mx-3" style="background-color: white; align-self: self-start;">
 				<!-- 엔터키 누르면 왜 넘어감? -->
-				<form action="#" method="post">
+				<form action="#" method="get" id="form-search-user">
 					<input name="page" type="hidden" value="1">
 					<ul>
 						<li class="py-3">
@@ -232,9 +241,18 @@
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-					<li class="page-item"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">3</a></li>
+					<!-- total = 5 -->
+					<!-- page의 블록은 3 -->
+					<c:forEach var="count" begin="1" end="${total }">
+						<c:choose>
+							<c:when test="${count <= 3 }">
+								<li class="page-item ${count eq 1? 'active' : '' }"><a class="page-link page" href="#">${count }</a></li>
+							</c:when>
+							<c:otherwise>
+								<li class="page-item" style="display: none;"><a class="page-link page" href="#">${count }</a></li>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
 					<li class="page-item">
 						<a class="page-link" href="#" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
@@ -262,11 +280,13 @@
 		    return x1 + x2;
 		}
 		
-		$(".td-userInfo").click(function() {
-			
-		})
+		// 처음 설정
+		if ($(".page-item:visible").eq(1).text() == 1) {
+			$("[aria-label=Previous]").css('color', 'gray')
+		}
 		
-		$(".btn-search").click(function() {
+		// 처음부터 실행되는 이유
+		let searchUser = function(no) {
 			$("#tbody-user").empty()
 			let deleted = $("[name=delete]:checked").val()
 			let email = $("[name=email]:checked").val()
@@ -275,8 +295,9 @@
 			let keyword = $("[name=keyword]").val()
 			
 			$.getJSON('/rest/admin/userSearch.do',
-				{option: option, keyword: keyword, email: email, sms:sms, deleted:deleted},	
+				{option: option, keyword: keyword, email: email, sms:sms, deleted:deleted, pageNo:no},	
 				function(response){
+					console.log(response.items)
 					response.items
 					$.each(response.items, function(index, user) {
 						let userList;
@@ -299,9 +320,65 @@
 					})
 				}
 			)
+		}
+		
+		$("[aria-label=Next]").click(function() {
+			// visible된 값을 끝값
+			// active된 값이 3*n 안에 들때 그 n값이 1이면 next는 n*3 n+1*3 인 것을 visible시킨다.
+			let lastBlock = $(".page-item:visible").eq(3).text() // 3
+			let block = ($(".page-item:visible").eq(3).text()/3) + 1 // 1
+			// 다음 블록이 있다면
+			if ($("li:has(.page)").eq(lastBlock).length != 0) {
+				$("[aria-label=Previous]").css('color', 'blue')
+				$("li:has(.page)").hide()
+				$("li:has(.page)").slice(lastBlock, block*3).show()
+				searchUser($("li:has(.page)").eq(lastBlock).text())
+				$(".page-item").removeClass('active')
+				$("li:has(.page)").eq(lastBlock).addClass('active')
+				if ($("li:has(.page)").eq(block*3-1).length == 0) {
+					$(this).css('color', 'gray')
+				}
+			} 
+		})
+
+		$("[aria-label=Previous]").click(function() {
+			// visible된 값을 첫번째 값
+			// active된 값이 3*n 안에 들때 그 n값이 1이면 next는 n*3 n+1*3 인 것을 visible시킨다.
+			// block의 첫번째 값
+			let firstBlock = $(".page-item:visible").eq(1).text() // 4
+			// 다음 block 값
+			// 1 4/3 2 7/3 
+			let block = (Math.floor($(".page-item:visible").eq(1).text()/3)-1) // 0
+			if (block != -1) {
+				$("[aria-label=Next]").css('color', 'blue')
+				$("li:has(.page)").hide()
+				$("li:has(.page)").slice(block*3, firstBlock-1).show()
+				searchUser($("li:has(.page)").eq(firstBlock-2).text())
+				$(".page-item").removeClass('active')
+				$("li:has(.page)").eq(firstBlock-2).addClass('active')
+				if ($("li:has(.page)").eq(block*3).text() == 1) {
+					$(this).css('color', 'gray')
+				}
+			} 
 		})
 		
 		
+		$("li:has(.page)").click(function() {
+			searchUser($(this).text())
+			$(".page-item").removeClass('active')
+			$(this).addClass('active')
+		})
+		
+		// 엔터키를 눌렀을 때 
+		$("#form-search-user").keypress(function(k) {
+			if (k.keyCode === 13) {
+				searchUser(1)
+			}
+		})
+		// 검색 버튼을 눌렀을 때
+		$(".btn-search").click(function(){
+			searchUser(1)
+		})
 		
 	})
 </script>

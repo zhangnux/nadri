@@ -1,5 +1,6 @@
 package com.nadri.manager.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,11 +43,14 @@ public class ManagerController {
 	@GetMapping("/userManagement.nadri")
 	public String userManagement(Model model) {
 		// 모든 유저 정보 불러오기
-		List<User> userList = service.getAllUser();
+		List<User> userList = new ArrayList<>(service.getAllUser().subList(0, 5));
 		model.addAttribute("userList", userList);
-		int total = userList.size();
+		int total = service.getAllUser().size();
 		model.addAttribute("genderRate", service.getGenderRateOfUser(total));
 		model.addAttribute("ageRate", service.getAgeRateOfUser(total));
+		// total/n.0 <= n은 한페이지에 나올 목록 개수 total/n은 페이지네이션 개수
+		// n값은 mapper의 rn 의 기준값과 동일 하다
+		model.addAttribute("total", Math.ceil(total/5.0));
 		return "manager/userManagement";
 	}
 	
