@@ -6,11 +6,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,25 +22,25 @@ import com.nadri.restaurant.service.RestaurantService;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.web.form.RestaurantReviewInsertForm;
+import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/rest/restaurant")
-public class restaurantRestController {
+public class RestaurantRestController {
 
 	@Autowired
 	private RestaurantService rtService;
 	
-	
+	static final Logger logger = LogManager.getLogger(RestaurantRestController.class);
 	
 	@PostMapping("/review/insert.nadri")
-	public RestaurantReview insert(RestaurantReviewInsertForm form) throws IOException {
-		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+	public void insert(@LoginedUser User user, RestaurantReviewInsertForm form) throws IOException {
 		
-		if (user == null) {
-			throw new LoginErrorException("로그인 해주세요.");
-		}
+		logger.debug("입력폼 정보" + form);
 		
 		RestaurantReview review = new RestaurantReview();
 		review.setRestaurantNo(form.getRestaurantNo());
@@ -45,9 +48,11 @@ public class restaurantRestController {
 		review.setRating(form.getRating());
 		review.setContent(form.getContent());
 		
+		logger.debug("전달된 정보" + review);
+		
 		MultipartFile upfile = form.getUpfile();
 		if (upfile != null && !upfile.isEmpty()) {
-			String directory = "c:/fileproject.../resources/images/";
+			String directory = "C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\restaurants\\reviews\\";
 			String filename = upfile.getOriginalFilename();
 			
 			InputStream in = upfile.getInputStream();	// 첨부파일을 읽어오는 스트림 
@@ -56,10 +61,15 @@ public class restaurantRestController {
 
 			review.setPicture(filename);
 		}
-		rtService.addNewReview(review);
-		
-		
-		return review;
+		rtService.addNewReview(review);	
 	}
+	
+	@GetMapping("/review/list.nadri")
+	public List<RestaurantReview> list(@RequestParam("no") int restaurantNo) throws IOException {
+
+		return rtService.getAllReviewsByRestaurantNo(restaurantNo);
+		
+	}
+	
 	
 }

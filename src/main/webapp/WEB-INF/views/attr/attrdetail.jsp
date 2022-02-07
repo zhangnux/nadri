@@ -110,10 +110,10 @@ article {
 				<div class="border-bottom mb-4 mt-4 pb-4 text-center">
 					<c:choose>
 						<c:when test="${empty star }">
-						0.0/5.0
+							0.0/5.0
 						</c:when>
 						<c:otherwise>
-						★★★★★${star }/5.0 
+							<span style="color:gold;">★</span>&nbsp;${star }/5.0 
 						</c:otherwise>
 					</c:choose>
 					(${count })</div>
@@ -147,57 +147,29 @@ article {
 					<h5 class="mb-3">
 						<strong>위치 안내</strong>
 					</h5>
-					<div id="map" style="width: 500px; height: 400px;">
+					<div>지도 넣기
 
-						<!-- forEach -->
-						<script>
-				var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-			    mapOption = {
-			        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-			        level: 3 // 지도의 확대 레벨
-			    };  
+				<!-- forEach -->
+				<script>
 
-				// 지도를 생성합니다    
-				var map = new kakao.maps.Map(mapContainer, mapOption); 
-	
-				// 주소-좌표 변환 객체를 생성합니다
-				var geocoder = new kakao.maps.services.Geocoder();
-	
-				// 주소로 좌표를 검색합니다
-				geocoder.addressSearch('공덕동', function(result, status) {
-	
-				    // 정상적으로 검색이 완료됐으면 
-				     if (status === kakao.maps.services.Status.OK) {
-	
-				        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-	
-				        // 결과값으로 받은 위치를 마커로 표시합니다
-				        var marker = new kakao.maps.Marker({
-				            map: map,
-				            position: coords
-				        });
-	
-				        // 인포윈도우로 장소에 대한 설명을 표시합니다
-				        var infowindow = new kakao.maps.InfoWindow({
-				            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-				        });
-				        infowindow.open(map, marker);
-	
-				        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-				        map.setCenter(coords);
-				    } 
-				});    
 				</script>
-						<!--  -->
+				<!--  -->
 
 					</div>
 				</div>
 
 				<!-- 후기 -->
-				<div class="border-top mt-5 pt-4">
+				<div class="border-top mt-5 pt-4 mb-2">
 					<h5>
 						<strong>후기 사진</strong>
 					</h5>
+					<div class="row">
+					
+							<div class="col">
+								<img src="../../../resources/images/att/review/${reviewList.pic }" style="width:100px;height:100px;object-fit:cover">
+							</div>
+					
+					</div>
 				</div>
 				<div class="border-top mt-5 mb-5 pt-4">
 					<h5>
@@ -258,13 +230,13 @@ article {
 										style="padding-top:12px;height:50px;width:50px">
 									<i class="bi bi-camera"></i>
 								</label>
-								<input type="file" name="photo" id="rphoto"
+								<input type="file" name="upfiles" id="rphoto"
 										style="display:none;" accept="image/*" multiple/>
 								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
 									<i class="bi bi-pencil-square"></i>
 								</button>
 							  <input type="hidden" name="attNo" value=${param.no }>
-							  <input type="hidden" name="id" value=${LOGIN_USER.no }>
+							  <input type="hidden" name="userNo" value=${LOGIN_USER.no }>
 							</div>
 						</div>
 						<div class="mt-4" id="thumb"></div>
@@ -286,7 +258,7 @@ article {
 				      	<p class="card-text">${rd.place } / ${rd.category }</p>
 				        <h5 class="card-title"><strong>${rd.name }</strong></h5>
 				        <p class="card-text">${rd.content }</p>
-				        <p class="card-text">★★★☆ ${rd.star } / 5.0　후기 ${rd.count }개</p>
+				        <p class="card-text"><span style="color:gold;">★</span> ${rd.star } / 5.0　후기 ${rd.count }개</p>
 				        <c:choose>
 				        	<c:when test="${rd.price==0 }">
 				        		<p class="text-end"><strong>옵션 별 상이</strong></p>
@@ -312,7 +284,6 @@ article {
 				  </div>
 				</c:forEach>
 				</div>
-			
 			<a style="display:scroll;position:fixed;bottom:2%;right:100px; text-decoration-line : none; color:black;"
 				href="javascript:window.scrollTo(0,0);"><i class="bi bi-arrow-up-square">
 				</i><strong>위로</strong>
@@ -323,7 +294,6 @@ article {
 	</div>
 <%@ include file="../common/footer.jsp"%>
 <script type="text/javascript">
-
 /*
 // 썸네일
 function setThumbnail(event) {
@@ -343,117 +313,17 @@ function setThumbnail(event) {
 */
 // 로딩 완료시점에 자동실행
 $(function() {
-	/**
-	 * 첨부파일로직
-	 */
-	 $("#rphoto").on("change", fileCheck);
-	// 파일 현재 필드 숫자 totalCount랑 비교값
-	var fileCount = 0;
-	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
-	var totalCount = 3;
-	// 파일 고유넘버
-	var fileNum = 0;
-	// 첨부파일 배열
-	var content_files = new Array();
-	function fileCheck(e) {
-	    var files = event.target.files;
-	    
-	    // 파일 배열 담기
-	    var filesArr = Array.prototype.slice.call(files);
-	    
-	    // 파일 개수 확인 및 제한
-	    if (fileCount + filesArr.length > totalCount) {
-	      alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
-	      return;
-	    } else {
-	    	 fileCount = fileCount + filesArr.length;
-	    }
-	    
-	    // 각각의 파일 배열담기 및 기타
-	    filesArr.forEach(function (f) {
-	      var reader = new FileReader();
-	      reader.onload = function (e) {
-	        content_files.push(f);
-	        $('#thumb').append(
-	       		'<div id="file' + fileNum + '">'
-	       		+ '<font style="font-size:12px">' + f.name + '</font>'  
-	       		+ '&nbsp;<img src=\"https://cdn-icons-png.flaticon.com/512/75/75519.png" style="width:10px; height:10px; cursor: pointer;" onclick="fileDelete(\'file' + fileNum + '\')"/>' 
-	       		+ '<div/>'
-			);
-	        fileNum ++;
-	      };
-	      reader.readAsDataURL(f);
-	    });
-	    console.log(content_files);
-	    //초기화
-	    $("#rphoto").val("");
-	  }
-
-	// 파일 부분 삭제 함수
-	function fileDelete(fileNum){
-	    var no = fileNum.replace(/[^0-9]/g, "");
-	    content_files[no].is_delete = true;
-		$('#' + fileNum).remove();
-		fileCount --;
-	    console.log(content_files);
-	}
-	
-	/* 후기등록 */
-	$(".register .btn-outline-primary").click(function(){
-		var textarea = document.getElementById("textarea");
-		var form = document.reviewform;
-
-		// 별점 여부 확인
-		var star = document.getElementsByName("star");
-		var starvalue = null;
-		for(var i=0;i<star.length;i++){
-			if(star[i].checked == true){ 
-				starvalue = star[i].value;
-			}
-		}
-		if(starvalue == null){
-            alert("별점을 선택하세요"); 
-			return false;
-		}
-		
-		// 내용 유무 확인
-		if(textarea.value.trim()==""){
-			alert("내용을 입력해주세요");
-			return false;
-		}
-		
-		var doubleCheck = confirm("등록하시겠습니까?")		
-		if(doubleCheck){
-			form.action="home.nadri";
-			form.method="get";
-			form.submit();
-		} else{}	
-	})
-	
-	/* 달력 설정 */
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1;
-	var yyyy = today.getFullYear();
-	 if(dd<10){
-	        dd='0'+dd
-	    } 
-	    if(mm<10){
-	        mm='0'+mm
-	    } 	
-	today = yyyy+'-'+mm+'-'+dd;
-	document.getElementById("startdate").setAttribute("min", today);
-	
-	/* 리뷰 */
+	/* 리뷰불러오기 */
 	var currentPage = '${param.page}'
 	var no = '${param.no}'
+	var id = '${LOGIN_USER.id }'
 	getReviewList();
  	
 	function getReviewList(){
 		$.ajax({
 			type:'POST',
 			url: '/attr/review',
-			data: {"no":no, "page":currentPage},
+			data: {"no":no, "page":currentPage, "id":id},
 			success: function(result) {
 				var list = result.reviewList;
                	var htmls = "";
@@ -463,23 +333,29 @@ $(function() {
 				} else {
                     $(list).each(function(){	
 						htmls += '<div class="row p-4 border-bottom">'
+						htmls += '<div class="col-3">'
 						switch(this.star){
-						case 1: htmls += '<div><a style="color:gold;">★☆☆☆☆&nbsp;</a>'; break;
-						case 2: htmls += '<div><a style="color:gold;">★★☆☆☆&nbsp;</a>'; break;
-						case 3: htmls += '<div><a style="color:gold;">★★★☆☆&nbsp;</a>'; break;
-						case 4: htmls += '<div><a style="color:gold;">★★★★☆&nbsp;</a>'; break;
-						case 5: htmls += '<div><a style="color:gold;">★★★★★&nbsp;</a>'; break;
+						case 1: htmls += '<a style="color:gold;">★☆☆☆☆&nbsp;</a>'; break;
+						case 2: htmls += '<a style="color:gold;">★★☆☆☆&nbsp;</a>'; break;
+						case 3: htmls += '<a style="color:gold;">★★★☆☆&nbsp;</a>'; break;
+						case 4: htmls += '<a style="color:gold;">★★★★☆&nbsp;</a>'; break;
+						case 5: htmls += '<a style="color:gold;">★★★★★&nbsp;</a>'; break;
 						}
 						htmls += this.star+'　'+this.userId+'</div>'
+						if(id == this.userId){
+							htmls += '<div class="col-9 text-end">'
+							htmls += '	<i class="bi bi-pencil-square"></i>&nbsp;'
+							htmls += '	<i class="bi bi-trash-fill" id="reviewdelete" data-review-no="'+this.no+'"></i>'
+							htmls += '</div>'
+						}
 						htmls += '<div>'+this.date+'</div>'
 						htmls += '<div class="col-11 mt-2">'+this.content+'</div>'
 						htmls += '<div class="col-1">'
-						if(result.photo != null){
-						htmls += '<img src="../../../resources/images/att/review'+this.photo+'" style="width:70px;height:70px;">'
-						} else {
-							htmls += '</div>'
-							htmls += '</div>'
+						if(this.pic != null){
+							htmls += '<img src=\"../../../resources/images/att/review/'+this.pic+'" style="width:70px;height:70px;object-fit:cover">'
 						}
+						htmls += '</div>'
+						htmls += '</div>'
                      
                 	});	//each end
                 	
@@ -517,15 +393,72 @@ $(function() {
 		});	// Ajax end
 	}
 	
-	/* 페이지 변경 */
+	/* 리뷰 페이지 변경 */
 	 $("#review").on('click', '.page-link', function(event){
 		 event.preventDefault();
 		 currentPage = $(this).attr("data-page")
 	  	 getReviewList();
 	 });
 	
+	/* 후기등록 */
+	$(".register .btn-outline-primary").click(function(){
+		var textarea = document.getElementById("textarea");
+		var form = document.reviewform;
+
+		// 별점 여부 확인
+		var star = document.getElementsByName("star");
+		var starvalue = null;
+		for(var i=0;i<star.length;i++){
+			if(star[i].checked == true){ 
+				starvalue = star[i].value;
+			}
+		}
+		if(starvalue == null){
+            alert("별점을 선택하세요"); 
+			return false;
+		}
+		
+		// 내용 유무 확인
+		if(textarea.value.trim()==""){
+			alert("내용을 입력해주세요");
+			return false;
+		}
+		
+		var doubleCheck = confirm("등록하시겠습니까?")		
+		if(doubleCheck){
+			form.action="addreview.nadri";
+			form.method="post";
+			form.submit();
+		} else{}	
+	})
+		
+	/* 후기 삭제 */
+	$("#reviewdelete").click(function(){
+		console.log(reviewNo);
+	var reviewNo = $(this).data("review-no");
+	var doubleCheck = confirm("삭제하시겠습니까?")		
+	if(doubleCheck){
+		alert(reviewNo)
+		
+	} else{}
+	
+	})
+	
+	/* 달력 설정 */
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1;
+	var yyyy = today.getFullYear();
+	 if(dd<10){
+	        dd='0'+dd
+	    } 
+	    if(mm<10){
+	        mm='0'+mm
+	    } 	
+	today = yyyy+'-'+mm+'-'+dd;
+	document.getElementById("startdate").setAttribute("min", today);
+
 });
 </script>
-
 </body>
 </html>
