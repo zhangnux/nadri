@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.attr.dto.AttOptionDetail;
+import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
 
@@ -34,4 +36,5 @@ public interface AttrDao{
 	
 	// 같은 place 상품 랜덤 4개 출력
 	List<Attraction> random(@Param("no")int attNo, @Param("place")String place);
+
 }

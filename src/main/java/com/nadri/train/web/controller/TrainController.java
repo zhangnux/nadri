@@ -274,8 +274,8 @@ public class TrainController {
 		}
 	}
 	
-	@GetMapping("/refund.nadri")
-	public String refund(@LoginedUser User user, int reservationNo, Model model) {
+	@PostMapping("/refund.nadri")
+	public String refund(@LoginedUser User user, int reservationNo, List<Integer> no, Model model) {
 		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
 		model.addAttribute("reservation" ,reservation);
 		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo, 0);

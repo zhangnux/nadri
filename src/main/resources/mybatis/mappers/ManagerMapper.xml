@@ -11,4 +11,97 @@
 		where 
 			manager_id = #{value}
 	</select>
+	
+	<select id="getAllUser" resultType="com.nadri.user.vo.User">
+		select 
+			user_no as no, 
+			user_id as id, 
+			user_name as name, 
+			user_birth as birth, 
+			user_gender as gender, 
+			user_tel as tel, 
+			user_address as address, 
+			user_point as point, 
+			user_delete_check as deleteCheck,  
+			user_email as email, 
+			user_type as type, 
+			user_created_date as createdDate, 
+			user_sms_check as smsCheck, 
+			user_email_Check as emailCheck
+		from  
+			user_table
+		order by user_no
+	</select>
+	<select id="getUserByCriteria" parameterType="com.nadri.manager.dto.UserCriteria"  resultType="com.nadri.user.vo.User">
+		select 
+			user_no as no, 
+			user_id as id, 
+			user_name as name, 
+			user_birth as birth, 
+			user_gender as gender, 
+			user_tel as tel, 
+			user_address as address, 
+			user_point as point, 
+			user_delete_check as deleteCheck,  
+			user_email as email, 
+			user_type as type, 
+			user_created_date as createdDate, 
+			user_sms_check as smsCheck, 
+			user_email_check as emailCheck,
+			user_deleted_date as deletedDate
+		from  
+			user_table
+			<where>
+				<if test='keyword != ""'>
+					<choose>
+						<when test='option == "id"'>
+							user_id like '%' || #{keyword} || '%'
+						</when>
+						<when test='option == "name"'>
+							user_name like '%' || #{keyword} || '%'
+						</when>
+					</choose>
+				</if>
+				<if test='deleted == "Y"'>
+					and user_delete_check = 'Y'
+				</if>
+				<if test='email == "Y"'>
+					and user_email_check is not null
+				</if>
+				<if test='sms == "Y"'>
+					and user_sms_check is not null
+				</if>
+			</where>
+			order by user_no
+	</select>
+	
+	<!-- 성별 비율 -->
+	<select id="getGenderRateOfUser" resultType="int">
+		select count(*)
+			from user_table
+		group by user_gender
+	</select>
+	<!-- 나이별 비율 -->
+	<select id="getAgeRateOfUser" resultType="com.nadri.manager.dto.UserAgeRate">
+		with age_count 
+		as (select age, count(*) as cnt
+		from ( select CASE
+		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 20 then 10
+		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 30 then 20
+		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 40 then 30
+		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 50 then 40
+		        else 50
+		        end as age
+		from user_table)
+		group by age),
+		ages as (
+		select level * 10 age
+		from dual
+		connect by level &lt;=5)
+		select b.age as  age,
+			nvl(a.cnt, 0) as count
+		from age_count a, ages b
+		where a.age(+) = b.age
+		order by b.age
+	</select>
 </mapper>

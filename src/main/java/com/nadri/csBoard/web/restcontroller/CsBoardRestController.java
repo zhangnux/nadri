@@ -24,7 +24,7 @@ public class CsBoardRestController {
 	
 	
 	@PostMapping("/reply/insert.nadri")
-	public CsBoardReply insert(ReplyInserForm form) {
+	public void insert(ReplyInserForm form) {
 
 		CsBoardReply reply = new CsBoardReply();
 		
@@ -33,8 +33,10 @@ public class CsBoardRestController {
 		
 		csService.addNewReply(reply);
 		
-		return reply;
+		
 	}
+	
+	
 	
 	
 

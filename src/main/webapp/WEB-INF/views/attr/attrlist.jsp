@@ -60,7 +60,7 @@
 				      	<p class="card-text">${cate.place } / ${cate.category }</p>
 				        <h5 class="card-title"><strong>${cate.name }</strong></h5>
 				        <p class="card-text">${cate.content }</p>
-				        <p class="card-text">★★★☆ ${cate.star } / 5.0　후기 ${cate.count }개</p>
+				        <p class="card-text"><span style="color:gold;">★</span>&nbsp;${cate.star } / 5.0　후기 ${cate.count }개</p>
 				        <c:choose>
 				        	<c:when test="${cate.price==0 }">
 				        		<p class="text-end"><strong>옵션 별 상이</strong></p>
