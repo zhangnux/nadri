@@ -60,7 +60,7 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 			</div>
 			<div class="userInput">
 				<label class="form-label">비밀번호 *</label>
-				<input type="password" class="check form-control" name="pw" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" minlength="4" maxlength="20" required />
+				<input type="password" class="check form-control" name="password" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" minlength="4" maxlength="20" required />
 				<h6 class="list"><span id="pwError"></span></h6>
 			</div>
 			<div class="userInput">
