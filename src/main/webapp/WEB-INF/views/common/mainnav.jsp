@@ -36,7 +36,7 @@
 				${LOGIN_USER.id }
 	          </a>
 		          <div class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
-		          	<a class="dropdown-item" href="#">마이페이지</a>
+		          	<a class="dropdown-item" href="/user/detail.nadri">마이페이지</a>
 		            <a class="dropdown-item" href="#">위시리스트</a>
 		     	<div class="dropdown-divider"></div>
 		            <a class="dropdown-item" href="/user/logout.nadri">로그아웃</a>

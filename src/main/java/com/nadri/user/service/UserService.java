@@ -46,14 +46,17 @@ public class UserService {
 		}
 		
 	}
-	/*
-	public User detailByNo() {
-		return userMapper.
+	
+	public User detailById() {
+		return null;
+	}
+	
+	public void updateUser(String id) {
+		User user = userMapper.getUserById(id);
 	}
 	
 	public void deleteUser(User user) {
 		
 		
 	}
-	*/
 }
