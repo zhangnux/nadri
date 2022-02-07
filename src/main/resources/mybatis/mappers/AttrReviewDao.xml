@@ -5,25 +5,46 @@
 		<id column="review_no" property="no"/>
 		<result column="review_star" property="star"/>
 		<result column="review_content" property="content"/>
-		<result column="review_photo" property="photo"/>
 		<result column="review_date" property="date"/>
 		<result column="att_no" property="attNo"/>
 		<result column="user_no" property="userNo"/>
 		<result column="user_id" property="userId"/>
+		<result column="review_pic" property="pic"/>
 	</resultMap>
 	
 	<select id="getListByNo" resultMap="ReviewMap">
 		<![CDATA[
-			select r.review_no, r.review_star, r.review_content, r.review_photo, r.review_date, r.user_no, u.user_id 
-			from (
-			        select row_number() over(order by review_no desc) rn, 
-			        	   review_no, review_star, review_content, review_photo, review_date, user_no, att_no
-			        from att_review
-			        )r, user_table u
-			where att_no = #{no}
-			and rn between #{beginIndex} and #{endIndex}
-			and r.user_no = u.user_no
+		select r.review_no, r.review_star, r.review_content, r.review_date, r.user_no, u.user_id, p.review_pic 
+		from ( select row_number() over(order by review_no desc) rn, review_no, review_star, review_content, review_date, user_no, att_no 
+		       from att_review 
+		       where att_no = #{no})r, user_table u, att_review_pic p 
+		       where rn between #{beginIndex} and #{endIndex} 
+		       and r.user_no = u.user_no 
+		       and r.review_no = p.review_no(+) 
+		       order by review_date desc
 		]]>
 	</select>
+	
+	<!-- 리뷰작성 -->
+	<insert id="insertReview" parameterType="com.nadri.attr.vo.AttrReview">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select attr_review_seq.nextval
+			from dual
+		</selectKey>
+		insert into att_review(review_no, review_star,review_content,review_date,att_no,user_no)
+		values(#{no},#{star},#{content},sysdate,#{attNo},#{userNo})
+	</insert>
+	
+	<!-- 리뷰사진 -->
+	<insert id="insertReviewPic" parameterType="com.nadri.attr.vo.AttrReviewPic">
+		insert into att_review_pic (review_no, review_pic)
+		values(#{no},#{pic})
+	</insert>
+
+	<!-- 리뷰삭제 -->
+	<delete id="deleteReview" parameterType="int">
+		delete from att_review
+		where review_no=#{no}
+	</delete>
 
 </mapper>

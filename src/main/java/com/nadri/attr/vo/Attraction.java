@@ -38,7 +38,7 @@ public class Attraction {
 	private String address;
 	private String detail;
 	private int count;
-	private int star;
+	private double star;
 	
 	private AttOption attOption;
 
