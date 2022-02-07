@@ -177,12 +177,11 @@
 	<!--
 		List<RestaurantReview> getReviewsByRestaurantNo(int no);
 	-->
-	<select id="getReviewsByRestaurantNo" parameterType="int" resultType="com.nadri.restaurant.vo.RestaurantReview">
+	<select id="getAllReviewsByRestaurantNo" parameterType="int" resultType="com.nadri.restaurant.vo.RestaurantReview">
 		select
 			A.restaurant_no restaurantNo,
 			A.user_no userNo,
 			A.rt_review_no no,
-			A.rt_review_title title,
 			A.rt_review_picture picture,
 			A.rt_review_content content,
 			A.rt_review_star_point rating,
@@ -191,9 +190,12 @@
 		from
 			restaurant_review A, user_table B
 		where
-			A.restaurant_no = #{value}
+			A.user_no = B.user_no
+			and A.restaurant_no = #{value}
+		order by A.rt_review_no desc
 	
 	</select>
+	
 	
 	<!--
 		void insertReview(RestaurantReview restaurnatReview)
@@ -205,9 +207,9 @@
 			from dual
 		</selectKey>
 		insert into restaurant_review
-		(restaurant_no, user_no, rt_review_no, rt_review_title, rt_review_picture, rt_review_content, rt_review_star_point)
+		(restaurant_no, user_no, rt_review_no, rt_review_picture, rt_review_content, rt_review_star_point)
 		values
-		(#{restaurantNo}, #{userNo}, #{no}, #{title}, #{picture}, #{content}, #{rating})
+		(#{restaurantNo}, #{userNo}, #{no}, #{picture}, #{content}, #{rating})
 	
 	</insert>
 	
@@ -218,7 +220,6 @@
 	<update id="updateReview" parameterType="com.nadri.restaurant.vo.RestaurantReview">
 		update restaurant_review
 		set
-			rt_review_title = #{title},
 			rt_review_content = #{content},
 			rt_review_star_point = #{starPoint}
 		where
