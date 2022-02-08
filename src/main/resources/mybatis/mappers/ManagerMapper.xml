@@ -78,6 +78,32 @@
 		where rn >= #{pageNo}*5-4 and rn &lt; #{pageNo}*5 + 1
 	</select>
 	
+	<select id="getCountUserByCriteria" parameterType="com.nadri.manager.dto.UserCriteria"  resultType="int">
+		select count(*)
+		from user_table
+		<where>
+			<if test='keyword != "" or keyword != null'>
+				<choose>
+					<when test='option == "id"'>
+						user_id like '%' || #{keyword} || '%'
+					</when>
+					<when test='option == "name"'>
+						user_name like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+			</if>
+			<if test='deleted == "Y"'>
+				and user_delete_check = 'Y'
+			</if>
+			<if test='email == "Y"'>
+				and user_email_check is not null
+			</if>
+			<if test='sms == "Y"'>
+				and user_sms_check is not null
+			</if>
+		</where>
+	</select>
+	
 	<!-- 성별 비율 -->
 	<select id="getGenderRateOfUser" resultType="int">
 		select count(*)

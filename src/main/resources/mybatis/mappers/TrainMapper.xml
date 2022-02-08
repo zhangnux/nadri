@@ -339,7 +339,8 @@
 			total_payment_amount = #{totalPrice},
 			ticketing_status = #{tickectStatus},
 			canceled_date = #{canceledDate},
-			sold_date = #{soldDate}
+			sold_date = #{soldDate},
+			tid = #{tid}
 		where reservation_no = #{no}
 	</update>
 	
