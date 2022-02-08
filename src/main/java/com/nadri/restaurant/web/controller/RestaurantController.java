@@ -138,9 +138,14 @@ public class RestaurantController {
 	
 	@GetMapping("/detail.nadri")
 	public String detail(int no, Model model) {
-	
+		
+		
 		Restaurant restaurant = rtService.getRestaurantDetail(no);
 		model.addAttribute("restaurant", restaurant);
+		int reviewCount = rtService.getReviewCount(no);
+		model.addAttribute("reviewCount", reviewCount);
+		double starPoint = rtService.getRestaurantStar(no);
+		model.addAttribute("starPiont", starPoint);
 		
 		return "restaurant/detail";	// prefix="/WEB-INF-views/" viewName="home" suffix=".jsp"
 	

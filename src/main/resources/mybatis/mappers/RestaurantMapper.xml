@@ -173,26 +173,59 @@
 			restaurant_category
 	</select>
 	
+	<!--
+		double getRestaurantStar(int no)
+	-->
+	<select id="getRestaurantStar" parameterType="int" resultType="double">
+		<![CDATA[
+			select nvl(round(avg(rt_review_star_point),1), 0)
+			from restaurant_review
+			where restaurant_no = #{value}
+		]]>		
+	</select>
 	
+	<!--
+		int getReviewCount(int no)
+	-->
+	<select id="getReviewCount" resultType="int">
+		select count(*)
+		from restaurant_review
+		where restaurant_no = #{value}
+	</select>
 	<!--
 		List<RestaurantReview> getReviewsByRestaurantNo(int no);
 	-->
-	<select id="getAllReviewsByRestaurantNo" parameterType="int" resultType="com.nadri.restaurant.vo.RestaurantReview">
+	<select id="getAllReviewsByRestaurantNo" resultType="com.nadri.restaurant.vo.RestaurantReview">
 		select
-			A.restaurant_no restaurantNo,
-			A.user_no userNo,
-			A.rt_review_no no,
-			A.rt_review_picture picture,
-			A.rt_review_content content,
-			A.rt_review_star_point rating,
-			A.rt_review_created_date createdDate,
-			B.user_name userName
-		from
-			restaurant_review A, user_table B
+				restaurantNo,
+				userNo,
+				no,
+				picture,
+				content,
+				rating,
+				createdDate,
+				userName
+			
+		from(
+			select
+				A.restaurant_no restaurantNo,
+				A.user_no userNo,
+				A.rt_review_no no,
+				A.rt_review_picture picture,
+				A.rt_review_content content,
+				A.rt_review_star_point rating,
+				A.rt_review_created_date createdDate,
+				B.user_name userName,
+				row_number() over (order by restaurant_no desc) rn
+			from
+				restaurant_review A, user_table B
+			where
+				A.user_no = B.user_no
+				and A.restaurant_no = #{no}
+			)	
 		where
-			A.user_no = B.user_no
-			and A.restaurant_no = #{value}
-		order by A.rt_review_no desc
+			 rn between #{beginIndex} and #{endIndex}
+		order by no desc
 	
 	</select>
 	
