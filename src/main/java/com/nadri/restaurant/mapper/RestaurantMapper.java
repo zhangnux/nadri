@@ -3,6 +3,7 @@ package com.nadri.restaurant.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
@@ -41,9 +42,10 @@ public interface RestaurantMapper {
 	
 	
 	// 리뷰기능
-	
+	double getRestaurantStar(int no);
+	int getReviewCount(int no);
 	// 레스토랑 번호로 리뷰 불러오기
-	List<RestaurantReview> getAllReviewsByRestaurantNo(int no);
+	List<RestaurantReview> getAllReviewsByRestaurantNo(@Param("no") int no, @Param("beginIndex") int beginIndex, @Param("endIndex") int endIndex);
 	
 	// 리뷰 작성
 	void insertReview(RestaurantReview restaurantReview);

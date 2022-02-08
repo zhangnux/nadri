@@ -12,8 +12,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+   
 </head>
 <style>
+
+	#review-img{
+		height: 150px;
+		width: 150px;
+	}
 	
 	#rt-img{
 		height: 500px;
@@ -94,41 +102,53 @@
 		</div>
 		<div class="col-3 border p-1 position-sticky">
 			<form action="">
-				<div class="mb-3">
-					<label class="form-labeL">날짜</label>
-					<input type="date" class="form-control" name="reservedDate" />
+				<div class="m-3">
+					<h4>예약</h4>
 				</div>
-				<div class="mb-3">
-					<label class="form-label">시간</label>
-					<select class="form-select">
-						<option value=""></option>
-					</select>
-				</div>
-				<div class="mb-3">
-					<label class="form-label">어른</label>
-					<select class="form-select">
-						<option value="1">1명</option>
-						<option value="2">2명</option>
-						<option value="3">3명</option>
-						<option value="4">4명</option>
-					</select>
-					<label class="form-label">아이</label>
-					<select class="form-select">
-						<option value="1">1명</option>
-						<option value="2">2명</option>
-						<option value="3">3명</option>
-						<option value="4">4명</option>
-					</select>
-				</div>
-				<div class="mb-3">
-					<a href="checkout.nadri?no=${restaurant.no }" class="btn btn-primary d-flex justify-content-end">book now</a>
+				<div class="mt-3">
+					<div class="m-3">
+						<div id="datepicker"></div>
+						<p>날짜:  <input type="text" id="datepicker2" name="revdate"></p>
+					</div>
+					<div class="m-3">
+						<label class="form-label">시간</label>
+						<select class="form-select">
+							<option value=""></option>
+						</select>
+					</div>
+					<div class="m-3">
+						<label class="form-label">어른</label>
+						<select class="form-select">
+							<option value="1">1명</option>
+							<option value="2">2명</option>
+							<option value="3">3명</option>
+							<option value="4">4명</option>
+						</select>
+						<label class="form-label">아이</label>
+						<select class="form-select">
+							<option value="1">1명</option>
+							<option value="2">2명</option>
+							<option value="3">3명</option>
+							<option value="4">4명</option>
+						</select>
+					</div>
+					<div class="m-3">
+						<p><strong>총 금액: 0원</strong></p>
+					</div>
+					<div class="mb-3 d-flex justify-content-end">
+						<a href="checkout.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a>
+					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	
 	<div class="row mb-3">
 		<div class="col-12">
-			<h1 class="p-3"><strong>${restaurant.name }</strong> ★ 5.0/5.0점</h1>
+			<c:choose>
+			
+			</c:choose>
+			<h1 class="p-3"><strong>${restaurant.name }</strong> ★ ${starPiont }/5.0점</h1>
 			<p>${restaurant.content }</p>
 		</div>
 		<div class="col-12 p-3">
@@ -156,23 +176,26 @@
 		<div class="col-12">
 			<h3>위치</h3>
 		</div>
+			<input type="hidden" name="lon" value="${restaurant.lat }" />
+			<input type="hidden" name="lat" value="${restaurant.lon }" />
 		<div class="col-12">
 			<div id="map" style="width:500px;height:400px;"></div>
 			<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c05627174d60c45205e9a8a04f17dfac"></script>
 			<script>
 			
-
-	
+				var lat = $(":input[name=lat]").val();
+				var lon = $(":input[name=lon]").val();
+				
 				var container = document.getElementById('map');
 				var options = {
-		    			center: new kakao.maps.LatLng(33.450701, 126.570667),
+		    			center: new kakao.maps.LatLng(lat, lon),
 		    			level: 3
 		    		};
 		
 				var map = new kakao.maps.Map(container, options);
 				
-				// 마커가 표시될 위치입니다  33.450701, 126.570667
-				var markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667); 
+				// 마커가 표시될 위치입니다
+				var markerPosition  = new kakao.maps.LatLng(lat, lon); 
 
 				// 마커를 생성합니다
 				var marker = new kakao.maps.Marker({
@@ -236,7 +259,7 @@
 	</div>
 	<div class="row mt-5 ms-3" style="border-bottom: 1px solid;">
 		<div class="col">
-			<h4>전체(0개)</h4>
+			<h4 id="reviewCount">전체(${reviewCount }개)</h4>
 		</div>
 	</div>
 	<div class="row m-3">
@@ -244,9 +267,15 @@
 			
 		</div>
 	</div>
+	<div class="row m-3">
+		<div class="col d-flex justify-content-center" id="review-pagination">
+			
+		</div>
+	</div>
 </div>
 <script type="text/javascript">
 
+	
 	getReviewList();
 
 
@@ -297,16 +326,19 @@
 	});
 	
 	
-	function getReviewList() {
+	
+	
+	
+	function getReviewList(page) {
 		var $reviewBox = $("#user-review").empty();
-		
+		page = page || 1;
 		$.ajax({
 			type: "get",
 			url : "/rest/restaurant/review/list.nadri",
-			data: {no: $(":input[name=restaurantNo]").val()},
+			data: {no: $(":input[name=restaurantNo]").val(), page:page},
 			dataType: 'json',
-			success: function(reviews) {
-				$.each(reviews, function(index, review) {
+			success: function(response) { // {"reviews": [{}, {}, {}], "pagination":{toal}}
+				$.each(response.reviews, function(index, review) {
 					var htmlContent = '';
 					htmlContent += '<div class="row mb-2 border-bottom">';
 					htmlContent += '<div class="col-3 p-3 border-end">';
@@ -318,19 +350,101 @@
 					htmlContent += '	<p>'+review.content+'</p>';
 					htmlContent += '</div>';
 					htmlContent += '<div class="col-3 p-3">';
+					// if loginuser.no = userNo
+					htmlContent += '		<div class="row">';
+					htmlContent += '			<div class="col gap-3 d-flex justify-content-end">';	
+					htmlContent += '				<a>수정</a>';
+					htmlContent += '				<a data-item-no="'+review.no+'">삭제</a>';
+					htmlContent += '			</div>';
+					htmlContent += '		</div>';
+					htmlContent += '		<div class="row">';	
 					if (review.picture != null) {
-						htmlContent += '	<img src="/resources/images/restaurants/review/'+review.picture+'" class="img-thumbnail"/>';
+						htmlContent += '		<img id="review-img" src="/resources/images/restaurants/reviews/'+review.picture+'" class="img-thumbnail"/>';
 					}
-					htmlContent += '</div>';
+					htmlContent += '		</div>';
+					htmlContent += '	</div>';
 					htmlContent += '</div>';
 	
 					$reviewBox.append(htmlContent);
-				})
+				});
+				$("#review-pagination").empty();
+				var pagination = response.pagination;
+				var pageContent = "";
+				pageContent += '<nav aria-label="...">';
+				pageContent += '  <ul class="pagination">';
+				if (pagination.existPrev) {
+					pageContent += '    <li class="page-item">';
+					pageContent += '      <a class="page-link" href="javascript:getReviewList('+pagination.prevPage+')">Previous</a>';
+					pageContent += '    </li>';
+					
+				} else {
+					pageContent += '    <li class="page-item disabled">';
+					pageContent += '      <a class="page-link">이전</a>';
+					pageContent += '    </li>';
+					
+				}
+				for (var num = pagination.beginPage; num <= pagination.endPage; num++) {
+					if (num == pagination.pageNo) {
+						pageContent += '    <li class="page-item active "><a class="page-link" href="javascript:getReviewList('+num+')">'+num+'</a></li>';
+					} else {
+						pageContent += '    <li class="page-item "><a class="page-link" href="javascript:getReviewList('+num+')">'+num+'</a></li>';
+					}
+					
+				}
+				if (pagination.existNext) {
+					pageContent += '    <li class="page-item">';
+					pageContent += '      <a class="page-link"  href="javascript:getReviewList('+pagination.nextPage+')">Next</a>';
+					pageContent += '    </li>';
+				} else{
+					pageContent += '    <li class="page-item disabled">';
+					pageContent += '      <a class="page-link">다음</a>';
+					pageContent += '    </li>';
+					
+				}
+				
+				pageContent += '  </ul>';
+				pageContent += '</nav>';
+				
+				$("#review-pagination").append(pageContent);
 			}
 		});
 	}
 	
-
+	/*
+	function deletereview(){
+		
+		if (!confirm("삭제하시겠습니까?")) {
+	        return;
+	    }
+	
+		var replyseq = $(this).attr("data-del");
+	    var sendData = {"replyseq": replyseq}
+	    $.ajax({
+	        method: 'GET',
+	        url : 'replyDelete',
+	        data : sendData,
+	        success: init
+	}
+	    */
+	
+	$(function(){
+		// 날짜
+		$("#datepicker2").datepicker({
+	     minDate:0,
+	     dateFormat: 'yy-mm-dd',
+	     prevText: '이전 달',
+	     nextText: '다음 달',
+	     monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+	     monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+	     dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+	     dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+	     dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+	     showMonthAfterYear: true,
+	     yearSuffix: '년'
+	
+	   });
+		$('#datepicker2').datepicker('setDate', 'today');
+	})
 
 </script>
 <!--  -->

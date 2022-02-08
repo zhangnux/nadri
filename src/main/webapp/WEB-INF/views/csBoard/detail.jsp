@@ -57,8 +57,9 @@
 		</div>
 	</div>
 	
+	<input type="hidden" name="no" value="${csBoard.no }"/>
 	
-	
+	<c:if test="${!empty LOGIN_MANAGER }">
 		<div class="row mb-3 p-3">
 			<div class="col">
 				<form action="" class="border bg-light p-3">
@@ -72,7 +73,7 @@
 				</form>
 			</div>
 		</div>
-	
+	</c:if>
 	<div class="row m-3">
 		<div class="col" id="manager-answer">
 
@@ -85,11 +86,13 @@
 //로딩 완료시점에 자동실행
 	
 	// 만약 답변이 있으면 실행
-	if()
+	
 	getReply();
 	
 	$("#btn-add-answer").click(function(){
 		var $replyBox = $("#manager-answer").empty();
+		
+		// 데베에 있으면 안되게??
 		
 
 		// 내용 유무 확인
@@ -124,7 +127,7 @@
 			$.ajax({
 				type: "get",
 				url : "/rest/csboard/reply/show.nadri",
-				data: {no: $(":input[name=boardNo]").val()},
+				data: {no: $(":input[name=no]").val()},
 				dataType: 'json',
 				success: function(reply) {
 					var htmlContent = '';
@@ -134,7 +137,15 @@
 					htmlContent += '		<div>'+reply.replyCreatedDate+'</div>';
 					htmlContent += '	</div>';
 					htmlContent += '	<div class="col-9 p-3">';
+					htmlContent += '		<div class="row">';
+					htmlContent += '			<div class="col gap-3 d-flex justify-content-end">';	
+					htmlContent += '				<a href="">수정</a>';
+					htmlContent += '				<a href="">삭제</a>';
+					htmlContent += '			</div>';
+					htmlContent += '		</div>';
+					htmlContent += '		<div class="row">';	
 					htmlContent += '		<p>'+reply.replyContent+'</p>';
+					htmlContent += '		</div>';
 					htmlContent += '	</div>';
 					htmlContent += '</div>';
 					

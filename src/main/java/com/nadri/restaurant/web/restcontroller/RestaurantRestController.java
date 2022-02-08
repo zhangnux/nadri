@@ -4,7 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,15 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nadri.manager.exception.LoginErrorException;
+import com.nadri.restaurant.dto.ResponseDto;
 import com.nadri.restaurant.service.RestaurantService;
+import com.nadri.restaurant.utill.Pagination;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.web.form.RestaurantReviewInsertForm;
 import com.nadri.user.annotation.LoginedUser;
-import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
 
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/rest/restaurant")
@@ -37,8 +39,12 @@ public class RestaurantRestController {
 	
 	static final Logger logger = LogManager.getLogger(RestaurantRestController.class);
 	
-	@PostMapping("/review/insert.nadri")
-	public void insert(@LoginedUser User user, RestaurantReviewInsertForm form) throws IOException {
+	
+	
+	
+	
+	 @PostMapping("/review/insert.nadri")
+	 public void insert(@LoginedUser User user, RestaurantReviewInsertForm form) throws IOException {
 		
 		logger.debug("입력폼 정보" + form);
 		
@@ -61,15 +67,33 @@ public class RestaurantRestController {
 
 			review.setPicture(filename);
 		}
-		rtService.addNewReview(review);	
+		rtService.addNewReview(review);
+		
+		
 	}
+
 	
 	@GetMapping("/review/list.nadri")
-	public List<RestaurantReview> list(@RequestParam("no") int restaurantNo) throws IOException {
-
-		return rtService.getAllReviewsByRestaurantNo(restaurantNo);
+	public Map<String, Object> list(@RequestParam("no") int restaurantNo, @RequestParam(name = "page", required = false, defaultValue = "1") int page) throws IOException {
+		
+		int totalCount = rtService.getReviewCount(restaurantNo);
+		
+		Pagination pagination = new Pagination(page, totalCount);
+		
+		List<RestaurantReview> reviewList = rtService.getAllReviewsByRestaurantNo(restaurantNo, pagination.getBegin(), pagination.getEnd());
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pagination", pagination);
+		map.put("reviews", reviewList);
+		
+		return map;
 		
 	}
 	
+	@GetMapping("/review/delete.nadri")
+	public void delete(int no) {
+		rtService.deleteReview(no);
+		
+	}
 	
 }

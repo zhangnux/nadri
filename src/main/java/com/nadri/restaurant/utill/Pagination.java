@@ -45,6 +45,11 @@ public class Pagination {
 		init(pageNo, totalRecords, rowsPerPage);
 	}
 	
+	
+	public Pagination(int pageNo, int totalRecords) {
+		init(String.valueOf(pageNo), totalRecords, rowsPerPage);
+	}
+	
 	/**
 	 * 페이지번호와 총 데이터 갯수, 행의 갯수를 전달받아서 Pagination객체를 초기화한다.<p>
 	 * 페이징처리에 필요한 모든 값을 계산해서 멤버변수에 저장한다.

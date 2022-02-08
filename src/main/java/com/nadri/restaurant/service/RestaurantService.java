@@ -97,9 +97,16 @@ public class RestaurantService {
 	
 	// 리뷰 서비스
 	
+	public double getRestaurantStar(int starPoint) {
+		return rtMapper.getRestaurantStar(starPoint);
+	}
 	
-	public List<RestaurantReview> getAllReviewsByRestaurantNo(int no){
-		return rtMapper.getAllReviewsByRestaurantNo(no);
+	public int getReviewCount(int no) {
+		return rtMapper.getReviewCount(no);
+	}
+	
+	public List<RestaurantReview> getAllReviewsByRestaurantNo(int no, int beginIndex, int endIndex){
+		return rtMapper.getAllReviewsByRestaurantNo(no, beginIndex, endIndex);
 	}
 	
 	
