@@ -61,4 +61,8 @@ public class ManagerService {
 		}
 		return rates;
 	}
+	
+	public int getCountUserByCriteria(UserCriteria criteria) {
+		return mapper.getCountUserByCriteria(criteria);
+	}
 }

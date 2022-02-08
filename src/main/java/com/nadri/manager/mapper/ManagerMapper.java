@@ -22,4 +22,10 @@ public interface ManagerMapper {
 	List<Integer> getGenderRateOfUser();
 	
 	List<UserAgeRate> getAgeRateOfUser();
+	
+	/**
+	 * 검색어로 검색된 결과 개수 조회
+	 * @return
+	 */
+	int getCountUserByCriteria(UserCriteria criteria);
 }

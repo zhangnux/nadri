@@ -104,6 +104,9 @@
 	</div>
 	<div class="row mt-4">
 		<div class="col">
+			<form action="/train/refundList.nadri" method="get" id="form-refund">
+				<input type="hidden" name="reservationNo1" >
+			</form>
 			<form action="/train/payment.nadri" method="get" id="form-modify">
 				<table class="text-center" id="reservationTable">
 					<thead>
@@ -218,7 +221,9 @@
 		// 환불 버튼 여기부터ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ
 		$(".btn-refund").click(function() {
 			let target = $(this).parent().prevAll().eq(8).attr('data-reservation-no')
-
+			$("[name=reservationNo1]").val(target)
+			$("#form-refund").submit()
+			// get방식?
 		})
 		
 		// 예약변경 버튼

@@ -180,7 +180,7 @@ public class TrainController {
 		return "train/paymentReservation";
 	}
 	
-	// 질문
+	// 결제 승인 신청
 	@GetMapping("/kakaoPayment.nadri")
 	public String kakaoPayment(@LoginedUser User user, String pg_token, Model model) throws IOException {
 		StringBuffer outPutData = new StringBuffer();
@@ -213,6 +213,7 @@ public class TrainController {
 				TrainReservation reservation = service.getReservationOne(user.getNo(), Integer.parseInt(noList[0]));
 				reservation.setTickectStatus("결제");
 				reservation.setSoldDate(new Date());
+				reservation.setTid((String)SessionUtils.getAttribute("tid"));
 				service.updateReservation(reservation);
 				return "redirect:/train/resultPayment.nadri?reservationNo1=" + noList[0];
 			} else {
@@ -220,6 +221,7 @@ public class TrainController {
 				for (TrainReservation reservation: reservationList) {
 					reservation.setTickectStatus("결제");
 					reservation.setSoldDate(new Date());
+					reservation.setTid((String)SessionUtils.getAttribute("tid"));
 					service.updateReservation(reservation);
 				}
 				return "redirect:/train/resultPayment.nadri?reservationNo1=" + noList[0] + "&reservationNo2=" + noList[1];
@@ -227,6 +229,23 @@ public class TrainController {
 			
 		} else {
 			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			
+			// BufferedReader값을 가져오기
+			// readLine()은 한번 가져오면 끝이다
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				sb.append(rd.readLine());
+			}
+			
+			String text = sb.toString();
+			System.out.println();
+			// 요청 해드에 들어잇는 것만 매개변수로 받을 수 잇다.
+			// json은 헤드가 아닌 body에 이므로 @RequestBody 어노테이션으로 매개변수로 받을 수 있다.
+			// json key값
+			// map안에 List를 답고 key값으로 꺼내내서 model에 담으면 jstl el은 알아서 List로 인식한다.
+			// 똑같은 ticket을 보내고 싶을때 ticket번호를 배열로 만들어서 변수로 할당하면 {ticket:[10, 22, 20]}
+			// @RequestBody List<Integer> ticket 로 매개 변수로 받으면 된다.
 			return "redirect:/errorPayment";
 		}
 	}
@@ -274,13 +293,19 @@ public class TrainController {
 		}
 	}
 	
-	@PostMapping("/refund.nadri")
-	public String refund(@LoginedUser User user, int reservationNo, List<Integer> no, Model model) {
-		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
+	// 예약 번호를 받아서 refund티켓 정보를 알아내기
+	@GetMapping("/refundList.nadri")
+	public String refundList(@LoginedUser User user, int reservationNo1, Model model) {
+		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo1);
 		model.addAttribute("reservation" ,reservation);
-		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo, 0);
+		List<TrainTicket> ticketList = service.getTicketByReservedNo(reservationNo1, 0);
 		model.addAttribute("ticketList", ticketList);
 		
+		return "train/refundList";
+	}
+
+	@GetMapping("/refund.nadri")
+	public String refund(@LoginedUser User user) {
 		return "train/refundPayment";
 	}
 //  스케줄 값 늘리는 메소드

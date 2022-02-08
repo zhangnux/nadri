@@ -11,11 +11,44 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<style>
+	#table-refund td, th, #table-seat-refund td, th{
+		border: 1px solid #C0C0C0;
+		height: 50px;
+	}
+	
+	#table-refund, #table-seat-refund {
+		text-align: center;
+		width: 100%;
+	}
+	
+	.btn {
+		width: 100px;
+		height: 35px;
+		border-radius: 0;
+		text-align-last: center;
+		font-size: .875rem;
+		padding: initial;
+		font-weight: bold;
+	}
+	
+	hr + div div {
+		background-color: #E6ECF3;
+		border: 1px solid #E0E0E0;
+		cursor: pointer;
+	}
+	hr + div div.active {
+		background-color: #495C75;
+		border: 1px solid #E0E0E0;
+		color: white;
+	}
+</style>
 <body>
+<%@ include file="../common/navbar.jsp" %>
 <div class="container">
 	<div class="row my-5">
 		<div class="col">
-			<h2>반환</h2>
+			<h2>반환수수료</h2>
 		</div>
 	</div>
 	<c:set var="menu4" value="reservationList"/>
@@ -26,71 +59,42 @@
 	<div class="border pt-4 pb-2 ps-4 my-3" style="font-size: 15px;">
 		<ul id="explanation">
 			<li>
-				'${sessionScope.LOGIN_USER.name }'고객님의 티켓 내역입니다.
+				'${sessionScope.LOGIN_USER.name }' 고객님의 반환 수수료 내역입니다.
 			</li>
 			<li class="mt-2">
-				반환하실 티켓을 선택해 주세요
+				수수료 내역을 확인하신 후 반환버튼을 눌러주세요.
 			</li>
 		</ul>
 	</div>
-	<div class="row mt-4">
+	<div class="row">
 		<div class="col">
-			<table class="text-center" id="table-modify">
+			<table class="" id="table-refund">
 				<thead>
-					<tr style="background-color: #D6DEE8; ">
-						<th width="10%">승차일자</th>
-						<th width="10%">열차이름</th>
-						<th width="10%">열차번호</th>
-						<th width="10%">출발역</th>
-						<th width="10%">출발시간</th>
-						<th width="10%">도착역</th>
-						<th width="10%">도착시간</th>
-						<th width="7%">인원</th>
+					<tr>
+						<th>탑승날짜</th>
+						<th>열차이름</th>
+						<th>열차번호</th>
+						<th>출발시간</th>
+						<th>출발역</th>
+						<th>도착시간</th>
+						<th>도착역</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td><fmt:formatDate value="${reservation.departureTime }" pattern="yyyy-MM-dd"/></td>
-						<td>${reservation.trainName }</td>
-						<td>${reservation.trainNo }</td>
-						<td>${reservation.departureStation }</td>
-						<td><fmt:formatDate value="${reservation.departureTime }" pattern="HH:mm"/></td>
-						<td>${reservation.arrivalStation }</td>
-						<td><fmt:formatDate value="${reservation.arrivalTime }" pattern="HH:mm"/></td>
-						<td>${reservation.totalCount }</td>
+						<td>2021/01/03</td>
+						<td>KTX</td>
+						<td>1</td>
+						<td>9:00</td>
+						<td>2021/01/03</td>
+						<td>10:45</td>
+						<td>2021/01/03</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
-	<div class="row" style="margin-top: 80px;">
-		<div class="col">
-			<form action="#" method="post" id="form-modify">
-				<input type="hidden" name="reservationNo" value="${reservation.no }">
-				<table class="text-center" id="table-seat-modify">
-					<thead>
-						<tr style="background-color: #D6DEE8; ">
-							<th width="*%">선택</th>
-							<th width="20%">좌석 정보</th>
-							<th width="20%">객실 유형</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="ticket" items="${ticketList }" >
-							<tr>
-								<td><input type="checkbox" name="no" value="${ticket.no }"></td>
-								<td>${ticket.roomName} - ${ticket.seatNo}</td>
-								<td>${ticket.roomType}</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</form>
-		</div>
-	</div>
-	<div class="text-end mt-5">
-		<button class="btn btn-dark" id="btn-refund">반환요청</button>
-	</div>
 </div>
+<%@ include file="../common/footer.jsp" %>
 </body>
 </html>

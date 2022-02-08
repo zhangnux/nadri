@@ -1,6 +1,8 @@
 package com.nadri.manager.web.restController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,14 +44,23 @@ public class ManagerRestController {
 		}
 	}
 	
+	/**
+	 * 회원 정보 검색 창
+	 * @param manager
+	 * @param criteria
+	 * @return
+	 */
 	@GetMapping("/userSearch.do")
-	public ResponseDto<User> userSearch(@LoginedManager Manager manager, UserCriteria criteria) {
+	public Map<String, Object> userSearch(@LoginedManager Manager manager, UserCriteria criteria) {
 		log.info("확인: " + criteria.toString());
 		ResponseDto<User> response = new ResponseDto<>();
 		List<User> userList = service.getUserByCriteria(criteria);
+		int no = service.getCountUserByCriteria(criteria);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("items", userList);
+		map.put("totalBlock", Math.ceil(no/5.0));
+		map.put("active", criteria.getPageNo());
 		
-		response.setItems(userList);
-		response.setStatus("OK");
-		return response;
+		return map;
 	}
 }

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -239,6 +240,13 @@ public class TrainRestController {
 		return response;
 	}
 	
+	/**
+	 * 결제 창 요청
+	 * @param user
+	 * @param dto
+	 * @return
+	 * @throws IOException
+	 */
 	@GetMapping("/kakaoPay")
 	public String kakaoPay(@LoginedUser User user, TrainPaymentDto dto) throws IOException {
 		SessionUtils.addAttribute("reservationNo", dto.getReservationNo());
@@ -286,5 +294,53 @@ public class TrainRestController {
 		SessionUtils.addAttribute("tid", tid);
 		return "";
 	}
+	
+	// parameter받을 때 List<Integer> 로 받을 수 없나???
+//	/**
+//	 * 환불
+//	 * @param user
+//	 * @return
+//	 * @throws IOException
+//	 */
+//	@GetMapping("/cancel")
+//	public String refundKakao(@LoginedUser User user) throws IOException {
+//		// 티켓 번호로 티켓 목록을 호출하기
+//		// 지금은 가상의 값
+//		int ticketNo = 123;
+//		TrainTicket ticketss = service.getTicketByNo(ticketNo);
+//		List<TrainTicket> ticketList = new ArrayList<>();
+//		TrainReservation reservation = service.getReservationOne(user.getNo(), ticketss.getReservationNo());
+//		int totalPrice = 0;
+//		for (TrainTicket ticket: ticketList) {
+//			totalPrice += ticket.getPrice();
+//		}
+//		
+//		StringBuffer outPutData = new StringBuffer();
+//		outPutData.append("cid=TC0ONETIME")
+//				.append("&tid=").append(reservation.getTid())
+//				.append("&cancel_amount=").append(String.valueOf(ticketList.size()))
+//				.append("&cancel_tax_free_amount=").append(String.valueOf(totalPrice));
+//		
+//		URL address = new URL("https://kapi.kakao.com/v1/payment/cancel");
+//		HttpURLConnection conn = (HttpURLConnection) address.openConnection();
+//		conn.setRequestMethod("POST");
+//		conn.setRequestProperty("Authorization", "KakaoAK 5fa0f0222e9a68676ec86330e233e3e7");
+//		conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+//		conn.setDoOutput(true);
+//		
+//		OutputStream outPut = conn.getOutputStream();
+//		DataOutputStream data = new DataOutputStream(outPut);
+//		data.writeBytes(outPutData.toString());
+//		data.flush();
+//		data.close();
+//		
+//		BufferedReader rd;
+//		if(conn.getResponseCode() == 200) {
+//			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//		} else {
+//			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+//		}
+//		return rd.readLine();
+//	}
 	
 }
