@@ -10,40 +10,74 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 <style>
-
+#text {
+	text-align: right;
+}
+.bi-piggy-bank{
+    font-size: 88px;
+    line-height: 88px;
+    color:red;
+}
 </style>
 </head>
 <body>
 <%@ include file="../common/navbar.jsp"%>
-<div class="container py-4">
-	<header class="pb-3 mb-4 border-bottom">
-		<a href="/" class="d-flex align-items-center text-dark text-decoration-none"> <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img">
-				<title>Bootstrap</title>
-				<path fill-rule="evenodd" clip-rule="evenodd"
-					d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"
-					fill="currentColor"></path></svg> <span class="fs-4">프로필 관리</span>
-		</a>
-	</header>
-</div>
+<header class="py-3 border-bottom mb-4">
+	<div class="container">
+		<div class="text-left">
+			<h1 class="fw-bolder">프로필 관리</h1>
+		</div>
+	</div>
+</header>
 <div class="container">
-
-	<div class="row align-items-md-stretch">
+	<div class="row">
+	
+	</div>
+	<div class="row">
 		<div class="col-md-3">
-			<div class="p-5 m-3 bg-light rounded-3 text-center">
-				<p>사진사진</p>
-				<p>이름이름</p>
+			<!-- Search widget-->
+			<div class="card mb-2" style="width: 15rem;">
+				<div class="card-body" style="text-align:center">
+					<!-- 
+					 <img src="../resources/images/user/user.png" class="card-img-top" alt="..." width="98px" height="98px">
+					 -->
+					<i class="bi bi-piggy-bank"></i>
+					<p class="card-text">유저 이름</p>
+					<a href="#" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
+				</div>
 			</div>
-			<div class="p-5 m-3 bg-light rounded-3 text-center">
-				<p>사진사진</p>
-				<p>이름이름</p>
+			<!-- Categories widget-->
+			<div class="card mb-2" style="width: 15rem;">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-6">
+							<div>내 포인트</div>
+							<div>내 쿠폰</div>
+						</div>
+						<div class="col-sm-6" id="text">
+								<a href="#" class="fw-bold text-decoration-none">0 원 &nbsp; <i class="bi bi-server"></i></a><br>
+								<a href="#" class="fw-bold text-decoration-none">0 개 &nbsp; <i class="bi bi-gift-fill"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Side widget-->
+			<div class="card mb-2" style="width: 15rem;">
+				<div class="card-body"> 이벤트를 걸까말까?</div>
 			</div>
 		</div>
-		<div class="col-md-9">
-			<div class="h-100 p-5 bg-light border rounded-3">
-				<h2>Add borders</h2>
-				<p></p>
+			<div class="col-md-9">
+			<!-- Featured blog post-->
+			<div class="card mb-4">
+				<div class="card-body" style="height: 50rem;">
+					<div class="small text-muted">text-muted</div>
+					<h2 class="card-title">구현몬</h2>
+					<p class="card-text">구현구현</p>
+				</div>
 			</div>
+			<!-- Pagination-->
 		</div>
 	</div>
 </div>
