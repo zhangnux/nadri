@@ -62,8 +62,8 @@ public class RestaurantController {
 		List<City> cities = rtService.getAllCities();
 		List<Category> categories = rtService.getAllCategories();
 		
-		model.addAttribute("restaurants", restaurants);
 		
+		model.addAttribute("restaurants", restaurants);
 		model.addAttribute("categories", categories);
 		model.addAttribute("cities", cities);
 		
@@ -116,6 +116,8 @@ public class RestaurantController {
 		List<Restaurant> restaurants = rtService.searchRestaurants(c);
 		List<City> cities = rtService.getAllCities();
 		List<Category> categories = rtService.getAllCategories();
+		
+		
 		
 		model.addAttribute("restaurants", restaurants);
 		model.addAttribute("pagination", pagination);

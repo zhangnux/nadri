@@ -91,7 +91,7 @@
 	
 	<div class="row mb-3 p-3" id="head">
 		<div class="col">
-			<h2>예약</h2>
+			<h2><strong>Restaurant</strong></h2>
 		</div>
 	</div>
 	
@@ -103,7 +103,7 @@
 		<div class="col-3 border p-1 position-sticky">
 			<form action="">
 				<div class="m-3">
-					<h4>예약</h4>
+					<h4><strong>예약</strong></h4>
 				</div>
 				<div class="mt-3">
 					<div class="m-3">
@@ -135,7 +135,7 @@
 					<div class="m-3">
 						<p><strong>총 금액: 0원</strong></p>
 					</div>
-					<div class="mb-3 d-flex justify-content-end">
+					<div class="m-3 d-flex justify-content-end">
 						<a href="checkout.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a>
 					</div>
 				</div>
@@ -144,11 +144,8 @@
 	</div>
 	
 	<div class="row mb-3">
-		<div class="col-12">
-			<c:choose>
-			
-			</c:choose>
-			<h1 class="p-3"><strong>${restaurant.name }</strong> ★ ${starPiont }/5.0점</h1>
+		<div class="col-12 border">
+			<h1 class="p-3"><strong>${restaurant.name }</strong> ★ ${starPiont }/5.0점</h1>			
 			<p>${restaurant.content }</p>
 		</div>
 		<div class="col-12 p-3">
@@ -350,13 +347,15 @@
 					htmlContent += '	<p>'+review.content+'</p>';
 					htmlContent += '</div>';
 					htmlContent += '<div class="col-3 p-3">';
-					// if loginuser.no = userNo
+					if('${LOGIN_USER.no}' == review.userNo){
 					htmlContent += '		<div class="row">';
 					htmlContent += '			<div class="col gap-3 d-flex justify-content-end">';	
 					htmlContent += '				<a>수정</a>';
-					htmlContent += '				<a data-item-no="'+review.no+'">삭제</a>';
+					htmlContent += '				<a href="javascript:void(0)" onclick="fn_deleteReply(' + review.no + ')" >삭제</a>';
+					//htmlContent += '				<a id="delete-review" data-review-no="'+review.no+'">삭제</a>';
 					htmlContent += '			</div>';
 					htmlContent += '		</div>';
+					}
 					htmlContent += '		<div class="row">';	
 					if (review.picture != null) {
 						htmlContent += '		<img id="review-img" src="/resources/images/restaurants/reviews/'+review.picture+'" class="img-thumbnail"/>';
@@ -410,22 +409,26 @@
 		});
 	}
 	
-	/*
-	function deletereview(){
-		
-		if (!confirm("삭제하시겠습니까?")) {
-	        return;
-	    }
+	// 리뷰 수정
 	
-		var replyseq = $(this).attr("data-del");
-	    var sendData = {"replyseq": replyseq}
-	    $.ajax({
-	        method: 'GET',
-	        url : 'replyDelete',
-	        data : sendData,
-	        success: init
+	
+	
+	// 리뷰 삭제
+	function fn_deleteReply(no){
+		var paramData = {"no": no};
+		$.ajax({
+			url: "/rest/restaurant/review/delete.nadri"
+			, data : paramData
+			, type : 'POST'
+			, dataType : 'text'
+			, success: function(result){
+				getReviewList();
+			}
+			, error: function(error){
+				console.log("에러 : " + error);
+			}
+		});
 	}
-	    */
 	
 	$(function(){
 		// 날짜
