@@ -52,7 +52,7 @@
 			user_sms_check = #{smsCheck},
 			user_email_check = #{emailCheck}
 		where
-			user_no = #{no}
+			user_no = #{id}
 	</update>
 	
 	<!--
@@ -90,7 +90,7 @@
 		from 
 			user_table
 		where 
-			user_no =  #{value}
+			user_no = #{value}
 	</select>
 	
 </mapper>

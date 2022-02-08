@@ -15,10 +15,20 @@
 #text {
 	text-align: right;
 }
-.bi-piggy-bank{
+#ltPiggy{
+    font-size: 44px;
+    line-height: 44px;
+    color:red;
+}
+#lgPiggy{
     font-size: 88px;
     line-height: 88px;
     color:red;
+}
+.member-box .form-group .title {
+    font-weight: 600;
+    position: absolute;
+    width: 122px;
 }
 </style>
 </head>
@@ -33,18 +43,15 @@
 </header>
 <div class="container">
 	<div class="row">
-	
-	</div>
-	<div class="row">
 		<div class="col-md-3">
 			<!-- Search widget-->
-			<div class="card mb-2" style="width: 15rem;">
+			<div class="card mb-2" style="width: 15rem; height: 10rem;">
 				<div class="card-body" style="text-align:center">
 					<!-- 
 					 <img src="../resources/images/user/user.png" class="card-img-top" alt="..." width="98px" height="98px">
 					 -->
-					<i class="bi bi-piggy-bank"></i>
-					<p class="card-text">유저 이름</p>
+					<i class="bi bi-piggy-bank" id="ltPiggy"></i>
+					<p class="card-text">${LOGIN_USER.id }</p>
 					<a href="#" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
 				</div>
 			</div>
@@ -57,7 +64,8 @@
 							<div>내 쿠폰</div>
 						</div>
 						<div class="col-sm-6" id="text">
-								<a href="#" class="fw-bold text-decoration-none">0 원 &nbsp; <i class="bi bi-server"></i></a><br>
+								<a href="#" class="fw-bold text-decoration-none">${LOGIN_USER.point } 원 &nbsp; <i class="bi bi-server"></i></a><br>
+								<!-- 아래쪽에 쿠폰 연결 ....... -->
 								<a href="#" class="fw-bold text-decoration-none">0 개 &nbsp; <i class="bi bi-gift-fill"></i></a>
 						</div>
 					</div>
@@ -68,16 +76,57 @@
 				<div class="card-body"> 이벤트를 걸까말까?</div>
 			</div>
 		</div>
-			<div class="col-md-9">
-			<!-- Featured blog post-->
+		<div class="col-md-9">
+		<!-- Featured blog post-->
 			<div class="card mb-4">
 				<div class="card-body" style="height: 50rem;">
-					<div class="small text-muted">text-muted</div>
-					<h2 class="card-title">구현몬</h2>
-					<p class="card-text">구현구현</p>
+					<div class="card-body" style="text-align:center">
+					<!-- 
+					 <img src="../resources/images/user/user.png" class="card-img-top" alt="..." width="98px" height="98px">
+					 -->
+					<i class="bi bi-piggy-bank" id="lgPiggy"></i>
+					<p class="card-text fs-3 fw-bolder">${LOGIN_USER.name }</p>
+					</div>
+					<div class="row pt-3">
+						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">아이디</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p>${LOGIN_USER.id }</p>
+						</div>
+						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">이름</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p>${LOGIN_USER.name }</p>
+						</div>
+						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">이메일</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p>${LOGIN_USER.email }</p>
+						</div>
+						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">전화번호</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p>${LOGIN_USER.tel }</p>
+						</div>
+						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">성별</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p>${LOGIN_USER.gender }</p>
+						</div>
+						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">생일</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p><fmt:formatDate value="${LOGIN_USER.birth}" pattern="yyyy년 M월 dd일"/></p>
+						</div>
+					</div>
 				</div>
 			</div>
-			<!-- Pagination-->
 		</div>
 	</div>
 </div>

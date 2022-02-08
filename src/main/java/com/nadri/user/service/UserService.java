@@ -47,13 +47,15 @@ public class UserService {
 		
 	}
 	
-	public User detailById() {
-		return null;
+	public User getUserDetail(String id) {
+		return userMapper.getUserById(id);
 	}
 	
-	public void updateUser(String id) {
-		User user = userMapper.getUserById(id);
+	public void updateUser(User user) {
+		userMapper.updateUser(user);
 	}
+	
+	
 	
 	public void deleteUser(User user) {
 		
