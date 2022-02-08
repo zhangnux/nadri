@@ -16,4 +16,5 @@ public class AttOption {
 	private String option;
 	private int price;
 	private int discountPrice;
+	private int optNo;
 }

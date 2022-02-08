@@ -1,17 +1,28 @@
 package com.nadri.attr.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nadri.attr.pagination.Pagination;
 import com.nadri.attr.service.AttrService;
 import com.nadri.attr.service.ReviewService;
+import com.nadri.attr.vo.AttrReview;
+import com.nadri.attr.vo.AttrReviewPic;
+import com.nadri.attr.vo.ReviewForm;
 
 @RestController
 @RequestMapping("/attr")
@@ -35,11 +46,16 @@ public class AttrReviewController {
 		
 		return result;
 	}
-/*	
-	@GetMapping("/delete")
-	public int deleteByNo(int reviewNo) {
-		int result = reviewService.removeReview(reviewNo);
-		return result;
+	
+	@PostMapping("/delete")
+	public void deleteByNo(int reviewNo) {
+		reviewService.removeReview(reviewNo);
 	}
-*/
+	
+	@PostMapping("/modify")
+	public void updateReview(int reviewNo, String content) throws Exception {
+		reviewService.modifyReview(reviewNo, content);
+	}
+
+
 }

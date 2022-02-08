@@ -1,18 +1,14 @@
 package com.nadri.attr.service;
 
-import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.nadri.attr.dao.AttrDao;
 import com.nadri.attr.dao.AttrReviewDao;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.AttrReviewPic;
-import com.nadri.attr.vo.Attraction;
 
 @Service
 public class ReviewService {
@@ -34,6 +30,10 @@ public class ReviewService {
 		}
 	}
 	
+	public void modifyReview(int reviewNo, String content) throws Exception{ 
+		reviewDao.updateReview(reviewNo, content);
+	}
+		
 	public void removeReview(int reviewNo) { reviewDao.deleteReview(reviewNo); }
 	
 }

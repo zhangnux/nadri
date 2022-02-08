@@ -13,6 +13,6 @@ import lombok.ToString;
 @ToString
 public class AttrOrderForm {
 
-	
+	private int no;
 	
 }

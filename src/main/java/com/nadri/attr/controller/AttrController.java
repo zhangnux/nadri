@@ -24,6 +24,7 @@ import com.nadri.attr.vo.AttrReviewPic;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.ReviewForm;
 import com.nadri.attr.vo.Search;
+import com.nadri.coupon.vo.Coupon;
 
 @Controller
 @RequestMapping("/attr")
@@ -71,11 +72,14 @@ public class AttrController {
 		List<Attraction> random = attrService.getRandom(no, place);
 		model.addAttribute("random", random);
 		
+		List<Coupon> coupon = attrService.getCoupon();
+		model.addAttribute("coupon",coupon);
+		
 		return "attr/attrdetail";
 	}
 	
 	
-	@PostMapping("/addreview.nadri")
+	@PostMapping("/addreview")
 	public String addReview(ReviewForm reviewForm) throws Exception {
 		String saveDirectory="C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\att\\review";
 		List<AttrReviewPic> attrReviewPics = new ArrayList<>();
@@ -98,5 +102,6 @@ public class AttrController {
 		
 		return "redirect:/attr/detail.nadri?no="+attrReview.getAttNo();
 	}
+	
 
 }

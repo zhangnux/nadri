@@ -28,6 +28,7 @@
 		<result column="att_option" property="option"/>
 		<result column="att_price" property="price"/>
 		<result column="att_discountprice" property="discountPrice"/>
+		<result column="att_optno" property="optNo"/>
 	</resultMap>
 
 	<!-- 전체 리스트 -->
@@ -89,6 +90,7 @@
 		
 	</select>
 	
+	<!-- 검색 -->
 	<select id="getSearchedRow" parameterType="com.nadri.attr.vo.Search" resultType="int">	
 		select count(*)
 		from (
@@ -113,7 +115,7 @@
 		order by att_no desc
 	</select>	
 	
-	<!-- 디테일페이지-설명/옵션 -->
+	<!-- 디테일페이지-설명/옵션/쿠폰 -->
 	<select id="getDetailByNo" parameterType="int" resultMap="AttrResultMap">
 		select  *
 		from attraction 
@@ -124,7 +126,18 @@
 		from att_option
 		where att_no = #{no}
 	</select>
+	<select id="coupon" resultType="com.nadri.coupon.vo.Coupon">
+		select coupon_no no, coupon_quantity quantity, coupon_discountrate discountRate,
+				coupon_startdate startDate, coupon_enddate endDate, coupon_category category,
+				coupon_name name, coupon_issue_date issueDate, coupon_deleted deleted, coupon_issue_end issueEndDate
+		from coupons
+		where coupon_category='즐길거리'
+        and coupon_deleted='n'
+        and coupon_quantity>0
+        and coupon_issue_end>sysdate
+	</select>
 
+	<!-- 리뷰수 -->
 	<select id="reviewCount" parameterType="int" resultType="int">
 		<![CDATA[
 			select count(*) cnt

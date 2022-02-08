@@ -5,7 +5,7 @@
 	<form id="attr-option" action="#" method="post">
 		<div class="rounded mb-3 p-4" style="background-color:#f5f6f7;">
 			<h5><strong>티켓구매</strong></h5>
-			<div class="border p-4 mt-3" style="background-color:white;">
+			<div class="border p-4 mt-3" style="background-color:white;" id="ticket">
 				<div class="mb-3">
 					<strong>날짜</strong>
 					<input type="Date" name="attdate" id="startdate">
@@ -22,13 +22,15 @@
 							<div class="row text-end">
 								<div class="col-8">
 									<a style="font-size:18px;">1인
-									<input type="hidden" name="" value="${opt.price }"> <fmt:formatNumber value="${opt.price }" pattern="0,000" />원</a>
+									<input type="hidden" name="optprice${opt.optNo }" value="${opt.price }" data-no="${opt.optNo }">
+										<fmt:formatNumber value="${opt.price }" pattern="0,000" />원
+									</a>
 								</div>
 								<div class="col-4">
 									<h5>
-									<span onclick=""><i class="bi bi-arrow-left-circle"></i></span>
-									<span class="updown">&nbsp;0&nbsp;</span>
-									<span onclick=""><i class="bi bi-arrow-right-circle"></i></span>
+										<i class="bi bi-arrow-left-circle down" id="${opt.optNo }" data-down="${opt.optNo }"></i></span>
+										<span class="sum" id="${opt.optNo }">0</span>
+										<i class="bi bi-arrow-right-circle up" id="${opt.optNo }" data-up="${opt.optNo }"></i></span>
 									</h5>
 								</div>
 							</div>
@@ -44,20 +46,17 @@
 							</div>
 							<div class="row text-end">
 								<div class="col-8">
-									<a style="font-size:18px;">1인
-									<input type="hidden" name="" value="${detail.price }">
-									${detail.discountPrice }
-									${detail.price }
-									<br>
-										<fmt:formatNumber value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }"
-															pattern="###,###,###" />원
-									</a>
+									<span style="font-size:18px;">1인
+									<span style="font-size:18px;" class="price">
+										<input type="hidden" name="optprice1" value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }">
+										<fmt:formatNumber value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }" pattern="###,###,###" />
+									</span>원</span>
 								</div>
 								<div class="col-4">
 									<h5>
-									<span onclick=""><i class="bi bi-arrow-left-circle"></i></span>
-									<span class="updown">&nbsp;0&nbsp;</span>
-									<span onclick=""><i class="bi bi-arrow-right-circle"></i></span>
+									<i class="bi bi-arrow-left-circle down" data-down="1"></i>
+									<span class="sum">0</span>
+									<i class="bi bi-arrow-right-circle up" data-up="1"></i>
 									</h5>
 								</div>
 							</div>
@@ -67,22 +66,85 @@
 	
 			</div>
 			<div class="mt-3 text-end">
-			<strong><span id="sum">총 금액: 0원</span>　　</strong>
+			<strong>총 금액: <span id="total">0</span>원　　</strong>
 				<c:choose>
 					<c:when test="${empty LOGIN_USER }"></c:when>
 					<c:otherwise>
 						<button class="btn btn-primary btn-lg">결제하기</button>
 					</c:otherwise>
 				</c:choose>
-			</div>					
+			</div>		
 		</div>
 	</form>
-	<script>
-			
-		
-	</script>
 
-	<div class="input-group text-center border rounded p-4 ">
-	모달창으로 발급가능한 쿠폰 띄우기
+	<!-- 쿠폰 -->
+	<div class="coupon border rounded p-3">
+	<div class="row mb-2"><h4><strong>적용가능한 쿠폰</strong></h4></div>
+	<c:forEach var="c" items="${coupon }">
+		<div class="coupon-print border rounded p-3 mb-3">
+			<div class="row">
+				<div class="col-12">
+					<strong>${c.name }</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				할인율: ${c.discountRate }%
+				</div>
+			</div>
+			<div class="row text-end">
+				<div class="col-6">사용기간</div>
+				<div class="col-6"><a class="btn btn-outline-warning ${c.no }">발급받기</a></div>
+			</div>
+		</div>
+	</c:forEach>
 	</div>
+	<script>
+	$(function(){	
+		
+		var total = 0
+		
+		$(".up").click(function(e){
+			e.preventDefault();
+			var sum =$(this).prev().text();
+			var num = parseInt(sum);
+			num++;
+			$(this).prev().text(num);
+			
+			var optNo = $(this).data("up");
+			var price = parseInt($('input[name=optprice'+optNo+']').val());
+			total += price
+			$("#total").text(total);
+		});
+		
+		$(".down").click(function(e){
+			e.preventDefault();
+			var sum = $(this).next().text();
+			var num = parseInt(sum);
+			num--;
+			if(num<0){
+				return false;
+			}
+			$(this).next().text(num);
+			
+			var optNo = $(this).data("down");
+			var price = parseInt($('input[name=optprice'+optNo+']').val());
+			total = parseInt($('#total').text());
+			if(total!=0){
+				var newtotal = total-price
+			}
+			$("#total").text(newtotal);
+			if(total=0){
+				total=0;
+			}
+
+		});
+		
+		$("a.btn-outline-warning").click(function(){
+			alert("하이")
+		})
+		
+	})
+	</script>
+	
 </div>

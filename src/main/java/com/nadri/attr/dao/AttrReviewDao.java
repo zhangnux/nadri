@@ -22,6 +22,9 @@ public interface AttrReviewDao {
 	void insertReviewPic(AttrReviewPic attrReviewPic); 
 	List<AttrReviewPic> ReviewPicsByNo(int reviewNo);
 	
+	// 후기 수정
+	void updateReview(@Param("no")int reviewNo, @Param("content")String content);
+	
 	// 후기 삭제
 	void deleteReview(int reviewNo);
 }

@@ -157,10 +157,8 @@
 		var couponNo = $(this).data("coupon-no");
 		var doubleCheck = confirm("삭제된 쿠폰은 복구 할 수 없습니다. 계속하시겠습니까?")		
 		if(doubleCheck){
-			location.href='delete.nadri?no='+couponNo;
-			
+			location.href='delete.nadri?no='+couponNo;	
 		} else{}
-	
 	})
 
 </script>
