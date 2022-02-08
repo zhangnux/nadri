@@ -26,7 +26,7 @@
 						<td colspan="2">Q&A</td>
 					</tr>
 					<tr>
-						<td colspan="2">[${csBoard.csType }]  <strong> ${csBoard.title } </strong> ${csBoard.replyCheck }</td>
+						<td colspan="2">[${csBoard.csType }]  <strong> ${csBoard.title } </strong> [${csBoard.replyCheck }]</td>
 					</tr>
 					<tr>
 						<td style="text-align: left; width: 8%;">${csBoard.userName }</td>
@@ -56,12 +56,13 @@
 			<h2>답변</h2>
 		</div>
 	</div>
-	<!-- 댓글입력은 매니저만 보이게 restcontroller-->
-	<c:if test="${!empty LOGIN_MANAGER }">
+	
+	
+	
 		<div class="row mb-3 p-3">
 			<div class="col">
 				<form action="" class="border bg-light p-3">
-					<input type="hidden" name="boardNo" value="${csBoard.no }"/>
+					<input type="hidden" name="no" value="${csBoard.no }"/>
 					<div class="mb-3">
 	 					<textarea class="form-control" rows="5" id="replyContent" name="replyContent"></textarea>
 					</div>
@@ -71,19 +72,10 @@
 				</form>
 			</div>
 		</div>
-	</c:if>
-	<!-- c:if로 -->
+	
 	<div class="row m-3">
 		<div class="col" id="manager-answer">
-			<div class="row mb-2 border-bottom">
-				<div class="col-3 p-3 border-end">
-					<div id="username" class="mb-3"><strong>관리자</strong></div>
-					<div>2022/02/22</div>
-				</div>
-				<div class="col-9 p-3">
-					<p>내용내용내용내내용내용내용내용내용내용내용내용내용내용용내용내용내용내용내용내용내용내용내용내용내용내용내용내용</p>
-				</div>
-			</div>
+
 		</div>
 	</div>
 
@@ -91,7 +83,10 @@
 </div>
 <script type="text/javascript">
 //로딩 완료시점에 자동실행
-
+	
+	// 만약 답변이 있으면 실행
+	if()
+	getReply();
 	
 	$("#btn-add-answer").click(function(){
 		var $replyBox = $("#manager-answer").empty();
@@ -103,13 +98,13 @@
 			return false;
 		}
 
-		var formData = new FormDate();
-		var boardNo = $(":input[name=boardNo]").val();
+		var formData = new FormData();
+		var no = $(":input[name=no]").val();
 		// 답변 내용 조회
 		var replyContent = $(":input[name=replyContent]").val();
 		
-		formData.appen("boardNo", baordNo);
-		formData.appen("replyContent", replyContent);
+		formData.append("no", no);
+		formData.append("replyContent", replyContent);
 	
 		$.ajax({
 			type:"post",				// 첨부파일이 업로드 되기 때문에 post 방식으로 지정한다.
@@ -119,7 +114,8 @@
 			contentType: false,			// contentType를 false로 지정하면 기본값으로 지정된 "application/x-www-form-urlencoded"가 적용되지 않는다.
 			success: function(data) {
 				getReply();
-			}
+				}
+			});
 		});
 	
 		function getReply() {
@@ -127,26 +123,26 @@
 			
 			$.ajax({
 				type: "get",
-				url : "/rest/restaurant/review/list.nadri",
-				data: {no: $(":input[name=restaurantNo]").val()},
+				url : "/rest/csboard/reply/show.nadri",
+				data: {no: $(":input[name=boardNo]").val()},
 				dataType: 'json',
 				success: function(reply) {
 					var htmlContent = '';
 					htmlContent += '<div class="row mb-2 border-bottom">';
 					htmlContent += '	<div class="col-3 p-3 border-end">';
 					htmlContent += '		<div id="username" class="mb-3"><strong>관리자</strong></div>';
-					htmlContent += '		<div>'+reply.createdDate+'</div>';
+					htmlContent += '		<div>'+reply.replyCreatedDate+'</div>';
 					htmlContent += '	</div>';
 					htmlContent += '	<div class="col-9 p-3">';
-					htmlContent += '		<p>'+reply.content+'</p>';
+					htmlContent += '		<p>'+reply.replyContent+'</p>';
 					htmlContent += '	</div>';
 					htmlContent += '</div>';
 					
 					$replyBox.append(htmlContent);
 				}
 				
-			}
-
+			});
+		}
 
 </script>
 </body>
