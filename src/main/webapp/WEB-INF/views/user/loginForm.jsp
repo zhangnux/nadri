@@ -95,13 +95,6 @@
 
 
 <script type="text/javascript">
-/*
-$("#loginForm").submit(function(){
-	var id = $("#id").val();
-	var pw = $("#pw").val();
-	
-})
-*/
 
 </script>
 <%@ include file="../common/footer.jsp" %>

@@ -26,7 +26,6 @@ public class UserController {
 	public String loginform() {
 		return "user/loginForm";
 	}
-
 	
 	@PostMapping("/login.nadri")
 	public String login(String id, String password, Model model) {
@@ -35,9 +34,8 @@ public class UserController {
 			model.addAttribute("error", "아이디와 비밀번호는 필수 입력값입니다.");
 			return "user/loginForm";
 		}
-
+		
 		try {
-
 			// UserService의 사용자 인증 서비스 호출
 			User user = userService.login(id, password);
 			SessionUtils.addAttribute("LOGIN_USER", user);
@@ -85,4 +83,31 @@ public class UserController {
 	public String detail() {
 		return "user/detail";
 	}
+	
+
+	@GetMapping("/modify.nadri")
+	public String modifyform() {
+		return "user/loginForm";
+	}
+	
+	@PostMapping("/login.nadri")
+	public String modify(String id, String password, Model model) {
+		// 아이디와 비밀번호가 비어있거나 공백만 있으면 loginform.jsp로 내부이동
+		if (!StringUtils.hasText(id) || !StringUtils.hasText(password)) {
+			model.addAttribute("error", "아이디와 비밀번호는 필수 입력값입니다.");
+			return "user/loginForm";
+		}
+		
+		try {
+			// UserService의 사용자 인증 서비스 호출
+			User user = userService.login(id, password);
+			SessionUtils.addAttribute("LOGIN_USER", user);
+
+			return "redirect:/home.nadri";
+		} catch (RuntimeException e) {
+			model.addAttribute("error", e.getMessage());
+			return "user/loginForm";
+		}
+	}
+
 }
