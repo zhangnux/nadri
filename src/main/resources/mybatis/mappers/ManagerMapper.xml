@@ -49,10 +49,13 @@
 			user_sms_check as smsCheck, 
 			user_email_check as emailCheck,
 			user_deleted_date as deletedDate
-		from  
-			user_table
+		from  (select row_number() over(order by user_no) rn, user_no, 
+			   		  user_id, user_name, user_birth, user_gender, user_tel, user_address, user_point, user_delete_check,  
+			   	 	  user_email, user_type, user_created_date, user_sms_check, user_email_check, user_deleted_date
+			   from  
+			   		user_table
 			<where>
-				<if test='keyword != ""'>
+				<if test='keyword != "" or keyword != null'>
 					<choose>
 						<when test='option == "id"'>
 							user_id like '%' || #{keyword} || '%'
@@ -71,8 +74,8 @@
 				<if test='sms == "Y"'>
 					and user_sms_check is not null
 				</if>
-			</where>
-			order by user_no
+			</where>)
+		where rn >= #{pageNo}*5-4 and rn &lt; #{pageNo}*5 + 1
 	</select>
 	
 	<!-- 성별 비율 -->
