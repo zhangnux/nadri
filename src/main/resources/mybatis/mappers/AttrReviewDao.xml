@@ -41,8 +41,16 @@
 		values(#{no},#{pic})
 	</insert>
 
+	<!-- 리뷰수정 -->
+	<update id="updateReview">
+		update att_review
+		set
+		review_content = #{content}
+		where review_no = #{no}
+	</update>
+	
 	<!-- 리뷰삭제 -->
-	<delete id="deleteReview" parameterType="int">
+	<delete id="deleteReview">
 		delete from att_review
 		where review_no=#{no}
 	</delete>

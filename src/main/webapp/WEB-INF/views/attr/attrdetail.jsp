@@ -20,7 +20,6 @@
 <title>나드리::즐길거리</title>
 <style>
 .detail {
-	position: fixed; .
 	top: 40%;
 	right: 6%;
 	padding: 0;
@@ -159,18 +158,21 @@ article {
 				</div>
 
 				<!-- 후기 -->
+				
 				<div class="border-top mt-5 pt-4 mb-2">
 					<h5>
 						<strong>후기 사진</strong>
 					</h5>
-					<div class="row">
+					<div class="row mt-4">
 					
 							<div class="col">
-								<img src="../../../resources/images/att/review/${reviewList.pic }" style="width:100px;height:100px;object-fit:cover">
+								<img src="../../../resources/images/att/review/reviewtest.jpg" style="width:130px;height:130px;object-fit:cover">
 							</div>
 					
 					</div>
 				</div>
+				 
+				 
 				<div class="border-top mt-5 mb-5 pt-4">
 					<h5>
 						<strong>후기</strong>
@@ -220,26 +222,44 @@ article {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-10 form-floating">
+							<div class="col-12 form-floating">
 							  <textarea class="form-control" id="textarea" name="content"
 							  			style="height: 200px;resize: none;" maxlength="500"></textarea>
 							  <label for="floatingTextarea2">500자까지 작성 가능합니다.</label>
-							</div>
-							<div class="col-2 d-flex align-items-end flex-column bd-highlight register">
+							</div>	
+						</div>
+						
+						<div class="row mt-4 register" id="thumb">
+						 <%--
+							<div class="col-auto">
 								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
 										style="padding-top:12px;height:50px;width:50px">
 									<i class="bi bi-camera"></i>
 								</label>
 								<input type="file" name="upfiles" id="rphoto"
-										style="display:none;" accept="image/*" multiple/>
+										accept="image/*" multiple/>
+								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
+										style="padding-top:12px;height:50px;width:50px">
+									<i class="bi bi-camera"></i>
+								</label>
+								<input type="file" name="upfiles" id="rphoto"
+										accept="image/*" multiple/>
+								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
+										style="padding-top:12px;height:50px;width:50px">
+									<i class="bi bi-camera"></i>
+								</label>
+								<input type="file" name="upfiles" id="rphoto"
+										accept="image/*" multiple/>
+							</div>
+						--%>		
+							<div class="col-12 text-end">
 								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
 									<i class="bi bi-pencil-square"></i>
 								</button>
-							  <input type="hidden" name="attNo" value=${param.no }>
-							  <input type="hidden" name="userNo" value=${LOGIN_USER.no }>
-							</div>
+							</div>																				
 						</div>
-						<div class="mt-4" id="thumb"></div>
+						<input type="hidden" name="attNo" value=${param.no }>
+						<input type="hidden" name="userNo" value=${LOGIN_USER.no }>	
 						</form>
 						</c:otherwise>
 					</c:choose>
@@ -313,6 +333,7 @@ function setThumbnail(event) {
 */
 // 로딩 완료시점에 자동실행
 $(function() {
+
 	/* 리뷰불러오기 */
 	var currentPage = '${param.page}'
 	var no = '${param.no}'
@@ -343,13 +364,13 @@ $(function() {
 						}
 						htmls += this.star+'　'+this.userId+'</div>'
 						if(id == this.userId){
-							htmls += '<div class="col-9 text-end">'
-							htmls += '	<i class="bi bi-pencil-square"></i>&nbsp;'
+							htmls += '<div class="col-9 text-end" id="icons">'
+							htmls += '	<i class="bi bi-pencil-square" id="reviewmodify" data-review-no="'+this.no+'"></i>&nbsp;'
 							htmls += '	<i class="bi bi-trash-fill" id="reviewdelete" data-review-no="'+this.no+'"></i>'
 							htmls += '</div>'
 						}
 						htmls += '<div>'+this.date+'</div>'
-						htmls += '<div class="col-11 mt-2">'+this.content+'</div>'
+						htmls += '<div class="col-11 mt-2" id="content'+this.no+'">'+this.content+'</div>'
 						htmls += '<div class="col-1">'
 						if(this.pic != null){
 							htmls += '<img src=\"../../../resources/images/att/review/'+this.pic+'" style="width:70px;height:70px;object-fit:cover">'
@@ -426,22 +447,68 @@ $(function() {
 		
 		var doubleCheck = confirm("등록하시겠습니까?")		
 		if(doubleCheck){
-			form.action="addreview.nadri";
+			form.action="addreview";
 			form.method="post";
 			form.submit();
 		} else{}	
 	})
 		
 	/* 후기 삭제 */
-	$("#reviewdelete").click(function(){
-		console.log(reviewNo);
-	var reviewNo = $(this).data("review-no");
-	var doubleCheck = confirm("삭제하시겠습니까?")		
-	if(doubleCheck){
-		alert(reviewNo)
-		
-	} else{}
+	$("#review").on('click', '#reviewdelete', function(){
+		var reviewNo = $(this).data("review-no");
+		var doubleCheck = confirm("삭제하시겠습니까?")		
+		if(doubleCheck){
+			$.ajax({
+				url: "delete",
+				type:"post",
+				data:{reviewNo:reviewNo},
+				success:function(){
+					getReviewList();
+				},
+				error:function(error){
+					console.log(error);
+				}
+			})
+		} else{}
+	});
 	
+	/* 후기 수정 */
+	$("#review").on('click','#reviewmodify', function(){
+		var reviewNo = $(this).data("review-no");
+		editReview(reviewNo);
+		$('#reviewmodify').hide();
+		$('#reviewdelete').hide();
+	})
+
+	function editReview(reviewNo){
+		var htmls="";
+		htmls += '<textarea class=\"form-control\" name="content" id="editContent" maxlength="500" rows=\"4\" style="resize: none">'+$('div#content'+reviewNo).text()+'</textarea>';
+		htmls += '<div class="text-end mt-2">';
+		htmls += '	<button class="btn btn-primary" id="saveModify">저장</button>';
+		htmls += '	<a class="btn btn-secondary" id="cancelModify">취소</a>';
+		htmls += '</div>';
+		$('#content'+reviewNo).html(htmls);
+	}
+	
+	$("#review").on('click', '#saveModify', function(){
+		alert("테스트")
+		var content = $("#editContent").();
+		var no = $("#reviewmodify").data("review-no");
+		$.ajax({
+			url: "modify",
+			type:"post",
+			data:{reviewNo:no, content:content},
+			success:function(){
+				getReviewList();
+			},
+			error:function(error){
+				console.log(error);
+			}
+		})
+	})
+	
+	$("#review").on('click','#cancelModify', function(){
+		getReviewList();
 	})
 	
 	/* 달력 설정 */

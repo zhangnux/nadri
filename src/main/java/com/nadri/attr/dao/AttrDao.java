@@ -10,6 +10,7 @@ import com.nadri.attr.dto.AttOptionDetail;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
+import com.nadri.coupon.vo.Coupon;
 
 @Mapper
 public interface AttrDao{
@@ -37,4 +38,6 @@ public interface AttrDao{
 	// 같은 place 상품 랜덤 4개 출력
 	List<Attraction> random(@Param("no")int attNo, @Param("place")String place);
 
+	// 즐길거리 쿠폰리스트
+	List<Coupon> coupon();
 }
