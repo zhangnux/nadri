@@ -244,11 +244,20 @@ public class TrainService {
 	
 	/**
 	 * 티켓 번호에 해당하는 티켓 정보 반환
-	 * @param no
-	 * @return
+	 * @param no 티켓 번호
+	 * @return 티켓 정보
 	 */
 	public TrainTicket getTicketByNo(int no) {
 		return mapper.getTicketByNo(no);
+	}
+	
+	/**
+	 * 티켓 번호목록에 해당하는 티켓목록 정보 반환
+	 * @param no 티켓 번호 목록
+	 * @return 티켓정보 목록
+	 */
+	public List<TrainTicket> getTicketByNo(List<Integer> no) {
+		return mapper.getTicketByNoList(no);
 	}
 	
 	/**

@@ -53,7 +53,6 @@ public class ManagerRestController {
 	@GetMapping("/userSearch.do")
 	public Map<String, Object> userSearch(@LoginedManager Manager manager, UserCriteria criteria) {
 		log.info("확인: " + criteria.toString());
-		ResponseDto<User> response = new ResponseDto<>();
 		List<User> userList = service.getUserByCriteria(criteria);
 		int no = service.getCountUserByCriteria(criteria);
 		Map<String, Object> map = new HashMap<String, Object>();

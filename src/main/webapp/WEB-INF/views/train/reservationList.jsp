@@ -104,7 +104,7 @@
 	</div>
 	<div class="row mt-4">
 		<div class="col">
-			<form action="/train/refundList.nadri" method="get" id="form-refund">
+			<form action="/train/refund.nadri" method="get" id="form-refund">
 				<input type="hidden" name="reservationNo1" >
 			</form>
 			<form action="/train/payment.nadri" method="get" id="form-modify">

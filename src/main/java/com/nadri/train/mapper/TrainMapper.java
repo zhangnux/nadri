@@ -129,6 +129,13 @@ public interface TrainMapper {
 	TrainTicket getTicketByNo(int no);
 	
 	/**
+	 * 티켓번호목록에 해당하는 티켓목록 조회
+	 * @param no
+	 * @return
+	 */
+	List<TrainTicket> getTicketByNoList(List<Integer> no);
+	
+	/**
 	 * 예약 정보 수정
 	 * @param reservation
 	 */

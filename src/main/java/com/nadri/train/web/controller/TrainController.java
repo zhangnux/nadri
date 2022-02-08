@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.service.TrainService;
+import com.nadri.train.util.RefundUtils;
 import com.nadri.train.util.SessionUtils;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainTicket;
@@ -294,7 +295,7 @@ public class TrainController {
 	}
 	
 	// 예약 번호를 받아서 refund티켓 정보를 알아내기
-	@GetMapping("/refundList.nadri")
+	@GetMapping("/refund.nadri")
 	public String refundList(@LoginedUser User user, int reservationNo1, Model model) {
 		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo1);
 		model.addAttribute("reservation" ,reservation);
@@ -304,8 +305,21 @@ public class TrainController {
 		return "train/refundList";
 	}
 
-	@GetMapping("/refund.nadri")
-	public String refund(@LoginedUser User user) {
+	@PostMapping("/refund.nadri")
+	public String refund(@LoginedUser User user, List<Integer> ticketNo, int reservationNo, Model model) {
+		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
+		List<TrainTicket> ticketList = service.getTicketByNo(ticketNo);
+		long refundPrice = reservation.getTotalPrice();
+		long refundRate = 0;
+		
+		for (TrainTicket ticket : ticketList) {
+			refundRate += RefundUtils.refundRate(ticket.getPrice(), reservation.getDepartureTime());
+			refundPrice -= RefundUtils.refundRate(ticket.getPrice(), reservation.getDepartureTime());
+		}
+		model.addAttribute("refundPrice", refundPrice);
+		model.addAttribute("refundRate", refundRate);
+		model.addAttribute("ticketList", ticketList);
+		
 		return "train/refundPayment";
 	}
 //  스케줄 값 늘리는 메소드
