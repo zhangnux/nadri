@@ -10,18 +10,30 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.nadri.attr.service.AttrOrderService;
+import com.nadri.attr.vo.AttrOrderForm;
 
 @Controller
 @RequestMapping("/attr")
 public class AttrOrderController {
 
-	@GetMapping("/orderform.nadri")
-	public String orderform(Model model) {
-		return "attr/attrorder";
+	@Autowired
+	AttrOrderService attrOrderService;
+	
+	@PostMapping("/orderform.nadri")
+	public String orderform(AttrOrderForm orderForm,Model model) {
+	
+		AttrOrderForm orderInfo = attrOrderService.getOrderInfo(orderForm);
+		model.addAttribute("orderInfo",orderInfo);
+		
+		return "attr/orderform";
 	}
 	
 	@RequestMapping("/kakao")

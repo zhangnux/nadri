@@ -22,7 +22,7 @@
 <body>
 <%@ include file="../common/navbar.jsp"%>
 <div class="container">
-	<div class="row mt-5 mb-4"><h2><strong>결제하기</strong></h2></div>
+	<div class="row mt-5 mb-4"><h2><strong>결제하기${orderInfo.no }</strong></h2></div>
 			
 	<form action="kakao" method="post">
 		<div class="border rounded p-3 mb-3">

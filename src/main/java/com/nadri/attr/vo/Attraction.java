@@ -39,6 +39,7 @@ public class Attraction {
 	private String detail;
 	private int count;
 	private double star;
+	private int purchasedQuantity;
 	
 	private AttOption attOption;
 

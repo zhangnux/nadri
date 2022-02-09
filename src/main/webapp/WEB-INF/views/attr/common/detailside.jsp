@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div class="col-3 order-md-last detail">
+<div class="col-4 order-md-last detail">
 
-	<form id="attr-option" action="#" method="post">
+	<form id="attr-option" action="orderform.nadri" method="post">
 		<div class="rounded mb-3 p-4" style="background-color:#f5f6f7;">
 			<h5><strong>티켓구매</strong></h5>
 			<div class="border p-4 mt-3" style="background-color:white;" id="ticket">
@@ -22,7 +22,7 @@
 							<div class="row text-end">
 								<div class="col-8">
 									<a style="font-size:18px;">1인
-									<input type="hidden" name="optprice${opt.optNo }" value="${opt.price }" data-no="${opt.optNo }">
+									<input type="hidden" name="${opt.optNo }" value="${opt.price }" data-no="${opt.optNo }" disabled >
 										<fmt:formatNumber value="${opt.price }" pattern="0,000" />원
 									</a>
 								</div>
@@ -48,7 +48,7 @@
 								<div class="col-8">
 									<span style="font-size:18px;">1인
 									<span style="font-size:18px;" class="price">
-										<input type="hidden" name="optprice1" value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }">
+										<input type="hidden" name="1" value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }" disabled>
 										<fmt:formatNumber value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }" pattern="###,###,###" />
 									</span>원</span>
 								</div>
@@ -66,15 +66,20 @@
 	
 			</div>
 			<div class="mt-3 text-end">
-			<strong>총 금액: <span id="total">0</span>원　　</strong>
+			<strong>
+				총 금액: 
+				<input type="hidden" name="price" value="0"><span id="total">0</span>원　　
+			</strong>
 				<c:choose>
 					<c:when test="${empty LOGIN_USER }"></c:when>
 					<c:otherwise>
-						<button class="btn btn-primary btn-lg">결제하기</button>
+						<button class="btn btn-primary btn-lg order">결제하기</button>
 					</c:otherwise>
 				</c:choose>
 			</div>		
 		</div>
+		<input type="hidden" name="attNo" value="${param.no }">
+		<input type="hidden" name="userNo" value="${LOGIN_USER.no }">
 	</form>
 
 	<!-- 쿠폰 -->
@@ -92,15 +97,49 @@
 				할인율: ${c.discountRate }%
 				</div>
 			</div>
-			<div class="row text-end">
-				<div class="col-6">사용기간</div>
-				<div class="col-6"><a class="btn btn-outline-warning ${c.no }">발급받기</a></div>
+			<div class="row">
+				<div class="col-6">
+					사용기간 ~<fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd"/>
+				</div>
+				<div class="col-6 text-end">
+					<a class="btn btn-outline-warning ${c.no }">발급받기</a>
+				</div>
 			</div>
 		</div>
 	</c:forEach>
 	</div>
 	<script>
 	$(function(){	
+			
+		/* 달력 설정 */
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1;
+		var yyyy = today.getFullYear();
+		 if(dd<10){
+		        dd='0'+dd
+		    } 
+		    if(mm<10){
+		        mm='0'+mm
+		    } 	
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("startdate").setAttribute("min", today);
+		
+		
+		$(".order").click(function(){
+			// 날짜
+			var attdate = $("#startdate").val();
+			if(attdate == ''){
+				alert("날짜를 선택해주세요");
+				return false;
+			}
+			// 옵션
+			var total = $("#total").text();
+			if(total==0){
+				alert("구매수량을 선택해주세요");
+				return false;
+			}
+		})
 		
 		var total = 0
 		
@@ -112,9 +151,10 @@
 			$(this).prev().text(num);
 			
 			var optNo = $(this).data("up");
-			var price = parseInt($('input[name=optprice'+optNo+']').val());
+			var price = parseInt($('input[name='+optNo+']').val());
 			total += price
 			$("#total").text(total);
+			$("input[name=price]").val(total);
 		});
 		
 		$(".down").click(function(e){
@@ -128,15 +168,15 @@
 			$(this).next().text(num);
 			
 			var optNo = $(this).data("down");
-			var price = parseInt($('input[name=optprice'+optNo+']').val());
+			var price = parseInt($('input[name='+optNo+']').val());
 			total = parseInt($('#total').text());
 			if(total!=0){
 				var newtotal = total-price
-			}
-			$("#total").text(newtotal);
-			if(total=0){
+			} else {
 				total=0;
 			}
+			$("#total").text(newtotal);
+			$("input[name=price]").val(newtotal);
 
 		});
 		

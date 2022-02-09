@@ -17,7 +17,6 @@
 		<result column="att_photo" property="photo"/>
 		<result column="att_address" property="address"/>
 		<result column="att_detailcontent" property="detail"/>
-		<result column="att_detailcontent" property="detail"/>
 		<result column="star" property="star"/>
 		<result column="cnt" property="count"/>
 		<collection property="attOption" resultMap="AttrOptionMap" />
