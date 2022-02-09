@@ -24,6 +24,7 @@ public class ReservationForm {
 	
 	private int deposit;				// 예치금
 	private Date reservedDate;			// 예약 날짜
+	private String startTime;			// 예약한 시작 날짜.
 	
 	private int child;					// 아이 수
 	private int adult;					// 어른 수

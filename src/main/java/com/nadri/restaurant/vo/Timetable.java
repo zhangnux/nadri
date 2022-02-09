@@ -15,8 +15,8 @@ import lombok.ToString;
 @ToString
 public class Timetable {
 	
-	private int no;
-	private int startTime;
+	private int timetableNo;
+	private String startTime;
 	private int capacity;	// 시간대별 수용량. 2시간단위로 예약받고, 그 수용량.
 	
 	

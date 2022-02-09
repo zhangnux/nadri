@@ -17,6 +17,7 @@ import lombok.ToString;
 @ToString
 public class RestaurantReviewInsertForm {
 	
+	private int reviewNo;
 	private int restaurantNo;
 	private int rating;
 	private String content;

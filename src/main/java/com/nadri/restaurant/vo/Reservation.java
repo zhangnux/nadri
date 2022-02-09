@@ -2,8 +2,6 @@ package com.nadri.restaurant.vo;
 
 import java.util.Date;
 
-import com.nadri.user.vo.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +31,9 @@ public class Reservation {
 	private int usedPoint;	// 사용포인트
 	private int reservedPoint;	//적립포인트
 	
-	private Restaurant restaurant;	// no
-	private User user;
-	private Timetable timetable;	//no
+	private int restaurantNo;
+	private int userNo;
+	private int timetableNo;	//no
 	
 	
 

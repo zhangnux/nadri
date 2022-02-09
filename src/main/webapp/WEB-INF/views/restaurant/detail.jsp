@@ -101,7 +101,7 @@
 			<img id="rt-img" alt="picture" src="${restaurant.picture }">
 		</div>
 		<div class="col-3 border p-1 position-sticky">
-			<form action="">
+			<form action="checkout.nadri" id="reservation-form">
 				<div class="m-3">
 					<h4><strong>예약</strong></h4>
 				</div>
@@ -113,30 +113,37 @@
 					<div class="m-3">
 						<label class="form-label">시간</label>
 						<select class="form-select">
-							<option value=""></option>
+							<option value="" ${empty param.timetable ? 'selected' : ''}>예약 시간</option>
+							<c:forEach var="timetable" items="${timetables }">
+								<option value="${timetable.timetableNo }" ${param.timetable == timetable.timetableNo ? 'selected' : ''}>
+									${timetable.startTime }
+								</option>							
+							</c:forEach>
 						</select>
 					</div>
 					<div class="m-3">
 						<label class="form-label">어른</label>
 						<select class="form-select">
-							<option value="1">1명</option>
-							<option value="2">2명</option>
-							<option value="3">3명</option>
-							<option value="4">4명</option>
+							<option>선택</option>
+							<option value="1" ${param.adult == 1 ? 'selected' : ''}>1명</option>
+							<option value="2" ${param.adult == 2 ? 'selected' : ''}>2명</option>
+							<option value="3" ${param.adult == 3 ? 'selected' : ''}>3명</option>
+							<option value="4" ${param.adult == 4 ? 'selected' : ''}>4명</option>
 						</select>
 						<label class="form-label">아이</label>
 						<select class="form-select">
-							<option value="1">1명</option>
-							<option value="2">2명</option>
-							<option value="3">3명</option>
-							<option value="4">4명</option>
+							<option>선택</option>
+							<option value="1" ${param.child == 1 ? 'selected' : ''}>1명</option>
+							<option value="2" ${param.child == 1 ? 'selected' : ''}>2명</option>
+							<option value="3" ${param.child == 1 ? 'selected' : ''}>3명</option>
+							<option value="4" ${param.child == 1 ? 'selected' : ''}>4명</option>
 						</select>
 					</div>
 					<div class="m-3">
-						<p><strong>총 금액: 0원</strong></p>
+						<p><strong>총 금액: <span id="totalPrice">0</span>원</strong></p>
 					</div>
 					<div class="m-3 d-flex justify-content-end">
-						<a href="checkout.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a>
+						<a href="checkout.nadri?no=${restaurant.no }" id="btn-book" class="btn btn-primary">book now</a>
 					</div>
 				</div>
 			</form>
@@ -211,7 +218,13 @@
 </div>
 
 <div class="container" id="review">
-		<!--
+
+	<!-- 
+		결제 버튼 누르면 로그인, 날짜, 시간, 어른 1명은 무조건 선택되는지 확인하고 경고창 띄우기
+	 -->
+	 
+
+	<!--
 		리뷰 로그인해야 작성할수 있게
 		수정 삭제는 로그인된 유저 정보 받아와서 일치하면 보이게
 		페이지 변경이 없으니 ajax로 해야함
@@ -337,28 +350,28 @@
 			success: function(response) { // {"reviews": [{}, {}, {}], "pagination":{toal}}
 				$.each(response.reviews, function(index, review) {
 					var htmlContent = '';
-					htmlContent += '<div class="row mb-2 border-bottom">';
+					htmlContent += '<div class="row mb-2 border-bottom" id="no'+review.no+'">';
 					htmlContent += '<div class="col-3 p-3 border-end">';
-					htmlContent += '	<div id="starPoint">★ '+review.rating+'점</div>';
-					htmlContent += '<div id="username" class="mb-3"><strong>'+review.userName+'</strong></div>';
-					htmlContent += '<div>'+review.createdDate+'</div>';
+					htmlContent += '	<div >★ <span id="starPoint-'+review.no+'">'+review.rating+'</span>점</div>';
+					htmlContent += '<div id="username'+review.no+'" class="mb-3"><strong>'+review.userName+'</strong></div>';
+					htmlContent += '<div id="createdDate'+review.no+'">'+review.createdDate+'</div>';
 					htmlContent += '</div>';
 					htmlContent += '<div class="col-6 p-3">';
-					htmlContent += '	<p>'+review.content+'</p>';
+					htmlContent += '	<p id="content'+review.no+'">'+review.content+'</p>';
 					htmlContent += '</div>';
 					htmlContent += '<div class="col-3 p-3">';
 					if('${LOGIN_USER.no}' == review.userNo){
 					htmlContent += '		<div class="row">';
 					htmlContent += '			<div class="col gap-3 d-flex justify-content-end">';	
-					htmlContent += '				<a>수정</a>';
-					htmlContent += '				<a href="javascript:void(0)" onclick="fn_deleteReply(' + review.no + ')" >삭제</a>';
+					htmlContent += '				<a href="javascript:void(0)" onclick="modifyformReview('+review.no+')" style="padding-right:5px">수정</a>';
+					htmlContent += '				<a href="javascript:void(0)" onclick="deleteReview(' + review.no + ')" >삭제</a>';
 					//htmlContent += '				<a id="delete-review" data-review-no="'+review.no+'">삭제</a>';
 					htmlContent += '			</div>';
 					htmlContent += '		</div>';
 					}
 					htmlContent += '		<div class="row">';	
 					if (review.picture != null) {
-						htmlContent += '		<img id="review-img" src="/resources/images/restaurants/reviews/'+review.picture+'" class="img-thumbnail"/>';
+						htmlContent += '		<img id="review-img'+review.no+'" src="/resources/images/restaurants/reviews/'+review.picture+'" class="img-thumbnail"/>';
 					}
 					htmlContent += '		</div>';
 					htmlContent += '	</div>';
@@ -367,54 +380,154 @@
 					$reviewBox.append(htmlContent);
 				});
 				$("#review-pagination").empty();
-				var pagination = response.pagination;
-				var pageContent = "";
-				pageContent += '<nav aria-label="...">';
-				pageContent += '  <ul class="pagination">';
-				if (pagination.existPrev) {
-					pageContent += '    <li class="page-item">';
-					pageContent += '      <a class="page-link" href="javascript:getReviewList('+pagination.prevPage+')">Previous</a>';
-					pageContent += '    </li>';
-					
-				} else {
-					pageContent += '    <li class="page-item disabled">';
-					pageContent += '      <a class="page-link">이전</a>';
-					pageContent += '    </li>';
-					
-				}
-				for (var num = pagination.beginPage; num <= pagination.endPage; num++) {
-					if (num == pagination.pageNo) {
-						pageContent += '    <li class="page-item active "><a class="page-link" href="javascript:getReviewList('+num+')">'+num+'</a></li>';
+				if (response.reviews.length > 0) {
+					var pagination = response.pagination;
+					var pageContent = "";
+					pageContent += '<nav aria-label="...">';
+					pageContent += '  <ul class="pagination">';
+					if (pagination.existPrev) {
+						pageContent += '    <li class="page-item">';
+						pageContent += '      <a class="page-link" href="javascript:getReviewList('+pagination.prevPage+')">Previous</a>';
+						pageContent += '    </li>';
+						
 					} else {
-						pageContent += '    <li class="page-item "><a class="page-link" href="javascript:getReviewList('+num+')">'+num+'</a></li>';
+						pageContent += '    <li class="page-item disabled">';
+						pageContent += '      <a class="page-link">이전</a>';
+						pageContent += '    </li>';
+						
+					}
+					for (var num = pagination.beginPage; num <= pagination.endPage; num++) {
+						if (num == pagination.pageNo) {
+							pageContent += '    <li class="page-item active "><a class="page-link" href="javascript:getReviewList('+num+')">'+num+'</a></li>';
+						} else {
+							pageContent += '    <li class="page-item "><a class="page-link" href="javascript:getReviewList('+num+')">'+num+'</a></li>';
+						}
+						
+					}
+					if (pagination.existNext) {
+						pageContent += '    <li class="page-item">';
+						pageContent += '      <a class="page-link"  href="javascript:getReviewList('+pagination.nextPage+')">Next</a>';
+						pageContent += '    </li>';
+					} else{
+						pageContent += '    <li class="page-item disabled">';
+						pageContent += '      <a class="page-link">다음</a>';
+						pageContent += '    </li>';
+						
 					}
 					
-				}
-				if (pagination.existNext) {
-					pageContent += '    <li class="page-item">';
-					pageContent += '      <a class="page-link"  href="javascript:getReviewList('+pagination.nextPage+')">Next</a>';
-					pageContent += '    </li>';
-				} else{
-					pageContent += '    <li class="page-item disabled">';
-					pageContent += '      <a class="page-link">다음</a>';
-					pageContent += '    </li>';
+					pageContent += '  </ul>';
+					pageContent += '</nav>';
 					
+					$("#review-pagination").append(pageContent);
 				}
-				
-				pageContent += '  </ul>';
-				pageContent += '</nav>';
-				
-				$("#review-pagination").append(pageContent);
 			}
 		});
 	}
 	
 	// 리뷰 수정
 	
+	function modifyformReview(reviewNo){
+		
+		var starPoint = $("#starPoint-" + reviewNo).text();
+		//alert(starPoint);
+		
+		var htmlContent = '';
+		htmlContent += '<div class="row mb-2 border-bottom" id="no'+reviewNo+'">';
+		htmlContent += '<div class="col-3 p-3 border-end">';
+		htmlContent += '<div class="col-auto star-rating mt-3 mb-3">';
+		htmlContent += '<input type="radio" id="5-stars" name="edit-rating" value="5" '+ (starPoint == 5 ? 'checked' : '')+' />';
+		htmlContent += '<label for="5-stars" class="star">&#9733;</label>';
+		htmlContent += '<input type="radio" id="4-stars" name="edit-rating" value="4" '+ (starPoint == 4 ? 'checked' : '')+'/>';
+		htmlContent += '<label for="4-stars" class="star">&#9733;</label>';
+		htmlContent += ' <input type="radio" id="3-stars" name="edit-rating" value="3" '+ (starPoint == 3 ? 'checked' : '')+'/>';
+		htmlContent += ' <label for="3-stars" class="star">&#9733;</label>';
+		htmlContent += '  <input type="radio" id="2-stars" name="edit-rating" value="2" '+ (starPoint == 2 ? 'checked' : '')+'/>';
+		htmlContent += '  <label for="2-stars" class="star">&#9733;</label>';
+		htmlContent += '  <input type="radio" id="1-star" name="edit-rating" value="1" '+ (starPoint == 1 ? 'checked' : '')+' />';
+		htmlContent += ' <label for="1-star" class="star">&#9733;</label>';
+		htmlContent += '</div>';
+		htmlContent += '<div id="username" class="mb-3"><strong>${LOGIN_USER.name}</strong></div>';
+		htmlContent += '<div>'+$('div#createdDate'+reviewNo).text()+'</div>';
+		htmlContent += '</div>';
+		htmlContent += '<div class="col-6 p-3">';
+		htmlContent += '	<textarea name="editContent" class="form-control" id="editContent" rows="3">'+$('p#content'+reviewNo).text()+'</textarea>';
+		// if로 첨부파일이 있으면 값입력해서 내놓기
+		htmlContent += '	<input type="file" class="form-control" name="upfile" id="edit-up-file""/>';				
+		htmlContent += '</div>';
+		htmlContent += '<div class="col-3 p-3">';
+		htmlContent += '		<div class="row">';
+		htmlContent += '			<div class="col gap-3 d-flex justify-content-end">';	
+		htmlContent += '				<a href="javascript:void(0)" onclick="updateReview('+reviewNo+')" style="padding-right:5px">저장</a>';
+		htmlContent += '				<a href="javascript:void(0)" onClick="getReviewList()">취소<a>';
+		htmlContent += '			</div>';
+		htmlContent += '		</div>';
+		htmlContent += '	</div>';
+		htmlContent += '</div>';
+		
+		$('#no' + reviewNo).replaceWith(htmlContent);
+		$('#no' + reviewNo + ' #editContent').focus();
+		
+		$('#no' + reviewNo).find('.star').click(function() {
+			// 모든 라이오버튼의 체크상태를 해제상태로 변경함  
+			$(":radio[name=edit-rating]").prop("checked", false);
+			// 모든 별의 색을 회색으로 변경
+			$('#no' + reviewNo).find('.star').css("color", '#ccc');
+			// 클릭한 변의 색을 주황색으로 변경하고, 그 별 바로 앞에 있는 라디오 버튼을 체크상태로 변경함 
+			$(this).prev().prop("checked", true);
+			
+			var checked = false;
+			$(":radio[name=edit-rating]").each(function(index, radio) {
+				if ($(radio).prop('checked') == true) {
+					checked = true;
+				}
+				if (checked) {
+					$(this).next().css('color', '#f90')
+				}
+			})
+			
+		});
+		
+		
+	}
 	
+	function updateReview(reviewNo){
+		
+		var formData = new FormData();
+		// 별점 조회
+		var rating = $(":input[name=edit-rating]:checked").val();
+		// 리뷰내용 조회
+		var content = $(":input[name=editContent]").val();
+		// FormData객체에 name,value의 쌍으로 값을 추가한다.
+		formData.append("reviewNo", reviewNo);
+		formData.append("rating", rating);
+		formData.append("content", content);
+		// 첨부파일 입력필드 조회
+		var input = document.getElementById("edit-up-file");	
+		// 첨부파일 조회하기
+		if (input.files.length) {
+			var upfile = input.files[0]; 	// 첨부파일 input 엘리먼트에 첨부된 파일중에서 첫번째 파일을 FormData에 저장	
+			formData.append("upfile", upfile);	
+
+		}
+		
+
+		$.ajax({
+			type:"post",				// 첨부파일이 업로드 되기 때문에 post 방식으로 지정한다.
+			url:"/rest/restaurant/review/modify.nadri",
+			data: formData,
+			processData: false,			// processData를 false로 지정하면 name=value&name=value의 형태가 아닌 다른 방식으로 전달된다.
+			contentType: false,			// contentType를 false로 지정하면 기본값으로 지정된 "application/x-www-form-urlencoded"가 적용되지 않는다.
+			success: function() {
+				getReviewList();
+			}
+		});
+		
+	}
+
+		
 	
 	// 리뷰 삭제
-	function fn_deleteReply(no){
+	function deleteReview(no){
 		var paramData = {"no": no};
 		$.ajax({
 			url: "/rest/restaurant/review/delete.nadri"

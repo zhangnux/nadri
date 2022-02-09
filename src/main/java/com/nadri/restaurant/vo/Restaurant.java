@@ -28,7 +28,7 @@ public class Restaurant {
 	private String tel;			// 전화번호
 	private String openTime;	// 영업시간
 	private int sales;			// 매출양
-	private int starPoint;		// 별점
+	private double starPoint;		// 별점
 	private double lat;			// 위도 mapx
 	private double lon;			// 경도 mapy
 	private String categoryName;

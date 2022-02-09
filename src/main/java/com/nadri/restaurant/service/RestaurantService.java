@@ -1,10 +1,8 @@
 package com.nadri.restaurant.service;
 
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.tomcat.util.json.JSONParser;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +11,7 @@ import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
+import com.nadri.restaurant.vo.Timetable;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
 
 @Service
@@ -123,7 +122,11 @@ public class RestaurantService {
 		rtMapper.deleteReview(reviewNo);
 	}
 	
+	// 예약
 	
+	public List<Timetable> getAllTimetable(){
+		return rtMapper.getAllTimetable();
+	}
 	
 	
 	

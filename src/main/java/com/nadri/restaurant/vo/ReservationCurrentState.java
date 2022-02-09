@@ -17,9 +17,9 @@ import lombok.ToString;
 @ToString
 public class ReservationCurrentState {
 	
-	private int no;
-	private Restaurant restaurant;	// no
-	private Timetable timetable;	// startTime;
+	private int currentNo;
+	private int restaurantNo;	// no
+	private String startTime;	// startTime;
 	private Date reservedDate;
 	private int reservedPeople;	// 해당 날짜에 예약한 총 인원수
 

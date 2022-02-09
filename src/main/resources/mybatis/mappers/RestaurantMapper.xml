@@ -8,20 +8,24 @@
 	-->
 	<select id="getBestRestaurants" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			restaurant_no as no,
-			restaurant_name as name,
-			restaurant_picture as picture,
-			restaurant_star_point as starPoint
+			X.restaurant_no as no,
+			X.restaurant_name as name,
+			X.restaurant_picture as picture,
+			(select 
+				round(avg(A.rt_review_star_point), 1)
+			 from 
+			 	restaurant_review A 
+			 where 
+			 	A.restaurant_no = X.restaurant_no) starPoint
 		from
 			(select
 				restaurant_no,
 				restaurant_name,
-				restaurant_picture,
-				restaurant_star_point
+				restaurant_picture
 			from
 				restaurant
 			order by restaurant_sales desc
-				)
+				) X
 		where rownum &lt; to_number(5)
 	</select>
 	
@@ -42,7 +46,6 @@
 			restaurant_restdate as restDate,
 			restaurant_tel as tel,
 			restaurant_open_time as openTime,
-			restaurant_star_point as starPoint,
 			restaurant_lat as lat,
 			restaurant_lon as lon
 		from
@@ -113,20 +116,28 @@
 	 -->
 	<select id="searchRestaurants" parameterType="com.nadri.restaurant.web.form.RestaurantCriteria" resultType="com.nadri.restaurant.vo.Restaurant">
 		select
-			no,
-			name,
-			picture,
-			starPoint,
-			categoryName,
-			cityName
+			X.no,
+			X.name,
+			X.picture,
+			X.categoryName,
+			X.cityName,
+			X.parking,
+			X.openTime,
+			(select 
+				round(avg(A.rt_review_star_point), 1)
+			 from 
+			 	restaurant_review A 
+			 where 
+			 	A.restaurant_no = X.no) starPoint
 		from (
 			select
 				A.restaurant_no as no,
 				A.restaurant_name as name,
 				A.restaurant_picture as picture,
-				A.restaurant_star_point as starPoint,
 				B.category_name as categoryName,
 				C.city_name as cityName,
+				A.restaurant_parking as parking,
+				A.restaurant_open_time as openTime,
 			row_number() over (order by restaurant_no desc) rn
 			from restaurant A, restaurant_category B, restaurant_city C
 			where
@@ -146,7 +157,7 @@
 				<if test="sort == 'starPoint'">
 					order by A.restaurant_star_point desc
 				</if>
-		)
+		) X
 		where rn between #{beginIndex} and #{endIndex}
 	</select>
 	
@@ -248,13 +259,14 @@
 	
 	<!--
 		void updateReview(RestaurantReview restaurantReview)
-		사진 수정은 어케함?
+		
 	-->
 	<update id="updateReview" parameterType="com.nadri.restaurant.vo.RestaurantReview">
 		update restaurant_review
 		set
 			rt_review_content = #{content},
-			rt_review_star_point = #{starPoint}
+			rt_review_star_point = #{rating},
+			rt_review_picture = #{picture}
 		where
 			rt_review_no = #{no}
 	</update>
@@ -270,5 +282,36 @@
 	<!--
 		예약
 	-->
+	
+	<!--
+		List<Timetable> getAllTimetable();
+	-->
+	<select id="getAllTimetable" resultType="com.nadri.restaurant.vo.Timetable">
+		select
+			time_table_no timetableNo,
+			start_time startTime,
+			restaurant_capacity capacity
+		from restaurant_time_table
+	
+	</select>
+	
+	<!--
+		List<RegisterDto> getBookableTime(Reservation reservation);
+	-->
+	<select id="getBookableTime" parameterType="com.nadri.restaurant.vo.ReservationCurrentState" resultType="com.nadri.restaurant.dto.RegisterDto">
+		select
+			B.time_table_no timeTableNo,
+			B.start_time startTime,
+			B.restaurant_capacity capacity,
+			nvl(A.reserved_people, 0) reservedPeople,
+			capacity - reservedPeople bookablePeople
+		from
+			rt_reservation_current_state A, restaurant_time_table B
+		where
+			A.restaurant_no = #{restaurantNo}
+			and A.reservation_date = #{reservedDate}
+			and A.time_table_no = B.time_table_no(+)
+		order by B.time_table_no asc
+	</select>
 
 </mapper>
