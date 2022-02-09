@@ -332,6 +332,28 @@
 		and t.price_id = p.price_id
 	</select>
 	
+	<!-- 티켓 여러개 조회 -->
+	<select id="getTicketByNoList" resultType="com.nadri.train.vo.TrainTicket">
+		select  t.ticket_no as no,
+				t.customer_name as customerName,
+				t.passenger_type as type,
+				t.is_canceled as isCanceled,
+				t.reservation_no as reservationNo,
+				t.schedule_no as scheduleNo,
+				t.room_no as roomNo,
+				t.train_no as trainNo,
+				t.price_id as priceId,
+				p.price as price,
+				t.seat_no as seatNo
+		from train_ticket t, train_price p
+		where t.ticket_no in
+			<foreach collection="list" item="no" open="(" close=")" separator=", ">
+				#{no}
+			</foreach>
+		and t.price_id = p.price_id
+	</select>
+	
+	<!-- 예약정보 수정 -->
 	<update id="updateReservation" parameterType="com.nadri.train.vo.TrainReservation">
 		update train_reservation
 		set
@@ -344,6 +366,7 @@
 		where reservation_no = #{no}
 	</update>
 	
+	<!-- 티켓 정보 수정 -->
 	<update id="updateTicket" parameterType="com.nadri.train.vo.TrainTicket">
 		update train_ticket
 		set
@@ -357,4 +380,5 @@
 			seat_no = #{seatNo}
 		where ticket_no = #{no}
 	</update>
+	
 </mapper>
