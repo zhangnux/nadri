@@ -361,19 +361,33 @@ public class TrainRestController {
 				ticket.setIsCanceled("Y");
 				service.updateTicket(ticket);
 			}
-			service.deleteTicketByNo(form.getTicketList());
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = rd.readLine()) != null) {
-				sb.append(rd.readLine());
+				sb.append(line);
 			}
-			
 			String text = sb.toString();
 			log.info("결제결과: " + text);
+			return text;
 		} else {
 			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
 		}
 		return "";
+	}
+	
+	@GetMapping("/print/{reservationNo}")
+	public ResponseDto<?> print(@PathVariable(name="reservationNo") int no) {
+		ResponseDto<TrainTicket> response = new ResponseDto<TrainTicket>();
+		// is canceled N인 티켓 정보 가져오기
+		List<TrainTicket> ticketList = service.getTicketByReservedNo(no, 0);
+		if (ticketList.size() != 0) {
+			response.setItems(ticketList);
+			response.setStatus("OK");
+		} else {
+			response.setStatus("FAIL");
+			response.setError("티켓정보가 존재하지 않습니다.");
+		}
+		return response;
 	}
 	
 }

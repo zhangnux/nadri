@@ -11,7 +11,9 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +47,7 @@ public class TrainController {
 	
 	@Autowired
 	TrainService service;
+	
 	
 	/**
 	 * 기차 스케줄 검색 창
@@ -330,6 +333,17 @@ public class TrainController {
 		
 		return "train/refundPayment";
 	}
+	
+	/**
+	 * 이용내역 조회
+	 * @param user
+	 * @return
+	 */
+	@GetMapping("/search.nadri")
+	public String search(@LoginedUser User user) {
+		return "train/searchReservation";
+	}
+		
 //  스케줄 값 늘리는 메소드
 //	@GetMapping("/insert.do")
 //	public void insertSchedule() {

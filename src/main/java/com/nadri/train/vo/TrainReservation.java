@@ -26,6 +26,7 @@ public class TrainReservation {
 	private Date arrivalTime;
 	private int userNo;
 	private String tid;
+	private String isPrinted;
 	
 	public String getDiffTime() {
 		long diff = arrivalTime.getTime() - departureTime.getTime();

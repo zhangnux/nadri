@@ -59,5 +59,10 @@
 			<a href="#">반환</a>
 		</li>
  	</c:if>
+ 	<c:if test="${not empty menu9 }">
+		<li class="breadcrumb-item ${active eq 'menu9' ? 'active' : '' }">
+			<a href="#">이용내역</a>
+		</li>
+ 	</c:if>
   </ol>
 </nav>

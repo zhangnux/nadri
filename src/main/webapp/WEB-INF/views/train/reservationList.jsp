@@ -71,7 +71,7 @@
 		<div class="col-4 p-4" id="modify-div">
 			예약변경
 		</div>
-		<div class="col-4 p-4">
+		<div class="col-4 p-4" id="search-div">
 			이용내역
 		</div>
 	</div>
@@ -148,7 +148,11 @@
 											<td><button type="button" class="btn btn-cancel" style="background-color: #7E5C5E; color: white;">예약 취소</button></td>
 										</c:when>
 										<c:when test="${reservation.tickectStatus eq '결제' }">
-											<td>결제 완료</td>
+											<td>결제 완료 
+												<c:if test="${reservation.isPrinted eq 'N' }">
+													<button type="button" class="btn btn-ticketing" style="background-color: lightgray; color: white;">발권</button>
+												</c:if>
+											</td>
 											<td><button type="button" class="btn btn-refund" style="background-color: #A0A0A0; color: white;">환불</button></td>
 										</c:when>
 									</c:choose>
@@ -170,10 +174,93 @@
 		<button class="btn btn-dark">결제하기</button>
 		<button class="btn border" style="display: none;">인원변경</button>
 	</div>
+	<div class="modal" tabindex="-1" data-bs-backdrop="static" id="modal-refund" style="border: 1px solid #D8E5F6;">
+ 		<div class="modal-dialog modal-dialog-scrollable modal-xl" style="justify-content: center; width: 1000px;">
+	   		<div class="modal-content" style="background-color: #7C97B9; min-height: 600px;">
+	    		<div class="modal-body pt-2">
+	    			<div style="display: flex; justify-content: space-between;">
+		       			<h6 class="modal-title mb-2 fw-bold" style="color: white;">승차권 발권</h6>
+	    	   			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+		    		</div>
+    				<div style="background-color: white; min-height: 620px; justify-content:space-between;">
+    					<div class="mx-4 pt-3 row" id="print-info">
+    						<div class="col-10">
+    							승차권 인쇄 버튼을 눌러서 승차권을 인쇄하여 주십시오.
+    						</div>
+    						<div class="col-1">
+		    					<button class="btn btn-outline-dark" onclick="onPrint()">프린트</button>
+    						</div>
+    					</div>
+	    				<div class="row border" style="margin: 25px;" id="print-target">
+	    					<div class="col m-3 border">
+	    						<h6 class="py-3"><strong>이용안내</strong></h6>
+	    						<ol class="ps-3" style="font-size: 14px;">
+	    							<li>티켓은 승차권에 표시된 승차자가 이용하셔야 하며, 도착역을 벗어날때까지 소지하셔야 합니다.</li>
+	    							<li>직원이 본인 확인을 요구할 경우 신분증을 제시하셔야 합니다.</li>
+	    							<li>열차출발시작이전에는 인터넷, 역 및 대리점에서 반환이 가능하나 출발시간, 
+	    							이후에는 역과 대리점에서만 반환이 가능하며 도착역 도착시각 이후에는 반환이 불가능합니다.</li>
+	    						</ol>
+	    					</div>
+	    					<div class="col m-3" style="background-color: #EBEBEB; border: 1px solid black;">
+	    						<div class="row" style="background-color: lightgray; border-bottom: 1px solid black">
+	    							<div class="col-3 mt-1">
+		    							<h5 style="display: inline-block;">승차일</h5>
+	    							</div>
+	    							<div class="col mt-1">
+	    								<span>2022년 2월 4일</span>
+	    							</div>
+	    						</div>
+	    						<div class="row mt-1">
+	    							<div class="col-3">
+	    								<h3>오송</h3>
+	    								<div>15:20</div>
+	    							</div>
+	    							<div class="col-3">
+	    								→
+	    							</div>
+	    							<div class="col">
+	    								<h3>서울</h3>
+	    								<div>15:20</div>
+	    							</div>
+	    						</div>
+	    						<div class="row mt-1">
+	    							<div class="col">
+	    								KTX
+	    							</div>
+	    							<div class="col">
+	    								201열차 일반실 11호차 3
+	    							</div>
+	    						</div>
+	    						<div class="mt-1 row" style="background-color: lightgray; border-bottom: 1px solid black; border-top: 1px solid black;">
+	    							<div class="col">
+		    							운임요금 10000원
+	    							</div>
+	    						</div>
+	    						<div class="my-1">
+	    							어른
+	    						</div>
+	    						<div>
+	    							예약자 : 홍길동 <span class="ms-4">승차자 : 이순신</span>
+	    						</div>
+	    					</div>
+	    				</div>
+	    			</div>
+				</div>
+   			</div>
+ 		</div>
+	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
 	$(function() {
+		var printModal = new bootstrap.Modal(document.getElementById('modal-refund'), {
+			keyboard: false
+		});
+		
+		$("#search-div").click(function() {
+			$(location).attr('href', "http://localhost/train/search.nadri")
+		})
+		
 		$("#modify-div").click(function() {
 			$("#reservationTable").find('th').last().hide()
 			$("#reservationTable").find('td:nth-of-type(10)').hide().prev().find('button').hide()
@@ -260,7 +347,37 @@
 			}
 		})
 	
+		$(".btn-ticketing").click(function() {
+			let reservationNo = $("[data-reservation-no]").attr("data-reservation-no")
+			// reservationNo로 결제한 티켓 리스트 가져오기
+			$.getJSON({'/api/train/print/'+ reservationNo, 
+				function(response) {
+					$.each(response.items, function(index, ticket) {
+						
+						
+					})
+				}
+			})
+			
+			printModal.show()
+		})
+		
 	})
+	
+	// 프린트 하는 방법
+	function onPrint() {
+		const html = document.querySelector('html'); // 전체 html
+		const printContents = document.querySelector('#print-target').innerHTML; // print할 element와 하위 element
+		const printDiv = document.createElement('DIV'); // print할 공간 element설정
+		 
+		html.appendChild(printDiv);
+		printDiv.innerHTML = printContents; // 공간에 타켓 element을 넣기
+		document.body.style.display = 'none'; // 원래 화면의 전체 body 부분 숨기기
+		window.print(); // 프린트 기능 실행
+		document.body.style.display = 'block'; // 프린트 후 화면 다시 보이기
+		printDiv.style.display = 'none'; // 프린트 공간 숨기기
+	}
+
 </script>
 </body>
 </html>
