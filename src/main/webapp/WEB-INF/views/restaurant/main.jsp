@@ -88,7 +88,7 @@
 					</select>
 				</div>
 				<div class="col input-group">
-					<input type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
+					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
 				</div>
 				<div class="col-2">
 					<select class="form-select" name="sort">
@@ -109,11 +109,11 @@
 	<div class="row mb-3">
 		<c:forEach var="restaurant" items="${restaurants }">
 			<div class="col-3">
-				<div class="card shadow" style="width: 18rem;" id="best-restaurant">
+				<div class="card shadow" style="width: 18rem;" id="best-restaurant-${restaurant.no }">
 	  				<img src="${restaurant.picture}" class="card-img-top" alt="picture">
 	  				<div class="card-body">
 	    				<p class="card-text"><strong>${restaurant.name }</strong></p>
-	    				<p class="card-text">${restaurant.starPoint } 점</p>
+	    				<p class="card-text"><span id="starPoint${restaurant.no }">${restaurant.starPoint }</span>/5.0 점</p>
 	    				<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary"><strong>book now</strong></a>
 	  				</div>
 				</div>
@@ -134,9 +134,39 @@
 <%@ include file="../common/footer.jsp" %>
 </body>
 <script type="text/javascript">
-	$("#select-sort").change(function()){
+	
+	//getStarPoint();
+	
+	$("#select-sort").change(function(){
 		document.getElementById("form-search").submit();
+	});
+	
+	
+	
+	function getStarPoint(){
+		$.getJSON("/rest/restaurant/starPoint.nadri", {"no": '${restaurant.no }'}, function(starPoint) {
+			$("#starPoint${restaurant.no }").text(starPoint);
+		})
 	}
+	
+	
+	/*
+	function getStarPoint(){
+		var no = {"no": '${restaurant.no }'};
+		$.ajax({
+			url: "/rest/restaurant/starPoint.nadri"
+			, data : no
+			, type : 'get'
+			, dataType : 'text'
+				, success: function(starPoint){
+					$("#starPoint${restaurant.no }").text(starPoint);
+				}
+				, error: function(error){
+					console.log("에러 : " + error);
+				}
+			});
+	}
+	*/
 
 </script>
 </html>

@@ -126,14 +126,14 @@
 							<tbody>
 									<tr>
 										<td rowspan="3" style="width: 20%"><img alt="" src="${restaurant.picture }"></td>
-										<td style="width: 80%">${restaurant.name }</td>
+										<td style="width: 80%"><strong>${restaurant.name }</strong></td>
 									</tr>
 									<tr>
-										<td>별점: ${restaurant.starPoint }점</td>
+										<td>별점: ${restaurant.starPoint }/5.0점</td>
 									</tr>
 									<tr>
-										<td>${restaurant.categoryName } 주차:${restaurant.parking }
-										<a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a></td>
+										<td>* ${restaurant.categoryName } * 주차 시설: ${restaurant.parking } * 영업 시간: ${restaurant.openTime }
+										<p class="d-flex justify-content-end"><a href="detail.nadri?no=${restaurant.no }" class="btn btn-primary">book now</a></p></td>
 									</tr>
 							</tbody>
 						</table>
@@ -174,9 +174,9 @@
 </body>
 <script type="text/javascript">
 
-	$("#select-sort").change(function()){
+	$("#select-sort").change(function(){
 		document.getElementById("form-search").submit();
-	}
+	})
 	
 	// 페이지내비게이션의 링크를 클릭했을 때 실행될 이벤트핸들러 함수를 등록한다.
 	$(".pagination a").click(function(event) {

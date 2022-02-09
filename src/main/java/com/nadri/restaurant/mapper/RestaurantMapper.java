@@ -1,14 +1,18 @@
 package com.nadri.restaurant.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.nadri.restaurant.dto.RegisterDto;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
+import com.nadri.restaurant.vo.Reservation;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
+import com.nadri.restaurant.vo.Timetable;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
 
 
@@ -37,6 +41,8 @@ public interface RestaurantMapper {
 	
 	// 레스토랑 예약(checkout.nadri)
 	
+	List<Timetable> getAllTimetable();
+	List<RegisterDto> getBookableTime(Reservation reservation);
 	
 	void insertReservation();
 	

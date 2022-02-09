@@ -96,4 +96,39 @@ public class RestaurantRestController {
 		
 	}
 	
+	@PostMapping("/review/modify.nadri")
+	public void modify(RestaurantReviewInsertForm form) throws IOException {
+		
+		RestaurantReview review = new RestaurantReview();
+		review.setNo(form.getReviewNo());
+		review.setRating(form.getRating());
+		review.setContent(form.getContent());
+		
+		logger.debug("전달된 정보" + review);
+		
+		MultipartFile upfile = form.getUpfile();
+		if (upfile != null && !upfile.isEmpty()) {
+			String directory = "C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\restaurants\\reviews\\";
+			String filename = upfile.getOriginalFilename();
+			
+			InputStream in = upfile.getInputStream();	// 첨부파일을 읽어오는 스트림 
+			OutputStream out = new FileOutputStream(directory + filename);	// 첨부파일을 지정된 폴더에 지정된 이름으로 기록하는 스트림
+			FileCopyUtils.copy(in, out);	
+
+			review.setPicture(filename);
+		}
+		rtService.updateReview(review);
+		
+	}
+	
+	@GetMapping("/starPoint.nadri")
+	public double starPoint(@RequestParam("no") int restaurantNo) {
+		
+		double star = rtService.getRestaurantStar(restaurantNo);
+		
+		return star;
+	}
+		
+	
+	
 }

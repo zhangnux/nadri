@@ -23,6 +23,8 @@ import com.nadri.restaurant.service.RestaurantService;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
 import com.nadri.restaurant.vo.Restaurant;
+import com.nadri.restaurant.vo.Timetable;
+import com.nadri.restaurant.web.form.ReservationForm;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
 import com.nadri.restaurant.web.form.RestaurantInsertForm;
 import com.nadri.restaurant.web.form.RestaurantSearchForm;
@@ -148,14 +150,17 @@ public class RestaurantController {
 		model.addAttribute("reviewCount", reviewCount);
 		double starPoint = rtService.getRestaurantStar(no);
 		model.addAttribute("starPiont", starPoint);
+		List<Timetable> timetables = rtService.getAllTimetable();
+		model.addAttribute("timetables", timetables);
 		
 		return "restaurant/detail";	// prefix="/WEB-INF-views/" viewName="home" suffix=".jsp"
 	
 	}
 	
 	@GetMapping("/checkout.nadri")
-	public String checkout() {
+	public String checkout(ReservationForm form, Model model) {
 		
+		model.addAttribute("form", form);
 		return "restaurant/checkout";
 	}
 	
