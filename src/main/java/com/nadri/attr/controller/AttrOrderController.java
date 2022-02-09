@@ -9,13 +9,18 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.attr.service.AttrOrderService;
 import com.nadri.attr.vo.AttrOrderForm;
@@ -28,9 +33,49 @@ public class AttrOrderController {
 	AttrOrderService attrOrderService;
 	
 	@PostMapping("/orderform.nadri")
-	public String orderform(AttrOrderForm orderForm,Model model) {
-	
-		AttrOrderForm orderInfo = attrOrderService.getOrderInfo(orderForm);
+	public String orderform(
+			@RequestParam(name="attdate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date attDate,
+			@RequestParam(name="attName") String attName,
+			@RequestParam(name="attNo")int attNo,
+			@RequestParam(name="attPic")String attPic,
+			@RequestParam(name="optNo", required=false)List<Integer> optNo,
+			@RequestParam(name="optionName", required=false)List<String> optionName,
+			@RequestParam(name="productQuantity")List<Integer> productQuantity,
+			@RequestParam(name="price")int price,
+			Model model) {
+		
+		List<AttrOrderForm> orderInfo = new ArrayList<>();
+		if(optNo!=null) {
+			for(int i=0; i<optNo.size();i++) {
+				int quantity = productQuantity.get(i);
+				int optionNo = optNo.get(i);
+				String optName = optionName.get(i);
+				
+				if(quantity!=0) {
+					AttrOrderForm orderForm = new AttrOrderForm();
+					orderForm.setAttNo(attNo);
+					orderForm.setPrice(price);
+					orderForm.setAttDate(attDate);
+					orderForm.setAttName(attName);
+					orderForm.setAttPic(attPic);
+					orderForm.setProductQuantity(quantity);
+					orderForm.setOptionNo(optionNo);
+					orderForm.setOptionName(optName);
+					orderInfo.add(orderForm);
+				}
+			}
+		} else {
+			int quantity = productQuantity.get(0);
+			AttrOrderForm orderForm = new AttrOrderForm();
+			orderForm.setProductQuantity(quantity);
+			orderForm.setAttNo(attNo);
+			orderForm.setPrice(price);
+			orderForm.setAttPic(attPic);
+			orderForm.setAttName(attName);
+			orderForm.setAttDate(attDate);
+			orderInfo.add(orderForm);
+		}
+		
 		model.addAttribute("orderInfo",orderInfo);
 		
 		return "attr/orderform";

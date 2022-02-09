@@ -22,29 +22,45 @@
 <body>
 <%@ include file="../common/navbar.jsp"%>
 <div class="container">
-	<div class="row mt-5 mb-4"><h2><strong>결제하기${orderInfo.no }</strong></h2></div>
+	<div class="row mt-5 mb-4"><h2><strong>결제하기</strong></h2></div>
 			
 	<form action="kakao" method="post">
 		<div class="border rounded p-3 mb-3">
 			<div class="row mb-4 border-bottom"><h3><strong>구매상품</strong></h3></div>
+<c:forEach var="o" items="${orderInfo }" begin="0" end="1">
 			<div class="row mb-3">
-				<div class="col-auto"><img src="../../../resources/images/att/review/reviewtest.jpg" style="width:100px;height:100px;object-fit:cover"></div>
-				<div class="col-8"><h4><strong>이름이 들어갈 곳</strong></h4></div>
+				<div class="col-auto"><img src="../../../resources/images/att/${o.attPic }" style="width:100px;height:100px;object-fit:cover"></div>
+				<div class="col-8"><h4><strong>${o.attName }</strong></h4></div>
 			</div>
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>사용일</strong></h5></div>
-				<div class="col-9">0000년00월00일</div>						
+				<div class="col-9"><fmt:formatDate value="${o.attDate }" pattern="yyyy년 MM월 dd일"/></div>						
 			</div>
+</c:forEach>
+
+<c:choose>
+	<c:when test="${fn:length(orderInfo) } > 1">
+		<c:forEach var="opt" items="${orderInfo }">
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>구매상품</strong></h5></div>
-				<div class="col-5"><strong>옵션이름</strong></div>						
-				<div class="col-4">0매 0원</div>						
-			</div>	
-			<div class="row mt-3">
-				<div class="col-8"><h5><strong>총 결제금액</strong></h5></div>
-				<div class="col-4">0원</div>						
 			</div>
+			<div class="row border rounded p-3">
+				<div class="col-5"><strong>옵션1</strong></div>						
+				<div class="col-4">0매　　0원</div>
+			</div>
+		</c:forEach>
+	</c:when>
+	<c:otherwise>
+		<c:forEach var="t" items="${orderInfo }">
+		<div class="row mt-3">
+			<div class="col-3"><h5><strong>구매수량</strong></h5></div>
+			<div class="col-4">${t.productQuantity }매　　<fmt:formatNumber value="${t.price }" pattern="###,###" />원</div>
 		</div>
+		</c:forEach>
+	</c:otherwise>
+</c:choose>
+		</div>
+		
 		<div class="border rounded p-3 mb-3">								
 			<div class="row mb-4 border-bottom"><h3><strong>할인 적용</strong></h3></div>
 			<div class="row mt-3">
@@ -64,7 +80,7 @@
 			</div>
 			<div class="row mt-3">
 				<div class="col-3"></div>
-				<div class="col-5"><h5><strong>최종 할인금액</strong></h5></div>
+				<div class="col-5"><h5><strong>최종 결제금액</strong></h5></div>
 				<div class="col-4">0원</div>						
 			</div>
 		</div>

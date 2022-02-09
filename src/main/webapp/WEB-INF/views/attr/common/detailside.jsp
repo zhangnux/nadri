@@ -22,9 +22,12 @@
 							<div class="row text-end">
 								<div class="col-8">
 									<a style="font-size:18px;">1인
-									<input type="hidden" name="${opt.optNo }" value="${opt.price }" data-no="${opt.optNo }" disabled >
+										<input type="hidden" name="item${opt.optNo }" value="${opt.price }" data-no="${opt.optNo }" disabled >
+										<input type="hidden" name="productQuantity" id="quantity-${opt.optNo }" value="0" >
 										<fmt:formatNumber value="${opt.price }" pattern="0,000" />원
 									</a>
+									<input type="hidden" name="optionNo" value="${opt.optNo }" />
+									<input type="hidden" name="optionName" value="${opt.option}" />
 								</div>
 								<div class="col-4">
 									<h5>
@@ -48,15 +51,16 @@
 								<div class="col-8">
 									<span style="font-size:18px;">1인
 									<span style="font-size:18px;" class="price">
-										<input type="hidden" name="1" value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }" disabled>
+										<input type="hidden" name="item1" value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }" disabled>
 										<fmt:formatNumber value="${(detail.discountPrice==0)?detail.price:detail.discountPrice }" pattern="###,###,###" />
-									</span>원</span>
+									</span>원</span>								
 								</div>
 								<div class="col-4">
 									<h5>
 									<i class="bi bi-arrow-left-circle down" data-down="1"></i>
 									<span class="sum">0</span>
 									<i class="bi bi-arrow-right-circle up" data-up="1"></i>
+									<input type="hidden" name="productQuantity" id="quantity-1" value="0" />	
 									</h5>
 								</div>
 							</div>
@@ -79,7 +83,8 @@
 			</div>		
 		</div>
 		<input type="hidden" name="attNo" value="${param.no }">
-		<input type="hidden" name="userNo" value="${LOGIN_USER.no }">
+		<input type="hidden" name="attName" value="${detail.name }">
+		<input type="hidden" name="attPic" value="${detail.thumbnail }">
 	</form>
 
 	<!-- 쿠폰 -->
@@ -151,10 +156,11 @@
 			$(this).prev().text(num);
 			
 			var optNo = $(this).data("up");
-			var price = parseInt($('input[name='+optNo+']').val());
+			var price = parseInt($('input[name=item'+optNo+']').val());
 			total += price
 			$("#total").text(total);
 			$("input[name=price]").val(total);
+			$("#quantity-" + optNo).val(num);
 		});
 		
 		$(".down").click(function(e){
@@ -168,15 +174,15 @@
 			$(this).next().text(num);
 			
 			var optNo = $(this).data("down");
-			var price = parseInt($('input[name='+optNo+']').val());
+			var price = parseInt($('input[name=item'+optNo+']').val());
 			total = parseInt($('#total').text());
 			if(total!=0){
-				var newtotal = total-price
-			} else {
-				total=0;
+				var newtotal = total-price;
+				total=newtotal;
 			}
 			$("#total").text(newtotal);
 			$("input[name=price]").val(newtotal);
+			$("#quantity-" + optNo).val(num);
 
 		});
 		

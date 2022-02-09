@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nadri.user.vo.User;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +21,7 @@ public class AttrOrderForm {
 
 	private int orderNo;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date date;
+	private Date attDate;
 	private int price;
 	private int lastPrice;
 	private int deposit;
@@ -30,10 +29,14 @@ public class AttrOrderForm {
 	private int userNo;
 	private String phoneNo;
 	
+	private String attName;
+	private String attPic;
+	
 	private int attNo;
 	private String couponNo;
 	private int productQuantity;
 	private int optionNo;
+	private String optionName;
 	
 	private User userInfo;
 	private Attraction attraction;
