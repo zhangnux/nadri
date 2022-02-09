@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,10 +52,6 @@ public class TrainController {
 	 */
 	@GetMapping
 	public String search(Model model) {
-		// 인기 열차 루트
-		// 9개,,, 출발지 도착지, 운임 (일반실), 출발일은 당일, 승객1, 편도 버튼 클릭시 form값 제출
-		// 티켓팅된 티켓의 스케줄의 rootNo에 따라서 순위를 지정한다.
-		// 사진은 어떻게 배분하지? 루트마다 다 정해져 잇는 건가?
 		model.addAttribute("favoriteList", service.getFavoriteRoute());
 		
 		return "train/trainSearch";
@@ -210,6 +207,14 @@ public class TrainController {
 		BufferedReader rd;
 		if(conn.getResponseCode() == 200) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//			bufferedbuilder에서 string으로 변경하기
+//			StringBuilder sb = new StringBuilder();
+//			String line = null;
+//			while ((line = rd.readLine()) != null) {
+//				sb.append(line);
+//			}
+//			String text = sb.toString();
+//			System.out.println("결제승인:" + text);
 			if (noList.length == 1) {
 				TrainReservation reservation = service.getReservationOne(user.getNo(), Integer.parseInt(noList[0]));
 				reservation.setTickectStatus("결제");
@@ -233,14 +238,6 @@ public class TrainController {
 			
 			// BufferedReader값을 가져오기
 			// readLine()은 한번 가져오면 끝이다
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = rd.readLine()) != null) {
-				sb.append(rd.readLine());
-			}
-			
-			String text = sb.toString();
-			System.out.println();
 			// 요청 해드에 들어잇는 것만 매개변수로 받을 수 잇다.
 			// json은 헤드가 아닌 body에 이므로 @RequestBody 어노테이션으로 매개변수로 받을 수 있다.
 			// json key값
@@ -290,7 +287,7 @@ public class TrainController {
 			model.addAttribute("ticketList", ticketList);
 			return "train/modifyReservation";
 		} catch (IndexOutOfBoundsException e) {
-			return "train/reservationList.nadri";
+			return "train/reservationList";
 		}
 	}
 	
@@ -304,21 +301,32 @@ public class TrainController {
 		
 		return "train/refundList";
 	}
-
+	
+	/**
+	 * 환불페이지로 이동
+	 * @param user
+	 * @param ticketNums
+	 * @param reservationNo
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/refund.nadri")
-	public String refund(@LoginedUser User user, List<Integer> ticketNo, int reservationNo, Model model) {
-		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
-		List<TrainTicket> ticketList = service.getTicketByNo(ticketNo);
-		long refundPrice = reservation.getTotalPrice();
+	public String refund(@LoginedUser User user, @RequestParam(name = "ticketNo") List<Integer> ticketNums, @RequestParam int reservationNo , Model model) {
+		List<TrainTicket> ticketList = service.getTicketByNo(ticketNums);
+		TrainReservation reservation = service.getReservationOne(user.getNo(), ticketList.get(0).getReservationNo());
+		long refundPrice = 0;
 		long refundRate = 0;
 		
 		for (TrainTicket ticket : ticketList) {
+			log.info("가격:"+ ticket.getPrice());
 			refundRate += RefundUtils.refundRate(ticket.getPrice(), reservation.getDepartureTime());
-			refundPrice -= RefundUtils.refundRate(ticket.getPrice(), reservation.getDepartureTime());
+			refundPrice += ticket.getPrice();
 		}
+		refundPrice -= refundRate;
 		model.addAttribute("refundPrice", refundPrice);
 		model.addAttribute("refundRate", refundRate);
 		model.addAttribute("ticketList", ticketList);
+		model.addAttribute("reservation", reservation);
 		
 		return "train/refundPayment";
 	}

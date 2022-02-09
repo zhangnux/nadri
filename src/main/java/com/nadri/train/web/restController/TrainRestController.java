@@ -9,7 +9,9 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +46,7 @@ import com.nadri.train.vo.TrainStation;
 import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.ResponseDto;
 import com.nadri.train.web.model.TrainPaymentDto;
+import com.nadri.train.web.model.TrainRefundForm;
 import com.nadri.train.web.model.TrainReservationDto;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.web.model.TrainSearchForm;
@@ -180,13 +184,13 @@ public class TrainRestController {
 	}
 	
 	@PutMapping("/reservation/{reservationNo}")
-	public ResponseDto<?> update(@LoginedUser User user, @RequestParam String jsonData, @PathVariable(name="reservationNo") int reservationNo) {
-		// json 배열값을 java객체로 옮기는 방법
-		log.info(jsonData);
+	public ResponseDto<?> update(@LoginedUser User user, @RequestBody List<TrainModifyDto> ticketList, @PathVariable(name="reservationNo") int reservationNo) {
 		ResponseDto<?> response = new ResponseDto<>();
-		Gson gson = new Gson(); 
-		Type ticketListType = new TypeToken<ArrayList<TrainModifyDto>>(){}.getType();
-		ArrayList<TrainModifyDto> ticketList = gson.fromJson(jsonData, ticketListType);
+		// json 배열값을 java객체로 옮기는 방법
+//		log.info(jsonData);
+//		Gson gson = new Gson(); 
+//		Type ticketListType = new TypeToken<ArrayList<TrainModifyDto>>(){}.getType();
+//		ArrayList<TrainModifyDto> ticketList = gson.fromJson(jsonData, ticketListType);
 		log.info("수정확인 : " + ticketList.toString());
 		List<Integer> ticketNo = new ArrayList<>();
 		long totalPrice = 0;
@@ -250,11 +254,21 @@ public class TrainRestController {
 	@GetMapping("/kakaoPay")
 	public String kakaoPay(@LoginedUser User user, TrainPaymentDto dto) throws IOException {
 		SessionUtils.addAttribute("reservationNo", dto.getReservationNo());
+		String[] reList = dto.getReservationNo().split(" ");
+		TrainReservation reservation = service.getReservationOne(user.getNo(), Integer.parseInt(reList[0]));
+		String merchandise = "";
+		if (reList.length == 2) {
+			merchandise = reservation.getArrivalStation() + "행 열차 외 1";
+			log.info(merchandise);
+		} else {
+			merchandise = reservation.getArrivalStation() + "행 열차";
+			log.info(merchandise);
+		}
 		StringBuffer outPutData = new StringBuffer();
 		outPutData.append("cid=TC0ONETIME")
 				.append("&partner_order_id=").append(dto.getReservationNo())
 				.append("&partner_user_id=").append(user.getId())
-				.append("&item_name=trainTicket")
+				.append("&item_name=").append(URLEncoder.encode(merchandise, "utf-8"))
 				.append("&quantity=").append(String.valueOf(dto.getTotalCount()))
 				.append("&total_amount=").append(String.valueOf(dto.getTotalPrice()))
 				.append("&tax_free_amount=0")
@@ -295,52 +309,71 @@ public class TrainRestController {
 		return "";
 	}
 	
-	// parameter받을 때 List<Integer> 로 받을 수 없나???
-//	/**
-//	 * 환불
-//	 * @param user
-//	 * @return
-//	 * @throws IOException
-//	 */
-//	@GetMapping("/cancel")
-//	public String refundKakao(@LoginedUser User user) throws IOException {
-//		// 티켓 번호로 티켓 목록을 호출하기
-//		// 지금은 가상의 값
-//		int ticketNo = 123;
-//		TrainTicket ticketss = service.getTicketByNo(ticketNo);
-//		List<TrainTicket> ticketList = new ArrayList<>();
-//		TrainReservation reservation = service.getReservationOne(user.getNo(), ticketss.getReservationNo());
-//		int totalPrice = 0;
-//		for (TrainTicket ticket: ticketList) {
-//			totalPrice += ticket.getPrice();
-//		}
-//		
-//		StringBuffer outPutData = new StringBuffer();
-//		outPutData.append("cid=TC0ONETIME")
-//				.append("&tid=").append(reservation.getTid())
-//				.append("&cancel_amount=").append(String.valueOf(ticketList.size()))
-//				.append("&cancel_tax_free_amount=").append(String.valueOf(totalPrice));
-//		
-//		URL address = new URL("https://kapi.kakao.com/v1/payment/cancel");
-//		HttpURLConnection conn = (HttpURLConnection) address.openConnection();
-//		conn.setRequestMethod("POST");
-//		conn.setRequestProperty("Authorization", "KakaoAK 5fa0f0222e9a68676ec86330e233e3e7");
-//		conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//		conn.setDoOutput(true);
-//		
-//		OutputStream outPut = conn.getOutputStream();
-//		DataOutputStream data = new DataOutputStream(outPut);
-//		data.writeBytes(outPutData.toString());
-//		data.flush();
-//		data.close();
-//		
-//		BufferedReader rd;
-//		if(conn.getResponseCode() == 200) {
-//			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//		} else {
-//			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-//		}
-//		return rd.readLine();
-//	}
+		
+	/**
+	 * 환불
+	 * @param user
+	 * @return
+	 * @throws IOException
+	 */
+	@PutMapping("/refundKakao/{reservationNo}")
+	public String refundKakao(@LoginedUser User user, @RequestBody TrainRefundForm form, @PathVariable(name="reservationNo") int reservationNo) throws IOException {
+		// tid값을 얻기 위한 reservation 호출
+		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
+		// 티켓 번호로 티켓 목록을 호출하기
+		List<TrainTicket> ticketList = service.getTicketByNo(form.getTicketList());
+		log.info("tid: " + reservation.getTid());
+		StringBuffer outPutData = new StringBuffer();
+		outPutData.append("cid=TC0ONETIME")
+				.append("&tid=").append(reservation.getTid())
+				.append("&cancel_amount=").append(String.valueOf(form.getRefundPrice()))
+				.append("&cancel_tax_free_amount=").append("0");
+		
+		URL address = new URL("https://kapi.kakao.com/v1/payment/cancel");
+		HttpURLConnection conn = (HttpURLConnection) address.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Authorization", "KakaoAK 5fa0f0222e9a68676ec86330e233e3e7");
+		conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		conn.setDoOutput(true);
+		log.info("카카오");
+		
+		OutputStream outPut = conn.getOutputStream();
+		DataOutputStream data = new DataOutputStream(outPut);
+		data.writeBytes(outPutData.toString());
+		data.flush();
+		data.close();
+		
+		BufferedReader rd;
+		if(conn.getResponseCode() == 200) {
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		 	reservation.setTotalCount(reservation.getTotalCount()-ticketList.size());
+			if (reservation.getTotalCount() == 0) {
+				reservation.setCanceledDate(new Date());
+				reservation.setTickectStatus("취소");
+				reservation.setTotalPrice(reservation.getTotalPrice() - form.getRefundPrice());
+				service.updateReservation(reservation);
+			} else {
+				reservation.setTotalPrice(reservation.getTotalPrice() - form.getRefundPrice());
+				service.updateReservation(reservation);
+				
+			}
+			for (TrainTicket ticket: ticketList) {
+				ticket.setIsCanceled("Y");
+				service.updateTicket(ticket);
+			}
+			service.deleteTicketByNo(form.getTicketList());
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = rd.readLine()) != null) {
+				sb.append(rd.readLine());
+			}
+			
+			String text = sb.toString();
+			log.info("결제결과: " + text);
+		} else {
+			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+		}
+		return "";
+	}
 	
 }

@@ -198,7 +198,8 @@
         				s.schedule_arrival_time as arrivalTime, 
         				r.total_passengers_count as totalCount, 
         				r.total_payment_amount as totalPrice,
-        				r.user_no as userNo
+        				r.user_no as userNo,
+        				r.tid as tid
 		from train_reservation r, train_ticket t, train_schedule s, train_route e, train_station t1, train_station t2, train n, train_type p
 		<where>
 		
@@ -225,7 +226,7 @@
 		</where>
 		order by r.reservation_no
 	</select>
-	
+	<!-- 예약 번호로 불러오는 티켓에서 제약 걸기 취소가 N인것-->
 	<!-- 예약 후 바로 티켓정보 조회 -->
 	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket" >
 		select t.ticket_no as no, 
@@ -244,6 +245,7 @@
 		from train_ticket t, train_room r, train_price p
 		where reservation_no in (#{reservedNo1}, #{reservedNo2})
 		and t.room_no = r.room_no
+		and t.is_canceled = 'N'
 		and p.price_id = t.price_id
 	</select>
 	
@@ -299,6 +301,7 @@
 		</foreach>
 	</delete>	
 	
+	<!-- 티켓 번호 리스트로 티켓 삭제 -->
 	<delete id="deleteTicketByNo">
 		delete from train_ticket
 		where ticket_no in 
@@ -313,6 +316,7 @@
 		where reservation_no = #{no}
 		and user_no = #{userNo}
 	</delete>
+	
 	
 	<!-- 티켓번호로 티켓 정보 조회 -->
 	<select id="getTicketByNo" parameterType="int" resultType="com.nadri.train.vo.TrainTicket">

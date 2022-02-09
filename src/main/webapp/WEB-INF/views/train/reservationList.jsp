@@ -218,12 +218,10 @@
 			$("#form-modify").submit()
 		})
 		
-		// 환불 버튼 여기부터ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ
 		$(".btn-refund").click(function() {
 			let target = $(this).parent().prevAll().eq(8).attr('data-reservation-no')
 			$("[name=reservationNo1]").val(target)
 			$("#form-refund").submit()
-			// get방식?
 		})
 		
 		// 예약변경 버튼
