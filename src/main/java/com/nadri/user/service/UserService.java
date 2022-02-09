@@ -51,8 +51,15 @@ public class UserService {
 		return userMapper.getUserById(id);
 	}
 	
-	public void updateUser(User user) {
-		userMapper.updateUser(user);
+	public User updateUser(User user) {
+		User savedUser = userMapper.getUserById(user.getId());
+		savedUser.setPassword(user.getPassword());
+		savedUser.setEmail(user.getEmail());
+		savedUser.setTel(user.getTel());
+		
+		userMapper.updateUser(savedUser);
+		
+		return savedUser;
 	}
 	
 	

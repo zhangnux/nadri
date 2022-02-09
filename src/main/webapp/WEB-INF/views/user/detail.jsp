@@ -11,6 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 #text {
 	text-align: right;
@@ -41,6 +42,21 @@
 		</div>
 	</div>
 </header>
+<c:if test="${empty LOGIN_USER }">
+	<div class="px-4 py-5 my-5 text-center">
+		<h1 class="display-5 fw-bold">이용 불가</h1>
+		<div class="col-lg-6 mx-auto">
+			<p class="lead mb-4">프로필 관리는 로그인 된 사용자만 이용할 수 있습니다.</p>
+			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+				<a href="../home.nadri"><button type="button" class="btn btn-lg btn-dark">홈페이지 돌아가기</button></a>
+			</div>
+			<div class="box pt-3">
+				<span class="p-2 h-100 align-center" style="font-size: 10pt">아직 회원이 아니신가요?&emsp;<a href="../user/insert.nadri">회원가입</a></span>
+			</div>
+		</div>
+	</div>
+</c:if>
+<c:if test="${not empty LOGIN_USER }">
 <div class="container">
 	<div class="row">
 		<div class="col-md-3">
@@ -52,7 +68,7 @@
 					 -->
 					<i class="bi bi-piggy-bank" id="ltPiggy"></i>
 					<p class="card-text">${LOGIN_USER.id }</p>
-					<a href="#" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
+					<a href="modify.nadri" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
 				</div>
 			</div>
 			<!-- Categories widget-->
@@ -130,6 +146,7 @@
 		</div>
 	</div>
 </div>
+</c:if>
 <script type="text/javascript">
 	
 </script>

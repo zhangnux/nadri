@@ -44,15 +44,10 @@
 			user_table
 		set
 			user_password = #{password},
-			user_name = #{name},
-			user_birth = #{birth},
 			user_tel = #{tel},
-			user_address = #{address},
-			user_email = #{email},
-			user_sms_check = #{smsCheck},
-			user_email_check = #{emailCheck}
+			user_email = #{email}
 		where
-			user_no = #{id}
+			user_id = #{id}
 	</update>
 	
 	<!--

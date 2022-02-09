@@ -42,65 +42,65 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 <body>
 <%@ include file="../common/navbar.jsp" %>
 
-	<div class="row justify-content-sm-center h-100">
-		<c:if test="${not empty error }">
-			<div class="mb-3 alert alert-danger">
-				<strong>오류</strong> ${error }
-			</div>
-		</c:if>
-		<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
-			<div class="card shadow-lg">
-				<div class="card-body p-5">
-					<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
-					<form method="post" action="insert.nadri" name="insertForm" id="insertForm">
-						<div class="userInput">
-							<label class="form-label">아이디 *<span class="">(5~20자)</span></label>
-							<input type="text" class="check form-control" name="id" id="id" placeholder="아이디를 입력해주세요. (5~20자)"  maxlength="20"  />
-							<h6 class="list"><span id="idError"></span></h6>
-						</div>
-						<div class="userInput">
-							<label class="form-label">비밀번호 *</label>
-							<input type="password" class="check form-control" name="password" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자"  maxlength="20" />
-							<h6 class="list"><span id="pwError"></span></h6>
-						</div>
-						<div class="userInput">
-							<label class="form-label">비밀번호 재확인 *</label>
-							<input type="password" class="check form-control" name="pwCheck" id="pwCheck" placeholder="비밀번호를 한번 더 입력해주세요" maxlength="20" />
-							<h6 class="list"><span id="pwCheckError"></span></h6> 
-						</div>
-						<div class="userInput">
-							<label class="form-label">이름 *</label>
-							<input type="text" class="check form-control" name="name" id="name" placeholder="이름을 입력해주세요."  maxlength="15" />
-							<h6 class="list"><span id="nameError"></span></h6> 
-						</div>
-						<div class="userInput">
-							<label class="form-label">이메일 *</label>
-							<input type="email" class="check form-control" name="email" id="email" placeholder="ID@example.com" maxlength="20"  />
-							<h6 class="list"><span id="emailError"></span></h6> 
-						</div>
-						<div class="userInput">
-							<label class="form-label">전화번호 *</label>
-							<input type="tel" class="check form-control" name="tel" id="tel" placeholder="-를 포함한 13자리"  />
-							<h6 class="list"><span id="telError"></span></h6> 
-						</div>
-						<div class="userInput">
-							<label class="form-label">성별 *</label> 
-							<input type="radio" name="gender" value="남자" id="male" checked>남자
-							<input type="radio" name="gender" value="여자" id="female" >여자
-						</div>
-						<div class="userInput">
-							<label class="form-label">생일 *</label> 
-							<input type="date" class="check form-control" name="birth" id="birth" placeholder="생일을 선택해주세요."  />
-						</div>
-						<div class="d-grid gap-2">
-							<button type="button" class="btn btn-dark" id="back">이전페이지</button>
-							<button type="submit" class="btn btn-primary">회원가입</button>
-						</div>
-					</form>
-				</div>
+<div class="row justify-content-sm-center h-100">
+	<c:if test="${not empty error }">
+		<div class="mb-3 alert alert-danger">
+			<strong>오류</strong> ${error }
+		</div>
+	</c:if>
+	<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+		<div class="card shadow-lg">
+			<div class="card-body p-5">
+				<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+				<form method="post" action="insert.nadri" name="insertForm" id="insertForm">
+					<div class="userInput">
+						<label class="form-label">아이디 *<span class="">(5~20자)</span></label>
+						<input type="text" class="check form-control" name="id" id="id" placeholder="아이디를 입력해주세요. (5~20자)"  maxlength="20"  />
+						<h6 class="list"><span id="idError"></span></h6>
+					</div>
+					<div class="userInput">
+						<label class="form-label">비밀번호 *</label>
+						<input type="password" class="check form-control" name="password" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자"  maxlength="20" />
+						<h6 class="list"><span id="pwError"></span></h6>
+					</div>
+					<div class="userInput">
+						<label class="form-label">비밀번호 재확인 *</label>
+						<input type="password" class="check form-control" id="pwCheck" placeholder="비밀번호를 한번 더 입력해주세요" maxlength="20" />
+						<h6 class="list"><span id="pwCheckError"></span></h6> 
+					</div>
+					<div class="userInput">
+						<label class="form-label">이름 *</label>
+						<input type="text" class="check form-control" name="name" id="name" placeholder="이름을 입력해주세요."  maxlength="15" />
+						<h6 class="list"><span id="nameError"></span></h6> 
+					</div>
+					<div class="userInput">
+						<label class="form-label">이메일 *</label>
+						<input type="email" class="check form-control" name="email" id="email" placeholder="ID@example.com" maxlength="20"  />
+						<h6 class="list"><span id="emailError"></span></h6> 
+					</div>
+					<div class="userInput">
+						<label class="form-label">전화번호 *</label>
+						<input type="tel" class="check form-control" name="tel" id="tel" placeholder="-를 포함한 13자리"  />
+						<h6 class="list"><span id="telError"></span></h6> 
+					</div>
+					<div class="userInput">
+						<label class="form-label">성별 *</label> 
+						<input type="radio" name="gender" value="남자" id="male" checked>남자
+						<input type="radio" name="gender" value="여자" id="female" >여자
+					</div>
+					<div class="userInput">
+						<label class="form-label">생일 *</label> 
+						<input type="date" class="check form-control" name="birth" id="birth" placeholder="생일을 선택해주세요."  />
+					</div>
+					<div class="d-grid gap-2">
+						<button type="button" class="btn btn-dark" id="back">이전페이지</button>
+						<button type="submit" class="btn btn-primary">회원가입</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
+</div>
 <script type="text/javascript">
 $(function() {
 	$("#insertForm").submit(function() {
@@ -256,23 +256,23 @@ $(function() {
 		$("#idError").text("");
 	})
 	
-	$("#id").keyup(function(){
+	$("#pw").keyup(function(){
 		$("#pwError").text("");
 	})
 	
-	$("#id").keyup(function(){
+	$("#pwCheck").keyup(function(){
 		$("#pwCheckError").text("");
 	})
 	
-	$("#id").keyup(function(){
+	$("#name").keyup(function(){
 		$("#nameError").text("");
 	})
 	
-	$("#id").keyup(function(){
+	$("#email").keyup(function(){
 		$("#emailError").text("");
 	})
 	
-	$("#id").keyup(function(){
+	$("#tel").keyup(function(){
 		$("#telError").text("");
 	})
 	
