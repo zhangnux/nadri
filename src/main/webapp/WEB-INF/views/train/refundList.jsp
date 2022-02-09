@@ -210,6 +210,11 @@
 			let now = new Date()
 			// 빠른 값이 더 크다
 			// 환불하는 날짜가 출발날짜보다 이전이어야 한다.
+			if ($("[name=ticketNo]:checked").length == 0) {
+				alert("반환하실 표를 선택해 주세요.")
+				return;
+			}
+			
 			if (now < dp) {
 				$("#form-refund").submit()
 			} else {

@@ -12,35 +12,45 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <style>
-	#table-refund td, th, #table-seat-refund td, th{
+	#table-refund td, #table-refund th{
 		border: 1px solid #C0C0C0;
 		height: 50px;
 	}
+	#table-refund th {
+		border: 1px solid #C0C0C0;
+		height: 35px;
+		background-color: #F2F2F2;
+	}
 	
-	#table-refund, #table-seat-refund {
+	#table-refund {
 		text-align: center;
 		width: 100%;
 	}
 	
 	.btn {
 		width: 100px;
-		height: 35px;
 		border-radius: 0;
 		text-align-last: center;
 		font-size: .875rem;
 		padding: initial;
 		font-weight: bold;
+		height: 35px;
 	}
 	
-	hr + div div {
-		background-color: #E6ECF3;
-		border: 1px solid #E0E0E0;
-		cursor: pointer;
+	#refundInfo th, #refundInfo td{
+		border-bottom: 1px solid #C0C0C0;
+		border-top: 1px solid #C0C0C0;
 	}
-	hr + div div.active {
-		background-color: #495C75;
-		border: 1px solid #E0E0E0;
-		color: white;
+	#refundInfo th {
+		width: 45%;
+		background-color: #F2F2F2;
+		border-right: 1px solid #C0C0C0;
+	}
+	
+	#refundInfo {
+		text-align: center;
+		width: 50%;
+		height: 90px;
 	}
 </style>
 <body>
@@ -72,29 +82,88 @@
 				<thead>
 					<tr>
 						<th>탑승날짜</th>
-						<th>열차이름</th>
-						<th>열차번호</th>
-						<th>출발시간</th>
+						<th>열차정보</th>
 						<th>출발역</th>
-						<th>도착시간</th>
 						<th>도착역</th>
+						<th>출발시간</th>
+						<th>도착시간</th>
+						<th>승객 유형</th>
+						<th>운임비</th>
 					</tr>
 				</thead>
+				<tbody data-reservationNo="${reservation.no }">
+					<c:forEach var="ticket" items="${ticketList }">
+					<tr>
+						<td data-ticketNo="${ticket.no }"><fmt:formatDate value="${reservation.departureTime }" pattern="yyyy-MM-dd"/></td>
+						<td>${reservation.trainName } - ${reservation.trainNo }</td>
+						<td>${reservation.departureStation }</td>
+						<td>${reservation.arrivalStation }</td>
+						<td><fmt:formatDate value="${reservation.departureTime }" pattern="HH:mm"/></td>
+						<td><fmt:formatDate value="${reservation.arrivalTime }" pattern="HH:mm"/></td>
+						<td>${ticket.type }</td>
+						<td><fmt:formatNumber value="${ticket.price }" pattern="##,###"/>원</td>
+					</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 60px; margin-bottom: 120px;">
+		<div class="col">
+			<table id="refundInfo">
 				<tbody>
 					<tr>
-						<td>2021/01/03</td>
-						<td>KTX</td>
-						<td>1</td>
-						<td>9:00</td>
-						<td>2021/01/03</td>
-						<td>10:45</td>
-						<td>2021/01/03</td>
+						<th>반환 수수료</th>
+						<td data-refundRate="${refundRate }"><fmt:formatNumber value="${refundRate }" pattern="##,###"/></td>
+					</tr>
+					<tr>
+						<th>반환 금액</th>
+						<td data-refundPrice="${refundPrice }"><fmt:formatNumber value="${refundPrice }" pattern="##,###"/></td>
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div class="col text-end">
+			<button class="btn btn-dark" id="btn-refund" type="button">반환요청</button>
 		</div>
 	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
 </body>
+<script type="text/javascript">
+	$(function() {
+		
+		$("#btn-refund").click(function() {
+			
+			let refundRate = $("[data-refundRate]").attr("data-refundRate")
+			let refundPrice = $("[data-refundPrice]").attr("data-refundPrice")
+			let reservationNo = $("[data-reservationNo]").attr("data-reservationNo")
+			/*  
+				{refundRate:refundRate, refundPrice:refundPrice, ticketList:[]}
+			*/
+			let ticketList = new Array();
+			$("[data-ticketNo]").each(function(index, element) {
+				console.log($(this).attr("data-ticketNo"))
+				ticketList.push($(this).attr("data-ticketNo"))
+			})
+			let result = {refundRate, refundPrice, ticketList}
+			let jsonData = JSON.stringify(result)
+			console.log(jsonData)
+ 			$.ajax({
+ 				type:'PUT',
+ 				contentType:"application/json",
+ 				url:'/api/train/refundKakao/' + reservationNo,
+ 				data:jsonData,
+ 				dataType:"json",
+				success: function(response) {
+					alert("반품이 성공했습니다")
+				}
+ 			}) 
+		})
+		
+		
+		
+		
+	})
+</script>
 </html>

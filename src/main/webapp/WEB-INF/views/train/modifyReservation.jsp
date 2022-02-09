@@ -183,7 +183,8 @@
 			// json으로 보내고 
 			$.ajax({type:"PUT",
 				url:"/api/train/reservation/" + $("[name=reservationNo]").val(),
-				data:{'jsonData':jsonData},
+				data:jsonData,
+				contentType: "application/json",
 				dataType:"json",
 				traditional:true,
 				success:function() {
