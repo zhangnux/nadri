@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mybatis.mappers.AttrOrderDao">
+	<resultMap id="orderResultMap" type="com.nadri.attr.vo.AttrOrderForm">
+		<id column="order_no" property="orderNo" />
+		<result column="order_date" property="date" />
+		<result column="order_price" property="price" />
+		<result column="order_lastprice" property="lastPrice"/>
+		<result column="order_deposit" property="deposit" />
+		<result column="order_process" property="process" />
+		<collection property="userInfo" resultMap="userResultMap" />
+		<collection property="attraction" resultMap="AttrResultMap" />
+		<collection property="attOption" resultMap="AttrOptionMap" />
+	</resultMap>
+	<resultMap id="userResultMap" type="com.nadri.user.vo.User">
+		<id column="user_no" property="no"/>
+		<result column="user_id" property="id"/>
+		<result column="user_email" property="email"/>		
+	</resultMap>
+	<resultMap id="AttrResultMap" type="com.nadri.attr.vo.Attraction">
+		<id column="att_no" property="no"/>
+		<result column="att_name" property="name"/>
+		<result column="att_price" property="price"/>
+		<result column="att_discountprice" property="discountPrice"/>
+		<result column="att_sales" property="sales"/>						
+	</resultMap>
+	<resultMap id="AttrOptionMap" type="com.nadri.attr.vo.AttOption">
+		<id column="att_option" property="option"/>
+		<result column="att_price" property="price"/>
+		<result column="att_discountprice" property="discountPrice"/>
+		<result column="att_optno" property="optNo"/>
+	</resultMap>
+	
+	<insert id="orderInfo" parameterType="com.nadri.attr.vo.AttrOrderForm">
+		insert into att_order(order_no, order_price, user_no)
+		values (att_order_no_seq.nextval, #{price}, #{userNo});
+	</insert>
+	
+	
+		
+</mapper>
