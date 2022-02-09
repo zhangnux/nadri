@@ -256,7 +256,7 @@
 			rt_review_content = #{content},
 			rt_review_star_point = #{starPoint}
 		where
-			review_no = #{no}
+			rt_review_no = #{no}
 	</update>
 	
 	<!--
@@ -264,7 +264,7 @@
 	-->
 	<delete id="deleteReview" parameterType="int">
 		delete from restaurant_review
-		where review_no = #{value}
+		where rt_review_no = #{value}
 	</delete>
 	
 	<!--

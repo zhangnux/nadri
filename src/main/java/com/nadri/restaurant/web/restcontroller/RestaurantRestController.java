@@ -90,7 +90,7 @@ public class RestaurantRestController {
 		
 	}
 	
-	@GetMapping("/review/delete.nadri")
+	@PostMapping("/review/delete.nadri")
 	public void delete(int no) {
 		rtService.deleteReview(no);
 		

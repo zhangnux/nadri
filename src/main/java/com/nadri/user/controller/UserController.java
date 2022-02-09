@@ -90,6 +90,7 @@ public class UserController {
 		return "user/loginForm";
 	}
 	
+	/*
 	@PostMapping("/login.nadri")
 	public String modify(String id, String password, Model model) {
 		// 아이디와 비밀번호가 비어있거나 공백만 있으면 loginform.jsp로 내부이동
@@ -109,5 +110,6 @@ public class UserController {
 			return "user/loginForm";
 		}
 	}
+	*/
 
 }
