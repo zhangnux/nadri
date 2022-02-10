@@ -224,6 +224,8 @@ public class TrainController {
 				reservation.setSoldDate(new Date());
 				reservation.setTid((String)SessionUtils.getAttribute("tid"));
 				service.updateReservation(reservation);
+				SessionUtils.removeAttribute("tid");
+				SessionUtils.removeAttribute("reservationNo");
 				return "redirect:/train/resultPayment.nadri?reservationNo1=" + noList[0];
 			} else {
 				List<TrainReservation> reservationList = service.getReservationByNo(user.getNo(), Integer.parseInt(noList[0]), Integer.parseInt(noList[1]));
@@ -233,6 +235,8 @@ public class TrainController {
 					reservation.setTid((String)SessionUtils.getAttribute("tid"));
 					service.updateReservation(reservation);
 				}
+				SessionUtils.removeAttribute("tid");
+				SessionUtils.removeAttribute("reservationNo");
 				return "redirect:/train/resultPayment.nadri?reservationNo1=" + noList[0] + "&reservationNo2=" + noList[1];
 			}
 			

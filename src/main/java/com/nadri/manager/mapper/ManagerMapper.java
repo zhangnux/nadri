@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.nadri.manager.dto.FavoriteTrainDto;
 import com.nadri.manager.dto.UserAgeRate;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.vo.Manager;
@@ -28,4 +29,7 @@ public interface ManagerMapper {
 	 * @return
 	 */
 	int getCountUserByCriteria(UserCriteria criteria);
+	
+	List<FavoriteTrainDto> getFavoriteTrain();
+		
 }

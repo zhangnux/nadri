@@ -7,8 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAgeRate {
-	private int age;
+public class FavoriteTrainDto {
+	private int rowNum;
+	private String departureStation;
+	private String arrivalStation;
+	private int routNo;
 	private int count;
-	private double rate;
+	private String image;
 }

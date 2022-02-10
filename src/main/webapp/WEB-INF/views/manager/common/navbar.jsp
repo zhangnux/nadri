@@ -34,7 +34,7 @@ html, body {
 	        </a>
 	      </li>
 	      <li class="nav-item mt-3">
-	        <a href="#" class="nav-link ${menu eq 'statistics' ? 'active' : ''}">
+	        <a href="/admin/statistics.nadri" class="nav-link ${menu eq 'statistics' ? 'active' : ''}">
 	          통계
 	        </a>
 	      </li>
