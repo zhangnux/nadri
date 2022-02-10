@@ -47,7 +47,7 @@
 							<tbody>
 								<tr>
 									<td rowspan="2" style="width: 20%"><img alt="" src=""></td>
-									<td style="width: 80%"><h5>Nantes</h3></td>
+									<td style="width: 80%"><h2><strong>Nantes</strong></h2></td>
 								</tr>
 								<tr>
 									<td>

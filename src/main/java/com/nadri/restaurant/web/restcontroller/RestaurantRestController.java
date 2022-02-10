@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nadri.manager.exception.LoginErrorException;
-import com.nadri.restaurant.dto.ResponseDto;
+import com.nadri.restaurant.dto.BookableDto;
 import com.nadri.restaurant.service.RestaurantService;
 import com.nadri.restaurant.utill.Pagination;
-import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.web.form.RestaurantReviewInsertForm;
 import com.nadri.user.annotation.LoginedUser;
@@ -121,14 +120,12 @@ public class RestaurantRestController {
 		
 	}
 	
-	@GetMapping("/starPoint.nadri")
-	public double starPoint(@RequestParam("no") int restaurantNo) {
-		
-		double star = rtService.getRestaurantStar(restaurantNo);
-		
-		return star;
+	@GetMapping("/book/bookable.nadri")
+	public List<BookableDto> bookabletime(@RequestParam("no") int restaurantNo,
+			@RequestParam("date") Date date){
+		List<BookableDto> bookableTimeList = rtService.getBookableTime(restaurantNo, date);
+		return bookableTimeList;
 	}
-		
 	
 	
 }

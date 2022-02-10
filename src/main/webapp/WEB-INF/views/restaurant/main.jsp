@@ -143,30 +143,7 @@
 	
 	
 	
-	function getStarPoint(){
-		$.getJSON("/rest/restaurant/starPoint.nadri", {"no": '${restaurant.no }'}, function(starPoint) {
-			$("#starPoint${restaurant.no }").text(starPoint);
-		})
-	}
 	
-	
-	/*
-	function getStarPoint(){
-		var no = {"no": '${restaurant.no }'};
-		$.ajax({
-			url: "/rest/restaurant/starPoint.nadri"
-			, data : no
-			, type : 'get'
-			, dataType : 'text'
-				, success: function(starPoint){
-					$("#starPoint${restaurant.no }").text(starPoint);
-				}
-				, error: function(error){
-					console.log("에러 : " + error);
-				}
-			});
-	}
-	*/
 
 </script>
 </html>
