@@ -162,6 +162,15 @@ public class TrainService {
 	}
 	
 	/**
+	 * 검색 정보에 해당하는 모든 예약 정보 반환
+	 * @param criteria
+	 * @return
+	 */
+	public List<TrainReservation> getAllReservatioin(Map<String, Object> criteria) {
+		return mapper.getAllReservatioin(criteria);
+	}
+	
+	/**
 	 * 예약 번호에 해당하는 티켓 정보 반환
 	 * @param reservedNo1 가는 기차 예약번호
 	 * @param reservedNo2 오는 기차 예약번호

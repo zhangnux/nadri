@@ -199,7 +199,8 @@
         				r.total_passengers_count as totalCount, 
         				r.total_payment_amount as totalPrice,
         				r.user_no as userNo,
-        				r.tid as tid
+        				r.tid as tid,
+        				r.is_printed as isPrinted
 		from train_reservation r, train_ticket t, train_schedule s, train_route e, train_station t1, train_station t2, train n, train_type p
 		<where>
 		
@@ -226,6 +227,40 @@
 		</where>
 		order by r.reservation_no
 	</select>
+	
+	<select id="getAllReservatioin" parameterType="map" resultType="com.nadri.train.vo.TrainReservation">
+		select distinct r.reservation_no as no, 
+						r.ticketing_status as tickectStatus,
+						r.canceled_date as canceledDate,
+						r.sold_date as soldDate,
+						r.reservation_date as reservationDate, 
+						p.train_name as trainName, 
+						t.train_no as trainNo,
+        				t1.station_name as departureStation, 
+        				t2.station_name as arrivalStation, 
+        				s.schedule_departure_time as departureTime, 
+        				s.schedule_arrival_time as arrivalTime, 
+        				r.total_passengers_count as totalCount, 
+        				r.total_payment_amount as totalPrice,
+        				r.user_no as userNo,
+        				r.tid as tid,
+        				r.is_printed as isPrinted
+		from train_reservation r, train_ticket t, train_schedule s, train_route e, train_station t1, train_station t2, train n, train_type p
+		<where>
+			r.user_no = #{userNo}
+			and r.reservation_date >= ${start }
+			and r.reservation_date &lt;= ${end }
+			and r.reservation_no = t.reservation_no
+			and t.schedule_no = s.schedule_no
+			and s.route_no = e.route_no
+			and e.departure_station_id = t1.station_id
+			and e.arrival_station_id = t2.station_id
+			and t.train_no = n.train_no
+			and n.type_no = p.type_no
+		</where>
+		order by r.reservation_no
+	</select>
+	
 	<!-- 예약 번호로 불러오는 티켓에서 제약 걸기 취소가 N인것-->
 	<!-- 예약 후 바로 티켓정보 조회 -->
 	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket" >
@@ -367,6 +402,7 @@
 			canceled_date = #{canceledDate},
 			sold_date = #{soldDate},
 			tid = #{tid}
+			is_printed = #{isPrinted}
 		where reservation_no = #{no}
 	</update>
 	

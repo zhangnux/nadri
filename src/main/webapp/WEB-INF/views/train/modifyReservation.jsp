@@ -153,6 +153,7 @@
 		$("#cancel-div").click(function() {
 			location.replace("http://localhost/train/reservationList.nadri")
 		})
+		
 		let jsonData;
 		// rest에 넣을 객체 만들기
 		$("[name=type]").change(function() {

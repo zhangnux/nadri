@@ -52,6 +52,29 @@
 		width: 50%;
 		height: 90px;
 	}
+	
+		#modal-refund ul{
+		padding: 13px 50px;
+		margin: 11px 24px;
+		border: 1px solid lightgray;
+		color: #404040;
+	}
+	
+	#modal-refund tr {
+		border: 1px solid lightgray;
+		border-left: 0;
+		border-right: 0;
+		height: 39px;
+	}
+	#modal-refund th {
+		border-right: 1px solid lightgray;
+		width: 150px;
+		background-color: aliceblue;
+	}
+	#modal-refund td {
+		text-align: start;
+		padding-left: 30px;
+	}
 </style>
 <body>
 <%@ include file="../common/navbar.jsp" %>
@@ -127,14 +150,75 @@
 			<button class="btn btn-dark" id="btn-refund" type="button">반환요청</button>
 		</div>
 	</div>
+	<div class="modal" tabindex="-1" data-bs-backdrop="static" id="modal-refund" style="border: 1px solid #D8E5F6;">
+ 		<div class="modal-dialog modal-dialog-centered modal-lg" style="justify-content: center; width: 580px;">
+	   		<div class="modal-content" style="background-color: #7C97B9; height: 364px;">
+	    		<div class="modal-body pt-2">
+	    			<div style="display: flex; justify-content: space-between;">
+		       			<h6 class="modal-title mb-2 fw-bold" style="color: white;">반환 확인</h6>
+	    	   			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+		    		</div>
+    				<div style="background-color: white; height: 303px;">
+    					<div class="mx-4 pt-3" id="refund-info">
+    						<strong>승차권 정보 : <span></span></strong>
+    					</div>
+    					<div>
+    						<ul>
+    							<li>
+									승차권 반환을 성공했습니다.    							
+    							</li>
+    							<li class="mt-2">
+		    						'${sessionScope.LOGIN_USER.name }'님의 반환 내역입니다.
+    							</li> 
+    						</ul>
+    					</div>
+	    				<div class="" style="margin: 25px;">
+	    					<table style="margin: 0; width: 100%; text-align: center; ">
+	    						<tbody>
+	    							<tr>
+	    								<th>영수금액</th>
+	    								<td></td>
+	    							</tr>
+	    							<tr>
+	    								<th>반환수수료</th>
+	    								<td></td>
+	    							</tr>
+	    							<tr>
+	    								<th>취소일자</th>
+	    								<td></td>
+	    							</tr>
+	    						</tbody>
+	    					</table>
+	    				</div>
+	    			</div>
+				</div>
+   			</div>
+ 		</div>
+	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		function addCommas(nStr) {
+		    nStr += '';
+		    x = nStr.split('.');
+		    x1 = x[0];
+		    x2 = x.length > 1 ? '.' + x[1] : '';
+		    var rgx = /(\d+)(\d{3})/;
+		    while (rgx.test(x1)) {
+		        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		    }
+		    return x1 + x2;
+		}
+		
+		var refundModal = new bootstrap.Modal(document.getElementById('modal-refund'), {
+			keyboard: false
+		});
 		
 		$("#btn-refund").click(function() {
-			
+			let refund = confirm("반환하시겠습니까??")
 			let refundRate = $("[data-refundRate]").attr("data-refundRate")
 			let refundPrice = $("[data-refundPrice]").attr("data-refundPrice")
 			let reservationNo = $("[data-reservationNo]").attr("data-reservationNo")
@@ -149,20 +233,32 @@
 			let result = {refundRate, refundPrice, ticketList}
 			let jsonData = JSON.stringify(result)
 			console.log(jsonData)
- 			$.ajax({
- 				type:'PUT',
- 				contentType:"application/json",
- 				url:'/api/train/refundKakao/' + reservationNo,
- 				data:jsonData,
- 				dataType:"json",
-				success: function(response) {
-					alert("반품이 성공했습니다")
-				}
- 			}) 
+			if (refund) {
+	 			$.ajax({
+	 				type:'PUT',
+	 				contentType:"application/json",
+	 				url:'/api/train/refundKakao/' + reservationNo,
+	 				data:jsonData,
+	 				dataType:"json",
+					success:function(response) {
+						console.log(response)
+						$("#refund-info").find('span').text(response.item_name)
+						$("#modal-refund").find('td').eq(0).text(addCommas(refundPrice))
+						$("#modal-refund").find('td').eq(1).text(addCommas(refundRate))
+						var now = moment(response.canceled_at);
+						$("#modal-refund").find('td').eq(2).text(now.format("YYYY-MM-DD hh:mm"))
+						refundModal.show()
+					},
+					error:function() {
+						
+					}
+	 			}) 
+			}
 		})
 		
-		
-		
+		$("[aria-label=Close]").click(function() {
+			location.replace("http://localhost/train/reservationList.nadri")
+		})		
 		
 	})
 </script>

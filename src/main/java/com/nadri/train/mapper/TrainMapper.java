@@ -77,6 +77,13 @@ public interface TrainMapper {
 	List<TrainReservation> getReservationByNo(Map<String, Object> useing);
 	
 	/**
+	 * 검색정보에 해당하는 예약 정보 조회
+	 * @param criteria
+	 * @return
+	 */
+	List<TrainReservation> getAllReservatioin(Map<String, Object> criteria);
+	
+	/**
 	 * 예약번호에 해당하는 티켓 정보 조회
 	 * @param reservedNo1
 	 * @param reservedNo2
