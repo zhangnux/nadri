@@ -2,6 +2,8 @@ package com.nadri.restaurant.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +25,7 @@ public class Reservation {
 	private int deposit;		// 예약금
 	
 	private String process;		// 예약 진행사항 default 완료
-	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date reservedDate;	// 예약일
 	private int adult;	// 성인예약명수
 	private int child;	// 아이 예약 명수
