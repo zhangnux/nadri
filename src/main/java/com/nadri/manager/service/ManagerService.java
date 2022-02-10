@@ -50,14 +50,14 @@ public class ManagerService {
 		return mapper.getUserByCriteria(criteria);
 	}
 	
-	public List<Integer> getGenderRateOfUser(int total) {
+	public List<Double> getGenderRateOfUser(int total) {
 		return CountRate.rate(total, mapper.getGenderRateOfUser());
 	}
 	
 	public List<UserAgeRate> getAgeRateOfUser(int total) {
 		List<UserAgeRate> rates = mapper.getAgeRateOfUser();
 		for (UserAgeRate rate: rates) {
-			rate.setCount(CountRate.rate(total, rate.getCount()));
+			rate.setRate(CountRate.rate(total, rate.getCount()));
 		}
 		return rates;
 	}

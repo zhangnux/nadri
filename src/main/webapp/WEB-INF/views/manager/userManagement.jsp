@@ -126,142 +126,150 @@
 <body>
 <c:set var="menu" value="user"/>
 <div class="container-fluid bg-light">
-<div class="row">
-	<div class="col-2" style="position: fixed; height: 100%;">
-		<%@ include file="common/navbar.jsp" %>
-	</div>
-	<div class="col-10" style="margin-left: 310px;">
-		<div class="row mt-5" >
-			<div class="col border mx-3" style="background-color: white; align-self: self-start;">
-				<form action="/admin/userManagement.nadri" method="get" id="form-search-user">
-					<input name="page" type="hidden" value="1">
-					<ul>
-						<li class="py-3">
-							<span class="me-5" >회원</span>
-							<input type="checkbox" name="delete" value="Y">
-							<label class="px-1">탈퇴회원</label>
-						</li>
-						<li class="py-3">
-							<span class="me-3" >수신여부</span>
-							<input type="checkbox" name="email" value="Y">
-							<label class="px-1">이메일</label>
-							<input type="checkbox" name="sms" value="Y">
-							<label class="px-1">SMS</label>
-						</li>
-						<li class="py-3">
-							<span class="me-4" >검색어</span>
-							<select name="option" style="padding: 2px; border-radius: 0;">
-								<option value="id">아이디</option>
-								<option value="name">이름</option> 
-							</select>
-							<input type="text" name="keyword" style="border-radius: 0; border: 1px solid black; padding: 3px 3px;">
-							<button type="button" class="btn btn-outline-dark btn-search" 
-							style="border-radius: 0; vertical-align: bottom; padding:6px; font: -webkit-small-control; width: 62px;">검색</button>
-						</li>
-					</ul>
-				</form>
-			</div>
-			<div class="col mx-3 border px-5 py-3" style="background-color: white;">
-				<div class="row">
-					<div class="col text-center" style="font-size: 20px; font-weight: bold;">
-						연령별/성별 회원 현황
-					</div>
-				</div>
-				<div class="row">
-					<div class="col vGraph mt-3">
+	<div class="row">
+		<div class="col-2" style="position: fixed; height: 100%;">
+			<%@ include file="common/navbar.jsp" %>
+		</div>
+		<div class="col-10" style="margin-left: 310px;">
+			<div class="row mt-5" >
+				<div class="col border mx-3" style="background-color: white; align-self: self-start;">
+					<form action="/admin/userManagement.nadri" method="get" id="form-search-user">
+						<input name="page" type="hidden" value="1">
 						<ul>
-							<c:forEach var="rate" items="${ageRate }">
-								<li><span class="gTerm">${rate.age }~${rate.age+9 }</span><span class="gBar" style="height:${rate.count }%"><span>${rate.count }%</span></span></li>
-							</c:forEach>
+							<li class="py-3">
+								<span class="me-5" >회원</span>
+								<input type="checkbox" name="delete" value="Y">
+								<label class="px-1">탈퇴회원</label>
+							</li>
+							<li class="py-3">
+								<span class="me-3" >수신여부</span>
+								<input type="checkbox" name="email" value="Y">
+								<label class="px-1">이메일</label>
+								<input type="checkbox" name="sms" value="Y">
+								<label class="px-1">SMS</label>
+							</li>
+							<li class="py-3">
+								<span class="me-4" >검색어</span>
+								<select name="option" style="padding: 2px; border-radius: 0;">
+									<option value="id">아이디</option>
+									<option value="name">이름</option> 
+								</select>
+								<input type="text" name="keyword" style="border-radius: 0; border: 1px solid black; padding: 3px 3px;">
+								<button type="button" class="btn btn-outline-dark btn-search" 
+								style="border-radius: 0; vertical-align: bottom; padding:6px; font: -webkit-small-control; width: 62px;">검색</button>
+							</li>
 						</ul>
+					</form>
+				</div>
+				<div class="col mx-3 border px-5 py-3" style="background-color: white;">
+					<div class="row">
+						<div class="col text-center" style="font-size: 20px; font-weight: bold;">
+							연령별/성별 회원 현황
+						</div>
 					</div>
-					<div class="col p-3 text-center">
-					    <ul style="list-style: none;" class="text-end">
-	   						<li class="m-2">
-		    					<em class="color me-2" style="border: 1px solid black; background-color: #659ED7; padding: 0.2px 35px">
-		    					</em>
-		    					<span>남성</span>
-	   						</li>
-	   						<li class="m-2">
-		    					<em class="color me-2" style="border: 1px solid black; background-color: #CD868B; padding: 0.2px 35px">
-		    					</em>
-		    					<span>여성</span>
-	   						</li>
-	   					</ul>
-						<div class="pie-chart2" style="background: conic-gradient(#CD868B 0% ${genderRate[0]}%, #659ED7 ${genderRate[0]}% ${genderRate[1]}%);">
-							<span class="center"></span>
+					<div class="row">
+						<div class="col vGraph mt-3">
+							<ul>
+								<c:forEach var="rate" items="${ageRate }">
+									<li><span class="gTerm">${rate.age }~${rate.age+9 }</span><span class="gBar" style="height:${rate.rate }%"><span>${rate.rate }%</span></span></li>
+								</c:forEach>
+							</ul>
+						</div>
+						<div class="col p-3 text-center">
+						    <ul style="list-style: none;" class="text-end">
+		   						<li class="m-2">
+			    					<em class="color me-2" style="border: 1px solid black; background-color: #659ED7; padding: 0.2px 35px">
+			    					</em>
+			    					<span>남성</span>
+		   						</li>
+		   						<li class="m-2">
+			    					<em class="color me-2" style="border: 1px solid black; background-color: #CD868B; padding: 0.2px 35px">
+			    					</em>
+			    					<span>여성</span>
+		   						</li>
+		   					</ul>
+		   					<div class="row">
+			   					<div class="text-start col-3" style="padding: 0; text-align-last: right;">
+			   						<strong>${genderRate[1]}%</strong>
+			   					</div>
+								<div class="pie-chart2 col-4" style="background: conic-gradient(#FFFFFF 0% 0.7%, #CD868B 0.7% ${genderRate[0]}%, #FFFFFF ${genderRate[0]}% ${genderRate[0] + 0.7}%, #659ED7 ${genderRate[0] + 0.7}% 100%);">
+									<span class="center"></span>
+								</div>
+								<div class="text-end col-1" style="align-self: self-end; padding: 0;">
+			   						<strong>${genderRate[0]}%</strong>
+			   					</div>
+		   					</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="d-flex flex-column flex-shrink-0 p-3 border mt-4" style="height: 450px;">
-			<table class="text-center" id="table-user">
-				<thead>
-					<tr>
-						<th width="5%">No.</th>
-						<th width="10%">아이디</th>
-						<th width="5%">이름</th>
-						<th width="15%">생년월일</th>
-						<th width="15%">이메일</th>
-						<th width="15%">연락처</th>
-						<th width="5%">포인트</th>
-						<th width="15%">가입일자</th>
-						<th width="15%">탈퇴일자</th>
-					</tr>
-				</thead>
-				<tbody id="tbody-user">
-					<c:forEach var="user" items="${userList }"> 
+			<div class="d-flex flex-column flex-shrink-0 p-3 border mt-4" style="height: 450px;">
+				<table class="text-center" id="table-user">
+					<thead>
 						<tr>
-							<td style="cursor: pointer; color: #7E5C5E;"><strong>${user.no }</strong></td>
-							<td class="td-userInfo">${user.id }</td>
-							<td>${user.name }</td>
-							<td><fmt:formatDate value="${user.birth }" pattern="yyyy년MM월dd일"/></td>
-							<td>${user.email }</td>
-							<td>${user.tel }</td>
-							<td><fmt:formatNumber value="${user.point }" pattern="##,###"/></td>
-							<td><fmt:formatDate value="${user.createdDate }" pattern="yyyy년MM월dd일"/></td>
+							<th width="5%">No.</th>
+							<th width="10%">아이디</th>
+							<th width="5%">이름</th>
+							<th width="15%">생년월일</th>
+							<th width="15%">이메일</th>
+							<th width="15%">연락처</th>
+							<th width="5%">포인트</th>
+							<th width="15%">가입일자</th>
+							<th width="15%">탈퇴일자</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-user">
+						<c:forEach var="user" items="${userList }"> 
+							<tr>
+								<td style="cursor: pointer; color: #7E5C5E;"><strong>${user.no }</strong></td>
+								<td class="td-userInfo">${user.id }</td>
+								<td>${user.name }</td>
+								<td><fmt:formatDate value="${user.birth }" pattern="yyyy년MM월dd일"/></td>
+								<td>${user.email }</td>
+								<td>${user.tel }</td>
+								<td><fmt:formatNumber value="${user.point }" pattern="##,###"/></td>
+								<td><fmt:formatDate value="${user.createdDate }" pattern="yyyy년MM월dd일"/></td>
+								<c:choose>
+									<c:when test="${empty user.deletedDate}">
+										<td> - </td>
+									</c:when>
+									<c:otherwise>
+										<td><fmt:formatDate value="${user.deletedDate }" pattern="yyyy년MM월dd일"/></td>
+									</c:otherwise>
+								</c:choose>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
+					<ul class="pagination justify-content-center mt-4">
+						<li class="page-item">
+							<a class="page-link" href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<!-- total = 5 -->
+						<!-- page의 블록은 3 -->
+						<c:forEach var="count" begin="1" end="${total }">
 							<c:choose>
-								<c:when test="${empty user.deletedDate}">
-									<td> - </td>
+								<c:when test="${count <= 3 }">
+									<li class="page-item ${count eq 1? 'active' : '' }"><a class="page-link page" href="#">${count }</a></li>
 								</c:when>
 								<c:otherwise>
-									<td><fmt:formatDate value="${user.deletedDate }" pattern="yyyy년MM월dd일"/></td>
+									<li class="page-item" style="display: none;"><a class="page-link page" href="#">${count }</a></li>
 								</c:otherwise>
 							</c:choose>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-			<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
-				<ul class="pagination justify-content-center mt-4">
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<!-- total = 5 -->
-					<!-- page의 블록은 3 -->
-					<c:forEach var="count" begin="1" end="${total }">
-						<c:choose>
-							<c:when test="${count <= 3 }">
-								<li class="page-item ${count eq 1? 'active' : '' }"><a class="page-link page" href="#">${count }</a></li>
-							</c:when>
-							<c:otherwise>
-								<li class="page-item" style="display: none;"><a class="page-link page" href="#">${count }</a></li>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
+						</c:forEach>
+						<li class="page-item">
+							<a class="page-link" href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
 		</div>
 	</div>
-</div>
 </div>
 </body>
 <script type="text/javascript">

@@ -401,7 +401,7 @@
 			ticketing_status = #{tickectStatus},
 			canceled_date = #{canceledDate},
 			sold_date = #{soldDate},
-			tid = #{tid}
+			tid = #{tid},
 			is_printed = #{isPrinted}
 		where reservation_no = #{no}
 	</update>
@@ -420,5 +420,6 @@
 			seat_no = #{seatNo}
 		where ticket_no = #{no}
 	</update>
+	
 	
 </mapper>

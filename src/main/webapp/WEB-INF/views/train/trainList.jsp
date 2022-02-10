@@ -288,6 +288,8 @@
 											</td>
 											<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
 												<c:choose>
+													<c:when test="${schedule.normalSeat eq 0 }">
+													</c:when>
 													<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
 														<button class="btn btn-no btn-sm" disabled="disabled">매진</button>
 													</c:when>
@@ -357,6 +359,9 @@
 										</td>
 										<td data-price-no="${schedule.normalPriceId }" data-price="${schedule.normalPrice }">
 											<c:choose>
+												<c:when test="${schedule.normalSeat eq 0 }">
+												</c:when>
+												
 												<c:when test="${schedule.normalBooking eq schedule.normalSeat }">
 													<button class="btn btn-secondary btn-sm" disabled="disabled">매진</button>
 												</c:when>
@@ -923,7 +928,8 @@
 								)
 									sh += "</td>"
 									sh += "<td data-price-no='"+ schedule.normalPriceId +"' data-price='" + schedule.normalPrice + "' >"
-								if (schedule.normalBooking == schedule.normalSeat) {
+								if (schedule.normalSeat == 0) {
+								} else if (schedule.normalBooking == schedule.normalSeat) {
 									sh += "<button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button>"
 								} else (
 									sh += "<button class='btn normal' type='button' >예매</button>"
@@ -978,7 +984,8 @@
 								)
 									sh += "</td>"
 									sh += "<td data-price-no='"+ schedule.normalPriceId +"' data-price='" + schedule.normalPrice + "'>"
-								if (schedule.normalBooking == schedule.normalSeat) {
+								if (schedule.normalSeat == 0) {
+								} else 	if (schedule.normalBooking == schedule.normalSeat) {
 									sh += "<button class='btn btn-secondary btn-sm' type='button' disabled='disabled'>매진</button>"
 								} else (
 									sh += "<button class='btn normal' type='button'>예매</button>"

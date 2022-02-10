@@ -31,7 +31,7 @@
 	}
 </style>
 <body>
-<c:set var="menu" value="home"/>
+<c:set var="menu" value="statistics"/>
 <%@ include file="common/navbar.jsp" %>
 <div class="container-fluid bg-light">
 	<div class="row">

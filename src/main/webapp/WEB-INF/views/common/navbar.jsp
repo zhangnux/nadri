@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../common/tags.jsp" %>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3 d-print-none">
     <div class="container px-4 px-lg-5" id="jyNav">
         <a class="fs-1 link-warning fw-bold" href="../home.nadri" id="enfont">Nadri</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">

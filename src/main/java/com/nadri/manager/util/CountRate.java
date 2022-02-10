@@ -13,16 +13,17 @@ import lombok.Data;
 @Data
 public class CountRate {
 	static final Logger log = LogManager.getLogger(ManagerRestController.class);
-	public static List<Integer> rate(int total, List<Integer> datas) {
+	public static List<Double> rate(int total, List<Integer> datas) {
 		
-		List<Integer> rates = new ArrayList<Integer>();
+		List<Double> rates = new ArrayList<Double>();
 		for (Integer data : datas) {
-			rates.add((data*100)/total);
+			double result = Math.round(((data*100.0)/total)*10)/10.0;
+			rates.add(result);
 		}
 		return rates;
 	}
 	
-	public static int rate(int total, int data) {
-		return (data*100)/total;
+	public static double rate(int total, int data) {
+		return Math.round(((data*100.0)/total)*10)/10.0;
 	}
 }

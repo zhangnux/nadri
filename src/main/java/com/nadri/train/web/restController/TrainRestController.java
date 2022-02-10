@@ -251,11 +251,12 @@ public class TrainRestController {
 	 * @return
 	 * @throws IOException
 	 */
-	@GetMapping("/kakaoPay")
-	public String kakaoPay(@LoginedUser User user, TrainPaymentDto dto) throws IOException {
+	@PutMapping("/kakaoPay")
+	public String kakaoPay(@LoginedUser User user, @RequestBody TrainPaymentDto dto) throws IOException {
 		SessionUtils.addAttribute("reservationNo", dto.getReservationNo());
 		String[] reList = dto.getReservationNo().split(" ");
 		TrainReservation reservation = service.getReservationOne(user.getNo(), Integer.parseInt(reList[0]));
+		List<TrainTicket> ticketList = service.getTicketByNo(dto.getNo());
 		String merchandise = "";
 		if (reList.length == 2) {
 			merchandise = reservation.getArrivalStation() + "행 열차 외 1";
@@ -265,6 +266,10 @@ public class TrainRestController {
 			log.info(merchandise);
 		}
 		StringBuffer outPutData = new StringBuffer();
+		// cid=TC0ONETIME&partner_order_id=10066 10067&partner_user_id=hong1234
+		// &item_name=%EC%B6%98%EC%B2%9C%ED%96%89+%EC%97%B4%EC%B0%A8+%EC%99%B8+1&quantity=3
+		// &total_amount=7500&tax_free_amount=0&approval_url=http://localhost/train/kakaoPayment.nadri
+		// &cancel_url=http://localhost/train/reservationList.nadri&fail_url=http://localhost/train/failPayment.nadri
 		outPutData.append("cid=TC0ONETIME")
 				.append("&partner_order_id=").append(dto.getReservationNo())
 				.append("&partner_user_id=").append(user.getId())
@@ -275,7 +280,7 @@ public class TrainRestController {
 				.append("&approval_url=http://localhost/train/kakaoPayment.nadri")
 				.append("&cancel_url=http://localhost/train/reservationList.nadri")
 				.append("&fail_url=http://localhost/train/failPayment.nadri");
-		
+		log.info("확인: " + outPutData.toString());
 		URL address = new URL("https://kapi.kakao.com/v1/payment/ready");
 		HttpURLConnection conn = (HttpURLConnection) address.openConnection();
 		conn.setRequestMethod("POST");
@@ -291,6 +296,11 @@ public class TrainRestController {
 		
 		BufferedReader rd;
 		if(conn.getResponseCode() == 200) {
+			for (int i=0; i<ticketList.size(); i++) {
+				ticketList.get(i).setCustomerName(dto.getName().get(i));
+				service.updateTicket(ticketList.get(i));
+			}
+			log.info("성공");
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		} else {
 			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
@@ -376,7 +386,7 @@ public class TrainRestController {
 	}
 	
 	@GetMapping("/print/{reservationNo}")
-	public ResponseDto<?> print(@PathVariable(name="reservationNo") int no) {
+	public ResponseDto<?> print(@LoginedUser User user, @PathVariable(name="reservationNo") int no) {
 		ResponseDto<TrainTicket> response = new ResponseDto<TrainTicket>();
 		// is canceled N인 티켓 정보 가져오기
 		List<TrainTicket> ticketList = service.getTicketByReservedNo(no, 0);

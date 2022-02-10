@@ -50,6 +50,9 @@
 			<li class="mt-2">
 				결제수단을 선택하신 후 결제확인 버튼을 클릭해 주시길 바랍니다.
 			</li>
+			<li>
+				승차권 발권을 위해 승차자 이름을 입력해주세요.
+			</li>
 		</ul>
 	</div>
 	<div>
@@ -128,11 +131,11 @@
 				<tbody>
 					<c:forEach var="ticket" items="${ticket1 }">
 						<tr>
-							<td>${ticket.roomType }</td>
+							<td data-ticket="${ticket.no }" >${ticket.roomType }</td>
 							<td>${ticket.roomName } <span> ${ticket.seatNo }</span></td>
 							<td>${ticket.type }</td>
 							<td><fmt:formatNumber value="${ticket.price }" pattern="##,###"/>원</td>
-							<td><input type="text" name="name1"/></td>
+							<td><input type="text" name="name"/></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -187,11 +190,11 @@
 					<tbody>
 						<c:forEach var="ticket" items="${ticket2 }">
 							<tr>
-								<td>${ticket.roomType }</td>
+								<td data-ticket="${ticket.no }">${ticket.roomType }</td>
 								<td>${ticket.roomName } <span> ${ticket.seatNo }</span></td>
 								<td>${ticket.type }</td>
 								<td><fmt:formatNumber value="${ticket.price }" pattern="##,###"/>원</td>
-								<td><input type="text" name="name1"/></td>
+								<td ><input type="text" name="name"/></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -216,24 +219,52 @@
 	
 		$(".btn-payment").click(function() {
 			let paymentNo = $("[name=reservationNo1]").val() + " " + $("[name=reservationNo2]").val()
+			let no = new Array()
+			$("[data-ticket]").each(function(index, element) {
+				no.push($(this).attr("data-ticket"))
+			})
+			let name = new Array()
+			$("[name=name]").each(function(index, element) {
+				if ($(this).val() != '') {
+					name.push($(this).val())
+				}
+			})
 			
+			if (name.length != no.length) {
+				alert("모든 승차자명을 입력해주시길 바랍니다.")
+				return;
+			}
+			
+			let result = {totalPrice:$("[name=totalPrice]").val() , totalCount:$("[name=totalCount]").val(),
+					reservationNo:paymentNo, no, name}
+			
+			let jsonData = JSON.stringify(result)
+			
+			
+			// [{no:100, name:"홍길동"}, {no:101 name:"이순신"}]
 			if ($("[name=paymentType]").val() == 'kakao') {
-				$.getJSON('/api/train/kakaoPay',
-						{totalPrice:$("[name=totalPrice]").val() , totalCount:$("[name=totalCount]").val(),
-							reservationNo:paymentNo},
-						function(response) {
-							
-							if (response.status == "FAIL") {
-								alert(response.error)
-								location.replace("http://localhost/user/login.nadri")
-							} else {
-								$.getJSON(
-									'/api/train/progress',
-									{tid:response.tid}
-								)
-								$(location).attr('href', response.next_redirect_pc_url);
+				$.ajax({type:"PUT",
+						url:'/api/train/kakaoPay',
+						data:jsonData,
+						contentType: "application/json",
+						traditional:true,
+						dataType: 'json',
+						success:function(response) {
+							console.log(response)
+							console.log(response.tid)
+							$.getJSON(
+								'/api/train/progress',
+								{tid:response.tid}
+							)
+							$(location).attr('href', response.next_redirect_pc_url);
+						},
+						statusCode:{
+							404:function() {
+								alert("취소된 예약정보 입니다.")
+								location.replace("http://localhost/train/reservationList.nadri");
 							}
-						})
+						}
+				})
 			}
 		})
 	
