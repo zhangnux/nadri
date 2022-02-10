@@ -421,5 +421,14 @@
 		where ticket_no = #{no}
 	</update>
 	
+	<!-- 환불내역 넣기 -->
+	<insert id="insertRefund" parameterType="java.util.List">
+		insert into train_refund(ticket_no, refund_date, refund_price, refund_fees)
+		select A.* from (
+		<foreach collection="list" item="refund" separator="UNION ALL">
+			select #{refund.ticketNo}, sysdate, #{refund.refundPrice}, #{refund.refundFees}
+			from dual
+		</foreach> ) A
+	</insert>
 	
 </mapper>

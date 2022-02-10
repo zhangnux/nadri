@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.vo.TrainRefund;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
@@ -153,4 +154,8 @@ public interface TrainMapper {
 	 * @param ticket
 	 */
 	void updateTicket(TrainTicket ticket);
+	
+	void insertRefund(List<TrainRefund> refundList);
+	
+	void deleteRefund(@Param("no") List<Integer> refundList);
 }

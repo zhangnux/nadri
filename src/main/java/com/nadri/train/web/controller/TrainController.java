@@ -48,6 +48,10 @@ public class TrainController {
 	@Autowired
 	TrainService service;
 	
+	@GetMapping("/fail.nadri")
+	public String error() {
+		return "train/error/failPayment";
+	}
 	
 	/**
 	 * 기차 스케줄 검색 창
@@ -56,7 +60,6 @@ public class TrainController {
 	@GetMapping
 	public String search(Model model) {
 		model.addAttribute("favoriteList", service.getFavoriteRoute());
-		
 		return "train/trainSearch";
 	}
 	
@@ -131,18 +134,6 @@ public class TrainController {
 		List<TrainReservation> reservationList = service.getReservationByUserNo(user.getNo());
 		model.addAttribute("reservationList", reservationList);
 		return "train/reservationList";
-	}
-	
-	/**
-	 * 사용자 승차권 이용목록 페이지
-	 * @return
-	 */
-	@GetMapping("/usedList.nadri")
-	public String usedList() {
-		// 과거에 결제하고 사용한 것들
-		
-		
-		return "train/usedList";
 	}
 	
 	/**
@@ -251,7 +242,7 @@ public class TrainController {
 			// map안에 List를 답고 key값으로 꺼내내서 model에 담으면 jstl el은 알아서 List로 인식한다.
 			// 똑같은 ticket을 보내고 싶을때 ticket번호를 배열로 만들어서 변수로 할당하면 {ticket:[10, 22, 20]}
 			// @RequestBody List<Integer> ticket 로 매개 변수로 받으면 된다.
-			return "redirect:/errorPayment";
+			throw new IOException();
 		}
 	}
 	

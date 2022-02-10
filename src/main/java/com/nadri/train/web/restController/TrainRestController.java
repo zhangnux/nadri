@@ -38,7 +38,9 @@ import com.nadri.train.dto.TrainModifyDto;
 import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.exception.LoginException;
 import com.nadri.train.service.TrainService;
+import com.nadri.train.util.RefundUtils;
 import com.nadri.train.util.SessionUtils;
+import com.nadri.train.vo.TrainRefund;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSeat;
@@ -252,6 +254,7 @@ public class TrainRestController {
 	 * @throws IOException
 	 */
 	@PutMapping("/kakaoPay")
+	// IOEXception과 fail_url conn.getErrorStream()의 구분?
 	public String kakaoPay(@LoginedUser User user, @RequestBody TrainPaymentDto dto) throws IOException {
 		SessionUtils.addAttribute("reservationNo", dto.getReservationNo());
 		String[] reList = dto.getReservationNo().split(" ");
@@ -266,10 +269,6 @@ public class TrainRestController {
 			log.info(merchandise);
 		}
 		StringBuffer outPutData = new StringBuffer();
-		// cid=TC0ONETIME&partner_order_id=10066 10067&partner_user_id=hong1234
-		// &item_name=%EC%B6%98%EC%B2%9C%ED%96%89+%EC%97%B4%EC%B0%A8+%EC%99%B8+1&quantity=3
-		// &total_amount=7500&tax_free_amount=0&approval_url=http://localhost/train/kakaoPayment.nadri
-		// &cancel_url=http://localhost/train/reservationList.nadri&fail_url=http://localhost/train/failPayment.nadri
 		outPutData.append("cid=TC0ONETIME")
 				.append("&partner_order_id=").append(dto.getReservationNo())
 				.append("&partner_user_id=").append(user.getId())
@@ -324,10 +323,11 @@ public class TrainRestController {
 	 * 환불
 	 * @param user
 	 * @return
+	 * @throws MalformedURLException 
 	 * @throws IOException
 	 */
 	@PutMapping("/refundKakao/{reservationNo}")
-	public String refundKakao(@LoginedUser User user, @RequestBody TrainRefundForm form, @PathVariable(name="reservationNo") int reservationNo) throws IOException {
+	public String refundKakao(@LoginedUser User user, @RequestBody TrainRefundForm form, @PathVariable(name="reservationNo") int reservationNo) throws IOException  {
 		// tid값을 얻기 위한 reservation 호출
 		TrainReservation reservation = service.getReservationOne(user.getNo(), reservationNo);
 		// 티켓 번호로 티켓 목록을 호출하기
@@ -345,7 +345,6 @@ public class TrainRestController {
 		conn.setRequestProperty("Authorization", "KakaoAK 5fa0f0222e9a68676ec86330e233e3e7");
 		conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		conn.setDoOutput(true);
-		log.info("카카오");
 		
 		OutputStream outPut = conn.getOutputStream();
 		DataOutputStream data = new DataOutputStream(outPut);
@@ -356,7 +355,8 @@ public class TrainRestController {
 		BufferedReader rd;
 		if(conn.getResponseCode() == 200) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		 	reservation.setTotalCount(reservation.getTotalCount()-ticketList.size());
+		 	// 예약 변경
+			reservation.setTotalCount(reservation.getTotalCount()-ticketList.size());
 			if (reservation.getTotalCount() == 0) {
 				reservation.setCanceledDate(new Date());
 				reservation.setTickectStatus("취소");
@@ -367,10 +367,22 @@ public class TrainRestController {
 				service.updateReservation(reservation);
 				
 			}
+			// 환불 내역 저장, 티켓 취소내역 갱신
+			List<TrainRefund> refundList = new ArrayList<>();
 			for (TrainTicket ticket: ticketList) {
+				TrainRefund refund = new TrainRefund();
+				long fees = RefundUtils.refundRate(ticket.getPrice(), reservation.getDepartureTime());
+				refund.setTicketNo(ticket.getNo());
+				refund.setRefundFees(fees);
+				refund.setRefundPrice(ticket.getPrice()- fees);
+				refundList.add(refund);
+				log.info("환불내역:" + refund.toString());
+
 				ticket.setIsCanceled("Y");
 				service.updateTicket(ticket);
 			}
+			service.addRefund(refundList);
+			
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = rd.readLine()) != null) {
@@ -379,8 +391,10 @@ public class TrainRestController {
 			String text = sb.toString();
 			log.info("결제결과: " + text);
 			return text;
+			// 아래의 errirStream과 throw IOExcetion의 차이?
 		} else {
 			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			service.deleteRefund(form.getTicketList());
 		}
 		return "";
 	}

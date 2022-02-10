@@ -15,6 +15,7 @@ import com.nadri.train.dto.TrainSearchDto;
 import com.nadri.train.exception.LoginException;
 import com.nadri.train.exception.ReservationException;
 import com.nadri.train.mapper.TrainMapper;
+import com.nadri.train.vo.TrainRefund;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
 import com.nadri.train.vo.TrainSchedule;
@@ -283,5 +284,13 @@ public class TrainService {
 	 */
 	public void updateTicket(TrainTicket ticket) {
 		mapper.updateTicket(ticket);
+	}
+	
+	public void deleteRefund(List<Integer> ticketNo) {
+		mapper.deleteRefund(ticketNo);
+	}
+	
+	public void addRefund(List<TrainRefund> refundList) {
+		mapper.insertRefund(refundList);
 	}
 }
