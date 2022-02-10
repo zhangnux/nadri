@@ -389,14 +389,14 @@ $(function() {
 						htmls += '<li class="page-item '+(pagination.existPrev ? '' : 'disabled')+'">'
 						htmls += '<a class="page-link" href="detail.nadri?no='+no+'&page='+pagination.prevPage+'" data-page="'+pagination.prevPage+'">이전</a>'
 						htmls += '</li>'
-					var currentPage = pagination.currentPage;
-					var beginPage = pagination.beginPage;
-					var endPage = pagination.endPage;
-					for(var num=beginPage; num <= endPage; num++){
-						htmls += '<li class="page-item '+ (pagination.currentPageNo == num ? 'active' : '' ) + '">'
-						htmls += '<a class="page-link" href="detail.nadri?no='+no+'&page='+num+'" data-page="'+num+'">'+num+'</a>'
-						htmls += '</li>'	
-					}   			
+						var currentPage = pagination.currentPage;
+						var beginPage = pagination.beginPage;
+						var endPage = pagination.endPage;
+						for(var num=beginPage; num <= endPage; num++){
+							htmls += '<li class="page-item '+ (pagination.currentPageNo == num ? 'active' : '' ) + '">'
+							htmls += '<a class="page-link" href="detail.nadri?no='+no+'&page='+num+'" data-page="'+num+'">'+num+'</a>'
+							htmls += '</li>'	
+						}   			
 
 					htmls += '<li class="page-item '+(pagination.existNext ? '' : 'disabled')+'">'
 					htmls += '<a class="page-link" href="detail.nadri?no='+no+'&page='+pagination.nextPage+'" data-page="'+pagination.nextPage+'">다음</a>'
@@ -491,8 +491,7 @@ $(function() {
 	}
 	
 	$("#review").on('click', '#saveModify', function(){
-		alert("테스트")
-		var content = $("#editContent").();
+		var content = $("#editContent").val();
 		var no = $("#reviewmodify").data("review-no");
 		$.ajax({
 			url: "modify",

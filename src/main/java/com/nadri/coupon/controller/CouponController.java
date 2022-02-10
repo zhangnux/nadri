@@ -35,14 +35,7 @@ public class CouponController {
 	}
 	
 	@GetMapping("/coulist.nadri")
-	public String list(Model model) {
-		
-		List<Coupon> coupons = couponService.getAllCouponList();
-		List<Coupon> invalidCoupons = couponService.getInvalidCouponList();
-		
-		model.addAttribute("coupons", coupons);
-		model.addAttribute("invalidCoupons", invalidCoupons);
-		
+	public String list(@RequestParam(name = "page", required = false, defaultValue = "1")String page, Model model) {
 		return "coupon/coulist";
 		
 	}
@@ -79,7 +72,6 @@ public class CouponController {
 		couponService.modifyCoupon(coupon);
 		return "redirect:coulist.nadri";
 	}
-
 	
 	
 }

@@ -3,11 +3,11 @@
 <div class="col-3 mt-1">
 <div class="sidebar">	
 <form id="form-search" action="list.nadri" method="get">
-	   	<div class="col mb-4">
-	   		<h1><strong>${place==""?'전국':place }</strong></h1>
-	 		<input name="place" value="${place }" type="hidden">
- 		</div>
-	<div class="d-flex flex-column flex-shrink-0 p-3"
+   	<div class="col text-center">
+   		<h2><strong>${place==""?'전국':place }</strong></h2>
+ 		<input name="place" value="${place }" type="hidden">
+	</div>
+	<div class="d-flex flex-column flex-shrink-0 p-1"
 		style="width: 250px;">
 		<span class="fs-4"><strong>지역</strong></span>
 		<hr>
@@ -65,7 +65,7 @@
 		<hr>
 	</div>
 
-	<div class="d-flex flex-column flex-shrink-0 p-3"
+	<div class="d-flex flex-column flex-shrink-0 p-1"
 		style="width: 250px;">
 		<span class="fs-4"><strong>상세검색</strong></span>
 		<hr>
@@ -98,12 +98,16 @@
 	</div>
 	</form>	
 	</div>
+	
 </div>
 <script type="text/javascript">
 	var today = new Date();
 	var dd = today.getDate();
 	var mm = today.getMonth()+1;
 	var yyyy = today.getFullYear();
+	
+	var tommorrow = new Date();
+
 	 if(dd<10){
 	        dd='0'+dd
 	    } 
@@ -111,7 +115,8 @@
 	        mm='0'+mm
 	    } 	
 	today = yyyy+'-'+mm+'-'+dd;
+	tommorrow =yyyy+'-'+mm+'-'+(dd+1);
 	document.getElementById("startdate").setAttribute("min", today);
 /* 	document.getElementById("startdate").setAttribute("value", today); */
-	document.getElementById("enddate").setAttribute("min", today);	
+	document.getElementById("enddate").setAttribute("min", tommorrow);	
 </script>
