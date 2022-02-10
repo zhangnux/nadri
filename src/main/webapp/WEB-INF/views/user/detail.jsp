@@ -141,6 +141,9 @@
 							<p><fmt:formatDate value="${LOGIN_USER.birth}" pattern="yyyy년 M월 dd일"/></p>
 						</div>
 					</div>
+					<div class="offset-md-9 pt-5 mt-3">
+					<button type="button" class="btn btn-dark" onclick="delete_user()">회원 탈퇴</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -148,7 +151,9 @@
 </div>
 </c:if>
 <script type="text/javascript">
-	
+function delete_user(){
+	location.href="delete.nadri";
+}
 </script>
 <%@ include file="../common/footer.jsp"%>
 </body>

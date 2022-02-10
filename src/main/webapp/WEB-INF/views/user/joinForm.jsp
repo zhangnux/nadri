@@ -16,8 +16,6 @@
 	::placeholder {
 		font-size: 0.8em;
 	}
-	/*벤치마킹 - 박스 디자인*/
-/*벤치마킹 - input 디자인*/
 .list{
 	padding: 3px;
 	margin: 3px;
@@ -51,7 +49,7 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 	<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 		<div class="card shadow-lg">
 			<div class="card-body p-5">
-				<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+				<h1 class="fs-4 card-title fw-bold mb-4">회원가입</h1>
 				<form method="post" action="insert.nadri" name="insertForm" id="insertForm">
 					<div class="userInput">
 						<label class="form-label">아이디 *<span class="">(5~20자)</span></label>
