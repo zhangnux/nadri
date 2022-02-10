@@ -46,6 +46,7 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 <body>
 <%@ include file="../common/navbar.jsp" %>
 <c:if test="${empty LOGIN_USER }">
+<div class="container">
 	<div class="px-4 py-5 my-5 text-center">
 		<h1 class="display-5 fw-bold">이용 불가</h1>
 		<div class="col-lg-6 mx-auto">
@@ -58,20 +59,26 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 			</div>
 		</div>
 	</div>
+</div>
 </c:if>
+<c:if test="${not empty LOGIN_USER }">
+<div class="container">
 	<div class="row justify-content-sm-center h-100">
 		<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 			<div class="card shadow-lg">
 				<div class="card-body p-5">
 					<h1 class="fs-4 card-title fw-bold mb-4">프로필 변경</h1>
-					<div class="card mb-2" style="width: 15rem; height: 10rem;">
+					<div class="card mb-2 align-self-center" style="float: none; margin:0 auto; width: 15rem; height: 10rem;">
 						<div class="card-body" style="text-align: center">
 							<i class="bi bi-piggy-bank" id="ltPiggy"></i>
-							<p class="card-text" id="id" value="${LOGIN_USER.id }"></p>
-							<a href="modify.nadri" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
 						</div>
 					</div>
 					<form method="post" action="modify.nadri" name="modifyForm" id="modifyForm">
+						<div class="userInput">
+							<input type="hidden" class="check form-control" name="id" id="id" value="${LOGIN_USER.id }"/>
+							<h6 class="list">
+							</h6>
+						</div>
 						<div class="userInput">
 							<label class="form-label">비밀번호 *</label> <input type="password" class="check form-control" name="password" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" maxlength="20" />
 							<h6 class="list">
@@ -79,7 +86,7 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 							</h6>
 						</div>
 						<div class="userInput">
-							<label class="form-label">비밀번호 재확인 *</label> <input type="password" class="check form-control" id="pwCheck" placeholder="비밀번호를 한번 더 입력해주세요" maxlength="20" />
+							<label class="form-label">비밀번호 확인 *</label> <input type="password" class="check form-control" id="pwCheck" placeholder="비밀번호를 한번 더 입력해주세요" maxlength="20" />
 							<h6 class="list">
 								<span id="pwCheckError"></span>
 							</h6>
@@ -105,10 +112,13 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 			</div>
 		</div>
 	</div>
+</div>
+</c:if>
 	<script type="text/javascript">
 $(function() {
 	$("#modifyForm").submit(function() {
 		
+		var id = $("#id").val();
 		var pw = $("#pw").val();
 		var pwCheck = $("#pwCheck").val();
 		var email = $("#email").val();
@@ -120,8 +130,6 @@ $(function() {
 		var emailLimit = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 		var telLimit = /^01[016789]-[^0][0-9]{3,4}-[0-9]{4}/;
 		
-		/*
-		var id = $("#id").val();
 		// 아이디,비번 중복 불가
 		if (id == pw) { 
 			$("#pwError").text("아이디와 비밀번호가 같습니다.");
@@ -129,7 +137,6 @@ $(function() {
 			
 			return false; 
 		}	
-		*/
 		
 		// 비번 공백
 		if (pw == "") {

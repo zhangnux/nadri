@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nadri.user.form.ModifyForm;
-import com.nadri.user.form.UserForm;
+import com.nadri.user.form.InsertForm;
 import com.nadri.user.service.UserService;
 import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
@@ -61,13 +61,14 @@ public class UserController {
 	}
 
 	@PostMapping("/insert.nadri")
-	public String join(UserForm form, Model model) {
+	public String join(InsertForm form, Model model) {
 
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
 
 		try {
 			userService.insertUser(user);
+			model.addAttribute(user);
 			return "redirect:joinCompleted.nadri";
 		} catch (RuntimeException e) {
 			model.addAttribute("error", e.getMessage());
@@ -85,14 +86,14 @@ public class UserController {
 		return "user/detail";
 	}
 	
-
+	// 정보 수정 폼
 	@GetMapping("/modify.nadri")
 	public String modifyform() {
 		return "user/modifyForm";
 	}
 	
 	@PostMapping("/modify.nadri")
-	public String modify(ModifyForm form, Model model) {
+	public String modify(ModifyForm form) {
 		// 세션에 로그인 된 유저를 loginedUser에 담기
 		User loginedUser = (User) SessionUtils.getAttribute("LOGIN_USER");
 		
@@ -109,13 +110,14 @@ public class UserController {
 		// 세션에 저장된 LOGIN_USER에 savedUser값 전달
 		SessionUtils.addAttribute("LOGIN_USER", savedUser);
 		
-		// model객체에 savedUser값 전달해서 DB변경
-		model.addAttribute(savedUser);
-		
 		return "redirect:detail.nadri";
 			
 	}
 	
-	
+	@GetMapping("/delete.nadri")
+	public String delete() {
+		
+		return "user/delete";
+	}
 
 }

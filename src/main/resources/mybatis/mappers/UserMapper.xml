@@ -53,14 +53,16 @@
 	<!--
 		void deleteUser 
 	-->
-	<delete id="deleteUser" parameterType="int">
-		delete from
+	<update id="deleteUser" parameterType="com.nadri.user.vo.User">
+		update
 			user_table
+		set
+			user_delete_check = 1
 		where
 			user_id = #{id}
 		and
 			user_password = #{password}
-	</delete>
+	</update>
 
 	<!-- 
 		User getUserById 

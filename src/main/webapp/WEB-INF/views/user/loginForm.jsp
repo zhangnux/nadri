@@ -76,12 +76,12 @@
 		</c:if>
 		<form class="p-5 border bg-white col-sm-4 mx-auto" action="login.nadri" method="post" name="loginForm" id="loginForm">
 			<div class="form-group p-2">
-				<label class="form-label" style="font-size:13px">아이디 *</label> 
-				<input type="text" class="form-control" placeholder="아이디를 입력해주세요." name="id">
+				<label class="form-label" for="id" style="font-size:13px">아이디 *</label> 
+				<input type="text" class="form-control" placeholder="아이디를 입력해주세요." name="id" id="id">
 			</div>
 			<div class="form-group p-2">
-				<label class="form-label" style="font-size:13px">비밀번호 *</label> 
-				<input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="password">
+				<label class="form-label" for="password" style="font-size:13px">비밀번호 *</label> 
+				<input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="password" id="password">
 			</div>
 			<div class="d-grid gap-3 p-2 col-12 mx-auto">
 				<button type="submit" class="btn btn-primary btn-lg">로그인</button>
@@ -92,8 +92,6 @@
 		</form>
 	</div>
 </div>
-
-
 <script type="text/javascript">
 
 </script>
