@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nadri.coupon.util.Pagination;
+import com.nadri.restaurant.dto.BookableDto;
 import com.nadri.restaurant.service.RestaurantService;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;

@@ -296,22 +296,26 @@
 	</select>
 	
 	<!--
-		List<RegisterDto> getBookableTime(Reservation reservation);
+		List<RegisterDto> getBookableTime(int restaurantNo, Date date);
 	-->
-	<select id="getBookableTime" parameterType="com.nadri.restaurant.vo.ReservationCurrentState" resultType="com.nadri.restaurant.dto.RegisterDto">
-		select
-			B.time_table_no timeTableNo,
-			B.start_time startTime,
-			B.restaurant_capacity capacity,
-			nvl(A.reserved_people, 0) reservedPeople,
-			capacity - reservedPeople bookablePeople
-		from
-			rt_reservation_current_state A, restaurant_time_table B
+	<select id="getBookableTime" resultType="com.nadri.restaurant.dto.BookableDto">
+		select 
+		    Y.time_table_no timeTableNo,
+		    Y.start_time startTime,
+		    Y.restaurant_capacity capacity,
+		    Y.restaurant_capacity - nvl(reserved_people, 0) bookablePeople 
+		from (select
+		        A.time_table_no,
+		        A.reserved_people
+		      from
+		        rt_reservation_current_state A
+		      where
+		        A.restaurant_no = ${restaurantNo}
+		        and to_char(A.reservation_date, 'yyyy-mm-dd') = to_char(${reservedDate}, 'yyyy-mm-dd')) X, restaurant_time_table Y
 		where
-			A.restaurant_no = #{restaurantNo}
-			and A.reservation_date = #{reservedDate}
-			and A.time_table_no = B.time_table_no(+)
-		order by B.time_table_no asc
+		    X.time_table_no(+) = Y.time_table_no
+		order by 
+		    Y.time_table_no asc
 	</select>
 
 </mapper>

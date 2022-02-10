@@ -1,14 +1,17 @@
 package com.nadri.restaurant.service;
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nadri.restaurant.dto.BookableDto;
 import com.nadri.restaurant.mapper.RestaurantMapper;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
+import com.nadri.restaurant.vo.Reservation;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.vo.Timetable;
@@ -129,6 +132,8 @@ public class RestaurantService {
 	}
 	
 	
-	
+	public List<BookableDto> getBookableTime(int restaurantNo, Date selectedDate){
+		return rtMapper.getBookableTime(restaurantNo, selectedDate);
+	}
 
 }

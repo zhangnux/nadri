@@ -18,7 +18,7 @@ import lombok.ToString;
 public class ReservationForm {
 	
 	
-	
+	private String userName;			// 유저 네임
 	private String reservedName;		// 예약자 이름
 	private String tel;					// 예약자 전화번호
 	
@@ -28,7 +28,7 @@ public class ReservationForm {
 	
 	private int child;					// 아이 수
 	private int adult;					// 어른 수
-	private int allPeople;				// 총인원수
+	private int people;					// 총인원수
 	
 	
 	private int usedPoint;				// 사용된 포인트

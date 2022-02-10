@@ -87,70 +87,85 @@
 <%@ include file="../common/navbar.jsp" %>
 
 <!-- ★ -->
-<div class="container">
+<div class="container m-3">
 	
-	<div class="row mb-3 p-3" id="head">
+	<div class="row m-3 p-3" id="head">
 		<div class="col">
 			<h2><strong>Restaurant</strong></h2>
 		</div>
 	</div>
 	
 
-	<div id="restaurant-detail" class="row mb-3">
+	<div id="restaurant-detail" class="row m-3">
 		<div class="col-9 p-1" id="restaurant-picture">
 			<img id="rt-img" alt="picture" src="${restaurant.picture }">
 		</div>
 		<div class="col-3 border p-1 position-sticky">
 			<form action="checkout.nadri" id="reservation-form">
-				<div class="m-3">
+				<div class="m-3 mb-5">
 					<h4><strong>예약</strong></h4>
 				</div>
-				<div class="mt-3">
-					<div class="m-3">
-						<div id="datepicker"></div>
-						<p>날짜:  <input type="text" id="datepicker2" name="revdate"></p>
+				<div class="row m-3">
+					<div id="datepicker"></div>
+					<p><strong>날짜 </strong>
+					<input type="text" id="datepicker2" name="reservedDate"></p>
+				</div>
+				<div class="row m-3">
+					<div class="col-3">
+						<span><strong>시간</strong></span>
 					</div>
-					<div class="m-3">
-						<label class="form-label">시간</label>
-						<select class="form-select">
-							<option value="" ${empty param.timetable ? 'selected' : ''}>예약 시간</option>
-							<c:forEach var="timetable" items="${timetables }">
-								<option value="${timetable.timetableNo }" ${param.timetable == timetable.timetableNo ? 'selected' : ''}>
-									${timetable.startTime }
-								</option>							
-							</c:forEach>
+					<div class="col-9 d-flex justify-content-start">
+						<select class="form-select" id="select-timetable">
+							
 						</select>
 					</div>
-					<div class="m-3">
-						<label class="form-label">어른</label>
-						<select class="form-select">
-							<option>선택</option>
-							<option value="1" ${param.adult == 1 ? 'selected' : ''}>1명</option>
-							<option value="2" ${param.adult == 2 ? 'selected' : ''}>2명</option>
-							<option value="3" ${param.adult == 3 ? 'selected' : ''}>3명</option>
-							<option value="4" ${param.adult == 4 ? 'selected' : ''}>4명</option>
-						</select>
-						<label class="form-label">아이</label>
-						<select class="form-select">
-							<option>선택</option>
-							<option value="1" ${param.child == 1 ? 'selected' : ''}>1명</option>
-							<option value="2" ${param.child == 1 ? 'selected' : ''}>2명</option>
-							<option value="3" ${param.child == 1 ? 'selected' : ''}>3명</option>
-							<option value="4" ${param.child == 1 ? 'selected' : ''}>4명</option>
-						</select>
+				</div>
+				<div class="row mt-3 mb-5">
+					<div class="row ms-3 mb-3">
+						<p><strong>인원</strong></p>
 					</div>
-					<div class="m-3">
+					<div class="row ms-5 gap-3">
+						<div class="row">
+							<div class="col-3">
+								<span>어른</span>
+							</div>
+							<div class="col-9">
+								<input type="hidden" name="adult" value="0"/>
+								<i class="bi bi-arrow-left-circle" data-input-name="adult"></i>
+								<span id="number-of-adult">0</span> 명
+								<i class="bi bi-arrow-right-circle" data-input-name="adult"></i>
+								<p style="font-size: 10px;" id="total-adult-price" data-adult-price="10000">0 원</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3">
+								<span>아이</span>
+							</div>
+							<div class="col-9">
+								<input type="hidden" name="child" value="0"/>
+								<i class="bi bi-arrow-left-circle" data-input-name="child"></i>
+								<span id="number-of-child">0</span> 명
+								<i class="bi bi-arrow-right-circle" data-input-name="child"></i>
+								<p style="font-size: 10px;" id="total-child-price" data-child-price="5000">0 원</p>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="people" value="0"/>
+				</div>
+				<div class="row m-3 mt-10">
+					<div class="col-5">
 						<p><strong>총 금액: <span id="totalPrice">0</span>원</strong></p>
+						<input type="hidden" name="deposit" value="0">
 					</div>
-					<div class="m-3 d-flex justify-content-end">
+					<div class="col-7 d-flex justify-content-end">
 						<a href="checkout.nadri?no=${restaurant.no }" id="btn-book" class="btn btn-primary">book now</a>
-					</div>
+					</div>				
 				</div>
 			</form>
 		</div>
 	</div>
 	
-	<div class="row mb-3">
+	<div class="row m-3">
 		<div class="col-12 border">
 			<h1 class="p-3"><strong>${restaurant.name }</strong> ★ ${starPiont }/5.0점</h1>			
 			<p>${restaurant.content }</p>
@@ -176,7 +191,7 @@
 			</table>
 		</div>
 	</div>
-	<div class="row mb-3">
+	<div class="row m-3">
 		<div class="col-12">
 			<h3>위치</h3>
 		</div>
@@ -217,7 +232,7 @@
 
 </div>
 
-<div class="container" id="review">
+<div class="container m-3" id="review">
 
 	<!-- 
 		결제 버튼 누르면 로그인, 날짜, 시간, 어른 1명은 무조건 선택되는지 확인하고 경고창 띄우기
@@ -230,7 +245,7 @@
 		페이지 변경이 없으니 ajax로 해야함
 		0개 count도 ajax로 하면 됨!
 	-->
-	<div class="row mb-5" style="border-bottom: 1px solid;">
+	<div class="row m-3 mb-5" style="border-bottom: 1px solid;">
 		<div class="col p-3">
 			<h3>리뷰</h3>
 		</div>
@@ -556,11 +571,104 @@
 	     dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
 	     dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
 	     showMonthAfterYear: true,
-	     yearSuffix: '년'
-	
+	     yearSuffix: '년',
+	     
+	     onSelect: function(date, inst) {
+	    	 alert(date+"를 선택했습니다.");
+	    	 
+	    	 $.ajax({
+	    		 type: "get",
+	    		 url : "/rest/restaurant/book/bookable.nadri",
+	    		 data: {no: "${restaurant.no}", date: date},
+	    		 dataType: 'json',
+	    		 success: function(bookable){			
+	    			 console.log(bookable)
+		    		//htmlContent = '';
+		  	 }
+	     	})
+	     	
+	     }
+	   
 	   });
 		$('#datepicker2').datepicker('setDate', 'today');
 	})
+	
+	
+	
+	
+	// 가격 구하기
+	
+	$(".bi-arrow-right-circle").click(function(){
+		// adult/child 인지 조회하기
+		var peopleType = $(this).attr('data-input-name');
+		var number = parseInt($(":input[name="+peopleType+"]").val());
+		number++;
+		
+		
+		$(":input[name="+peopleType+"]").val(number);
+		$(this).prev().text(number);
+		
+		var price = parseInt($("#total-" + peopleType + "-price").attr("data-" + peopleType + "-price"));
+		var totalPrice = number*price;
+		$("#total-" + peopleType + "-price").text(totalPrice);
+		
+		
+		var adult = parseInt($("#number-of-adult").text());
+		var child = parseInt($("#number-of-child").text());
+		var totalPeople = adult+child;
+		
+		/*
+		if (totalPeople >= 10) {
+			alert("10명 이상은 가게로 직접 문의하세요.")
+			var peopleType = $(this).attr('data-input-name');
+			var number = parseInt($(":input[name="+peopleType+"]").val());
+			number--;
+		}
+		*/
+		
+		$(":input[name=people]").val(totalPeople);
+		
+		var adultTotalPrice = parseInt($("#total-adult-price").text());
+		var childTotalPrice = parseInt($("#total-child-price").text());
+		var adultChildTotalPrice = adultTotalPrice + childTotalPrice;
+		
+		$("#totalPrice").text(adultChildTotalPrice);
+		$(":input[name=deposit]").val(adultChildTotalPrice)
+	})
+	
+	
+	$(".bi-arrow-left-circle").click(function(){
+		
+		var peopleType = $(this).attr('data-input-name');
+		var number = parseInt($(":input[name="+peopleType+"]").val());
+		number--;
+		if(number<0){
+			return false;
+		}
+		
+		$(":input[name="+peopleType+"]").val(number);
+		$(this).next().text(number);
+		
+		var price = parseInt($("#total-" + peopleType + "-price").attr("data-" + peopleType + "-price"));
+		var totalPrice = number*price;
+		$("#total-" + peopleType + "-price").text(totalPrice);
+		
+		
+		var adult = parseInt($("#number-of-adult").text());
+		var child = parseInt($("#number-of-child").text());
+		var totalPeople = adult+child;
+		$(":input[name=people]").val(totalPeople);
+		
+		var adultTotalPrice = parseInt($("#total-adult-price").text());
+		var childTotalPrice = parseInt($("#total-child-price").text());
+		var adultChildTotalPrice = adultTotalPrice + childTotalPrice;
+		
+		$("#totalPrice").text(adultChildTotalPrice);
+		$(":input[name=deposit]").val(adultChildTotalPrice)
+		
+	})
+	
+
 
 </script>
 <!--  -->
