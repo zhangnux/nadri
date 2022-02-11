@@ -19,12 +19,13 @@
 <meta charset="UTF-8">
 <title>나드리::즐길거리</title>
 </head>
-<body onload="setTimeout('home()', 2000)">
+<%-- <body onload="setTimeout('home()', 2000)"> --%>
+<body>
 <%@ include file="../common/navbar.jsp"%>
 <div class="container">
 	<div class="row border rounded mt-5 p-3 border-5">
 		<div class="row border-bottom text-center border-2">
-			<h1><strong>결제가 완료되었습니다.</strong></h1>
+			<h1><strong>결제 대기중입니다.</strong></h1>
 		</div>
 		<div class="col text-center mt-3"><h4>상세 내역은 마이페이지를 확인해주세요</h4></div>
 	</div>

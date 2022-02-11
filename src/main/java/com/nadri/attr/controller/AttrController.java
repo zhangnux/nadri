@@ -24,7 +24,12 @@ import com.nadri.attr.vo.AttrReviewPic;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.ReviewForm;
 import com.nadri.attr.vo.Search;
+import com.nadri.coupon.service.UserCouponService;
 import com.nadri.coupon.vo.Coupon;
+import com.nadri.coupon.vo.UserCoupon;
+import com.nadri.user.annotation.LoginedUser;
+import com.nadri.user.util.SessionUtils;
+import com.nadri.user.vo.User;
 
 @Controller
 @RequestMapping("/attr")
@@ -32,6 +37,7 @@ public class AttrController {
 	
 	@Autowired AttrService attrService;
 	@Autowired ReviewService reviewService;
+	@Autowired UserCouponService userCouponService;
 
 	@GetMapping("/main.nadri")
 	public String home(Model model) {
@@ -71,10 +77,14 @@ public class AttrController {
 		String place = detail.getPlace();
 		List<Attraction> random = attrService.getRandom(no, place);
 		model.addAttribute("random", random);
-		
-		List<Coupon> coupon = attrService.getCoupon();
-		model.addAttribute("coupon",coupon);
-		
+
+		User loginedUser = (User) SessionUtils.getAttribute("LOGIN_USER");
+		if(loginedUser != null) {
+			int userNo = loginedUser.getNo();
+			List<UserCoupon> couponList = attrService.getCoupon(userNo);
+			model.addAttribute("couponList", couponList);			
+		}
+	
 		return "attr/attrdetail";
 	}
 	

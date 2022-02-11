@@ -3,7 +3,7 @@
 <mapper namespace="mybatis.mappers.AttrOrderDao">
 	<resultMap id="orderResultMap" type="com.nadri.attr.vo.AttrOrderForm">
 		<id column="order_no" property="orderNo" />
-		<result column="order_date" property="date" />
+		<result column="order_date" property="attDate" />
 		<result column="order_price" property="price" />
 		<result column="order_lastprice" property="lastPrice"/>
 		<result column="order_deposit" property="deposit" />
@@ -35,7 +35,6 @@
 		insert into att_order(order_no, order_price, user_no)
 		values (att_order_no_seq.nextval, #{price}, #{userNo});
 	</insert>
-	
 	
 		
 </mapper>

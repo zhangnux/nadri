@@ -38,16 +38,51 @@
 		<result column="coupon_issue_end" property="issueEndDate"/>
 	</resultMap>
 	
+	<!-- 쿠폰 발급 -->
 	<insert id="getCoupon">
 		insert into coupons_user
-		values(n, #{couponNo}, #{userNo})
+		values('n', #{couponNo}, #{userNo})
 	</insert>
+	<!-- 발급받은 쿠폰 수량 감소 -->
+	<update id="reduceQuantity" parameterType="int">
+		update coupons
+		set coupon_quantity = coupon_quantity-1
+		where coupon_no = #{couponNo}
+	</update>
 	
+	<!-- 보유한 쿠폰리스트 조회 -->
 	<select id="couponList" parameterType="int" resultType="com.nadri.coupon.vo.UserCoupon">
-		select c.coupon_name as name, 
+		select c.coupon_name as couponName, 
 				c.coupon_category as category, 
 				c.coupon_discountrate as discountRate, 
-				c.coupon_enddate as endDate
+				c.coupon_enddate as endDate,
+				c.coupon_no as couponNo
+		from coupons c, coupons_user u
+		where c.coupon_no = u.coupon_no
+		and coupon_enddate > sysdate
+		and coupon_deleted='n'
+		and coupon_used='n'
+		and user_no = #{userNo}
+	</select>
+	<!-- 보유쿠폰리스트 조회-즐길거리 -->
+	<select id="attrCouponList" parameterType="int" resultType="com.nadri.coupon.vo.UserCoupon">
+		select c.coupon_name as couponName, 
+				c.coupon_category as category, 
+				c.coupon_discountrate as discountRate, 
+				c.coupon_enddate as endDate,
+				c.coupon_no as couponNo
+		from coupons c, coupons_user u
+		where c.coupon_no = u.coupon_no
+		and coupon_enddate > sysdate
+		and coupon_category='즐길거리'
+		and coupon_deleted='n'
+		and coupon_used='n'
+		and user_no = #{userNo}
+	</select>	
+	
+	<!-- 보유쿠폰갯수조회 -->
+	<select id="couponCount" parameterType="int" resultType="int">
+		select count(c.coupon_no)
 		from coupons c, coupons_user u
 		where c.coupon_no = u.coupon_no
 		and coupon_enddate > sysdate
@@ -56,14 +91,5 @@
 		and user_no = #{userNo}
 	</select>
 	
-	<select id="couponCount" parameterType="int" resultType="int">
-		select count(c.coupon_no)
-		from coupons c, coupons_user u
-		where c.coupon_no = u.coupon_no
-		and coupon_enddate > sysdate
-		and coupon_deleted='n'
-		and coupon_used='n'
-		and user_no = #{value}
-	</select>
 
 </mapper>

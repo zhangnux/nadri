@@ -76,10 +76,9 @@
 				<input type="hidden" name="price" value="0"><span id="total">0</span>원　　
 			</strong>
 				<c:choose>
-					<c:when test="${empty LOGIN_USER }"></c:when>
-					<c:otherwise>
+					<c:when test="${!empty LOGIN_USER }">
 						<button class="btn btn-primary btn-lg order">결제하기</button>
-					</c:otherwise>
+					</c:when>
 				</c:choose>
 			</div>		
 		</div>
@@ -89,34 +88,56 @@
 	</form>
 
 	<!-- 쿠폰 -->
-	<div class="coupon border rounded p-3">
-	<div class="row mb-2"><h4><strong>적용가능한 쿠폰</strong></h4></div>
-	<c:forEach var="c" items="${coupon }">
-		<div class="coupon-print border rounded p-3 mb-3">
-			<div class="row">
-				<div class="col-12">
-					<strong>${c.name }</strong>
+	<div class="coupon border rounded p-3" style="background-color:#f5f6f7;">
+	<c:choose>
+		<c:when test="${not empty couponList }">
+		<div class="row mb-2"><h4><strong>발급 가능한 쿠폰</strong></h4></div>
+			<c:forEach var="c" items="${couponList }">
+				<div class="coupon-print border rounded p-3 mb-3" style="background-color:#ffffff;">
+					<div class="row">
+						<div class="col-12">
+							<strong>${c.couponName }</strong>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+						할인율: ${c.discountRate }%
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							사용기간 ~<fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd"/>
+						</div>
+						<div class="col-6 text-end">
+							<a class="btn btn-outline-warning" id="${c.couponNo }">발급받기</a>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-				할인율: ${c.discountRate }%
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-6">
-					사용기간 ~<fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd"/>
-				</div>
-				<div class="col-6 text-end">
-					<a class="btn btn-outline-warning ${c.no }">발급받기</a>
-				</div>
-			</div>
-		</div>
-	</c:forEach>
+			</c:forEach>
+		</c:when>
+		<c:otherwise>
+			<div class="text-center">로그인 후 할인 혜택을 확인하세요!</div>
+		</c:otherwise>
+	</c:choose>
 	</div>
 	<script>
 	$(function(){	
-			
+		
+		
+		$("a.btn-outline-warning").click(function(){
+			var couponNo=$(this).attr("id")
+			var userNo = ${LOGIN_USER.no};
+			$.ajax({
+				type:"get",
+				url:"addCoupon",
+				data:{userno:userNo, couponno:couponNo},
+				success: function(){
+					alert("쿠폰 발급이 완료되었습니다.")
+					location.reload();
+				}
+			})
+		})
+		
 		/* 달력 설정 */
 		var today = new Date();
 		var dd = today.getDate();
@@ -186,10 +207,6 @@
 			$("#quantity-" + optNo).val(num);
 
 		});
-		
-		$("a.btn-outline-warning").click(function(){
-			alert("하이")
-		})
 		
 	})
 	</script>

@@ -21,7 +21,7 @@ public class CouponService {
 	
 	public List<Coupon> getInvalidCouponList(int begin, int end){ return couponDao.getInvalidCoupons(begin, end); }
 	
-	public int getValidTotalRows() { return couponDao.validCouponCount();}
+	public int getValidTotalRows(String category) { return couponDao.validCouponCount(category);}
 	public int getInValidTotalRows() { return couponDao.invalidCouponCount();}
 	
 	public void addNewCoupon(Coupon coupon) {	

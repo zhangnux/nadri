@@ -84,7 +84,7 @@
 						<div class="col-sm-6" id="text">
 								<a href="#" class="fw-bold text-decoration-none">${LOGIN_USER.point } 원 &nbsp; <i class="bi bi-server"></i></a><br>
 								<!-- 아래쪽에 쿠폰 연결 ....... -->
-								<a href="#" class="fw-bold text-decoration-none">0 개 &nbsp; <i class="bi bi-gift-fill"></i></a>
+								<a href="coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
 						</div>
 					</div>
 				</div>
@@ -156,6 +156,16 @@
 function delete_user(){
 	location.href="delete.nadri";
 }
+
+$(function(){
+	$.ajax({
+		type:"get",
+		url: "/coupon/coucount",
+		success:function(count){
+			$("#couponCount").text(count);
+		}
+	})
+})
 </script>
 <%@ include file="../common/footer.jsp"%>
 </body>

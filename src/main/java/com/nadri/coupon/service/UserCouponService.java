@@ -20,17 +20,24 @@ public class UserCouponService {
 	public void insertCouponByUserNo(int couponNo, int userNo) {
 		userCouponDao.getCoupon(couponNo, userNo);
 	}
+	/* 발급받은 쿠폰 갯수 감수 */
+	public void reduceCouponQuantity(int couponNo) {
+		userCouponDao.reduceQuantity(couponNo);
+	}
 	
 	/* 유저 보유 쿠폰 목록 */
 	public List<UserCoupon> getCouponList(int userNo){
 		return userCouponDao.couponList(userNo);
 	}
 	
+	/* 유저 보유 쿠폰 목록-즐길거리 */
+	public List<UserCoupon> getAttrCouponList(int userNo){
+		return userCouponDao.attrCouponList(userNo);
+	}
+	
 	/* 유저 보유 쿠폰 갯수 */
 	public int getCouponCount(int userNo) {
 		return userCouponDao.couponCount(userNo);
 	}
-	
-	public List<UserCoupon> getCou(){ return userCouponDao.cou(); }
 	
 }

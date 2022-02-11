@@ -22,7 +22,7 @@ public interface CouponDao {
 	//만료 쿠폰 조회
 	List<Coupon> getInvalidCoupons(@Param("beginIndex") int beginIndex, @Param("endIndex") int endIndex);
 	// 유효쿠폰 데이터 개수 반환
-	int validCouponCount();
+	int validCouponCount(String category);
 	// 만료쿠폰 데이터 개수 반환
 	int invalidCouponCount();
 	// 메뉴 별 발급 쿠폰 검색 - valid

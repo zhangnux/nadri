@@ -35,6 +35,20 @@ public class AttrOrderController {
 	@Autowired
 	AttrOrderService attrOrderService;
 	
+	/**
+	 * 오더폼
+	 * @param attDate
+	 * @param attName
+	 * @param attNo
+	 * @param attPic
+	 * @param optNo
+	 * @param optionName
+	 * @param optionPrice
+	 * @param productQuantity
+	 * @param price
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/orderform.nadri")
 	public String orderform(
 			@RequestParam(name="attdate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date attDate,
@@ -77,40 +91,6 @@ public class AttrOrderController {
 		orderInfo.setAttDate(attDate);
 		
 		model.addAttribute("orderInfo",orderInfo);
-			
-		/*
-		List<AttrOrderForm> orderInfo = new ArrayList<>();
-		if(optNo!=null) {
-			for(int i=0; i<optNo.size();i++) {
-				int quantity = productQuantity.get(i);
-				int optionNo = optNo.get(i);
-				String optName = optionName.get(i);
-				
-				if(quantity!=0) {
-					AttrOrderForm orderForm = new AttrOrderForm();
-					orderForm.setAttNo(attNo);
-					orderForm.setPrice(price);
-					orderForm.setAttDate(attDate);
-					orderForm.setAttName(attName);
-					orderForm.setAttPic(attPic);
-					orderForm.setProductQuantity(quantity);
-					orderForm.setOptionNo(optionNo);
-					orderForm.setOptionName(optName);
-					orderInfo.add(orderForm);
-				}
-			}
-		} else {
-			int quantity = productQuantity.get(0);
-			AttrOrderForm orderForm = new AttrOrderForm();
-			orderForm.setProductQuantity(quantity);
-			orderForm.setAttNo(attNo);
-			orderForm.setPrice(price);
-			orderForm.setAttPic(attPic);
-			orderForm.setAttName(attName);
-			orderForm.setAttDate(attDate);
-			orderInfo.add(orderForm);
-		}
-		*/
 		
 		return "attr/orderform";
 	}
@@ -123,6 +103,11 @@ public class AttrOrderController {
 	@GetMapping("/success.nadri")
 	public String success() {
 		return "attr/orderSuccess";
+	}
+	
+	@PostMapping("/waiting.nadri")
+	public String waiting() {
+		return "attr/orderWaiting";
 	}
 	
 	@RequestMapping("/kakao")

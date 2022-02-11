@@ -70,6 +70,7 @@
               ) r, coupons c
 		where r.coupon_no = c.coupon_no
 		and rn between #{beginIndex} and #{endIndex}
+		order by coupon_issue_end
 	</select>	
 	
 	<!-- 만료된 쿠폰조회 -->
@@ -89,12 +90,13 @@
 	</select>
 	
 	<!-- 유효쿠폰 총 갯수 -->
-	<select id="validCouponCount" resultType="int">
+	<select id="validCouponCount" parameterType="String" resultType="int">
 		select count(coupon_no)
 		from coupons
 		where coupon_enddate > sysdate
 		and coupon_quantity > 0
 		and coupon_deleted = 'n'
+        and coupon_category like '%'||#{category}||'%'
 		order by coupon_no desc
 	</select>
 	
@@ -120,7 +122,7 @@
               ) r, coupons c
 		where r.coupon_no = c.coupon_no
 		and rn between #{beginIndex} and #{endIndex}
-		order by rn 
+		order by coupon_issue_end
 	</select>
 
 	<!-- 쿠폰 삭제(deleted를 y로) -->
