@@ -10,6 +10,7 @@ import com.nadri.restaurant.dto.BookableDto;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
 import com.nadri.restaurant.vo.Reservation;
+import com.nadri.restaurant.vo.ReservationCurrentState;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.vo.Timetable;
@@ -42,9 +43,12 @@ public interface RestaurantMapper {
 	// 레스토랑 예약(checkout.nadri)
 	
 	List<Timetable> getAllTimetable();
-	List<BookableDto> getBookableTime(int restaurantNo, Date date);
+	List<BookableDto> getBookableTime(int restaurantNo, String date);
+	Timetable getTime(int no);
 	
-	void insertReservation();
+	void insertReservation(Reservation reservation);
+	void insertCurrentState(ReservationCurrentState currentState);
+	
 	
 	
 	// 리뷰기능

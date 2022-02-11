@@ -29,7 +29,7 @@ public class Reservation {
 	private Date reservedDate;	// 예약일
 	private int adult;	// 성인예약명수
 	private int child;	// 아이 예약 명수
-	private int allPeople; // 성인 + 아이
+	private int people; // 성인 + 아이
 	private int usedPoint;	// 사용포인트
 	private int reservedPoint;	//적립포인트
 	
