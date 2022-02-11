@@ -136,16 +136,15 @@
 	
 	<!-- 인기 노선 BEST4 -->
 	<select id="getFavoriteTrain" resultType="com.nadri.manager.dto.FavoriteTrainDto">
-		select a.rn as rowNum, 
-			t1.station_name as departureStation, 
-			t2.station_name as arrivalStation, 
-			a.route_no as routNo, 
+		select a.rn as rowNo, 
+			t1.station_name || '  ▶  ' || t2.station_name as destination, 
 			a.cnt as count, 
 			r.route_image as image
 		from train_route r, train_station t1, train_station t2,
 		        (select row_number() over (order by count(*) desc) rn, s.route_no, count(*) cnt
 		        from train_ticket t, train_schedule s
 		        where t.schedule_no = s.schedule_no
+		        and t.is_canceled = 'N'
 		        group by s.route_no
 		        order by cnt desc) a
 		where r.route_no = a.route_no
