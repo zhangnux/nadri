@@ -9,7 +9,7 @@
 		<result column="coupon_startdate" property="startDate"/>
 		<result column="coupon_enddate" property="endDate"/>
 		<result column="coupon_category" property="category"/>
-		<result column="coupon_name" property="name"/>
+		<result column="coupon_name" property="couponName"/>
 		<result column="coupon_issue_date" property="issueDate"/>
 		<result column="coupon_deleted" property="deleted"/>
 		<result column="coupon_issue_end" property="issueEndDate"/>
@@ -24,14 +24,14 @@
 		insert into coupons (coupon_no, coupon_quantity,coupon_discountrate, coupon_startdate,
 						coupon_enddate, coupon_category, coupon_name, coupon_issue_date, coupon_issue_end)
 		values
-		(#{no},#{quantity},#{discountRate},#{startDate},#{endDate},#{category},#{name},#{issueDate},#{issueEndDate})
+		(#{no},#{quantity},#{discountRate},#{startDate},#{endDate},#{category},#{couponName},#{issueDate},#{issueEndDate})
 	</insert>
 	
 	<!-- 쿠폰 정보 수정 -->
 	<update id="updateCoupon" parameterType="com.nadri.coupon.vo.Coupon">
 		update coupons
 		set
-			coupon_name = #{name},
+			coupon_name = #{couponName},
 			coupon_quantity = #{quantity},
 			coupon_discountrate = #{discountRate},
 			coupon_issue_end = #{issueEndDate},	
@@ -50,7 +50,7 @@
 			coupon_startdate as startdate,
 			coupon_enddate as enddate,
 			coupon_category as category,
-			coupon_name as name,
+			coupon_name as couponName,
 			coupon_issue_date as issuedate,
 			coupon_deleted as deleted,
 			coupon_issue_end as issueend
@@ -58,53 +58,76 @@
 		where coupon_no = #{no}
 	</select>
 	
-	<!-- 사용가능한 쿠폰조회 -->
+	<!-- 사용가능한 쿠폰 조회 -->
 	<select id="getAllCoupons" resultMap="CouponResultMap">
-		select *
-		from coupons
-		where <![CDATA[coupon_enddate > sysdate]]>
-        and coupon_quantity > 0
-        and coupon_deleted = 'n'
-		order by coupon_no desc
-	</select>
+		select c.coupon_no, c.coupon_quantity, c.coupon_discountrate, c.coupon_startdate, c.coupon_enddate,
+       		   c.coupon_category, c.coupon_name, c.coupon_issue_date, c.coupon_deleted, c.coupon_issue_end
+		from (select row_number() over(order by coupon_issue_end) rn, coupon_no
+		      from coupons
+              where coupon_enddate > sysdate
+                and coupon_quantity > 0
+                and coupon_deleted = 'n'
+              ) r, coupons c
+		where r.coupon_no = c.coupon_no
+		and rn between #{beginIndex} and #{endIndex}
+	</select>	
 	
 	<!-- 만료된 쿠폰조회 -->
 	<select id="getInvalidCoupons" resultMap="CouponResultMap">
-		select *
+		select c.coupon_no, c.coupon_quantity, c.coupon_discountrate, c.coupon_startdate, c.coupon_enddate,
+                c.coupon_category, c.coupon_name, c.coupon_issue_date, c.coupon_deleted, c.coupon_issue_end
+		from (
+            select row_number() over(order by coupon_no desc) rn, coupon_no
+            from coupons
+            where <![CDATA[coupon_enddate < sysdate]]>
+            or coupon_quantity = 0
+            or coupon_deleted = 'y'
+            )r, coupons c
+		where r.coupon_no = c.coupon_no
+		and rn between #{beginIndex} and #{endIndex}           
+		order by coupon_no desc
+	</select>
+	
+	<!-- 유효쿠폰 총 갯수 -->
+	<select id="validCouponCount" resultType="int">
+		select count(coupon_no)
+		from coupons
+		where coupon_enddate > sysdate
+		and coupon_quantity > 0
+		and coupon_deleted = 'n'
+		order by coupon_no desc
+	</select>
+	
+	<!-- 만료쿠폰 총 갯수 -->
+	<select id="invalidCouponCount" resultType="int">
+		select count(coupon_no)
 		from coupons
 		where <![CDATA[coupon_enddate < sysdate]]>
         or coupon_quantity = 0
         or coupon_deleted = 'y'
-		order by coupon_no desc
 	</select>
 	
-	<!-- 쿠폰 총 갯수 -->
-	<select id="getCouponTotalRows" parameterType="com.nadri.coupon.util.Criteria" resultType="int">
-		select count(*)
-		from coupons
-	</select>
-	
-	<!-- 메뉴별 쿠폰 찾기 -->
-	<select id="searchCoupons" parameterType="com.nadri.coupon.util.Criteria" resultMap="CouponResultMap">
-		select *
-		from (
-				select c.*, row_number() over(order by coupon_no desc)
-				from coupons c
-				<where>
-					<if test="menu!=null and value!=null">
-						coupon_category like '%' || #{value} || '%'
-					</if>
-				</where>
-			  )
+	<!-- 메뉴별 쿠폰 찾기 - valid -->
+	<select id="searchValidCoupons" resultMap="CouponResultMap">
+ 		select c.coupon_no, c.coupon_quantity, c.coupon_discountrate, c.coupon_startdate, c.coupon_enddate,
+       		   c.coupon_category, c.coupon_name, c.coupon_issue_date, c.coupon_deleted, c.coupon_issue_end
+		from (select row_number() over(order by coupon_issue_end) rn, coupon_no
+		      from coupons
+              where coupon_enddate > sysdate
+                and coupon_quantity > 0
+                and coupon_deleted = 'n'
+                and coupon_category like '%' || #{category} || '%'
+              ) r, coupons c
+		where r.coupon_no = c.coupon_no
+		and rn between #{beginIndex} and #{endIndex}
+		order by rn 
 	</select>
 
 	<!-- 쿠폰 삭제(deleted를 y로) -->
 	<update id="deleteCoupon" parameterType="int">
 		update coupons
-		set
-			coupon_deleted = 'y'
-		where
-			coupon_no = #{no}
+		set coupon_deleted = 'y'
+		where coupon_no = #{no}
 	</update>
 	
 </mapper>

@@ -28,6 +28,7 @@
 									</a>
 									<input type="hidden" name="optionNo" value="${opt.optNo }" />
 									<input type="hidden" name="optionName" value="${opt.option}" />
+									<input type="hidden" name="optionPrice" value="${opt.price}" />
 								</div>
 								<div class="col-4">
 									<h5>

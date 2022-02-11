@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nadri.coupon.dao.UserCouponDao">
+
+	<resultMap id="attrCouponResultMap" type="com.nadri.coupon.vo.UserCoupon">
+		<result column="coupon_used" property="used" />
+		<result column="coupon_no" property="couponNo" />
+		<result column="user_no" property="userNo" />
+		<collection property="user" resultMap="UserResultMap" />
+		<collection property="coupon" resultMap="CouponResultMap" />
+	</resultMap>
+	<resultMap id="UserResultMap" type="com.nadri.user.vo.User">
+		<id column="user_no" property="no"/>
+		<result column="user_id" property="id"/>
+		<result column="user_password" property="password"/>
+		<result column="user_birth" property="birth"/>
+		<result column="user_gender" property="gender"/>
+		<result column="user_tel" property="tel"/>
+		<result column="user_address" property="address"/>
+		<result column="user_point" property="point"/>
+		<result column="user_delete_check" property="deleteCheck"/>
+		<result column="user_email" property="email"/>
+		<result column="user_type" property="type"/>
+		<result column="user_created_date" property="createdDate"/>
+		<result column="user_sms_check" property="smsCheck"/>
+		<result column="user_email_check" property="emailCheck"/>
+	</resultMap>
+	<resultMap id="CouponResultMap" type="com.nadri.coupon.vo.Coupon">
+		<id column="coupon_no" property="no"/>
+		<result column="coupon_quantity" property="quantity"/>
+		<result column="coupon_discountrate" property="discountRate"/>
+		<result column="coupon_startdate" property="startDate"/>
+		<result column="coupon_enddate" property="endDate"/>
+		<result column="coupon_category" property="category"/>
+		<result column="coupon_name" property="couponName"/>
+		<result column="coupon_issue_date" property="issueDate"/>
+		<result column="coupon_deleted" property="deleted"/>
+		<result column="coupon_issue_end" property="issueEndDate"/>
+	</resultMap>
+	
+	<insert id="getCoupon">
+		insert into coupons_user
+		values(n, #{couponNo}, #{userNo})
+	</insert>
+	
+	<select id="couponList" parameterType="int" resultType="com.nadri.coupon.vo.UserCoupon">
+		select c.coupon_name as name, 
+				c.coupon_category as category, 
+				c.coupon_discountrate as discountRate, 
+				c.coupon_enddate as endDate
+		from coupons c, coupons_user u
+		where c.coupon_no = u.coupon_no
+		and coupon_enddate > sysdate
+		and coupon_deleted='n'
+		and coupon_used='n'
+		and user_no = #{userNo}
+	</select>
+	
+	<select id="couponCount" parameterType="int" resultType="int">
+		select count(c.coupon_no)
+		from coupons c, coupons_user u
+		where c.coupon_no = u.coupon_no
+		and coupon_enddate > sysdate
+		and coupon_deleted='n'
+		and coupon_used='n'
+		and user_no = #{value}
+	</select>
+
+</mapper>

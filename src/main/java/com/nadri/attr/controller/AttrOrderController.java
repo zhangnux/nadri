@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.attr.service.AttrOrderService;
 import com.nadri.attr.vo.AttrOrderForm;
+import com.nadri.user.util.SessionUtils;
+import com.nadri.user.vo.User;
 
 @Controller
 @RequestMapping("/attr")
@@ -38,12 +40,44 @@ public class AttrOrderController {
 			@RequestParam(name="attName") String attName,
 			@RequestParam(name="attNo")int attNo,
 			@RequestParam(name="attPic")String attPic,
-			@RequestParam(name="optNo", required=false)List<Integer> optNo,
+			@RequestParam(name="optionNo", required=false)List<Integer> optNo,
 			@RequestParam(name="optionName", required=false)List<String> optionName,
+			@RequestParam(name="optionPrice", required=false)List<Integer> optionPrice,
 			@RequestParam(name="productQuantity")List<Integer> productQuantity,
 			@RequestParam(name="price")int price,
 			Model model) {
+
+		List<AttrOrderForm> optionInfo = new ArrayList<>();
+		if(optNo!=null) {
+			for(int i=0; i<optNo.size();i++) {
+				int quantity = productQuantity.get(i);
+				int optionNo = optNo.get(i);
+				String optName = optionName.get(i);
+				int optPrice = optionPrice.get(i);
+				
+				if(quantity!=0) {
+					AttrOrderForm orderForm = new AttrOrderForm();
+					orderForm.setProductQuantity(quantity);
+					orderForm.setOptionNo(optionNo);
+					orderForm.setOptionName(optName);
+					orderForm.setOptionPrice(optPrice);
+					optionInfo.add(orderForm);
+				}
+			}
+			model.addAttribute("optionInfo",optionInfo);
+		}
 		
+		AttrOrderForm orderInfo = new AttrOrderForm();
+		orderInfo.setProductQuantity(productQuantity.get(0));
+		orderInfo.setAttNo(attNo);
+		orderInfo.setPrice(price);
+		orderInfo.setAttPic(attPic);
+		orderInfo.setAttName(attName);
+		orderInfo.setAttDate(attDate);
+		
+		model.addAttribute("orderInfo",orderInfo);
+			
+		/*
 		List<AttrOrderForm> orderInfo = new ArrayList<>();
 		if(optNo!=null) {
 			for(int i=0; i<optNo.size();i++) {
@@ -75,10 +109,19 @@ public class AttrOrderController {
 			orderForm.setAttDate(attDate);
 			orderInfo.add(orderForm);
 		}
-		
-		model.addAttribute("orderInfo",orderInfo);
+		*/
 		
 		return "attr/orderform";
+	}
+	
+	@GetMapping("/deposit.nadri")
+	public String desposit() {
+		return "attr/orderWaiting";
+	}
+	
+	@GetMapping("/success.nadri")
+	public String success() {
+		return "attr/orderSuccess";
 	}
 	
 	@RequestMapping("/kakao")

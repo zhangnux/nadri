@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="UTF-8">
 <title>나드리::즐길거리</title>
 <style>
@@ -42,10 +43,7 @@
 	<div class="row">
 <%@ include file="common/sidebar.jsp" %>	
 		<div class="col-9 mt-5 tb-5" id="listcontent">
-			<div class="text-end mb-3">
-			<a>가격 높은순</a>&nbsp;|&nbsp;<a>평점 높은순</a>
-			</div>
-           
+       
 	       <c:choose>
 			<c:when test="${empty category }">
 					<div class="col col-12 text-center fw-bold"><h1>일치하는 상품이 없습니다.</h1></div>

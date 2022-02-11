@@ -17,13 +17,12 @@ public class CouponService {
 	@Autowired
 	private CouponDao couponDao;
 	
-	public List<Coupon> getAllCouponList(){ return couponDao.getAllCoupons(); }
+	public List<Coupon> getAllCouponList(int begin, int end){ return couponDao.getAllCoupons(begin, end); }
 	
-	public List<Coupon> getInvalidCouponList(){ return couponDao.getInvalidCoupons(); }
+	public List<Coupon> getInvalidCouponList(int begin, int end){ return couponDao.getInvalidCoupons(begin, end); }
 	
-	public int getTotalRows(Criteria criteria) {
-		return couponDao.getCouponTotalRows(criteria);
-	}
+	public int getValidTotalRows() { return couponDao.validCouponCount();}
+	public int getInValidTotalRows() { return couponDao.invalidCouponCount();}
 	
 	public void addNewCoupon(Coupon coupon) {	
 		couponDao.insertCoupon(coupon);	
@@ -38,8 +37,8 @@ public class CouponService {
 		return coupon;	
 	}
 	
-	public List<Coupon> searchCoupons(Criteria criteria){
-		return couponDao.searchCoupons(criteria);
+	public List<Coupon> searchCoupons(int begin, int end, String category){
+		return couponDao.searchValidCoupons(begin, end, category);
 	}
 	
 	public void removeCoupon(int no) { couponDao.deleteCoupon(no); }
