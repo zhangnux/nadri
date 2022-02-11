@@ -38,7 +38,7 @@
 	<div class="row mb-3 p-3 border">
 		<div class="col">
 			<form action="">
-				<div class="row p-3">
+				<div class="row m-3 p-3 border">
 					<div class="col p-3">
 						<h4>1. 예약 확인</h4>
 					</div>
@@ -53,32 +53,16 @@
 									<td>
 										<div class="row mb-3">
 											<div class="col-3">
-												<label class="form-labeL">날짜</label>
-												<input type="date" value="" class="form-control" name="reservedDate" />
+												<p>날짜: 2022/2/22</p>
 											</div>
 											<div class="col-3">
-												<label class="form-label">시간</label>
-												<select class="form-select">
-													<option value=""></option>
-												</select>
+												<p>예약 시간: 13:00</p>
 											</div>
 											<div class="col-3">
-												<label class="form-label">어른</label>
-												<select class="form-select">
-													<option value="1">1명</option>
-													<option value="2">2명</option>
-													<option value="3">3명</option>
-													<option value="4">4명</option>
-												</select>
+												<p>어른: 3명</p>
 											</div>
 											<div class="col-3">
-												<label class="form-label">아이</label>
-												<select class="form-select">
-													<option value="1">1명</option>
-													<option value="2">2명</option>
-													<option value="3">3명</option>
-													<option value="4">4명</option>
-												</select>
+												<p>아이: 6명</p>
 											</div>
 										</div>
 									</td>
@@ -87,7 +71,7 @@
 						</table>
 					</div>
 				</div>
-				<div class="row p-3">
+				<div class="row m-3 p-3 border">
 					<div class="col p-3" id="reservation-info">
 						<h4>2. 예약자 정보 입력</h4>
 					</div>
@@ -102,7 +86,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row border p-3">
+				<div class="row border p-3  m-3">
 					<div class="col p-3" id="coupon-point">
 						<div>
 							<h5>보유 쿠폰</h5>
@@ -124,9 +108,11 @@
 						<h4>= 총 결제 금액: <strong>15000</strong>원</h4>
 					</div>
 				</div>
-				<div class="p-3">
-					<a href="#" class="btn btn-danger g-3">취소</a>
-					<a href="#" class="btn btn-primary g-3">결제</a>
+				<div class="row p-3 m-3">
+					<div class="col d-flex justify-content-center gap-3">
+						<a href="detail.nadri?no=" class="btn btn-danger g-3">취소</a>
+						<a href="#" class="btn btn-primary g-3">결제</a>
+					</div>
 				</div>
 			</form>
 		</div>

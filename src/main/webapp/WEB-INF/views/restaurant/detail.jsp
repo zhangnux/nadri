@@ -574,7 +574,11 @@
 	     yearSuffix: '년',
 	     
 	     onSelect: function(date, inst) {
+	    	 
 	    	 alert(date+"를 선택했습니다.");
+	    	 
+	    	 
+	    	 
 	    	 
 	    	 $.ajax({
 	    		 type: "get",

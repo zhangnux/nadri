@@ -311,7 +311,7 @@
 		        rt_reservation_current_state A
 		      where
 		        A.restaurant_no = ${restaurantNo}
-		        and to_char(A.reservation_date, 'yyyy-mm-dd') = to_char(${reservedDate}, 'yyyy-mm-dd')) X, restaurant_time_table Y
+		        and to_char(A.reservation_date, 'yyyy-mm-dd') = to_char(${date}, 'yyyy-mm-dd')) X, restaurant_time_table Y
 		where
 		    X.time_table_no(+) = Y.time_table_no
 		order by 
