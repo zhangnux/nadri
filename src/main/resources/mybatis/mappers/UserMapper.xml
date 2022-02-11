@@ -57,10 +57,9 @@
 		update
 			user_table
 		set
-			user_delete_check = 1
+			user_delete_check = 1,
+			
 		where
-			user_id = #{id}
-		and
 			user_password = #{password}
 	</update>
 

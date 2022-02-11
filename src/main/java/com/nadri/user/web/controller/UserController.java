@@ -1,4 +1,4 @@
-package com.nadri.user.controller;
+package com.nadri.user.web.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nadri.user.form.ModifyForm;
+import com.nadri.user.exception.DeleteErrorException;
+import com.nadri.user.exception.LoginErrorException;
+import com.nadri.user.exception.ModifyErrorException;
 import com.nadri.user.form.InsertForm;
 import com.nadri.user.service.UserService;
 import com.nadri.user.util.SessionUtils;
@@ -29,23 +32,16 @@ public class UserController {
 	}
 	
 	@PostMapping("/login.nadri")
-	public String login(String id, String password, Model model) {
-		// 아이디와 비밀번호가 비어있거나 공백만 있으면 loginform.jsp로 내부이동
+	public String login(String id, String password) {
 		if (!StringUtils.hasText(id) || !StringUtils.hasText(password)) {
-			model.addAttribute("error", "아이디와 비밀번호는 필수 입력값입니다.");
-			return "user/loginForm";
+			throw new LoginErrorException("아이디와 비밀번호는 필수 입력값입니다.");
 		}
 		
-		try {
 			// UserService의 사용자 인증 서비스 호출
 			User user = userService.login(id, password);
 			SessionUtils.addAttribute("LOGIN_USER", user);
 
 			return "redirect:/home.nadri";
-		} catch (RuntimeException e) {
-			model.addAttribute("error", e.getMessage());
-			return "user/loginForm";
-		}
 	}
 
 	@GetMapping("/logout.nadri")
@@ -94,8 +90,13 @@ public class UserController {
 	
 	@PostMapping("/modify.nadri")
 	public String modify(ModifyForm form) {
-		// 세션에 로그인 된 유저를 loginedUser에 담기
+		// 세션에 로그인 된 유저 정보를 loginedUser에 담기
 		User loginedUser = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		
+		if (loginedUser.getId().equals(form.getPassword())) {
+			throw new ModifyErrorException("아이디와 비밀번호가 같습니다.");
+		}
 		
 		// 새 User객체 user 생성 후 form의 값 받아오기
 		User user = new User();
@@ -114,10 +115,53 @@ public class UserController {
 			
 	}
 	
+	// 유저 삭제
 	@GetMapping("/delete.nadri")
-	public String delete() {
+	public String deleteForm() {
 		
-		return "user/delete";
+		return "user/deleteForm";
 	}
 
+	@PostMapping("/delete.nadri")
+	public String delete(String password) {
+		// 세션에서 로그인된 유저 정보 가져와 loginUser에 담기
+		User loginUser = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		if(!password.equals(loginUser.getPassword())) {
+			throw new DeleteErrorException("비밀번호가 일치하지 않습니다.");
+		}
+		
+		if (password.equals(loginUser.getPassword())) {
+			
+			userService.deleteUser(password);
+			
+			SessionUtils.removeAttribute("LOGIN_USER");
+			return "user/delCompleted";
+		}
+		
+		return "redirect:delete.nadri";
+		
+	}
+
+	/*
+	@PostMapping("/login.nadri")
+	public String login(String id, String password, Model model) {
+		// 아이디와 비밀번호가 비어있거나 공백만 있으면 loginform.jsp로 내부이동
+		if (!StringUtils.hasText(id) || !StringUtils.hasText(password)) {
+			model.addAttribute("error", "아이디와 비밀번호는 필수 입력값입니다.");
+			return "user/loginForm";
+		}
+		
+		try {
+			// UserService의 사용자 인증 서비스 호출
+			User user = userService.login(id, password);
+			SessionUtils.addAttribute("LOGIN_USER", user);
+
+			return "redirect:/home.nadri";
+		} catch (RuntimeException e) {
+			model.addAttribute("error", e.getMessage());
+			return "user/loginForm";
+		}
+	}
+	*/
 }

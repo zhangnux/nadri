@@ -22,47 +22,58 @@
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
-<!-- <div class="modal modal-signin position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalSignin">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content rounded-5 shadow">
-      <div class="modal-header p-5 pb-4 border-bottom-0">
-        <h5 class="modal-title">Modal title</h5>
-        <h2 class="fw-bold mb-0">Sign up for free</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+<c:if test="${not empty error }">
+	<div class="alert alert-primary alert-dismissible fade show align-center" role="alert">
+		<strong>오류</strong> ${error }
+		<button type="button" class="btn-close fade show" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+</c:if>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content rounded-5 shadow">
+			<div class="modal-header p-5 pb-4 border-bottom-0">
+				<h5 class="modal-title"></h5>
+				<h2 class="fw-bold mb-0">Sign In</h2>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
 
-      <div class="modal-body p-5 pt-0">
-        <form class="">
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control rounded-4" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password</label>
-          </div>
-          <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign up</button>
-          <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
-          <hr class="my-4">
-          <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-          <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
-            <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"></use></svg>
-            Sign up with Twitter
-          </button>
-          <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
-            <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"></use></svg>
-            Sign up with Facebook
-          </button>
-          <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4" type="submit">
-            <svg class="bi me-1" width="16" height="16"><use xlink:href="#github"></use></svg>
-            Sign up with GitHub
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div> -->
-<div class="container">
+			<div class="modal-body p-5 pt-0">
+				<form class="" action="login.nadri" method="post" name="loginForm" id="loginForm">
+					<div class="form-floating mb-3">
+						<input type="text" class="form-control" placeholder="아이디를 입력해주세요." name="id" id="id"> <label for="id">ID</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="password" id="password"> <label class="form-label" for="password" style="font-size: 13px">Password</label>
+					</div>
+					<div class="d-grid gap-3 p-2 col-12 mx-auto">
+						<button type="submit" class="w-100 mb-2 btn btn-lg rounded-4 btn-primary">Sign In</button>
+					</div>
+					<div class="box">
+						<span class="p-2 h-100 align-center" style="font-size:10pt">Not a member yet?&emsp;<a href="../user/insert.nadri">Sign Up</a></span>
+					</div>
+					<hr class="my-4">
+					<h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+					<button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
+						<svg class="bi me-1" width="16" height="16">
+							<use xlink:href="#twitter"></use></svg>
+						Sign up with Twitter
+					</button>
+					<button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
+						<svg class="bi me-1" width="16" height="16">
+							<use xlink:href="#facebook"></use></svg>
+						Sign up with Facebook
+					</button>
+					<button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4" type="submit">
+						<svg class="bi me-1" width="16" height="16">
+							<use xlink:href="#github"></use></svg>
+						Sign up with GitHub
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<%-- <div class="container">
 	<div class="row mb-3">
 		<div class="col-8">
 			<h1>로그인 폼</h1>
@@ -91,7 +102,7 @@
 			</div>
 		</form>
 	</div>
-</div>
+</div> --%>
 <script type="text/javascript">
 
 </script>

@@ -1,4 +1,4 @@
-package com.nadri.user.controller;
+package com.nadri.user.web.controller;
 
 
 public class UserRestController {
