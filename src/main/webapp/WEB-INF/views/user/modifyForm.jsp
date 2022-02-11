@@ -10,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -64,6 +65,11 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 <c:if test="${not empty LOGIN_USER }">
 <div class="container">
 	<div class="row justify-content-sm-center h-100">
+		<c:if test="${not empty error }">
+			<div class="mb-3 alert alert-danger">
+				<strong>오류</strong> ${error }
+			</div>
+		</c:if>
 		<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 			<div class="card shadow-lg">
 				<div class="card-body p-5">
@@ -74,11 +80,6 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 						</div>
 					</div>
 					<form method="post" action="modify.nadri" name="modifyForm" id="modifyForm">
-						<div class="userInput">
-							<input type="hidden" class="check form-control" name="id" id="id" value="${LOGIN_USER.id }"/>
-							<h6 class="list">
-							</h6>
-						</div>
 						<div class="userInput">
 							<label class="form-label">비밀번호 *</label> <input type="password" class="check form-control" name="password" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" maxlength="20" />
 							<h6 class="list">
@@ -118,7 +119,6 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 $(function() {
 	$("#modifyForm").submit(function() {
 		
-		var id = $("#id").val();
 		var pw = $("#pw").val();
 		var pwCheck = $("#pwCheck").val();
 		var email = $("#email").val();
@@ -129,14 +129,6 @@ $(function() {
 		var nameLimit = /^[가-힣]{2,15}$/;
 		var emailLimit = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
 		var telLimit = /^01[016789]-[^0][0-9]{3,4}-[0-9]{4}/;
-		
-		// 아이디,비번 중복 불가
-		if (id == pw) { 
-			$("#pwError").text("아이디와 비밀번호가 같습니다.");
-			$("#pw").focus(); 
-			
-			return false; 
-		}	
 		
 		// 비번 공백
 		if (pw == "") {

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nadri.manager.exception.LoginErrorException;
+import com.nadri.user.exception.DeleteErrorException;
+import com.nadri.user.exception.LoginErrorException;
 import com.nadri.user.mapper.UserMapper;
+import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
 
 // 스프링이 컴포넌트 스캔을 통해 Bean에 등록, IoC 해쥼
@@ -24,7 +26,7 @@ public class UserService {
 			throw new LoginErrorException("회원정보가 존재하지 않습니다.");
 		}
 		if ("1".equals(user.getDeleteCheck())) {
-			throw new LoginErrorException("탈퇴처리된 회원아이디 입니다.");
+			throw new LoginErrorException("탈퇴한 회원입니다.");
 		}
 		if (!password.equals(user.getPassword())) {
 			throw new LoginErrorException("비밀번호가 일치하지 않습니다.");
@@ -63,8 +65,16 @@ public class UserService {
 	
 	
 	
-	public void deleteUser(User user) {
-		User loginedUser = userMapper.getUserById(user.getId());
+	public void deleteUser(String password) {
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		if (user == null) {
+			throw new DeleteErrorException("회원정보를 입력해주세요.");
+		}
+		
+		if (!password.equals(user.getPassword())) {
+			throw new DeleteErrorException("비밀번호가 일치하지 않습니다.");
+		}
 		
 		userMapper.deleteUser(user);
 	}

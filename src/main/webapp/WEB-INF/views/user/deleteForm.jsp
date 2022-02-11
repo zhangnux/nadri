@@ -10,10 +10,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css" integrity="sha384-FYrl2Nk72fpV6+l3Bymt1zZhnQFK75ipDqPXK0sOR0f/zeOSZ45/tKlsKucQyjSp" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
 	::placeholder {
 		font-size: 0.8em;
@@ -60,24 +60,24 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 <c:if test="${not empty LOGIN_USER }">
 <div class="container">
 	<div class="row justify-content-sm-center h-100">
+		<%-- <c:if test="${not empty error }">
+			<div class="mb-3 alert alert-danger">
+				<strong>오류</strong> ${error }
+			</div>
+		</c:if> --%>
 		<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 			<div class="card shadow-lg">
 				<div class="card-body p-5">
 					<h1 class="fs-4 card-title fw-bold">회원 탈퇴</h1>
-					<form method="post" action="delete.nadri" name="deleteUser" id="deleteUser">
-						<div class="userInput">
-							<label class="form-label">아이디</label>
-							<input type="text" class="check form-control" name="id" id="id" placeholder="사용자의 아이디를 입력해주세요." />
-							<h6 class="list"><span id="idError"></span></h6>
-						</div>
+					<form method="post" action="delete.nadri" name="deleteForm" id="deleteForm">
 						<div class="userInput">
 							<label class="form-label">비밀번호</label>
 							<input type="password" class="check form-control" name="password" id="pw" placeholder="사용자의 비밀번호를 입력해주세요." />
 							<h6 class="list"><span id="pwError"></span></h6>
 						</div>
 						<div class="">
-							<button type="button" class="btn btn-dark" id="back">이전페이지</button>
-							<button type="submit" class="btn btn-primary">회원 탈퇴</button>
+							<button type="button" class="btn btn-dark" id="btn-back">이전페이지</button>
+							<button type="button" class="btn btn-primary" id="btn-del">회원 탈퇴</button>
 						</div>
 					</form>
 				</div>
@@ -87,6 +87,49 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 </div>
 </c:if>
 <script type="text/javascript">
+$("#btn-del").click(function(){
+	Swal.fire({
+		title: '회원 탈퇴처리 하시겠습니까?',
+		text: "회원님의 모든 정보가 삭제됩니다.",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: '확인',
+		cancelButtonText: '취소',
+		showLoaderOnConfirm: true,
+		preConfirm: () => {
+			// 프로그램 구현
+			$("#deleteForm").submit();
+		},
+		allowOutsideClick: () => !Swal.isLoading()
+	}).then((result) => {
+		if (result.isConfirmed) {
+			Swal.fire(
+				'회원 탈퇴 완료',
+				'회원님의 모든 정보가 삭제되었습니다.',
+				'success'
+			)
+		}
+	})		
+})
+$("#btn-back").click(function () { 
+	Swal.fire({ 
+		title: '뒤로 돌아가시겠습니까?', 
+		text: "입력한 내용이 모두 삭제됩니다.", 
+		icon: 'warning', 
+		showCancelButton: true, 
+		confirmButtonColor: '#3085d6', 
+		cancelButtonColor: '#d33', 
+		confirmButtonText: '이전페이지', 
+		cancelButtonText: '취소' 
+	}).then((result) => { 
+		if (result.isConfirmed) { 
+			window.history.back();
+		} 
+	}) 
+})
+
 </script>
 <%@ include file="../common/footer.jsp" %>	
 </body>

@@ -1,4 +1,4 @@
-package com.nadri.user.dto;
+package com.nadri.user.web.dto;
 
 import org.springframework.http.HttpStatus;
 
