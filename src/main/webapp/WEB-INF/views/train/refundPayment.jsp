@@ -200,7 +200,11 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
+	var time = setTimeout(function () { location.reload(); }, 60 * 1000);
+	
 	$(function() {
+		
+		
 		function addCommas(nStr) {
 		    nStr += '';
 		    x = nStr.split('.');
@@ -218,6 +222,7 @@
 		});
 		
 		$("#btn-refund").click(function() {
+			
 			let refund = confirm("반환하시겠습니까??")
 			let refundRate = $("[data-refundRate]").attr("data-refundRate")
 			let refundPrice = $("[data-refundPrice]").attr("data-refundPrice")
@@ -234,6 +239,7 @@
 			let jsonData = JSON.stringify(result)
 			console.log(jsonData)
 			if (refund) {
+				clearTimeout(time);
 	 			$.ajax({
 	 				type:'PUT',
 	 				contentType:"application/json",
@@ -249,8 +255,8 @@
 						$("#modal-refund").find('td').eq(2).text(now.format("YYYY-MM-DD hh:mm"))
 						refundModal.show()
 					},
-					error:function() {
-						
+					error:function(response) {
+						alert(response.error)
 					}
 	 			}) 
 			}
@@ -261,5 +267,6 @@
 		})		
 		
 	})
+		
 </script>
 </html>
