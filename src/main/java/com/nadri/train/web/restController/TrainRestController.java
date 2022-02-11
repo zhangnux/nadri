@@ -36,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainModifyDto;
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.exception.KakaoException;
 import com.nadri.train.exception.LoginException;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.util.RefundUtils;
@@ -294,16 +295,14 @@ public class TrainRestController {
 		data.close();
 		
 		BufferedReader rd;
-		if(conn.getResponseCode() == 200) {
-			for (int i=0; i<ticketList.size(); i++) {
-				ticketList.get(i).setCustomerName(dto.getName().get(i));
-				service.updateTicket(ticketList.get(i));
-			}
-			log.info("성공");
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		} else {
-			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+
+		for (int i=0; i<ticketList.size(); i++) {
+			ticketList.get(i).setCustomerName(dto.getName().get(i));
+			service.updateTicket(ticketList.get(i));
 		}
+		log.info("성공");
+		rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		
 		return rd.readLine();
 	}
 	
@@ -393,10 +392,8 @@ public class TrainRestController {
 			return text;
 			// 아래의 errirStream과 throw IOExcetion의 차이?
 		} else {
-			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-			service.deleteRefund(form.getTicketList());
+			throw new KakaoException("결제 취소를 실패했습니다. (원거래 없음)");
 		}
-		return "";
 	}
 	
 	@GetMapping("/print/{reservationNo}")

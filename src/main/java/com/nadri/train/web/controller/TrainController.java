@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.exception.KakaoException;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.util.RefundUtils;
 import com.nadri.train.util.SessionUtils;
@@ -232,17 +233,7 @@ public class TrainController {
 			}
 			
 		} else {
-			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-			
-			// BufferedReader값을 가져오기
-			// readLine()은 한번 가져오면 끝이다
-			// 요청 해드에 들어잇는 것만 매개변수로 받을 수 잇다.
-			// json은 헤드가 아닌 body에 이므로 @RequestBody 어노테이션으로 매개변수로 받을 수 있다.
-			// json key값
-			// map안에 List를 답고 key값으로 꺼내내서 model에 담으면 jstl el은 알아서 List로 인식한다.
-			// 똑같은 ticket을 보내고 싶을때 ticket번호를 배열로 만들어서 변수로 할당하면 {ticket:[10, 22, 20]}
-			// @RequestBody List<Integer> ticket 로 매개 변수로 받으면 된다.
-			throw new IOException();
+			throw new KakaoException("진행중인 거래가 있습니다. 잠시 후 다시 시도해 주세요.");
 		}
 	}
 	

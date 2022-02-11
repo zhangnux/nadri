@@ -45,8 +45,12 @@ public class ManagerController {
 	@GetMapping("/userManagement.nadri")
 	public String userManagement(@LoginedManager Manager manager, Model model) {
 		// 모든 유저 정보 불러오기
-		List<User> userList = new ArrayList<>(service.getAllUser().subList(0, 5));
+		List<User> userList = service.getAllUser();
+		if (userList.size() >=  5) {
+			userList = new ArrayList<>(userList.subList(0, 5));
+		}
 		model.addAttribute("userList", userList);
+		
 		int total = service.getAllUser().size();
 		model.addAttribute("genderRate", service.getGenderRateOfUser(total));
 		model.addAttribute("ageRate", service.getAgeRateOfUser(total));
@@ -58,6 +62,7 @@ public class ManagerController {
 	
 	@GetMapping("statistics.nadri")
 	public String statistics(@LoginedManager Manager manager, Model model) {
+		model.addAttribute("famousList", service.getFavoriteTrain());
 		return "manager/statistics";
 	}
 	

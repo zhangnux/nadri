@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nadri.manager.dto.FavoriteTrainDto;
 import com.nadri.manager.dto.UserAgeRate;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.exception.LoginErrorException;
@@ -64,5 +65,9 @@ public class ManagerService {
 	
 	public int getCountUserByCriteria(UserCriteria criteria) {
 		return mapper.getCountUserByCriteria(criteria);
+	}
+	
+	public List<FavoriteTrainDto> getFavoriteTrain() {
+		return mapper.getFavoriteTrain();
 	}
 }

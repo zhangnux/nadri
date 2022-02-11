@@ -8,11 +8,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nadri.manager.annotation.LoginedManager;
+import com.nadri.manager.dto.FavoriteTrainDto;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.service.ManagerService;
 import com.nadri.manager.util.SessionUtils;
@@ -61,5 +63,37 @@ public class ManagerRestController {
 		map.put("active", criteria.getPageNo());
 		
 		return map;
+	}
+	
+	@GetMapping("/famous/{category}")
+	public Map<String, Object> famoust(@LoginedManager Manager manager, @PathVariable("category") String category) {
+		log.info("선택:" + category);
+		Map<String, Object> response = new HashMap<>();
+		switch (category) {
+		case "train":
+			response.put("famousList", service.getFavoriteTrain());
+			break;
+
+		case "restaurant":
+			response.put("famousList", service.getFavoriteTrain());
+			break;
+			
+		case "attr":
+			response.put("famousList", service.getFavoriteTrain());
+			break;
+		}
+		
+		return response;
+	}
+	
+	@GetMapping("/chart")
+	public Map<String, Object> chart() {
+		Map<String, Object> response = new HashMap<>();
+		
+		int total = service.getAllUser().size();
+		response.put("genderRate", service.getGenderRateOfUser(total));
+		response.put("ageRate", service.getAgeRateOfUser(total));
+		
+		return response;
 	}
 }

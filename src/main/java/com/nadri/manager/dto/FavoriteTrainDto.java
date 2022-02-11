@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteTrainDto {
-	private int rowNum;
-	private String departureStation;
-	private String arrivalStation;
-	private int routNo;
+	private int rowNo;
+	private String destination;
 	private int count;
 	private String image;
 }

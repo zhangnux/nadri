@@ -237,7 +237,6 @@
 			})
 			let result = {refundRate, refundPrice, ticketList}
 			let jsonData = JSON.stringify(result)
-			console.log(jsonData)
 			if (refund) {
 				clearTimeout(time);
 	 			$.ajax({
