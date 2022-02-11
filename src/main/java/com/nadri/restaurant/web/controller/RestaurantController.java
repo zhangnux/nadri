@@ -1,25 +1,26 @@
 package com.nadri.restaurant.web.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import com.nadri.coupon.util.Pagination;
-import com.nadri.restaurant.dto.BookableDto;
+import com.nadri.restaurant.dto.PayReadyResponseDto;
 import com.nadri.restaurant.service.RestaurantService;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
@@ -27,7 +28,6 @@ import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.Timetable;
 import com.nadri.restaurant.web.form.ReservationForm;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
-import com.nadri.restaurant.web.form.RestaurantInsertForm;
 import com.nadri.restaurant.web.form.RestaurantSearchForm;
 
 
@@ -38,7 +38,7 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantService rtService;
 	
-	
+	static final Logger logger = LogManager.getLogger(RestaurantController.class);
 	
 	/*
 	@GetMapping("/init")
@@ -161,44 +161,59 @@ public class RestaurantController {
 	@GetMapping("/checkout.nadri")
 	public String checkout(ReservationForm form, Model model) {
 		
-		model.addAttribute("form", form);
+		logger.debug("form 값"+form);
+		
+		Timetable time = rtService.getTime(form.getTimetableNo());
+		model.addAttribute("time", time);
+		Restaurant restaurant = rtService.getRestaurantDetail(form.getRestaurantNo());
+		model.addAttribute("restaurant", restaurant);
+		model.addAttribute("register", form);
 		return "restaurant/checkout";
 	}
 	
-	
-	
-	
-	
-	/*
-	 @GetMapping("/insert.nadri")
-	public String form() {
+	@GetMapping("/pay")
+	public @ResponseBody PayReadyResponseDto pay(@RequestParam(name = "id") long id,
+			@RequestParam(name = "quantity") int quantity,
+			@RequestParam(name = "total_amount") int totalAmount) {
+		/*
+		Book book = bookService.getBook(id);
 		
-		return "restaurant/form";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "KakaoAK 3e168fa6b46ea4b83a4b7f9195e27db5");
+		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("cid", "TC0ONETIME");
+		parameters.add("partner_order_id", String.valueOf(System.currentTimeMillis()));
+		parameters.add("partner_user_id", "jhta");
+		parameters.add("item_name", book.getTitle());
+		parameters.add("item_code", String.valueOf(book.getId()));
+		parameters.add("quantity", String.valueOf(quantity));
+		parameters.add("total_amount", String.valueOf(totalAmount));
+		parameters.add("tax_free_amount", "0");
+		parameters.add("approval_url", "http://localhost/order/pay/completed");
+		parameters.add("cancel_url", "http://localhost/order/pay/cancel");
+		parameters.add("fail_url", "http://localhost/order/pay/fail");
+		
+		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, headers);
+		
+		RestTemplate template = new RestTemplate();
+		String url = "https://kapi.kakao.com/v1/payment/ready";
+		PayReadyResponseDto dto = template.postForObject(url, requestEntity, PayReadyResponseDto.class);
+		System.out.println(dto);
+		
+		return dto;
+		*/
+		return null;
+		
 	}
-	@PostMapping("/insert.nadri")
-	public String save(RestaurantInsertForm form) throws IOException  {
-		String saveDirectory = "C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\restaurants";
-		Restaurant rt = new Restaurant();
-		MultipartFile upfiles = form.getUpfiles();
-		
-		if(!upfiles.isEmpty()) {
-			String filename = upfiles.getOriginalFilename();
-			rt.setPicture(filename);
-			
-			InputStream in = upfiles.getInputStream();
-			FileOutputStream out = new FileOutputStream(new File(saveDirectory, filename));
-			
-			FileCopyUtils.copy(in, out);
-		}
-		
-		BeanUtils.copyProperties(form, rt);
-		
-		rtService.addNewRestaurant(rt);
-		
-		return "redirect:insert.nadri";
-	}
 	
-	*/
+	@PostMapping("/pay.nadri")
+	public String reserve() {
+		
+		
+		return null;
+	}
 	
 
 

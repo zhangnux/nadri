@@ -12,6 +12,7 @@ import com.nadri.restaurant.mapper.RestaurantMapper;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
 import com.nadri.restaurant.vo.Reservation;
+import com.nadri.restaurant.vo.ReservationCurrentState;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.vo.Timetable;
@@ -127,13 +128,25 @@ public class RestaurantService {
 	
 	// 예약
 	
+	public Timetable getTime(int no) {
+		return rtMapper.getTime(no);
+	}
+	
 	public List<Timetable> getAllTimetable(){
 		return rtMapper.getAllTimetable();
 	}
 	
 	
-	public List<BookableDto> getBookableTime(int restaurantNo, Date selectedDate){
+	public List<BookableDto> getBookableTime(int restaurantNo, String selectedDate){
 		return rtMapper.getBookableTime(restaurantNo, selectedDate);
+	}
+	
+	public void insertReservation(Reservation reservation) {
+		rtMapper.insertReservation(reservation);
+	}
+	
+	public void insertCurrentState(ReservationCurrentState currentState) {
+		rtMapper.insertCurrentState(currentState);
 	}
 
 }

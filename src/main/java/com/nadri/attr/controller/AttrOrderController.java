@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nadri.attr.service.AttrOrderService;
 import com.nadri.attr.vo.AttrOrderForm;
@@ -125,6 +126,7 @@ public class AttrOrderController {
 	}
 	
 	@RequestMapping("/kakao")
+	@ResponseBody
 	public String kakaopay() {
 		try {
 			// 보내는 부분

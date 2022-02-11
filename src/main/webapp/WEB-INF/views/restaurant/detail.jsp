@@ -18,6 +18,7 @@
 </head>
 <style>
 
+	
 	#review-img{
 		height: 150px;
 		width: 150px;
@@ -102,6 +103,7 @@
 		</div>
 		<div class="col-3 border p-1 position-sticky">
 			<form action="checkout.nadri" id="reservation-form">
+				<input type="hidden" name="restaurantNo" value="${restaurant.no }"/>
 				<div class="m-3 mb-5">
 					<h4><strong>예약</strong></h4>
 				</div>
@@ -115,7 +117,7 @@
 						<span><strong>시간</strong></span>
 					</div>
 					<div class="col-9 d-flex justify-content-start">
-						<select class="form-select" id="select-timetable">
+						<select class="form-select" id="select-timetable" name="timetableNo">
 							
 						</select>
 					</div>
@@ -134,7 +136,7 @@
 								<i class="bi bi-arrow-left-circle" data-input-name="adult"></i>
 								<span id="number-of-adult">0</span> 명
 								<i class="bi bi-arrow-right-circle" data-input-name="adult"></i>
-								<p style="font-size: 10px;" id="total-adult-price" data-adult-price="10000">0 원</p>
+								<p style="font-size: 10px;" id="total-adult-price" data-adult-price="10000">0 </p>
 							</div>
 						</div>
 						<div class="row">
@@ -146,7 +148,7 @@
 								<i class="bi bi-arrow-left-circle" data-input-name="child"></i>
 								<span id="number-of-child">0</span> 명
 								<i class="bi bi-arrow-right-circle" data-input-name="child"></i>
-								<p style="font-size: 10px;" id="total-child-price" data-child-price="5000">0 원</p>
+								<p style="font-size: 10px;" id="total-child-price" data-child-price="5000">0 </p>
 							</div>
 						</div>
 					</div>
@@ -158,7 +160,7 @@
 						<input type="hidden" name="deposit" value="0">
 					</div>
 					<div class="col-7 d-flex justify-content-end">
-						<a href="checkout.nadri?no=${restaurant.no }" id="btn-book" class="btn btn-primary">book now</a>
+						<button type="submit" href="checkout.nadri?no=${restaurant.no }" id="btn-book" class="btn btn-primary">book now</button>
 					</div>				
 				</div>
 			</form>
@@ -302,17 +304,53 @@
 
 	
 	getReviewList();
+	
+	// btn-book 버튼 클릭시 로그인, 시간, 인원 수 여부 확인
+	$("#btn-book").click(function(e) {
+		// 로그인
+		
+		
+		// 시간
+		
+		if($("#select-timetable").val() == null){
+			alert("시간을 선택하세요"); 
+			return e.preventDefault();
+		}
+		//인원 수 최소 어른 1명
+		var adult = parseInt($("#number-of-adult").text());
+		if(parseInt($("#number-of-adult").text()) == 0){
+			alert("어른을 최소 1명 선택해야합니다.")
+			return e.preventDefault();
+		}
 
+		
+		
+	})
+	
 
+	// 리뷰 등록
 	$("#btn-add-review").click(function() {
 		var $reviewBox = $("#user-review").empty();
 		// 로그인 안 되었을때, 로그인 해주세요
+		if("${LOGIN_USER}" == ""){
+			alert("로그인을 해주세요.");
+			
+			return getReviewList();
+		}
+		
+		// 별점 여부	
+		if(document.querySelector('input[name="rating"]').checked == false){
+            alert("별점을 선택하세요"); 
+			return getReviewList();
+		}
 		
 		// 내용 입력
 		if($("#reviewContent").val().trim()==""){
 			alert("내용을 입력해주세요");
-			return false;
+			return getReviewList();
 		}
+		
+		
 		// 등록 확인
 		// 레스토랑 번호 조회
 		// 첨부파일 업로드를 지원하는 FormData 객체를 생성한다.
@@ -380,7 +418,6 @@
 					htmlContent += '			<div class="col gap-3 d-flex justify-content-end">';	
 					htmlContent += '				<a href="javascript:void(0)" onclick="modifyformReview('+review.no+')" style="padding-right:5px">수정</a>';
 					htmlContent += '				<a href="javascript:void(0)" onclick="deleteReview(' + review.no + ')" >삭제</a>';
-					//htmlContent += '				<a id="delete-review" data-review-no="'+review.no+'">삭제</a>';
 					htmlContent += '			</div>';
 					htmlContent += '		</div>';
 					}
@@ -444,7 +481,7 @@
 	function modifyformReview(reviewNo){
 		
 		var starPoint = $("#starPoint-" + reviewNo).text();
-		//alert(starPoint);
+		
 		
 		var htmlContent = '';
 		htmlContent += '<div class="row mb-2 border-bottom" id="no'+reviewNo+'">';
@@ -506,6 +543,24 @@
 	}
 	
 	function updateReview(reviewNo){
+		// 로그인 안 되었을때, 로그인 해주세요
+		if("${LOGIN_USER}" == ""){
+			alert("로그인을 해주세요.");
+			
+			return getReviewList();
+		}
+		
+		// 별점 여부	
+		if(document.querySelector('input[name="edit-rating"]').checked == false){
+            alert("별점을 선택하세요"); 
+			return getReviewList();
+		}
+		
+		// 내용 입력
+		if($("#editContent").val().trim()==""){
+			alert("내용을 입력해주세요");
+			return getReviewList();
+		}
 		
 		var formData = new FormData();
 		// 별점 조회
@@ -574,21 +629,23 @@
 	     yearSuffix: '년',
 	     
 	     onSelect: function(date, inst) {
-	    	 
-	    	 alert(date+"를 선택했습니다.");
-	    	 
-	    	 
-	    	 
-	    	 
+   			$("#select-timetable").empty();
+   			
 	    	 $.ajax({
 	    		 type: "get",
 	    		 url : "/rest/restaurant/book/bookable.nadri",
 	    		 data: {no: "${restaurant.no}", date: date},
 	    		 dataType: 'json',
-	    		 success: function(bookable){			
-	    			 console.log(bookable)
-		    		//htmlContent = '';
-		  	 }
+	    		 success: function(bookables){
+	    			
+	    			
+			    	$("#select-timetable").append('<option value="" selected disabled>선택</option>')
+		    		$.each(bookables, function(index, bookable) {
+			    		var opt = '	<option value="'+bookable.timeTableNo+'" '+(bookable.bookablePeople == 0 ? "disabled" : "")+'" >'+bookable.startTime+'</option>';
+			    		$("#select-timetable").append(opt);
+		    		})
+	    			
+		  	 	}
 	     	})
 	     	
 	     }
@@ -606,7 +663,24 @@
 		// adult/child 인지 조회하기
 		var peopleType = $(this).attr('data-input-name');
 		var number = parseInt($(":input[name="+peopleType+"]").val());
-		number++;
+		
+		
+		// 10 이상은 등록 안됨.
+		var preAdult = parseInt($("#number-of-adult").text());
+		var preChild = parseInt($("#number-of-child").text());
+		var preTotalPeople = preAdult+preChild+1;
+		
+		
+		if (preTotalPeople >= 10) {
+			alert("10명 이상은 가게로 직접 문의하세요.")
+			var peopleType = $(this).attr('data-input-name');
+			var number = parseInt($(":input[name="+peopleType+"]").val());
+			return false;
+		} else{
+			number++;
+		}
+		
+		
 		
 		
 		$(":input[name="+peopleType+"]").val(number);
@@ -617,18 +691,11 @@
 		$("#total-" + peopleType + "-price").text(totalPrice);
 		
 		
+		
+		
 		var adult = parseInt($("#number-of-adult").text());
 		var child = parseInt($("#number-of-child").text());
 		var totalPeople = adult+child;
-		
-		/*
-		if (totalPeople >= 10) {
-			alert("10명 이상은 가게로 직접 문의하세요.")
-			var peopleType = $(this).attr('data-input-name');
-			var number = parseInt($(":input[name="+peopleType+"]").val());
-			number--;
-		}
-		*/
 		
 		$(":input[name=people]").val(totalPeople);
 		

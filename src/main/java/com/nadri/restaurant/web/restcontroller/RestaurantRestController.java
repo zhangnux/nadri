@@ -122,10 +122,12 @@ public class RestaurantRestController {
 	
 	@GetMapping("/book/bookable.nadri")
 	public List<BookableDto> bookabletime(@RequestParam("no") int restaurantNo,
-			@RequestParam("date") Date date){
+			@RequestParam("date") String date){
 		List<BookableDto> bookableTimeList = rtService.getBookableTime(restaurantNo, date);
 		return bookableTimeList;
 	}
 	
+	
+
 	
 }

@@ -18,13 +18,17 @@ import lombok.ToString;
 public class ReservationForm {
 	
 	
+	private int restaurantNo;
+	
 	private String userName;			// 유저 네임
 	private String reservedName;		// 예약자 이름
 	private String tel;					// 예약자 전화번호
 	
+	
 	private int deposit;				// 예치금
-	private Date reservedDate;			// 예약 날짜
+	private String reservedDate;			// 예약 날짜
 	private String startTime;			// 예약한 시작 날짜.
+	private int timetableNo;			// 예약한 시작 날짜 번호
 	
 	private int child;					// 아이 수
 	private int adult;					// 어른 수
