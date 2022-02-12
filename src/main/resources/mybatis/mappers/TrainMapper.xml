@@ -228,40 +228,57 @@
 		order by r.reservation_no
 	</select>
 	
-	<select id="getAllReservatioin" parameterType="map" resultType="com.nadri.train.vo.TrainReservation">
-		select distinct r.reservation_no as no, 
-						r.ticketing_status as tickectStatus,
-						r.canceled_date as canceledDate,
-						r.sold_date as soldDate,
-						r.reservation_date as reservationDate, 
-						p.train_name as trainName, 
-						t.train_no as trainNo,
-        				t1.station_name as departureStation, 
-        				t2.station_name as arrivalStation, 
-        				s.schedule_departure_time as departureTime, 
-        				s.schedule_arrival_time as arrivalTime, 
-        				r.total_passengers_count as totalCount, 
-        				r.total_payment_amount as totalPrice,
-        				r.user_no as userNo,
-        				r.tid as tid,
-        				r.is_printed as isPrinted
-		from train_reservation r, train_ticket t, train_schedule s, train_route e, train_station t1, train_station t2, train n, train_type p
-		<where>
-			r.user_no = #{userNo}
-			and r.reservation_date >= ${start }
-			and r.reservation_date &lt;= ${end }
-			and r.reservation_no = t.reservation_no
-			and t.schedule_no = s.schedule_no
-			and s.route_no = e.route_no
-			and e.departure_station_id = t1.station_id
-			and e.arrival_station_id = t2.station_id
-			and t.train_no = n.train_no
-			and n.type_no = p.type_no
-		</where>
-		order by r.reservation_no
+	<select id="getAllReservatioin" parameterType="com.nadri.train.dto.TrainReservationCriteria" resultType="com.nadri.train.dto.TrainReservaionTicket">
+		SELECT  a.ticket_no as ticketNo, 
+		        a.schedule_departure_time as departureDate, 
+		        a.schedule_arrival_time as arrivalDate, 
+		        a.train_name as trainName, 
+		        a.train_no as trainNo, 
+		        a.dp as departureStatioin, 
+		        a.ar as arrivalStation,
+		        a.room_type as roomType, 
+		        a.room_name as roomName, 
+		        a.seat_no as seatNo,
+		        a.customer_name as customerName,
+		        a.is_canceled as isCanceled,  
+		        a.price as price,
+		        a.passenger_type as type,
+		        a.reservation_date as reservedDate
+		FROM (select row_number() over(order by t.ticket_no) rn, t.ticket_no, 
+		        s.schedule_departure_time, s.schedule_arrival_time, e.train_name, t.train_no, 
+		        t1.station_name dp, t2.station_name ar,
+		        r.room_type, r.room_name, t.seat_no,
+		        t.customer_name, t.is_canceled, p.price, n.reservation_date, t.passenger_type
+		        from train_ticket t, train_room r, train_price p, train_reservation n, train b, train_type e, 
+		            train_schedule s, train_route u, train_station t1, train_station t2
+		        where n.reservation_date >= #{startDate}
+		        and n.reservation_date &lt; #{endDate}+1
+		        and n.user_no = #{userNo}
+		        and t.is_canceled = 'N'
+		        and t.reservation_no = n.reservation_no
+		        and t.room_no = r.room_no
+		        and t.train_no = b.train_no
+		        and b.type_no = e.type_no
+		        and t.price_id = p.price_id
+		        and t.schedule_no = s.schedule_no
+		        and s.route_no = u.route_no
+		        and u.departure_station_id = t1.station_id
+		        and u.arrival_station_id = t2.station_id
+		        ) a
+		where a.rn >= #{begin} and a.rn &lt;= #{end}
 	</select>
 	
-	<!-- 예약 번호로 불러오는 티켓에서 제약 걸기 취소가 N인것-->
+	<select id="getReservationCount" parameterType="com.nadri.train.dto.TrainReservationCriteria" resultType="int">
+		select count(*)
+		from train_reservation r, train_ticket t
+		<where>
+			r.user_no = #{userNo}
+			and r.reservation_date >= #{startDate }
+			and r.reservation_date &lt; #{endDate }+1
+			and t.is_canceled = 'N'
+		</where>
+	</select>
+	
 	<!-- 예약 후 바로 티켓정보 조회 -->
 	<select id="getTicketByReservedNo" resultType="com.nadri.train.vo.TrainTicket" >
 		select t.ticket_no as no, 
@@ -282,6 +299,42 @@
 		and t.room_no = r.room_no
 		and t.is_canceled = 'N'
 		and p.price_id = t.price_id
+	</select>
+	
+	<!-- 티켓 총 개수 -->
+	<select id="getTicketCount" parameterType="com.nadri.train.dto.TrainTicketCriteria" resultType="int">
+		select count(*)
+		from train_ticket t, train_reservation n
+		where t.reservation_no = #{reservationNo}
+		and n.user_no = #{userNo}
+		and t.reservation_no = n.reservation_no
+	</select>
+	<!-- 티켓 페이지 네이션 -->
+	<select id="getTicketByCriteria" parameterType="com.nadri.train.dto.TrainTicketCriteria" resultType="com.nadri.train.vo.TrainTicket" >
+		select  a.customer_name as customerName, 
+		        a.passenger_type as type, 
+		        a.is_canceled as isCanceled, 
+		        a.reservation_no as reservationNo, 
+		        a.schedule_no as scheduleNo,
+		        a.train_no as trainNo, 
+		        a.price_id as priceId,  
+		        a.price as price,
+		        a.room_no as roomNo, 
+		        a.room_name as roomName, 
+		        a.room_type as roomType, 
+		        a.seat_no as seatNo
+		from (select row_number() over(order by t.ticket_no) rn, t.ticket_no, 
+		        t.customer_name, t.passenger_type, t.is_canceled, t.reservation_no, 
+		        t.schedule_no, t.train_no, t.price_id, p.price, t.room_no, r.room_name, 
+		        r.room_type, t.seat_no
+		        from train_ticket t, train_room r, train_price p, train_reservation n
+		        where t.reservation_no = #{reservationNo}
+		        and n.user_no = #{userNo}
+		        and t.reservation_no = n.reservation_no
+		        and t.room_no = r.room_no
+		        and t.is_canceled = 'N'
+		        and p.price_id = t.price_id) a
+		where a.rn >= #{begin} and a.rn &lt;= #{end}
 	</select>
 	
 	<!-- 인기노선 검색 -->

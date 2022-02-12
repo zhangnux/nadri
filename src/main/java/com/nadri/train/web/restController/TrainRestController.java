@@ -31,11 +31,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainModifyDto;
+import com.nadri.train.dto.TrainReservaionTicket;
+import com.nadri.train.dto.TrainReservationCriteria;
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.dto.TrainTicketCriteria;
 import com.nadri.train.exception.KakaoException;
 import com.nadri.train.exception.LoginException;
 import com.nadri.train.service.TrainService;
@@ -255,7 +259,6 @@ public class TrainRestController {
 	 * @throws IOException
 	 */
 	@PutMapping("/kakaoPay")
-	// IOEXception과 fail_url conn.getErrorStream()의 구분?
 	public String kakaoPay(@LoginedUser User user, @RequestBody TrainPaymentDto dto) throws IOException {
 		SessionUtils.addAttribute("reservationNo", dto.getReservationNo());
 		String[] reList = dto.getReservationNo().split(" ");
@@ -396,18 +399,34 @@ public class TrainRestController {
 		}
 	}
 	
+	/**
+	 * 승차권 발권을 위한 티켓 정보 가져오기
+	 * @param user
+	 * @param no 예약 번호
+	 * @param page 페이지 번호
+	 * @return
+	 */
 	@GetMapping("/print/{reservationNo}")
-	public ResponseDto<?> print(@LoginedUser User user, @PathVariable(name="reservationNo") int no) {
-		ResponseDto<TrainTicket> response = new ResponseDto<TrainTicket>();
+	public Map<String, Object> print(@LoginedUser User user, @PathVariable(name="reservationNo") int no, int page) {
 		// is canceled N인 티켓 정보 가져오기
-		List<TrainTicket> ticketList = service.getTicketByReservedNo(no, 0);
-		if (ticketList.size() != 0) {
-			response.setItems(ticketList);
-			response.setStatus("OK");
-		} else {
-			response.setStatus("FAIL");
-			response.setError("티켓정보가 존재하지 않습니다.");
-		}
+		TrainTicketCriteria criteria = new TrainTicketCriteria();
+		criteria.setReservationNo(no);
+		criteria.setUserNo(user.getNo());
+		Map<String, Object> response = service.getTicketByCriteria(page, criteria);
+		return response;
+	}
+	
+	@GetMapping("/ticket/{reservationNo}")
+	public List<TrainTicket> ticket(@PathVariable(name="reservationNo") int reservationNo) {
+		return service.getTicketByReservedNo(reservationNo, 0);
+	}
+	
+	@PostMapping("/searchReserved")
+	public List<TrainReservaionTicket> searchResrvation(@LoginedUser User user, @RequestBody TrainReservationCriteria criteria) {
+		log.info("출발:" + criteria);
+		// 페이지네이션
+		criteria.setUserNo(user.getNo());
+		List<TrainReservaionTicket> response = service.getAllReservatioin(criteria);
 		return response;
 	}
 	

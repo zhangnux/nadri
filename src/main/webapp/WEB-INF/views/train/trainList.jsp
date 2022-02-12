@@ -679,7 +679,7 @@
 			let scheduleNo = searchInfo.attr('data-schedule-no')
 			$("#modal-seat").attr('data-root-type', scheduleNo)
 			let $tbody = $(this).closest('tbody').attr('id')
-			// 확인하기 ------------------------------------------
+			
 			let now = new Date();
 			let nowTarget = now.getFullYear() + "/" + (("00"+(now.getMonth()+1)).slice(-2)) + "/" + (("00"+now.getDate()).slice(-2))
 			if ($tbody == 'schedule1' && $("[name=dpDate1]").val() == nowTarget) {
@@ -853,9 +853,10 @@
 				maxCount = $("[name=count2]").val()
 			}
 			
+			let count = Math.floor($("td[data-schedule-no="+ putNo + "]").closest('tbody').find('input').filter(index => index > 1).length/2)
+			// 예약되지 않은 좌석 클릭시
 			if (!$(this).hasClass("no") && !$(this).hasClass("chosen")) {
 				// 클릭횟수 제어
-				let count = Math.floor($("td[data-schedule-no="+ putNo + "]").closest('tbody').find('input').filter(index => index > 1).length/2)
 				if (count == maxCount) {
 					alert(maxCount + "명 이상 선택할 수 없습니다.")
 					return;
@@ -868,6 +869,8 @@
 				//모달창 선택 좌석 표시
 				$(".chosenSeatList").append("<span class='seatlist px-1'>" + $(this).text() +"번</span>")
 			} else if ($(this).hasClass("chosen")) {
+				
+				
 				$(this).removeClass("chosen")
 				$("[value=" + $(this).text() + "]").next().remove()
 				$("[value=" + $(this).text() + "]").remove()

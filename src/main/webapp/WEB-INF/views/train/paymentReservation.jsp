@@ -239,7 +239,10 @@
 					reservationNo:paymentNo, no, name}
 			
 			let jsonData = JSON.stringify(result)
-			
+			if ($("[name=paymentType]").val() == '') {
+				alert("결제수단을 선택해주시길 바랍니다.")
+				return;
+			}
 			
 			// [{no:100, name:"홍길동"}, {no:101 name:"이순신"}]
 			if ($("[name=paymentType]").val() == 'kakao') {
