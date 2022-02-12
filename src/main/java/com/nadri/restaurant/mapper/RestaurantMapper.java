@@ -48,6 +48,8 @@ public interface RestaurantMapper {
 	
 	void insertReservation(Reservation reservation);
 	void insertCurrentState(ReservationCurrentState currentState);
+	// 예약시 sales 수정
+	void updateRestaurant(Restaurant restaurant);
 	
 	
 	

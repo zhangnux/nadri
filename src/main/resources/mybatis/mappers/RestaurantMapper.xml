@@ -357,5 +357,15 @@
 		values
 		(#{no}, #{reservedDate}, #{reservedPeople}, #{timetableNo}, #{restaurantNo})
 	</insert>
+	
+	<!--
+		void updateRestaurant(Restaurant restaurant);
+	-->
+	<update id="updateRestaurant" parameterType="com.nadri.restaurant.vo.Restaurant">
+		update restaurant
+		set
+			restaurant_sales = #{sales}
+		where restaurant_no = #{no}
+	</update>
 
 </mapper>

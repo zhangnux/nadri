@@ -19,6 +19,7 @@ import com.nadri.csBoard.web.form.Criteria;
 import com.nadri.csBoard.web.form.CsBoardInsertForm;
 import com.nadri.manager.annotation.LoginedManager;
 import com.nadri.manager.vo.Manager;
+import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
 
@@ -101,9 +102,9 @@ public class csBoardController {
 	}
 	
 	@PostMapping("/insert.nadri")
-	public String save(CsBoardInsertForm form) throws IOException {
+	public String save(@LoginedUser User user, CsBoardInsertForm form) throws IOException {
 		
-		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		//User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		
 		
 		CsBoard csBoard = new CsBoard();

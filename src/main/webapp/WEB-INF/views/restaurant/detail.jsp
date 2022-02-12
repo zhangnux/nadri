@@ -503,7 +503,6 @@
 		htmlContent += '</div>';
 		htmlContent += '<div class="col-6 p-3">';
 		htmlContent += '	<textarea name="editContent" class="form-control" id="editContent" rows="3">'+$('p#content'+reviewNo).text()+'</textarea>';
-		// if로 첨부파일이 있으면 값입력해서 내놓기
 		htmlContent += '	<input type="file" class="form-control" name="upfile" id="edit-up-file""/>';				
 		htmlContent += '</div>';
 		htmlContent += '<div class="col-3 p-3">';
