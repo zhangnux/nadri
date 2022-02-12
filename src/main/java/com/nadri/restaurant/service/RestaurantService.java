@@ -141,12 +141,25 @@ public class RestaurantService {
 		return rtMapper.getBookableTime(restaurantNo, selectedDate);
 	}
 	
-	public void insertReservation(Reservation reservation) {
+	
+	public void reserveRestaurant(int restaurantNo) {
+		
+		// 쿠폰 사용은?
+		
+		Restaurant restaurant = rtMapper.getRestaurantDetail(restaurantNo);
+		
+		
+		// 레스토랑 sales +1
+		int sales = restaurant.getSales() + 1;
+		restaurant.setSales(sales);
+		restaurant.setNo(restaurantNo);
+		rtMapper.updateRestaurant(restaurant);
+		
+		Reservation reservation = new Reservation();
 		rtMapper.insertReservation(reservation);
+		ReservationCurrentState state = new ReservationCurrentState();
+		rtMapper.insertCurrentState(state);
+		
 	}
 	
-	public void insertCurrentState(ReservationCurrentState currentState) {
-		rtMapper.insertCurrentState(currentState);
-	}
-
 }

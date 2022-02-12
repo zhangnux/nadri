@@ -51,12 +51,13 @@
 							<tbody>
 								<tr>
 									<td rowspan="2" style="width: 20%"><img id="rt-img" alt="" src="${restaurant.picture }"></td>
-									<td style="width: 80%"><h2><strong>${restaurant.name }</strong></h2></td>
+									<td style="width: 80%"><h2><strong id="restaurantName" data-rt-no="${restaurant.no }">${restaurant.name }</strong></h2></td>
 								</tr>
 								<tr>
 									<td>
 										<div class="row mb-3">
 											<div class="col-3">
+												<input type="hidden" name="restaurantNo" value="${restaurant.no }"/>
 												<p>날짜: ${register.reservedDate }</p>
 												<input type="hidden" name="reservedDate" value="${register.reservedDate }"/>
 											</div>
@@ -109,27 +110,16 @@
 								</div>
 							</div>
 						</div>
-						<div class="m-3">				
-							<div>
-								<div>
-									<h5>보유 포인트: 10000</h5>
-								</div>
-								<div>
-									<span>사용 포인트: </span>
-									<input type="number" class="form-control" min="0" name="usedpoint"/>
-								</div>
-							</div>
-						</div>
 					</div>
-					<div id="final-price" class="p-3">
-						<h4>= 총 결제 금액: <strong id="total-amount" data-total-amount="">15000</strong>원</h4>
+					<div id="final-price" class="p-3 m-3">
+						<h4> = 총 결제 금액: <strong id="total-amount" data-total-amount="15000">15000</strong>원</h4>
 						<input type="hidden" name="deposit" value="0"/>
 					</div>
 				</div>
 				<div class="row p-3 m-3">
 					<div class="col d-flex justify-content-center gap-3">
 						<a href="detail.nadri?no=${restaurant.no }" class="btn btn-danger g-3">취소</a>
-						<button type="submit" id="btn-pay" class="btn btn-primary g-3">결제</button>
+						<button type="button" id="btn-pay" class="btn btn-primary g-3">결제</button>
 					</div>
 				</div>
 			</form>
@@ -139,21 +129,30 @@
 
 </div>
 <script type="text/javascript">
+	
+	// 예약자 이름, 전화번호 입력 안하면 클릭 안되게
+	
+	
+	// max 넘으면 입력이 안되게
+	
+
 	$(function() {
 		$("#btn-pay").click(function(e) {
 			
+			
 			$.ajax({
 				type: 'get',
-				url: '/order/pay',
+				url: '/restaurant/pay.nadri',
 				data: {
-					id: $("#book-title").attr("data-book-id"),
+					no: $("#restaurantName").attr("data-rt-no"),
 					quantity: 1,
 					total_amount: $("#total-amount").attr("data-total-amount"),
 				},
 				success:function(response) {
-					window.open(response.next_redirect_pc_url, "결제창", "toolbar=yes,scrollbars=no,resizable=no,top=500,left=500,width=500,height=800");
+					location.href= response.next_redirect_pc_url;
 				}
 			});
+			
 		});
 	})
 </script>

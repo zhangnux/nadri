@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,22 +22,34 @@ import org.springframework.web.client.RestTemplate;
 
 import com.nadri.coupon.util.Pagination;
 import com.nadri.restaurant.dto.PayReadyResponseDto;
+import com.nadri.restaurant.kakaopay.ApproveResponse;
+import com.nadri.restaurant.kakaopay.KakaoPayService;
+import com.nadri.restaurant.kakaopay.ReadyResponse;
 import com.nadri.restaurant.service.RestaurantService;
 import com.nadri.restaurant.vo.Category;
 import com.nadri.restaurant.vo.City;
+import com.nadri.restaurant.vo.Reservation;
+import com.nadri.restaurant.vo.ReservationCurrentState;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.Timetable;
 import com.nadri.restaurant.web.form.ReservationForm;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
 import com.nadri.restaurant.web.form.RestaurantSearchForm;
+import com.nadri.user.annotation.LoginedUser;
+import com.nadri.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/restaurant")
 public class RestaurantController {
 	
 	@Autowired
 	private RestaurantService rtService;
+	
+	@Autowired
+	private KakaoPayService kakaoPayService;
 	
 	static final Logger logger = LogManager.getLogger(RestaurantController.class);
 	
@@ -171,50 +184,81 @@ public class RestaurantController {
 		return "restaurant/checkout";
 	}
 	
-	@GetMapping("/pay")
-	public @ResponseBody PayReadyResponseDto pay(@RequestParam(name = "id") long id,
-			@RequestParam(name = "quantity") int quantity,
-			@RequestParam(name = "total_amount") int totalAmount) {
+	@GetMapping("/pay/ready")
+	public @ResponseBody ReadyResponse payReady(@RequestParam("no") int no, int quantity, int totalPrice, Model model) {
+		log.info("레스토랑 번호: " + no);
+		log.info("주문 수량: " + quantity);
+		log.info("주문 금액: " + totalPrice);
+		
+		Restaurant restaurant = rtService.getRestaurantDetail(no);
+		
+		// 카카오 결재 준비 하기
+		ReadyResponse readyResponse = kakaoPayService.payReady(restaurant, quantity, totalPrice);
+		// 결재고유 번호(tid)를 세션에 저장시킨다.
+		model.addAttribute("tid", readyResponse.getTid());
+		log.info("결재고유 번호: " + readyResponse.getTid());
+		
+		return readyResponse;
+	}
+	
+	@GetMapping("/pay/completed")
+	public String payCompleted(@LoginedUser User user, @RequestParam("pg_token") String pgToken, @ModelAttribute("tid") String tid, Model model) {
+		
+		log.info("결제승인 요청을 인증하는 토큰: " + pgToken);
+		log.info("결재고유 번호: " + tid);
+		log.info("로그인한 사용자 정보: " + user);
+		
+		// 카카오 결재 요청하기
+		ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);	
+		
+		int userNo = user.getNo();
+		int totalPrice = approveResponse.getAmount().getTotal();
+		int restaurantNo = Integer.parseInt(approveResponse.getItem_code());	
+		int quantity = approveResponse.getQuantity();
+		
 		/*
-		Book book = bookService.getBook(id);
+		OrderItem orderItem = new OrderItem();
+		orderItem.setBookNo(bookNo);
+		orderItem.setQuantity(quantity);
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "KakaoAK 3e168fa6b46ea4b83a4b7f9195e27db5");
-		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-		
-		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
-		parameters.add("cid", "TC0ONETIME");
-		parameters.add("partner_order_id", String.valueOf(System.currentTimeMillis()));
-		parameters.add("partner_user_id", "jhta");
-		parameters.add("item_name", book.getTitle());
-		parameters.add("item_code", String.valueOf(book.getId()));
-		parameters.add("quantity", String.valueOf(quantity));
-		parameters.add("total_amount", String.valueOf(totalAmount));
-		parameters.add("tax_free_amount", "0");
-		parameters.add("approval_url", "http://localhost/order/pay/completed");
-		parameters.add("cancel_url", "http://localhost/order/pay/cancel");
-		parameters.add("fail_url", "http://localhost/order/pay/fail");
-		
-		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, headers);
-		
-		RestTemplate template = new RestTemplate();
-		String url = "https://kapi.kakao.com/v1/payment/ready";
-		PayReadyResponseDto dto = template.postForObject(url, requestEntity, PayReadyResponseDto.class);
-		System.out.println(dto);
-		
-		return dto;
+		orderService.saveOrder(userNo, tid, totalPrice, orderItem);
 		*/
-		return null;
 		
+		return "redirect:/order/completed?id=" + tid;
 	}
 	
-	@PostMapping("/pay.nadri")
-	public String reserve() {
+	@RequestMapping("/completed")
+	public String completed(@RequestParam("id") String orderId, Model model) {
+		/*
+		Order order = orderService.getOrderById(orderId);
+		model.addAttribute("order", order);
+		*/
+		return "order/completed";
+	}
+	
+	/*
+	@PostMapping("/reserve.nadri")
+	public String reserve(@LoginedUser User user, ReservationForm form) {
 		
+		// coupon 어케 사용??
+		
+		Restaurant restaurant = rtService.getRestaurantDetail(form.getRestaurantNo());
+		Reservation reservation = new Reservation();
+		ReservationCurrentState state = new ReservationCurrentState();
+		
+		int sales = restaurant.getSales() + 1;
+		restaurant.setSales(sales);
+		restaurant.setNo(form.getRestaurantNo());
+		rtService.updateSales(restaurant);
+		
+		
+		
+		rtService.insertReservation(reservation);
+		rtService.insertCurrentState(state);
 		
 		return null;
 	}
-	
+	*/
 
 
 }
