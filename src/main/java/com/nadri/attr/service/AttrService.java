@@ -12,6 +12,7 @@ import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
 import com.nadri.coupon.vo.Coupon;
+import com.nadri.coupon.vo.UserCoupon;
 
 @Service
 @Transactional
@@ -29,5 +30,5 @@ public class AttrService {
 	public int getReviewCount(int attNo) { return attrDao.reviewCount(attNo); }
 	public double getStarCount(int attNo) { return attrDao.star(attNo); }
 	public List<Attraction> getRandom(int attNo, String place) { return attrDao.random(attNo, place); }
-	public List<Coupon> getCoupon(){ return attrDao.coupon(); }
+	public List<UserCoupon> getCoupon(int userNo){ return attrDao.coupon(userNo); }
 }

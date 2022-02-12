@@ -1,5 +1,10 @@
 package com.nadri.coupon.vo;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nadri.user.vo.User;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +24,12 @@ public class UserCoupon {
 	private String used;
 	private int couponNo;
 	private int userNo;
+	
+	private String couponName;
+	private int discountRate;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDate;
 	
 	/* 유저 테이블 */
 	private User user;

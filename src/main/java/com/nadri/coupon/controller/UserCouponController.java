@@ -20,13 +20,19 @@ public class UserCouponController {
 	@Autowired
 	UserCouponService userCouponService;
 	
+	/**
+	 * 유저별 보유 쿠폰 조회
+	 * @param user
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/coupon.nadri")
 	public String userCoupon(@LoginedUser User user, Model model) {
 
 		List<UserCoupon> couponList = userCouponService.getCouponList(user.getNo());
 		model.addAttribute("couponList", couponList);
 		
-		return "coupon/userCoupon";
+		return "user/userCoupon";
 	}
 
 }

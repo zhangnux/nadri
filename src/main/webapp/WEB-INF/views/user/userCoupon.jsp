@@ -94,61 +94,35 @@
 				<div class="card-body"> 이벤트를 걸까말까?</div>
 			</div>
 		</div>
-		<div class="col-md-9">
-		<!-- Featured blog post-->
-			<div class="card mb-4">
-				<div class="card-body" style="height: 50rem;">
-					<div class="card-body" style="text-align:center">
-					<!-- 
-					 <img src="../resources/images/user/user.png" class="card-img-top" alt="..." width="98px" height="98px">
-					 -->
-					<i class="bi bi-piggy-bank" id="lgPiggy"></i>
-					<p class="card-text fs-3 fw-bolder">${LOGIN_USER.name }</p>
-					</div>
-					<div class="row pt-3">
-						<div class="col-md-3 offset-md-1 p-3">
-							<p class="fw-bold">아이디</p>
-						</div>
-						<div class="col-md-5 p-3">
-							<p>${LOGIN_USER.id }</p>
-						</div>
-						<div class="col-md-3 offset-md-1 p-3">
-							<p class="fw-bold">이름</p>
-						</div>
-						<div class="col-md-5 p-3">
-							<p>${LOGIN_USER.name }</p>
-						</div>
-						<div class="col-md-3 offset-md-1 p-3">
-							<p class="fw-bold">이메일</p>
-						</div>
-						<div class="col-md-5 p-3">
-							<p>${LOGIN_USER.email }</p>
-						</div>
-						<div class="col-md-3 offset-md-1 p-3">
-							<p class="fw-bold">전화번호</p>
-						</div>
-						<div class="col-md-5 p-3">
-							<p>${LOGIN_USER.tel }</p>
-						</div>
-						<div class="col-md-3 offset-md-1 p-3">
-							<p class="fw-bold">성별</p>
-						</div>
-						<div class="col-md-5 p-3">
-							<p>${LOGIN_USER.gender }</p>
-						</div>
-						<div class="col-md-3 offset-md-1 p-3">
-							<p class="fw-bold">생일</p>
-						</div>
-						<div class="col-md-5 p-3">
-							<p><fmt:formatDate value="${LOGIN_USER.birth}" pattern="yyyy년 M월 dd일"/></p>
-						</div>
-					</div>
-					<div class="offset-md-9 pt-5 mt-3">
-					<button type="button" class="btn btn-dark" onclick="delete_user()">회원 탈퇴</button>
-					</div>
+<!--  -->
+		<div class="col-md-9 border rounded" style="background-color:#ffffff;">
+			<div class="row">
+				<div style="text-align:center" class="pt-3">
+					<h1><strong>내 보유 쿠폰</strong></h1>
+					<hr>
 				</div>
 			</div>
+			<c:forEach var="c" items="${couponList }">
+				<div class="row border rounded m-2 p-3">
+					<div class="col-5">
+						<h5><strong>${c.couponName }</strong></h5>
+					</div>
+					<div class="col-2">
+						<span>${c.discountRate }% OFF</span>
+					</div>
+					<div class="col-2">
+						<span></span>
+					</div>
+					<div class="col text-end">
+						<span>
+							사용기한 ~
+							<%-- <fmt:formatNumber value="${c.endDate }" pattern="yyyy-MM-dd" />--%>
+						</span>
+					</div>
+				</div>
+			</c:forEach>
 		</div>
+<!--  -->
 	</div>
 </div>
 </c:if>

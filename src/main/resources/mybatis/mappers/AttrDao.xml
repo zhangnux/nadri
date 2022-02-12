@@ -125,15 +125,22 @@
 		from att_option
 		where att_no = #{no}
 	</select>
-	<select id="coupon" resultType="com.nadri.coupon.vo.Coupon">
-		select coupon_no no, coupon_quantity quantity, coupon_discountrate discountRate,
-				coupon_startdate startDate, coupon_enddate endDate, coupon_category category,
-				coupon_name name, coupon_issue_date issueDate, coupon_deleted deleted, coupon_issue_end issueEndDate
-		from coupons
-		where coupon_category='즐길거리'
-        and coupon_deleted='n'
-        and coupon_quantity>0
-        and coupon_issue_end>sysdate
+	<select id="coupon" parameterType="int" resultType="com.nadri.coupon.vo.UserCoupon">
+		select DISTINCT c.coupon_name as couponName, 
+				c.coupon_category as category, 
+				c.coupon_discountrate as discountRate, 
+				c.coupon_enddate as endDate,
+				c.coupon_no as couponNo
+		from coupons c, coupons_user u
+		where c.coupon_no not in (select coupon_no  
+                        from coupons_user
+                        where user_no = 1)
+        and coupon_category like '%즐길거리%'
+		and coupon_enddate > sysdate
+		and coupon_deleted='n'
+		and coupon_used='n'
+        and coupon_quantity > 0
+		and user_no = #{userNo}
 	</select>
 
 	<!-- 리뷰수 -->
