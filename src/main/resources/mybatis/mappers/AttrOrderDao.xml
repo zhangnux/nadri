@@ -36,5 +36,16 @@
 		values (att_order_no_seq.nextval, #{price}, #{userNo});
 	</insert>
 	
+	<!-- 주문정보 -->
+	<insert id="depositOrderInfo">
+		insert into att_order(order_no, order_price, user_no)
+		values (att_order_no_seq.nextval, #{price}, #{userNo});
+	</insert>
+	<!-- 옵션정보 -->
+	<insert id="depositOptionInfo">
+		insert into att_order(order_no, order_price, user_no)
+		values (att_order_no_seq.nextval, #{price}, #{userNo});
+	</insert>
+	
 		
 </mapper>
