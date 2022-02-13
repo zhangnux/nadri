@@ -94,10 +94,10 @@
 		<div class="col-2">
 			<ul class="nav flex-column nav-tabs">
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="list.nadri">전체</a>
+					<a class="nav-link" aria-current="page" href="list.nadri?city=">전체</a>
 				</li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
+				    <a class="nav-link dropdown-toggle ${city.no eq param.city ? 'active' : ''}" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
 				    <ul class="dropdown-menu">
 				    	<c:forEach var="city" items="${cities }">
 				    		<li><a class="dropdown-item" href="list.nadri?city=${city.no} ">${city.cityName }</a></li>
@@ -105,7 +105,7 @@
 				    </ul>
 				</li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
+				    <a class="nav-link dropdown-toggle ${category.no eq param.category ? 'active' : ''}" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
 				    <ul class="dropdown-menu">
 				    	<c:forEach var="category" items="${categories }">
 				    		<li><a class="dropdown-item" href="list.nadri?category=${category.no }">${category.categoryName }</a></li>

@@ -44,12 +44,12 @@ html, body {
 	        </a>
 	      </li>
 	      <li class="nav-item mt-3">
-	        <a href="#" class="nav-link ${menu eq 'qna' ? 'active' : ''}">
+	        <a href="../csboard/list.nadri" class="nav-link ${menu eq 'qna' ? 'active' : ''}">
 	          문의
 	        </a>
 	      </li>
 	      <li class="nav-item mt-3">
-	        <a href="#" class="nav-link ${menu eq 'notice' ? 'active' : ''}">
+	        <a href="../noticeBoard/list.nadri" class="nav-link ${menu eq 'notice' ? 'active' : ''}">
 	          공지사항
 	        </a>
 	      </li>
