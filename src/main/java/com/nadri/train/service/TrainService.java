@@ -171,11 +171,16 @@ public class TrainService {
 	 * @param criteria
 	 * @return
 	 */
-	public List<TrainReservaionTicket> getAllReservatioin(TrainReservationCriteria criteria) {
+	public Map<String, Object> getAllReservatioin(TrainReservationCriteria criteria) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
 		Pagination pagination = new Pagination(criteria.getPageNo(), mapper.getReservationCount(criteria), 7, 5);
 		criteria.setBegin(pagination.getBegin());
 		criteria.setEnd(pagination.getEnd());
-		return mapper.getAllReservatioin(criteria);
+		
+		map.put("pagination", pagination);
+		map.put("infoList", mapper.getAllReservatioin(criteria));
+		return map;
 	}
 	
 	/**

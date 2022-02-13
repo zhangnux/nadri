@@ -422,12 +422,11 @@ public class TrainRestController {
 	}
 	
 	@PostMapping("/searchReserved")
-	public List<TrainReservaionTicket> searchResrvation(@LoginedUser User user, @RequestBody TrainReservationCriteria criteria) {
+	public Map<String, Object> searchResrvation(@LoginedUser User user, @RequestBody TrainReservationCriteria criteria) {
 		log.info("출발:" + criteria);
-		// 페이지네이션
 		criteria.setUserNo(user.getNo());
-		List<TrainReservaionTicket> response = service.getAllReservatioin(criteria);
-		return response;
+		
+		return service.getAllReservatioin(criteria);
 	}
 	
 }
