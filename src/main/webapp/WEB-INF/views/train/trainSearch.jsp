@@ -95,9 +95,6 @@
 			</div>
 		</c:forEach>
 	</div>
-	<div class="border" style="height: 100px; margin-bottom: 100px; margin-top: 70px; background-color: #567CAF; white-space: pre-line;">
-		<h3 style="color: white; margin: 8px 30px;">기차표예매 가이드</h3>
-	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">

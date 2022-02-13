@@ -144,9 +144,10 @@
 						<th>열차번호</th>
 						<th>출발역</th>
 						<th>도착역</th>
-						<th>인원</th>
+						<th>객실등급</th>
+						<th>좌석정보</th>
+						<th>승차자명</th>
 						<th>발권 상태</th>
-						<th>예약 상태</th>
 						<th>금액</th>
 					</tr>
 				</thead>
@@ -193,6 +194,7 @@
 </div>
 <%@ include file="../common/footer.jsp" %>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		let now = new Date(); 
@@ -206,6 +208,57 @@
 		    });
 		});
 		
+		function pagination(no) {
+			let start = moment($("[name=date1]").val(), "YYYY/MM/DD")
+			let end = moment($("[name=date2]").val(), "YYYY/MM/DD")
+			console.log(start)
+			console.log(end.diff(start, 'months'))
+ 			if (end.diff(start, 'months') > 2) {
+				alert("조회기간은 최대 3개월까지 가능합니다.")
+				return;
+			} else if (end.diff(start, 'days') < 0) {
+				alert("시작일이 종료일보다 빠른날짜 입니다.")
+				return;
+			}
+			let result = {startDate:start, endDate:end, pageNo:no}
+			let jsonData = JSON.stringify(result)
+			
+			$.ajax({
+				type:"GET",
+				url:"/api/train/searchReservation",
+				contentType:"application/json",
+				data:jsonData,
+				success:function(response) {
+					console.log(response)
+				}
+			})
+		}
+		
+		$("#btn-search").click(function() {
+			let start = moment($("[name=date1]").val(), "YYYY/MM/DD")
+			let end = moment($("[name=date2]").val(), "YYYY/MM/DD")
+			console.log(start)
+			console.log(end.diff(start, 'months'))
+ 			if (end.diff(start, 'months') > 2) {
+				alert("조회기간은 최대 3개월까지 가능합니다.")
+				return;
+			} else if (end.diff(start, 'days') < 0) {
+				alert("시작일이 종료일보다 빠른날짜 입니다.")
+				return;
+			}
+			let result = {startDate:start, endDate:end, pageNo:1}
+			let jsonData = JSON.stringify(result)
+			console.log(jsonData)
+			$.ajax({
+				type:"POST",
+				url:"/api/train/searchReserved",
+				data:jsonData,
+				contentType:"application/json",
+				success:function(response) {
+					console.log(response)
+				}
+			})
+		})
 		
 	})
 </script>

@@ -202,14 +202,6 @@ public class TrainController {
 		BufferedReader rd;
 		if(conn.getResponseCode() == 200) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//			bufferedbuilder에서 string으로 변경하기
-//			StringBuilder sb = new StringBuilder();
-//			String line = null;
-//			while ((line = rd.readLine()) != null) {
-//				sb.append(line);
-//			}
-//			String text = sb.toString();
-//			System.out.println("결제승인:" + text);
 			if (noList.length == 1) {
 				TrainReservation reservation = service.getReservationOne(user.getNo(), Integer.parseInt(noList[0]));
 				reservation.setTickectStatus("결제");
@@ -231,7 +223,6 @@ public class TrainController {
 				SessionUtils.removeAttribute("reservationNo");
 				return "redirect:/train/resultPayment.nadri?reservationNo1=" + noList[0] + "&reservationNo2=" + noList[1];
 			}
-			
 		} else {
 			throw new KakaoException("진행중인 거래가 있습니다. 잠시 후 다시 시도해 주세요.");
 		}
