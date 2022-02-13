@@ -22,4 +22,16 @@ public class AttrOrderService {
 		return orderDao.productInfo(orderForm); 
 	}
 	
+	/* 오더정보 추가 */
+	public void addDepositOrder(AttrOrder attrOrder) {
+		orderDao.depositOrderInfo(attrOrder);
+	}
+	public void addDepositOption(AttrOrder attrOrder) {
+		orderDao.depositOptionInfo(attrOrder);
+	}
+	/* 쿠폰 사용여부 변경 */
+	public void couponUsedStat(int userNo, int couponNo) {
+		orderDao.couponUsed(userNo, couponNo);
+	}
+	
 }

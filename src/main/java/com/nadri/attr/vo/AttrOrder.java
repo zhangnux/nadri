@@ -30,12 +30,12 @@ public class AttrOrder {
 	private int deposit;
 	private int process;
 	private int userNo;
-	private String name;
-	private String email;
-	private String tel;
+	private String buyerName;
+	private String buyerEmail;
+	private String buyerTel;
 	private int totalQuantity;
 	private int attNo;
-	private String couponNo;
+	private int couponNo;
 	
 	/* 상품정보 */
 	private String attName;

@@ -70,17 +70,19 @@
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>쿠폰선택</strong></h5></div>
 				<div class="col-9" id="coupon"><%-- 쿠폰 선택 --%></div>					
-				<div class="row mt-3" id="discount"><%-- 할인금액표시 --%></div>
-				<input type="hidden" name="couponNo" value="">
 			</div>
-			<div class="row mt-3">
-				<div class="col-3">
-					<h5><strong>최종 결제금액</strong></h5>
-				</div>
-				<input type="hidden" id="originalPrice" value="${orderInfo.price }" disabled>
-				<input type="hidden" name="lastPrice" value="${orderInfo.price }" id="lastPrice">
-				<div class="col-4" id="finalprice">
-					<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원
+			<div class="row" id="priceSection">
+				<div class="row mt-2" id="discount"><%-- 할인금액표시 --%></div>
+				<input type="hidden" name="couponNo" value="0">
+				<div class="row mt-2">
+					<div class="col-3">
+						<h5><strong>최종 결제금액</strong></h5>
+					</div>
+					<input type="hidden" id="originalPrice" value="${orderInfo.price }" disabled>
+					<input type="hidden" name="lastPrice" value="${orderInfo.price }" id="lastPrice">
+					<div class="col-4" id="finalprice">
+						<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원
+					</div>
 				</div>					
 			</div>
 		</div>
@@ -97,17 +99,17 @@
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>예약자명</strong></h5></div>
 				<div class="col-auto originalName">${LOGIN_USER.name }</div>
-				<input type="hidden" id="name" name="name" value="${LOGIN_USER.name }" maxlength="5" size="5" required>				
+				<input type="hidden" id="name" name="buyerName" value="${LOGIN_USER.name }" maxlength="5" size="5" required>				
 			</div>
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>이메일 주소</strong></h5></div>
 				<div class="col-9 originalEmail">${LOGIN_USER.email }</div>
-				<input type="hidden" id="email" name="email" value="${LOGIN_USER.email }" maxlength="5" size="5" required>				
+				<input type="hidden" id="email" name="buyerEmail" value="${LOGIN_USER.email }" maxlength="5" size="5" required>				
 			</div>
 			<div class="row mt-3">
 				<div class="col-3" class="originalTel"><h5><strong>휴대폰 번호</strong></h5></div>
 				<div class="col-9 originalTel">${LOGIN_USER.tel }</div>	
-				<input type="hidden" id="tel" name="tel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
+				<input type="hidden" id="tel" name="buyerTel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
 			</div>
 			<div class="row mt-3 d-flex justify-content-center" id="modifybtn"><%-- 수정버튼 들어갈 곳 --%></div>
 		</div>	
@@ -152,7 +154,7 @@
 						 htmls+="보유한 쿠폰이 없습니다."
 					 } else {
 						 htmls+="<select class=\"coupon-select\" aria-label=\"Default select example\">"
-						 htmls+="	<option selected disabled>사용할 쿠폰을 선택하세요</option>"
+						 htmls+="	<option value=\"0\">쿠폰 사용 안함</option>"
 						 $(coulist).each(function(){
 							 htmls+="<option value="+this.couponNo+">"+this.couponName+" / 할인율 "+this.discountRate+"%</option>"
 						 })
@@ -168,17 +170,24 @@
 				 } // success문 끝
 			 }) // ajax 끝
 			 
-			 // 정보수정 시작
 				 var originalPrice = $("#originalPrice").val();
 			 $("#coupon").change(function(){
-				 var discountRate = $(".coupon-select option:selected").text().slice(-3,-1).trim();
-				 var discountPrice = originalPrice*(discountRate/100);
-				 var finalPrice = originalPrice-discountPrice
-				 var couponNo = $("select").val();
-				 $("#discountPrice").html("<strong>-<span style=\"color:red;\">"+discountPrice+"</span></strong>");
-				 $("#finalprice").html(finalPrice+"원");
-				 $("input[name=lastPrice]").val(finalPrice);
-				 $("input[name=\"couponNo\"]").val(couponNo);
+				if($(".coupon-select option:selected").val()=='0'){
+					 $("#priceSection").hide();
+					 var originPrice = $("#originalPrice").val();
+					 $("#finalprice").html(originPrice);
+					 $("input[name=lastPrice]").val(originPrice);
+				 } else {
+					 $("#priceSection").show();
+					 var discountRate = $(".coupon-select option:selected").text().slice(-3,-1).trim();
+					 var discountPrice = Math.floor(originalPrice*(discountRate/100)/10)*10;
+					 var finalPrice = originalPrice-discountPrice
+					 var couponNo = $("select").val();
+					 $("#discountPrice").html("<strong>-<span style=\"color:red;\">"+discountPrice+"</span></strong>");
+					 $("#finalprice").html(finalPrice+"원");
+					 $("input[name=lastPrice]").val(finalPrice);
+					 $("input[name=\"couponNo\"]").val(couponNo);
+				 }
 			 })	 
 			 
 			 $('a#modifyInfo').click(function(){

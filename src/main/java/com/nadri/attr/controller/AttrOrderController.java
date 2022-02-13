@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.nadri.attr.service.AttrOrderService;
 import com.nadri.attr.service.AttrService;
 import com.nadri.attr.vo.AttrOrder;
+import com.nadri.attr.vo.AttrOrderForm;
 import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
 
@@ -95,11 +97,14 @@ public class AttrOrderController {
 		return "attr/orderform";
 	}
 	
-	@GetMapping("/deposit.nadri")
-	public String desposit() {
+	@PostMapping("/deposit.nadri")
+	public String desposit(@LoginedUser User user,AttrOrderForm form, Model model) {
+		
+
+		
 		return "attr/orderWaiting";
 	}
-	
+
 	/*
 	@ResponseBody
 	@PostMapping("/deposit")
@@ -170,7 +175,19 @@ public class AttrOrderController {
 	}
 	
 	@PostMapping("/waiting.nadri")
-	public String waiting() {
+	public String waiting(@LoginedUser User user,AttrOrderForm form, Model model) {
+		// 주문정보 저장
+		AttrOrder attrOrder = new AttrOrder();
+		int userNo = user.getNo();
+		form.setUserNo(userNo);
+		BeanUtils.copyProperties(form, attrOrder);
+		
+		attrOrderService.addDepositOrder(attrOrder);
+		
+		// 쿠폰사용여부 변경
+		int couponNo = form.getCouponNo();
+		attrOrderService.couponUsedStat(userNo, couponNo);
+		
 		return "attr/orderWaiting";
 	}
 	
