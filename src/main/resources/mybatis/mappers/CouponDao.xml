@@ -53,7 +53,7 @@
 			coupon_name as couponName,
 			coupon_issue_date as issuedate,
 			coupon_deleted as deleted,
-			coupon_issue_end as issueend
+			coupon_issue_end as issueEndDate
 		from coupons
 		where coupon_no = #{no}
 	</select>

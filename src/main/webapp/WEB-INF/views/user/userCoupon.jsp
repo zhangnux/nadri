@@ -102,25 +102,32 @@
 					<hr>
 				</div>
 			</div>
-			<c:forEach var="c" items="${couponList }">
-				<div class="row border rounded m-2 p-3">
-					<div class="col-5">
-						<h5><strong>${c.couponName }</strong></h5>
-					</div>
-					<div class="col-2">
-						<span>${c.discountRate }% OFF</span>
-					</div>
-					<div class="col-2">
-						<span></span>
-					</div>
-					<div class="col text-end">
-						<span>
-							사용기한 ~
-							<%-- <fmt:formatNumber value="${c.endDate }" pattern="yyyy-MM-dd" />--%>
-						</span>
-					</div>
-				</div>
-			</c:forEach>
+			<c:choose>
+				<c:when test="${empty couponList }">
+					<div class="col-12 text-center mt-3"><h5>보유한 쿠폰이 없습니다.</h5></div>
+				</c:when>
+				<c:otherwise>
+					<c:forEach var="c" items="${couponList }">
+						<div class="row border rounded m-2 p-3">
+							<div class="col-5">
+								<h5><strong>${c.couponName }</strong></h5>
+							</div>
+							<div class="col-2">
+								<span>${c.discountRate }% OFF</span>
+							</div>
+							<div class="col-2">
+								<span></span>
+							</div>
+							<div class="col text-end">
+								<span>
+									사용기한 ~
+									<%-- <fmt:formatNumber value="${c.endDate }" pattern="yyyy-MM-dd" />--%>
+								</span>
+							</div>
+						</div>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
 		</div>
 <!--  -->
 	</div>

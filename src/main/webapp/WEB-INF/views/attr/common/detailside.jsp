@@ -123,7 +123,6 @@
 	<script>
 	$(function(){	
 		
-		
 		$("a.btn-outline-warning").click(function(){
 			var couponNo=$(this).attr("id")
 			var userNo = ${LOGIN_USER.no};
