@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class KakaoPayService {
+public class KakaoPayServiceforTrain {
 	
 	/**
 	 * 카카오 결제 준비창 요청
