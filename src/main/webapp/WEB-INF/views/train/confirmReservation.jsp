@@ -168,6 +168,7 @@
 		<button class="btn btn-outline-dark submit-btn" style="border-radius: 0;" type="button">결제하기</button>
 	</div>
 </div>
+<%@ include file="../common/footer.jsp" %>
 </body>
 <script type="text/javascript">
 	$(function() {

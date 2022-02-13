@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.dto.TrainTicketCriteria;
 import com.nadri.train.vo.TrainRefund;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
@@ -17,6 +18,8 @@ import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainFavoriteRouteDto;
+import com.nadri.train.dto.TrainReservaionTicket;
+import com.nadri.train.dto.TrainReservationCriteria;
 
 @Mapper
 public interface TrainMapper {
@@ -82,7 +85,9 @@ public interface TrainMapper {
 	 * @param criteria
 	 * @return
 	 */
-	List<TrainReservation> getAllReservatioin(Map<String, Object> criteria);
+	List<TrainReservaionTicket> getAllReservatioin(TrainReservationCriteria criteria);
+	
+	int getReservationCount(TrainReservationCriteria criteria);
 	
 	/**
 	 * 예약번호에 해당하는 티켓 정보 조회
@@ -91,6 +96,12 @@ public interface TrainMapper {
 	 * @return
 	 */
 	List<TrainTicket> getTicketByReservedNo(@Param("reservedNo1") int reservedNo1, @Param("reservedNo2") int reservedNo2);
+	
+	
+	
+	List<TrainTicket> getTicketByCriteria(TrainTicketCriteria criteria);
+	
+	int getTicketCount(TrainTicketCriteria criteria);
 	
 	/**
 	 * 인기 노선 조회

@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nadri.train.dto.TrainSearchDto;
+import com.nadri.train.dto.TrainTicketCriteria;
 import com.nadri.train.exception.LoginException;
 import com.nadri.train.exception.ReservationException;
 import com.nadri.train.mapper.TrainMapper;
+import com.nadri.train.util.Pagination;
 import com.nadri.train.vo.TrainRefund;
 import com.nadri.train.vo.TrainReservation;
 import com.nadri.train.vo.TrainRoom;
@@ -25,6 +27,8 @@ import com.nadri.train.vo.TrainTicket;
 import com.nadri.train.web.model.TrainRoomInfo;
 import com.nadri.train.dto.TrainCriteria;
 import com.nadri.train.dto.TrainFavoriteRouteDto;
+import com.nadri.train.dto.TrainReservaionTicket;
+import com.nadri.train.dto.TrainReservationCriteria;
 
 @Service
 @Transactional
@@ -167,8 +171,16 @@ public class TrainService {
 	 * @param criteria
 	 * @return
 	 */
-	public List<TrainReservation> getAllReservatioin(Map<String, Object> criteria) {
-		return mapper.getAllReservatioin(criteria);
+	public Map<String, Object> getAllReservatioin(TrainReservationCriteria criteria) {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		Pagination pagination = new Pagination(criteria.getPageNo(), mapper.getReservationCount(criteria), 7, 5);
+		criteria.setBegin(pagination.getBegin());
+		criteria.setEnd(pagination.getEnd());
+		
+		map.put("pagination", pagination);
+		map.put("infoList", mapper.getAllReservatioin(criteria));
+		return map;
 	}
 	
 	/**
@@ -181,29 +193,22 @@ public class TrainService {
 		return mapper.getTicketByReservedNo(reservedNo1, reservedNo2); 
 	}
 	
-	
-//	map안에 list어케 꺼내???	
-//	public Map<String, Object> getTicketAndReservation(int userNo, int reservedNo1, int reservedNo2) {
-//		Map<String, Object> target = new HashMap<String, Object>();
-//		List<TrainReservation> reservationList = getReservationByNo(userNo, reservedNo1, reservedNo2);
-//		List<TrainTicket> ticketList = getTicketByReservedNo(reservedNo1, reservedNo2);
-//		
-//		List<TrainTicket> ticket1 = new ArrayList<>();
-//		List<TrainTicket> ticket2 = new ArrayList<>();
-//		for (TrainTicket ticket : ticketList) {
-//			if (ticket.getReservationNo() == reservationList.get(0).getNo()) {
-//				ticket1.add(ticket);
-//			} else {
-//				ticket2.add(ticket);
-//			}
-//		}
-//		
-//		target.put("reservationList", reservationList);
-//		target.put("ticket1", ticket1);
-//		target.put("ticket2", ticket2);
-//		
-//		return target;
-//	}
+	/**
+	 * 프린트할 티켓 목록 반환
+	 * @param criteria
+	 * @return
+	 */
+	public Map<String, Object> getTicketByCriteria(int pageNo, TrainTicketCriteria criteria) {
+		int totalRecords = mapper.getTicketCount(criteria);
+		Pagination pagination = new Pagination(pageNo, totalRecords, 5, 3);
+		criteria.setBegin(pagination.getBegin());
+		criteria.setEnd(pagination.getEnd());
+		Map<String, Object> map = new HashMap<>();
+		map.put("ticketList", mapper.getTicketByCriteria(criteria));
+		map.put("pagination", pagination);
+		
+		return map;
+	}
 	
 	/**
 	 * 인기 노선 반환
