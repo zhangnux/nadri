@@ -1,12 +1,14 @@
 package com.nadri.manager.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.nadri.manager.dto.FavoriteTrainDto;
 import com.nadri.manager.dto.UserAgeRate;
+import com.nadri.manager.dto.UserCountDate;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.vo.Manager;
 import com.nadri.user.vo.User;
@@ -31,5 +33,7 @@ public interface ManagerMapper {
 	int getCountUserByCriteria(UserCriteria criteria);
 	
 	List<FavoriteTrainDto> getFavoriteTrain();
-		
+	
+	Map<String, Object> getUserCountByMonth();
+//	List<UserCountDate> getUserCountByMonth();
 }

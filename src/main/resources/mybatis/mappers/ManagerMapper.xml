@@ -153,5 +153,31 @@
 		order by a.rn
 	</select>
 	
+	<!-- 이번달과 지난달의 회원수 통계 -->
+	<!-- 질문 -->
+	<select id="getUserCountByMonth" resultType="map">
+		with cntDates
+		as (
+		SELECT *
+		FROM (SELECT to_char(USER_CREATED_DATE, 'fmdd') dates, USER_ID, to_char(USER_CREATED_DATE, 'mm') months
+		        FROM user_table
+		        WHERE to_char(USER_CREATED_DATE, 'yyyy/mm') in (to_char(sysdate, 'yyyy/mm'), to_char(ADD_MONTHS(sysdate, -1), 'yyyy/mm'))    
+		    ) V
+		    PIVOT( 
+		        COUNT(USER_ID)
+		        FOR months 
+		        IN('01' AS "ONE",
+		           '02' AS "TWO")
+		        )
+		),
+		createdDate as (
+		select level as lab
+		from dual
+		connect by level &lt;= 31)
+		select d.lab as dates, nvl(c.ONE, 0) as before, nvl(c.TWO, 0) as now
+		from cntDates c, createdDate d
+		where c.dates(+) = d.lab
+		order by d.lab
+	</select>
 	
 </mapper>

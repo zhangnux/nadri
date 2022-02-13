@@ -18,10 +18,12 @@ import com.nadri.manager.vo.Manager;
 import com.nadri.manager.web.restController.ManagerRestController;
 import com.nadri.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class ManagerController {
-	static final Logger log = LogManager.getLogger(ManagerRestController.class);
 	
 	@Autowired
 	ManagerService service;

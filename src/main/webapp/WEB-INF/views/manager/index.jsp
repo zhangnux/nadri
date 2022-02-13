@@ -147,38 +147,48 @@
 		let date = new Date()
 		let before = date.getMonth() + "월"
 		let now = date.getMonth() + 1 + "월"
-		var chart = bb.generate({
-			  data: {
-			    x: "x",
-			    columns: [
-				["x", 1, 2, 3, 4],
-				[before, 4, 10, 14, 20],
-				[now, 20, 10, 44, 30]
-			    ],
-			    type: "line", 
-			   	colors: {
-			   		before: "#83B1DF",
-			   		now: "#B393D2"
-			    }
-			  },
-			  bindto: "#simpleXYLineChart"
-			});
-		
-		var chart = bb.generate({
-			  data: {
-			    columns: [
-				["기차", 3],
-				["여행지", 5],	["음식점", 2]
-			    ],
-			    type: "pie", 
-			    colors: {
-			      기차: "#83B1DF",
-			      여행지: "#CD868B",
-			      음식점: "#B393D2"
-			    }
-			  },
-			  bindto: "#pieChart"
-		});
+		$.ajax({
+			type:'GET',
+			url:'/rest/admin/index',
+			success:function(response) {
+				let nowRate = response.monthsRate[0];
+				console.log(response.monthsRate[0])
+				console.log(Object.entries(response.monthsRate[0]))
+				bb.generate({
+					  data: {
+					    x: "x",
+					    columns: [
+						["x", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+						[before, 10, 14, 20],
+						[now, 20, 10, 44, 30]
+					    ],
+					    type: "line", 
+					   	colors: {
+					   		before: "#83B1DF",
+					   		now: "#B393D2"
+					    }
+					  },
+					  bindto: "#simpleXYLineChart"
+				});
+				
+				var chart = bb.generate({
+					  data: {
+					    columns: [
+						["기차", 3],
+						["여행지", 5],	["음식점", 2]
+					    ],
+					    type: "pie", 
+					    colors: {
+					      기차: "#83B1DF",
+					      여행지: "#CD868B",
+					      음식점: "#B393D2"
+					    }
+					  },
+					  bindto: "#pieChart"
+				});
+			}
+			
+		})
 	})
 </script>
 </html>

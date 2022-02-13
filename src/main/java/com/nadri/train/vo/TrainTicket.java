@@ -21,6 +21,7 @@ public class TrainTicket {
 	private int priceId;
 	private long price;
 	private int seatNo;
+	private String name;
 	
 	public long getPrice() {
 		if ("어린이".equals(type)) {

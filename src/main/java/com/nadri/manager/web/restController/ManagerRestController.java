@@ -87,13 +87,21 @@ public class ManagerRestController {
 	}
 	
 	@GetMapping("/chart")
-	public Map<String, Object> chart() {
+	public Map<String, Object> chart(@LoginedManager Manager manager) {
 		Map<String, Object> response = new HashMap<>();
 		
 		int total = service.getAllUser().size();
 		response.put("genderRate", service.getGenderRateOfUser(total));
 		response.put("ageRate", service.getAgeRateOfUser(total));
 		
+		return response;
+	}
+	
+	@GetMapping("/index")
+	public Map<String, Object> index(@LoginedManager Manager manager) {
+		Map<String, Object> response = new HashMap<>();
+		
+		response.put("monthsRate", service.getUserCountByMonth());
 		return response;
 	}
 }
