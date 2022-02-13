@@ -16,7 +16,7 @@
 <div class="container">
 	<div class="row mb-3 p-3">
 		<div class="col">
-			<h1>Q&A</h1>
+			<h1><Strong>Q&A</Strong></h1>
 		</div>
 	</div>
 	<div class="mb-3 p-3">

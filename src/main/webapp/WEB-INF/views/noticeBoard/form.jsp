@@ -12,8 +12,14 @@
 </head>
 <body>
 <div class="container">
-	<div class="row mb-3">
-		<div class="col">
+	<div class="row">
+		<div class="col-2">
+		
+		</div>
+		<div class="col-10">
+		
+		</div>
+		<div class="col m-3">
 			<h1>공지사항 등록</h1>
 		</div>
 	</div>
