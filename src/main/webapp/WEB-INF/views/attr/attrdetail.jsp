@@ -142,6 +142,7 @@ article {
 						</div>
 					</c:otherwise>
 				</c:choose>
+				<%--
 				<div class="border-top mt-5 pt-4">
 					<h5 class="mb-3">
 						<strong>위치 안내</strong>
@@ -171,7 +172,7 @@ article {
 					
 					</div>
 				</div>
-				 
+				 --%>
 				 
 				<div class="border-top mt-5 mb-5 pt-4">
 					<h5>
@@ -234,7 +235,6 @@ article {
 								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
 									<i class="bi bi-pencil-square"></i>
 								</button>
-								<input type="hidden" name="upfiles">
 							</div>																				
 						</div>
 						<input type="hidden" name="attNo" value=${param.no }>

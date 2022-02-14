@@ -20,5 +20,7 @@ public interface NoticeBoardMapper {
 	void insertNoticeBoard(NoticeBoard noticeBoard);
 	void updateNoticeBoard(NoticeBoard noticeBoard);
 	void deleteNoticeBoard(int no);
+	
+	List<NoticeBoard> mainBoard();
 
 }

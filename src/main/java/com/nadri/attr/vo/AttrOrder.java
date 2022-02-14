@@ -28,7 +28,7 @@ public class AttrOrder {
 	private int price;
 	private int lastPrice;
 	private int deposit;
-	private int process;
+	private String process;
 	private int userNo;
 	private String buyerName;
 	private String buyerEmail;

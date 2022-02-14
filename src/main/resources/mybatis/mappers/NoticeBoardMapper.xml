@@ -118,6 +118,25 @@
 			where
 				board_no = #{value}
 		</delete>
-
+		
+		<select id="mainBoard" resultType="com.nadri.noticeBoard.vo.NoticeBoard">
+		<![CDATA[
+		select
+			board_no no,
+			board_title title,
+			board_content content,
+			board_created_date createdDate,
+			board_view_count viewCount
+		from
+			(select A.board_no,
+					A.board_title ,
+					A.board_content ,
+					A.board_created_date ,
+					A.board_view_count,
+					row_number() over (order by board_no desc) rn
+			from notice_board A)
+            where rn<6
+        ]]>
+		</select>
 
 </mapper>

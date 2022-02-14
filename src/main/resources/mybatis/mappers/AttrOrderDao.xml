@@ -94,5 +94,18 @@
 		set order_process = '결제완료'
 		where order_no=#{orderNo}
 	</update>
+	
+	<!-- 주문확인용 -->
+	<select id="reservList" parameterType="int" resultMap="orderResultMap">
+	<![CDATA[
+	select a.order_date, a.order_lastprice, a.att_date, a.order_process, a.total_quantity,
+	        o.att_option, o.att_price, p.product_quantity, t.att_place, t.att_name
+	from att_order a, att_order_product p, att_option o, attraction t
+	where a.order_no = p.order_no(+)
+	and p.option_no = o.att_optno(+)
+	and o.att_no = t.att_no(+)
+	and a.user_no=#{userNo}
+	]]>
+	</select>
 		
 </mapper>
