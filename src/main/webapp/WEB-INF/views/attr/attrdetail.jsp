@@ -201,7 +201,7 @@ article {
 						<c:when test="${empty LOGIN_USER }">
 						</c:when>
 						<c:otherwise>
-						<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data">
+						<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data" action="">
 						<div class="row">
 							<div class="col-auto mt-2">
 								<h5>
@@ -234,6 +234,7 @@ article {
 								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
 									<i class="bi bi-pencil-square"></i>
 								</button>
+								<input type="hidden" name="upfiles">
 							</div>																				
 						</div>
 						<input type="hidden" name="attNo" value=${param.no }>

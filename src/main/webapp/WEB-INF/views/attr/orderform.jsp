@@ -32,7 +32,7 @@
 			<div class="row mb-4 border-bottom"><h3><strong>구매 상품</strong></h3></div>
 			<div class="row mb-3">
 				<div class="col-auto"><img src="../../../resources/images/att/${orderInfo.attPic }" style="width:100px;height:100px;object-fit:cover"></div>
-				<div class="col-8"><h4><strong>${orderInfo.attName }</strong></h4></div>
+				<div class="col-8" id="attName"><h4><strong>${orderInfo.attName }</strong></h4></div>
 				<input type="hidden" name="attNo" value="${orderInfo.attNo }">
 			</div>
 			<div class="row mt-3">
@@ -120,7 +120,7 @@
 					<a class="btn btn-primary" id="deposit">무통장입금</a>
 				</div>
 				<div class="col-auto">
-					<a class="btn btn-warning">
+					<a class="btn btn-warning" id="kakaoPay">
 						카카오페이<img src="https://developers.kakao.com/tool/resource/static/img/button/pay/payment_icon_yellow_small.png" style="height:20px;">
 					</a>
 				</div>					
@@ -154,6 +154,7 @@
 						 htmls+="보유한 쿠폰이 없습니다."
 					 } else {
 						 htmls+="<select class=\"coupon-select\" aria-label=\"Default select example\">"
+						 htmls+="	<option selected disabled>쿠폰을 선택해주세요</option>"
 						 htmls+="	<option value=\"0\">쿠폰 사용 안함</option>"
 						 $(coulist).each(function(){
 							 htmls+="<option value="+this.couponNo+">"+this.couponName+" / 할인율 "+this.discountRate+"%</option>"
@@ -263,17 +264,17 @@
 			})
 			
 			 // 카카오페이
-			 /*
-			 $("#").click(function(){
+			 $("#kakaoPay").click(function(){
 				 // 보낼 데이터
 				 var attNo=$("input[name=attNo]").val();
 				 var attDate=$("input[name=attDate]").val();
 				 var totalQuantity=$("input[name=totalQuantity]").val();
 				 var couponNo=$("input[name=couponNo]").val();
 				 var lastPrice=$("input[name=lastPrice]").val();
-				 var name=$("input[name=name]").val();
-				 var email=$("input[name=email]").val();
-				 var tel=$("input[name=tel]").val();
+				 var name=$("input[name=buyerName]").val();
+				 var email=$("input[name=buyerEmail]").val();
+				 var tel=$("input[name=buyerTel]").val();
+				 var attName=$("#attName").text();
 				 
 				 var optionNoLength=$("input[name=optionNo]").length;
 					 if(optionNoLength>0){
@@ -282,11 +283,11 @@
 							optionNo.push($(this).val());
 						 });
 					 } else{
-						 var optionNo=0;
+						 var optionNo='';
 					 }
 				 
 				 var productQuantity=$("input[name=productQuantity]").length;
-					 if(productQuantity>0){
+					 if(productQuantity>1){
 						 var productQuantity=[];
 						 $("input[name=productQuantity]").each(function(){
 							 productQuantity.push($(this).val());
@@ -304,20 +305,19 @@
 						"lastPrice":lastPrice,
 						"name":name,
 						"email":email,
-						"tel":tel
+						"tel":tel,
+						"attName":attName
 				}
-					 
-				// 값을 보내는 ajax
+				
 				$.ajax({
-					type:post,
+					type:"get",
 					data:datas,
-					url:"",
-					success:function(){
-						$("form").submit();
-					}
-				})
-					 
-			 }) */
+					url:"pay/ready",
+					success:function(result){
+						location.href= result.next_redirect_pc_url;
+					}// success끝
+				});//ajax끝		 
+			 }); // 카카오페이 끝
 			
 		}) // 함수의 끝	 
 		</script>

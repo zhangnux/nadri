@@ -19,8 +19,7 @@
 <meta charset="UTF-8">
 <title>나드리::즐길거리</title>
 </head>
-<%-- <body onload="setTimeout('home()', 2000)"> --%>
-<body>
+<body onload="setTimeout('home()', 2000)">
 <%@ include file="../common/navbar.jsp"%>
 <div class="container">
 	<div class="row border rounded mt-5 p-3 border-5">
@@ -34,6 +33,18 @@
 function home(){
 	location.replace("http://localhost/home.nadri");
 }
+
+function noEvent() {
+    if (event.keyCode == 116) {
+        event.keyCode= 2;
+        return false;
+    }
+    else if(event.ctrlKey && (event.keyCode==78 || event.keyCode == 82))
+    {
+        return false;
+    }
+}
+document.onkeydown = noEvent;
 </script>
 </body>
 </html>

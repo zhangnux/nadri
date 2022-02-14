@@ -1,6 +1,7 @@
 package com.nadri.attr.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,13 +25,14 @@ public class AttrOrderForm {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date attDate;
 	private int userNo;
-	private int optionNo;
-	private int productQuantity;
+	private List<Integer> optionNo;
+	private List<Integer> productQuantity;
 	private int totalQuantity;
 	private int couponNo;
 	private int lastPrice;
 	private String buyerName;
 	private String buyerEmail;
 	private String buyerTel;
+	private String attName;
 	
 }
