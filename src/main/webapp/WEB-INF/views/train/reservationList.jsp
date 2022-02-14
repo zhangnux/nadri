@@ -225,16 +225,16 @@
 		<button class="btn border" style="display: none;">인원변경</button>
 	</div>
 </div>
-<div class="modal d-print-block" tabindex="-1" data-bs-backdrop="static" id="modal-print" style="border: 1px solid #D8E5F6;">
+<div class="modal d-print-none" tabindex="-1" data-bs-backdrop="static" id="modal-print" style="border: 1px solid #D8E5F6;">
 	<div class="modal-dialog modal-dialog-scrollable modal-xl" >
    		<div class="modal-content" style="background-color: #7C97B9; min-height: 600px;">
     		<div class="modal-body pt-2">
-    			<div class="d-print-none" style="display: flex; justify-content: space-between;">
+    			<div style="display: flex; justify-content: space-between;">
 	       			<h6 class="modal-title mb-2 fw-bold" style="color: white;">승차권 발권</h6>
     	   			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
 	    		</div>
    				<div style="background-color: white; min-height: 620px; " id="print-list">
-   					<div class="mx-4 pt-3 row d-print-none" id="print-info">
+   					<div class="mx-4 pt-3 row" id="print-info">
    						<div class="col-10">
    							승차권 인쇄 버튼을 눌러서 승차권을 인쇄하여 주십시오.
    						</div>
@@ -245,7 +245,7 @@
    					<div id="print-target" >
 	    				
 	    			</div>
-	    			<div class="d-print-none pb-2" id="pagination">
+	    			<div class="pb-2" id="pagination">
 	    				<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
 							<ul class="pagination justify-content-center mt-4">
 								<li class="page-item" id="previous">
@@ -296,7 +296,14 @@
 	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
+<div class="container-fluid d-print-block">
+	
+</div>
 <script type="text/javascript">
+	var printModal = new bootstrap.Modal(document.getElementById('modal-print'), {
+		keyboard: false
+	});
+
 	$(function() {
 		function addCommas(nStr) {
 		    nStr += '';
@@ -310,9 +317,6 @@
 		    return x1 + x2;
 		}
 		
-		var printModal = new bootstrap.Modal(document.getElementById('modal-print'), {
-			keyboard: false
-		});
 
 		var ticketModal = new bootstrap.Modal(document.getElementById('modal-ticket'), {
 			keyboard: false
@@ -525,8 +529,10 @@
 	
 	// 프린트 하는 방법
 	function onPrint() {
+		$(".d-print-block").html($("#print-target").html())
+		printModal.hide()
 		window.print();
-		
+		location.reload()
 	}
 
 </script>

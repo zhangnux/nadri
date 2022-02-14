@@ -22,6 +22,7 @@
 
 	.container-fluid {
 	    position:fixed;
+   		overflow: auto;
 	    padding:0;
 	    margin:0;
 	
@@ -44,20 +45,30 @@
 		font-size: 15px;
 	}
 
-	#page a {
-		border: 0;
-	}
-	
-	.page {
-		padding: 10px;
-	}
-	
-	a[aria-label] {
-		font-size: 28px;
-		padding: 0px;
-	}
 	.border {
 		background-color: white;
+	}
+	
+	#page span {
+		border: 0;
+		border-radius: 3px;
+	}
+	#page .page-item.active .page-link {
+		background-color: #7E5C5E;
+		height: 40px;
+		
+	}
+	.page-link {
+		color: #9A565B;
+	}
+	.page {
+		padding: 9px 12px;
+		cursor: pointer;
+	}
+	
+	span[aria-label] {
+		padding: 4px 12px;
+		font-size: 21px;
 	}
 </style>
 <body>
@@ -68,7 +79,10 @@
 			<%@ include file="common/navbar.jsp" %>
 		</div>
 		<div class="col-10" style="margin-left: 310px;">
-			<div class="row mt-5 mx-4" >
+			<div class="pt-4 px-4 fw-bold">
+				<h2><Strong>사용자 관리</Strong></h2>
+			</div>
+			<div class="row mt-3 mx-4" >
 				<div class="col-4 border me-4" style="background-color: white; align-self: self-start;">
 					<form action="/admin/userManagement.nadri" method="get" id="form-search-user">
 						<input name="page" type="hidden" value="1">
@@ -116,7 +130,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="d-flex flex-column flex-shrink-0 p-3 border mx-4 mt-3" style="height: 430px;">
+			<div class="d-flex flex-column flex-shrink-0 p-3 border mx-4 mt-3" style="height: 400px;">
 				<table class="text-center" id="table-user">
 					<thead>
 						<tr>
@@ -154,32 +168,13 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
-					<ul class="pagination justify-content-center mt-4">
-						<li class="page-item">
-							<a class="page-link" href="#" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-						<!-- total = 5 -->
-						<!-- page의 블록은 3 -->
-						<c:forEach var="count" begin="1" end="${total }">
-							<c:choose>
-								<c:when test="${count <= 3 }">
-									<li class="page-item ${count eq 1? 'active' : '' }"><a class="page-link page" href="#">${count }</a></li>
-								</c:when>
-								<c:otherwise>
-									<li class="page-item" style="display: none;"><a class="page-link page" href="#">${count }</a></li>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-						<li class="page-item">
-							<a class="page-link" href="#" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
+				<div class="pb-2" id="pagination">
+					<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
+						<ul class="pagination justify-content-center mt-4">
+			
+						</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -258,8 +253,8 @@
 			})
 		
 		}
- 		
  		chart()
+ 		pagination(1)
 		
 		function addCommas(nStr) {
 		    nStr += '';
@@ -273,16 +268,8 @@
 		    return x1 + x2;
 		}
 		
-		// 처음 설정
-		if ($(".page-item:visible").eq(1).text() == 1) {
-			$("[aria-label=Previous]").css('color', 'gray')
-		}
-		if($("li:has(.page)").length <= 3) {
-			$("[aria-label=Next]").css('color', 'gray')
-		}
-		
-		let searchUser = function(no, type) {
-			$("#tbody-user").empty()
+ 		
+ 		function pagination(no) {
 			let deleted = $("[name=delete]:checked").val()
 			let email = $("[name=email]:checked").val()
 			let sms = $("[name=sms]:checked").val()
@@ -292,8 +279,11 @@
 			$.getJSON('/rest/admin/userSearch.do',
 				{option: option, keyword: keyword, email: email, sms:sms, deleted:deleted, pageNo:no},	
 				function(response){
-					if (response.items.length == 0) {
-						$("[aria-label]").hide()
+		 			$("#tbody-user").empty()
+		 			$(".pagination").empty()
+					
+					console.log(response)
+					if (response.userList.length == 0) {
 						let userNone;
 						userNone = '<tr>'
 						userNone += '<td colspan="9">사용자 정보가 존재하지 않습니다.</td>'
@@ -302,8 +292,7 @@
 						$("#tbody-user").append(userNone)
 						
 					} else {
-						$.each(response.items, function(index, user) {
-							$("[aria-label]").show()
+						$.each(response.userList, function(index, user) {
 							let userList;
 							userList = '<tr>'
 							userList += '<td style="cursor: pointer; color: #7E5C5E;"><strong>' + user.no + '</strong></td>'
@@ -322,107 +311,68 @@
 							userList += '</tr>'
 							$("#tbody-user").append(userList)
 						})
-						if (type == 'search') {
-							let pageNation = '';
-		 					$("li:has(.page)").remove()
-							// 검색으로 진행될때 만들어야 될 페이지 네이션 // 검색인지 아닌지 어케 판단함?
-							let totalBlock = response.totalBlock;
-							for (var i=1; i<= totalBlock; i++) {
-								if (no == 1 && i == 1) {
-									pageNation += '<li class="page-item active"><a class="page-link page" href="#">' + 1 + '</a></li>';
-								} else if (i > 3) {
-									pageNation += '<li class="page-item" style="display: none;"><a class="page-link page" href="#">' + i + '</a></li>';
-								} else {
-									pageNation += '<li class="page-item"><a class="page-link page" href="#">' + i + '</a></li>';
-								}
-							}
-							$(".page-item").eq(0).after(pageNation) 
-							
-							if(totalBlock <= 3) {
-								$("[aria-label=Next]").css('color', 'gray')
+						// 페이지 네이션
+						let page = response.pagination
+						let pagination = "";
+						
+						if (page.existPrev) {
+							pagination += '<li class="page-item" id="previous" data-prev-page="' + page.prevPage +'">'
+						} else {
+							pagination += '<li class="page-item disabled" id="previous" data-prev-page="">'
+						}
+						
+						pagination += '<span class="page-link" aria-label="Previous">'
+						pagination += '<span aria-hidden="true"><strong>&laquo;</strong></span>'
+						pagination += '</span></li>'
+						
+						for (var i=page.beginPage; i<= page.endPage; i++) {
+							if (i == page.pageNo) {
+								pagination += '<li class="page-item active"><span class="page-link page" >' + i +'</span></li>'
 							} else {
-								$("[aria-label=Next]").css('color', 'blue')
+								pagination += '<li class="page-item"><span class="page-link page">' + i +'</span></li>'
 							}
 						}
+						
+						if (page.existNext) {
+							pagination += '<li class="page-item" id="next" data-next-page="' + page.nextPage + '">'
+						} else {
+							pagination += '<li class="page-item disabled" id="next" data-next-page="">'
+						}
+						pagination += '<span class="page-link" aria-label="Next">'
+						pagination += '<span aria-hidden="true"><strong>&raquo;</strong></span>'
+						pagination += '</span></li>'
+						$(".pagination").append(pagination)
 					}
 				}
 			)
-			
+		
 		}
-		
-		$('ul').on('click', "[aria-label=Next]", function() {
-			// visible된 값을 끝값
-			// active된 값이 3*n 안에 들때 그 n값이 1이면 next는 n*3 n+1*3 인 것을 visible시킨다.
-			// 0, 1, 2, 3, 4, 5, 6  첫번째 숫자는 3*(block-1), 마지막 숫자는 3*block-1 이다.
-			// 지금 있는 block의 마지막 page숫자
-			let lastBlock = $("li:has(.page):visible").eq(2).text() // 3
-			// 지금 있는 block 번호
-			let block = Math.ceil($("li:has(.page):visible").eq(0).text()/3) // 1
-			// 다음 블록이 있다면 
-			if ($("li:has(.page)").eq(block*3).length != 0) {
-				// 그 다음다음 블록이 존재하는가?
-				if ($("li:has(.page)").eq((block+1)*3).length == 0) {
-					$(this).css('color', 'gray')
-				}
-				$("[aria-label=Previous]").css('color', 'blue')
-				$("li:has(.page)").hide()
-				$("li:has(.page)").slice(lastBlock, 3*(block+1)).show()
-				
-				searchUser($("li:has(.page)").eq(lastBlock).text(), 'pageNation')
-				$(".page-item").removeClass('active')
-				$("li:has(.page)").eq(lastBlock).addClass('active')
-			} else {
-				$(this).css('color', 'gray')
-			}
-		})
-		
-		$('ul').on('click', '[aria-label=Previous]', function() {
-			// visible된 값을 첫번째 값
-			// 0, 1, 2, 3, 4, 5, 6  첫번째 숫자는 $("li:has(.page)")의 3*(block-1), 마지막 숫자는 3*block-1 이다.
-			// block의 첫번째 값
-			let firstBlock = $("li:has(.page):visible").eq(0).text() // 4 // 1
-			// 현재 block 값
-			let block = (Math.ceil($("li:has(.page):visible").eq(0).text()/3)) // 2 // 1
-			
-			if (block-1 != 0) {
-				// 그 다음다음 블록이 존재하는 가? 그 다음다음의 마지막 값 첫번째 값의 -1
-				if ($("li:has(.page)").eq((block-2)*3).text() == 1) {
-					$(this).css('color', 'gray')
-				}
-				$("[aria-label=Next]").css('color', 'blue')
-				$("li:has(.page)").hide()
-				// 그다음 블록의 첫번째 값 ,  지금 블록의 첫번째 값
-				$("li:has(.page)").slice(3*(block-2), 3*(block-1)).show()
-				// 그 다음 블록의 마지막 값
-				searchUser($("li:has(.page)").eq(3*block-4).text(), 'pageNation')
-				$(".page-item").removeClass('active')
-				$("li:has(.page)").eq(3*block-4).addClass('active')
-			} else {
-				$(this).css('color', 'gray')
-			}
-		})
-		
-		
+ 		
 		$('ul').on('click', 'li:has(.page)', function() {
-			searchUser($(this).text(), 'pageNation')
-			$(this).siblings().removeClass('active')
-			$(this).addClass('active')
+			pagination($(this).text())
 		})
 		
 		// 엔터키를 눌렀을 때 
 		$("#form-search-user").keypress(function(e) {
 			e.preventDefault();
 			if (e.keyCode == 13) {
-				searchUser(1, 'search')
+				pagination(1)
 			}
 
 		})
 		// 검색 버튼을 눌렀을 때
 		$(".btn-search").click(function(){
-			searchUser(1, 'search')
-			
+			pagination(1)
 		})
 		
+		$(".pagination").on('click', "#next", function() {
+			console.log($(this).attr("data-next-page"))
+			pagination($(this).attr("data-next-page"))
+		})
+		$(".pagination").on('click', "#previous", function() {
+			console.log($(this).attr("data-prev-page"))
+			pagination($(this).attr("data-prev-page"))
+		})
 		
 	})
 </script>

@@ -18,11 +18,13 @@
 	html, body {
 		width: 100%;
 		height: 100%;
+		overflow: hidden;
 	}
 
 	.container-fluid
 	{
 	    position:fixed;
+		overflow: auto;
 	    padding:0;
 	    margin:0;
 	
@@ -116,7 +118,7 @@
 					<div class="p-3 text-start">
 						<strong>일일 회원 현황</strong>
 					</div>
-					<div class="my-4">
+					<div class="mt-4 mb-5">
 						<ul style="display: table; margin-left: auto; margin-right: auto; font-size:18px;">
 							<li><strong>가입</strong>: <span class="ps-2">4</span>명</li>
 							<li><strong>탈퇴</strong>: <span class="ps-2">4</span>명</li>
@@ -125,13 +127,13 @@
 				</div>
 			</div>
 			<div class="row m-4">
-				<div class="col-6 border me-3" style="text-align: -webkit-center;">
+				<div class="col-6 border me-3" style="text-align: -webkit-center; width: 766px;">
 					<div class="p-3 text-start">
 						<strong>회원 현황</strong>
 					</div>
 					<div id="simpleXYLineChart"></div>
 				</div>
-				<div class="col border">
+				<div class="col-6 border" style="width: 766px;">
 					<div class="p-3 text-start">
 						<strong>매출 현황</strong>
 					</div>
@@ -145,27 +147,33 @@
 <script type="text/javascript">
 	$(function() {
 		let date = new Date()
-		let before = date.getMonth() + "월"
-		let now = date.getMonth() + 1 + "월"
+		let before = date.getMonth()
+		let now = date.getMonth() + 1
 		$.ajax({
 			type:'GET',
 			url:'/rest/admin/index',
 			success:function(response) {
-				let nowRate = response.monthsRate[0];
-				console.log(response.monthsRate[0])
-				console.log(Object.entries(response.monthsRate[0]))
+				var monthsRateArray =response.monthsRate;
+				
+				var dates = monthsRateArray.map(item => item.dates);
+				var befores = monthsRateArray.map(item => item.before);
+				var nows = monthsRateArray.map(item => item.now);
+				
 				bb.generate({
 					  data: {
 					    x: "x",
 					    columns: [
-						["x", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-						[before, 10, 14, 20],
-						[now, 20, 10, 44, 30]
+						["x", ...dates],
+						["지난달", ...befores],
+						["이번달", ...nows]
 					    ],
-					    type: "line", 
+					    types: {
+					    	지난달: "area-spline", // for ESM specify as: area()
+					        이번달: "area-spline", // for ESM specify as: areaSpline()
+					      },
 					   	colors: {
-					   		before: "#83B1DF",
-					   		now: "#B393D2"
+					   		지난달: "#83B1DF",
+					   		이번달: "#B393D2"
 					    }
 					  },
 					  bindto: "#simpleXYLineChart"

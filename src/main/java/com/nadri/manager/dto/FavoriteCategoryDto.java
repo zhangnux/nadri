@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FavoriteTrainDto {
+public class FavoriteCategoryDto {
 	private int rowNo;
 	private String destination;
 	private int count;

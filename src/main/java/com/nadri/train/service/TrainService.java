@@ -93,6 +93,16 @@ public class TrainService {
 	 * @param ticketList
 	 */
 	public int addNewReservation(TrainReservation reservation, List<TrainTicket> ticketList) {
+		List<Integer> seatList = mapper.getSeatList(ticketList.get(0));
+		for (TrainTicket ticket : ticketList) {
+			for (int seat :seatList) {
+				if (ticket.getSeatNo() == seat) {
+					throw new ReservationException("이미 예약된 좌석입니다.");
+				}
+			}
+		
+		}
+		 
 		mapper.insertReservation(reservation);
 		for (TrainTicket ticket : ticketList) {
 			ticket.setReservationNo(reservation.getNo());
@@ -298,4 +308,5 @@ public class TrainService {
 	public void addRefund(List<TrainRefund> refundList) {
 		mapper.insertRefund(refundList);
 	}
+	
 }
