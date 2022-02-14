@@ -22,14 +22,8 @@ public class ReviewService {
 		return reviewDao.getListByNo(attNo, beginIndex, endIndex); 
 	}
 
-	public void addReview(AttrReview attrReview, List<AttrReviewPic> attrReviewPic) throws Exception{ 
+	public void addReview(AttrReview attrReview) throws Exception{ 
 		reviewDao.insertReview(attrReview);
-		if(attrReviewPic!=null) {
-			for(AttrReviewPic pic:attrReviewPic) {
-				pic.setNo(attrReview.getNo());
-				reviewDao.insertReviewPic(pic);
-			}
-		}
 	}
 
 	public void modifyReview(int reviewNo, String content) throws Exception{ 

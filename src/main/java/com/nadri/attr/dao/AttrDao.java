@@ -12,6 +12,7 @@ import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
 import com.nadri.coupon.vo.Coupon;
 import com.nadri.coupon.vo.UserCoupon;
+import com.nadri.restaurant.vo.Restaurant;
 
 @Mapper
 public interface AttrDao{
@@ -41,4 +42,10 @@ public interface AttrDao{
 
 	// 즐길거리 쿠폰리스트
 	List<UserCoupon> coupon(int userNo);
+	
+	// 메인용
+	// 즐길거리
+	List<Attraction> mainRandomAttr();
+	// 레스토랑
+	List<Restaurant> mainRandomRes();
 }

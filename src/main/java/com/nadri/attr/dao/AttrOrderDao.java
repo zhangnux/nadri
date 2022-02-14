@@ -1,5 +1,7 @@
 package com.nadri.attr.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +28,7 @@ public interface AttrOrderDao {
 	void kakaoOrderDelete(int orderNo);
 	// 결제 완료
 	void kakaoCompleted(int orderNo);
+	
+	// 주문내역확인
+	List<AttrOrder> reservList(int userNo);
 }

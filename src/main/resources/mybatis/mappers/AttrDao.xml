@@ -89,7 +89,7 @@
 		
 	</select>
 	
-	<!-- 검색 -->
+	<!-- 검색결과 갯수 -->
 	<select id="getSearchedRow" parameterType="com.nadri.attr.vo.Search" resultType="int">	
 		select count(*)
 		from (
@@ -134,13 +134,12 @@
 		from coupons c, coupons_user u
 		where c.coupon_no not in (select coupon_no  
                         from coupons_user
-                        where user_no = 1)
+                        where user_no = #{userNo})
         and coupon_category like '%즐길거리%'
 		and coupon_enddate > sysdate
 		and coupon_deleted='n'
 		and coupon_used='n'
         and coupon_quantity > 0
-		and user_no = #{userNo}
 	</select>
 
 	<!-- 리뷰수 -->
@@ -173,5 +172,26 @@
 		]]>	
 	</select>
 	
+	<select id="mainRandomAttr" resultMap="AttrResultMap">
+		<![CDATA[
+        select att_no, att_name, att_thumbnail, att_place
+		from(
+		    select * from attraction
+		    order by DBMS_RANDOM.RANDOM
+			)
+		where rownum<5
+		and (att_enddate is null or att_enddate > sysdate)
+		]]>		
+	</select>
+	<select id="mainRandomRes" resultType="com.nadri.restaurant.vo.Restaurant">
+		<![CDATA[
+        select restaurant_no no, restaurant_name as name, restaurant_picture as picture, restaurant_address as address
+		from(
+		    select * from restaurant
+		    order by DBMS_RANDOM.RANDOM
+			)
+		where rownum<5
+		]]>		
+	</select>
 	
 </mapper>

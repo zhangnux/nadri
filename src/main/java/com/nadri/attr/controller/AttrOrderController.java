@@ -213,4 +213,12 @@ public class AttrOrderController {
 		return "attr/orderFail";
 	}
 	
+	// 주문내역확인
+	@GetMapping("/reservation.nadri")
+	public String reservList(@LoginedUser User user, Model model) {
+		int userNo = user.getNo();
+		List<AttrOrder> reserv = attrOrderService.getReservList(userNo);
+		model.addAttribute("reserv",reserv);
+		return "/attr/reservlist";
+	}
 }

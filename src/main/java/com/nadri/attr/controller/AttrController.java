@@ -94,25 +94,12 @@ public class AttrController {
 		
 		String saveDirectory="C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\att\\review";
 		List<AttrReviewPic> attrReviewPics = new ArrayList<>();
-		List<MultipartFile> upfiles = reviewForm.getUpfiles();
-		for(MultipartFile multipartFile:upfiles) {
-			if(!multipartFile.isEmpty()) {
-				String filename = System.currentTimeMillis() + multipartFile.getOriginalFilename();
-				AttrReviewPic attrReviewPic = new AttrReviewPic();
-				attrReviewPic.setPic(filename);
-				attrReviewPics.add(attrReviewPic);
-				InputStream in = multipartFile.getInputStream();
-				FileOutputStream out = new FileOutputStream(new File(saveDirectory,filename));
-				FileCopyUtils.copy(in, out);
-			}
-		}
 		
 		AttrReview attrReview = new AttrReview();
 		BeanUtils.copyProperties(reviewForm, attrReview);
-		reviewService.addReview(attrReview, attrReviewPics);
+		reviewService.addReview(attrReview);
 		
 		return "redirect:/attr/detail.nadri?no="+attrReview.getAttNo();
 	}
 	
-
 }
