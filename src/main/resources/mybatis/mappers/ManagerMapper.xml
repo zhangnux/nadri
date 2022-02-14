@@ -75,7 +75,7 @@
 					and user_sms_check is not null
 				</if>
 			</where>)
-		where rn >= #{begin} and rn &lt; #{end}
+		where rn >= #{begin} and rn &lt;= #{end}
 	</select>
 	
 	<select id="getCountUserByCriteria" parameterType="com.nadri.manager.dto.UserCriteria"  resultType="int">
@@ -123,7 +123,8 @@
 			        else 50
 			        end as age
 				from user_table
-				where user_delete_check = 0)
+				where user_delete_check = 0
+				and user_type = 'normal')
 		group by age),
 		ages as (
 		select level * 10 age
@@ -157,6 +158,7 @@
 		order by a.rn
 	</select>
 	
+	<!-- 결제가 완료이고 이행 날짜가 지났을 경우  -->
 	<!-- 인기 음식점 BEST 4 -->
 	<select id="getFavoirteRestuarnt" resultType="com.nadri.manager.dto.FavoriteCategoryDto">
 		select r.restaurant_name as destination, 
@@ -164,8 +166,8 @@
 				a.cnt as count
 		from restaurant r, (select row_number() over (order by count(*) desc) rn, e.restaurant_no, count(*) cnt
 		        from restaurant_reservation e, restaurant r
-		        where to_char(e.reservation_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
-		        and e.reservation_process = '완료'
+		        where to_char(e.payment_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+		        and e.reservation_process = '결제완료'
 		        and r.restaurant_no = e.restaurant_no
 		        group by e.restaurant_no) a
 		where r.restaurant_no = a.restaurant_no
@@ -175,12 +177,12 @@
 	
 	<!-- 인기 여행지 BEST 4 -->
 	<select id="getFavoirteAttraction" resultType="com.nadri.manager.dto.FavoriteCategoryDto">
-		select n.att_name as destination, n.att_photo as image, b.cnt as count
+		select n.att_name as destination, n.att_thumbnail as image, b.cnt as count
 		from attraction n, (select row_number() over(order by count(*) desc) rn, o.att_no, count(*) cnt
 		                    from att_order o, attraction a
-		                    where to_char(o.order_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+		                    where to_char(o.payment_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
 		                    and o.att_no = a.att_no
-		                    and o.order_process = '결제'
+		                    and o.order_process = '결제완료'
 		                    group by o.att_no) b
 		where n.att_no = b.att_no
 		and b.rn >=1 and b.rn &lt;= 4
@@ -210,4 +212,116 @@
 		order by d.lab
 	</select>
 	
+	<!-- 나이별 매출 -->
+	<select id="getAgePayment" resultType="com.nadri.manager.dto.AgePaymentDto">
+		with userAge
+		as (
+		select CASE
+		        WHEN floor((to_char(sysdate, 'YYYY') - (to_char(user_birth, 'YYYY'))) / 10) * 10 &lt; 20 THEN 10
+		        WHEN floor((to_char(sysdate, 'YYYY') - (to_char(user_birth, 'YYYY'))) / 10) * 10 &lt; 30 THEN 20
+		        WHEN floor((to_char(sysdate, 'YYYY') - (to_char(user_birth, 'YYYY'))) / 10) * 10 &lt; 40 THEN 30
+		        WHEN floor((to_char(sysdate, 'YYYY') - (to_char(user_birth, 'YYYY'))) / 10) * 10 &lt; 50 THEN 40
+		        ELSE 50
+		        END AS AGE, user_no
+		from user_table
+		where user_type = 'normal'),
+		ages as (
+		select level * 10 age
+		from dual
+		connect by level &lt;=5)
+		select s.age as age, nvl((select sum(t.RESERVATION_DEPOSIT)
+		                from RESTAURANT_RESERVATION t, userAge a
+		                where t.RESERVATION_PROCESS = '결제완료' 
+		                and a.user_no = t.user_no
+		                and a.age = s.age
+		                group by a.age), 0) as restaurantPayment,
+		             nvl((select sum(r.total_payment_amount)
+		                from train_reservation r, userAge a
+		                where r.ticketing_status in ('결제', '취소') 
+		                and a.user_no = r.user_no
+		                and a.age = s.age
+		                group by a.age), 0) as trainPayment,
+		            nvl((select sum(o.order_lastprice)
+		                from ATT_ORDER o, userAge a
+		                where ORDER_PROCESS = '결제완료'
+		                and a.user_no = o.user_no
+		               and a.age = s.age
+		                group by a.age), 0) as attractionPayment
+		from ages s
+	</select>
+	
+	<!-- 성별 누적 매출 -->
+	<select id="getGenderPayment" resultType="com.nadri.manager.dto.GenderPaymentDto">
+		with gender
+		as (
+		select distinct user_gender gen
+		from user_table a)
+		select gen as gender, (select sum(t.RESERVATION_DEPOSIT)
+		        from RESTAURANT_RESERVATION t, user_table a
+		        where t.RESERVATION_PROCESS = '결제완료' 
+		        and a.user_no = t.user_no
+		        and a.user_gender = g.gen
+		        group by a.user_gender) as restaurantPayment,
+		            (select sum(r.total_payment_amount)
+		                from train_reservation r, user_table a
+		                where r.ticketing_status in ('결제', '취소')
+		                and a.user_no = r.user_no
+		                and a.user_gender = g.gen
+		                group by a.user_gender) as trainPayment,
+		            (select sum(o.order_lastprice)
+		                from ATT_ORDER o, user_table a
+		                where ORDER_PROCESS = '결제완료'
+		                and a.user_no = o.user_no
+		                and a.user_gender = g.gen
+		                group by a.user_gender) as attractionPayment
+		from gender g
+	</select>
+	
+	<select id="getDayRate" resultType="com.nadri.manager.dto.DayRateDto">
+		select (select sum(TOTAL_PAYMENT_AMOUNT) 
+		        from train_reservation where to_char(RESERVATION_DATE, 'yyyy/mm/dd') = to_char(sysdate, 'yyyy/mm/dd')
+		        and ticketing_status in ('결제', '취소') 
+		        ) as trainPayment,
+		        (select sum(RESERVATION_DEPOSIT)
+		        from RESTAURANT_RESERVATION where to_char(PAYMENT_DATE, 'yyyy/mm/dd') = to_char(sysdate, 'yyyy/mm/dd')
+		        and RESERVATION_PROCESS = '결제완료'
+		        ) as restaurantPayment,	
+		        (select sum(ORDER_LASTPRICE)
+		        from ATT_ORDER where to_char(PAYMENT_DATE, 'yyyy/mm/dd') = to_char(sysdate, 'yyyy/mm/dd')
+		        and ORDER_PROCESS = '결제완료'
+		        ) as attractionPayment,
+		        (select count(*)
+		        from user_table where USER_DELETE_CHECK =1 and to_char(USER_DELETED_DATE, 'yyyy/mm/dd') = to_char(sysdate, 'yyyy/mm/dd')) as deletedUser,
+		        (select count(*)
+		        from user_table where USER_DELETE_CHECK =0 and to_char(USER_created_DATE, 'yyyy/mm/dd') = to_char(sysdate, 'yyyy/mm/dd')) as createdUser
+		from dual
+	</select>
+	
+	<select id="getTrainStatus" resultType="com.nadri.manager.dto.CategoryStatus">
+		select count(decode(ticketing_status, '결제', reservation_no)) as finish,
+        count(decode(ticketing_status, '예약', reservation_no)) as reservaion,
+        count(decode(ticketing_status, '취소', reservation_no)) as cancel
+		from train_reservation
+		where to_char(reservation_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+		or to_char(canceled_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+		or to_char(sold_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+	</select>
+	
+	<select id="getRestaurantStatus" resultType="com.nadri.manager.dto.CategoryStatus">
+		select count(decode(reservation_process, '결제완료', reservation_no)) as finish,
+		        count(decode(reservation_process, '예약', reservation_no)) as reservaion,
+		        count(decode(reservation_process, '취소', reservation_no)) as cancel
+		from restaurant_reservation
+		where to_char(payment_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+		group by reservation_process
+	</select>
+	
+	<select id="getAttractionStatus" resultType="com.nadri.manager.dto.CategoryStatus">
+		select count(decode(order_process, '결제완료', order_no)) as finish,
+		        count(decode(order_process, '예약', order_no)) as reservaion,
+		        count(decode(order_process, '취소', order_no)) as cancel
+		from att_order
+		where to_char(payment_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+		group by order_process
+	</select>
 </mapper>
