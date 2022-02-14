@@ -21,6 +21,7 @@ public class InsertForm {
 	private String name;
 	private String email;
 	private String tel;
+	private String address;
 	private String gender;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birth;

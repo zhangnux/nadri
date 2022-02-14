@@ -9,7 +9,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -98,8 +97,8 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="col-md-9">
+
+		<div class="col-md-8">
 		<!-- Featured blog post-->
 			<div class="card mb-4">
 				<div class="card-body" style="height: 50rem;">
@@ -136,6 +135,12 @@
 							<p>${LOGIN_USER.tel }</p>
 						</div>
 						<div class="col-md-3 offset-md-1 p-3">
+							<p class="fw-bold">주소</p>
+						</div>
+						<div class="col-md-5 p-3">
+							<p>${LOGIN_USER.address }</p>
+						</div>
+						<div class="col-md-3 offset-md-1 p-3">
 							<p class="fw-bold">성별</p>
 						</div>
 						<div class="col-md-5 p-3">
@@ -147,9 +152,10 @@
 						<div class="col-md-5 p-3">
 							<p><fmt:formatDate value="${LOGIN_USER.birth}" pattern="yyyy년 M월 dd일"/></p>
 						</div>
-					</div>
-					<div class="offset-md-9 pt-5 mt-3">
-					<button type="button" class="btn btn-dark" onclick="delete_user()">회원 탈퇴</button>
+						<div class="col-md-10 p-3">
+							<button type="button" class="btn btn-primary" onclick="password_update()">비밀번호 변경</button>
+							<button type="button" class="btn btn-dark" onclick="delete_user()">회원 탈퇴</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -160,6 +166,9 @@
 <script type="text/javascript">
 function delete_user(){
 	location.href="delete.nadri";
+}
+function password_update(){
+	location.href="passwordCheck.nadri";
 }
 
 $(function(){

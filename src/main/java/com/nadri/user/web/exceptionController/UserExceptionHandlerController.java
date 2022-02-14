@@ -8,6 +8,7 @@ import com.nadri.user.exception.DeleteErrorException;
 import com.nadri.user.exception.JoinErrorException;
 import com.nadri.user.exception.LoginErrorException;
 import com.nadri.user.exception.ModifyErrorException;
+import com.nadri.user.exception.PasswordErrorException;
 import com.nadri.user.exception.UserException;
 
 @ControllerAdvice
@@ -40,6 +41,15 @@ public class UserExceptionHandlerController {
 		
 		return "/user/joinForm";
 	}
+	
+	@ExceptionHandler(PasswordErrorException.class)
+	public String handlePasswordErrorException(PasswordErrorException e, Model model) {
+		model.addAttribute("error", e.getMessage());
+		
+		return "/user/passwordCheckForm";
+	}
+	
+	
 	
 	@ExceptionHandler(UserException.class)
 	public String handleException(Exception e) {

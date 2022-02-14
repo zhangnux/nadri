@@ -46,7 +46,20 @@
 		set
 			user_password = #{password},
 			user_tel = #{tel},
-			user_email = #{email}
+			user_email = #{email},
+			user_address = #{address}
+		where
+			user_id = #{id}
+	</update>
+	
+	<!-- 
+		void updateUserPassword 
+	-->
+	<update id="updateUserPassword" parameterType="com.nadri.user.vo.User">
+		update
+			user_table
+		set
+			user_password = #{password}
 		where
 			user_id = #{id}
 	</update>

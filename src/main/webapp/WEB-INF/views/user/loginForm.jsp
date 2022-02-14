@@ -24,54 +24,69 @@
 </head>
 <body>
 <%@ include file="../common/navbar.jsp" %>
+<c:if test="${not empty LOGIN_USER }">
+	<div class="container">
+		<div class="px-4 py-5 my-5 text-center">
+			<h1 class="display-5 fw-bold">이용 불가</h1>
+			<div class="col-lg-6 mx-auto">
+				<p class="lead mb-4">로그인은 비회원만 이용할 수 있습니다.</p>
+				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+					<a href="../home.nadri"><button type="button" class="btn btn-lg btn-dark">홈페이지 돌아가기</button></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</c:if>
 <c:if test="${not empty error }">
 	<div class="alert alert-primary alert-dismissible fade show align-center" role="alert">
 		<strong>오류</strong> ${error }
 		<button type="button" class="btn-close fade show" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 </c:if>
-<div class="container">
-	<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content rounded-5 shadow">
-				<div class="modal-header p-5 pb-4 border-bottom-0">
-					<h5 class="modal-title"></h5>
-					<h2 class="fw-bold mb-0">Sign In</h2>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-	
-				<div class="modal-body p-5 pt-0">
-					<form class="" action="login.nadri" method="post" name="loginForm" id="loginForm">
-						<div class="form-floating mb-3">
-							<input type="text" class="form-control" placeholder="아이디를 입력해주세요." name="id" id="id"> <label for="id">ID</label>
-						</div>
-						<div class="form-floating mb-3">
-							<input type="password" class="form-control" placeholder="비밀번호를 입력해주세요." name="password" id="password"> <label class="form-label" for="password" style="font-size: 13px">Password</label>
-						</div>
-						<div class="d-grid gap-3 p-2 col-12 mx-auto">
-							<button type="submit" class="w-100 mb-2 btn btn-lg rounded-4 btn-primary">Sign In</button>
-						</div>
-						<div class="box">
-							<span class="p-2 h-100 align-center" style="font-size:10pt">Not a member yet?&emsp;<a href="../user/insert.nadri">Sign Up</a></span>
-						</div>
-					</form>
-						<hr class="my-4">
-					<h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-					<a class="w-100 py-2 mb-2 btn btn-outline-warning rounded-4" id="btn-kakao-login" href="kakao/login" type="submit">
-						<i class="bi bi-chat-fill"></i>
-						Sign up with Kakao
-					</a>
+<c:if test="${empty LOGIN_USER }">
+	<div class="container">
+		<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content rounded-5 shadow">
+					<div class="modal-header p-5 pb-4 border-bottom-0">
+						<h5 class="modal-title"></h5>
+						<h2 class="fw-bold mb-0">Sign In</h2>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+		
+					<div class="modal-body p-5 pt-0">
+						<form class="" action="login.nadri" method="post" name="loginForm" id="loginForm">
+							<div class="form-floating mb-3">
+								<input type="text" class="form-control" placeholder=" " name="id" id="id"> <label for="id">ID</label>
+							</div>
+							<div class="form-floating mb-3">
+								<input type="password" class="form-control" placeholder=" " name="password" id="password"> <label for="password">Password</label>
+							</div>
+							<div class="d-grid gap-3 p-2 col-12 mx-auto">
+								<button type="submit" class="w-100 mb-2 btn btn-lg rounded-4 btn-primary">Sign In</button>
+							</div>
+							<div class="box">
+								<span class="p-2 h-100 align-center" style="font-size:14px;">Not a member yet?&emsp;<a href="../user/insert.nadri">Sign Up</a></span>
+							</div>
+						</form>
+							<hr class="my-4">
+						<h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+						<a class="w-100 py-2 mb-2 btn btn-outline-warning rounded-4" id="btn-kakao-login" href="kakao/login" type="submit">
+							<i class="bi bi-chat-fill"></i>
+							Sign up with Kakao
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
+		<form id="form-kakao-login" method="post" action="kakao-login">
+	   		<input type="hidden" name="id" />
+	   		<input type="hidden" name="name" />
+	   		<input type="hidden" name="email" />
+	   		<input type="hidden" name="gender" />
+	   	</form>
 	</div>
-	<form id="form-kakao-login" method="post" action="kakao-login">
-   		<input type="hidden" name="id" />
-   		<input type="hidden" name="name" />
-   		<input type="hidden" name="email" />
-   		<input type="hidden" name="gender" />
-   	</form>
-</div>
+</c:if>
 <script type="text/javascript">
 $(function() {
 	// 카카오 로그인 버튼을 클릭할 때 실행할 이벤트 핸들러 함수를 등록한다.

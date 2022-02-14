@@ -3,18 +3,16 @@ package com.nadri.user.web.controller;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.nadri.user.form.ModifyForm;
-import com.nadri.coupon.service.UserCouponService;
 import com.nadri.user.exception.DeleteErrorException;
-import com.nadri.user.exception.LoginErrorException;
 import com.nadri.user.exception.ModifyErrorException;
+import com.nadri.user.exception.PasswordErrorException;
 import com.nadri.user.form.InsertForm;
 import com.nadri.user.form.KakaoLoginForm;
+import com.nadri.user.form.ModifyForm;
 import com.nadri.user.service.UserService;
 import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
@@ -40,9 +38,6 @@ public class UserController {
 	
 	@PostMapping("/login.nadri")
 	public String login(String id, String password) {
-		if (!StringUtils.hasText(id) || !StringUtils.hasText(password)) {
-			throw new LoginErrorException("아이디와 비밀번호는 필수 입력값입니다.");
-		}
 		// UserService의 사용자 인증 서비스 호출
 		User user = userService.login(id, password);
 		SessionUtils.addAttribute("LOGIN_USER", user);
@@ -97,6 +92,7 @@ public class UserController {
 				.name(form.getName())
 				.email(form.getEmail())
 				.tel(form.getTel())
+				.address(form.getAddress())
 				.gender(form.getGender())
 				.birth(form.getBirth())
 				.type(NORMAL_LOGIN_TYPE)
@@ -130,11 +126,6 @@ public class UserController {
 		// 세션에 로그인 된 유저 정보를 loginedUser에 담기
 		User loginedUser = (User) SessionUtils.getAttribute("LOGIN_USER");
 		
-		
-		if (loginedUser.getId().equals(form.getPassword())) {
-			throw new ModifyErrorException("아이디와 비밀번호가 같습니다.");
-		}
-		
 		// 새 User객체 user 생성 후 form의 값 받아오기
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
@@ -148,8 +139,58 @@ public class UserController {
 		// 세션에 저장된 LOGIN_USER에 savedUser값 전달
 		SessionUtils.addAttribute("LOGIN_USER", savedUser);
 		
-		return "redirect:detail.nadri";
+		return "redirect:updateCompleted.nadri";
 			
+	}
+	
+	@GetMapping("/passwordCheck.nadri")
+	public String passwordCheck() {
+		return "user/passwordCheckForm";
+	}
+	
+	@PostMapping("/passwordCheck.nadri")
+	public String passwordUpdateForm(String password) {
+		User loginUser = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		if (!password.equals(loginUser.getPassword())) {
+			throw new PasswordErrorException("비밀번호가 일치하지 않습니다.");
+		}
+		if (password.equals(loginUser.getPassword())) {
+			return "user/passwordUpdateForm";
+		}
+		
+		return "redirect:passwordCheck.nadri";
+	}
+	
+
+	@GetMapping("/passwordUpdate.nadri")
+	public String passwordUpdateForm() {
+		return "user/passwordUpdateForm";
+	}
+	
+	
+	@PostMapping("/passwordUpdate.nadri")
+	public String passwordUpdate(User user) {
+		// 세션에 로그인 된 유저 정보 가져오기
+		User loginedUser = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		// 변경할 비밀번호가 로그인 한 유저의 아이디와 같다면 오류
+		if (loginedUser.getId().equals(user.getPassword())) {
+			throw new ModifyErrorException("아이디와 비밀번호가 같습니다.");
+		}
+		user.setId(loginedUser.getId());
+		
+		User savedUser = userService.updateUserPassword(user);
+		
+		SessionUtils.addAttribute("LOGIN_USER", savedUser);
+		
+		return "redirect:updateCompleted.nadri";
+	}
+	
+	// 업데이트 완료 화면
+	@GetMapping("/updateCompleted.nadri")
+	public String updateCompleted() {
+		return "user/updateCompleted";
 	}
 	
 	// 유저 삭제
