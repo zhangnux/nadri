@@ -120,8 +120,7 @@
 							</div>
 							<div class="col text-end">
 								<span>
-									사용기한 ~
-									<%-- <fmt:formatNumber value="${c.endDate }" pattern="yyyy-MM-dd" />--%>
+									사용기한　~<fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd" />
 								</span>
 							</div>
 						</div>

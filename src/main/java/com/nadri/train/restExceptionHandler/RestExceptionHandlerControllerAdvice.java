@@ -1,18 +1,13 @@
 package com.nadri.train.restExceptionHandler;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import com.nadri.train.exception.KakaoException;
 import com.nadri.train.exception.LoginException;
 import com.nadri.train.exception.ReservationException;
 import com.nadri.train.service.TrainService;
 import com.nadri.train.web.model.ResponseDto;
-import com.nadri.train.web.model.TrainRefundForm;
 
 @RestControllerAdvice
 public class RestExceptionHandlerControllerAdvice {

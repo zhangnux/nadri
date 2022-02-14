@@ -19,6 +19,7 @@
 	.container-fluid
 	{
     position:fixed;
+    overflow: auto;
     padding:0;
     margin:0;
 
@@ -126,6 +127,7 @@
 <div class="container-fluid bg-light">
 	<div class="row">
 		<div class="col-2" style="position: fixed; height: 100%;">
+			<c:set var="menu" value="coupon"/>
 			<%@ include file="../manager/common/navbar.jsp" %>
 		</div>
 		<div class="col-10" style="margin-left: 310px;">

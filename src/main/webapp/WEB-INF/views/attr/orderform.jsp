@@ -32,7 +32,7 @@
 			<div class="row mb-4 border-bottom"><h3><strong>구매 상품</strong></h3></div>
 			<div class="row mb-3">
 				<div class="col-auto"><img src="../../../resources/images/att/${orderInfo.attPic }" style="width:100px;height:100px;object-fit:cover"></div>
-				<div class="col-8"><h4><strong>${orderInfo.attName }</strong></h4></div>
+				<div class="col-8" id="attName"><h4><strong>${orderInfo.attName }</strong></h4></div>
 				<input type="hidden" name="attNo" value="${orderInfo.attNo }">
 			</div>
 			<div class="row mt-3">
@@ -70,17 +70,19 @@
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>쿠폰선택</strong></h5></div>
 				<div class="col-9" id="coupon"><%-- 쿠폰 선택 --%></div>					
-				<div class="row mt-3" id="discount"><%-- 할인금액표시 --%></div>
-				<input type="hidden" name="couponNo" value="">
 			</div>
-			<div class="row mt-3">
-				<div class="col-3">
-					<h5><strong>최종 결제금액</strong></h5>
-				</div>
-				<input type="hidden" id="originalPrice" value="${orderInfo.price }" disabled>
-				<input type="hidden" name="lastPrice" value="${orderInfo.price }" id="lastPrice">
-				<div class="col-4" id="finalprice">
-					<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원
+			<div class="row" id="priceSection">
+				<div class="row mt-2" id="discount"><%-- 할인금액표시 --%></div>
+				<input type="hidden" name="couponNo" value="0">
+				<div class="row mt-2">
+					<div class="col-3">
+						<h5><strong>최종 결제금액</strong></h5>
+					</div>
+					<input type="hidden" id="originalPrice" value="${orderInfo.price }" disabled>
+					<input type="hidden" name="lastPrice" value="${orderInfo.price }" id="lastPrice">
+					<div class="col-4" id="finalprice">
+						<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원
+					</div>
 				</div>					
 			</div>
 		</div>
@@ -97,17 +99,17 @@
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>예약자명</strong></h5></div>
 				<div class="col-auto originalName">${LOGIN_USER.name }</div>
-				<input type="hidden" id="name" name="name" value="${LOGIN_USER.name }" maxlength="5" size="5" required>				
+				<input type="hidden" id="name" name="buyerName" value="${LOGIN_USER.name }" maxlength="5" size="5" required>				
 			</div>
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>이메일 주소</strong></h5></div>
 				<div class="col-9 originalEmail">${LOGIN_USER.email }</div>
-				<input type="hidden" id="email" name="email" value="${LOGIN_USER.email }" maxlength="5" size="5" required>				
+				<input type="hidden" id="email" name="buyerEmail" value="${LOGIN_USER.email }" maxlength="5" size="5" required>				
 			</div>
 			<div class="row mt-3">
 				<div class="col-3" class="originalTel"><h5><strong>휴대폰 번호</strong></h5></div>
 				<div class="col-9 originalTel">${LOGIN_USER.tel }</div>	
-				<input type="hidden" id="tel" name="tel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
+				<input type="hidden" id="tel" name="buyerTel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
 			</div>
 			<div class="row mt-3 d-flex justify-content-center" id="modifybtn"><%-- 수정버튼 들어갈 곳 --%></div>
 		</div>	
@@ -118,7 +120,7 @@
 					<a class="btn btn-primary" id="deposit">무통장입금</a>
 				</div>
 				<div class="col-auto">
-					<a class="btn btn-warning">
+					<a class="btn btn-warning" id="kakaoPay">
 						카카오페이<img src="https://developers.kakao.com/tool/resource/static/img/button/pay/payment_icon_yellow_small.png" style="height:20px;">
 					</a>
 				</div>					
@@ -152,7 +154,8 @@
 						 htmls+="보유한 쿠폰이 없습니다."
 					 } else {
 						 htmls+="<select class=\"coupon-select\" aria-label=\"Default select example\">"
-						 htmls+="	<option selected disabled>사용할 쿠폰을 선택하세요</option>"
+						 htmls+="	<option selected disabled>쿠폰을 선택해주세요</option>"
+						 htmls+="	<option value=\"0\">쿠폰 사용 안함</option>"
 						 $(coulist).each(function(){
 							 htmls+="<option value="+this.couponNo+">"+this.couponName+" / 할인율 "+this.discountRate+"%</option>"
 						 })
@@ -168,17 +171,24 @@
 				 } // success문 끝
 			 }) // ajax 끝
 			 
-			 // 정보수정 시작
 				 var originalPrice = $("#originalPrice").val();
 			 $("#coupon").change(function(){
-				 var discountRate = $(".coupon-select option:selected").text().slice(-3,-1).trim();
-				 var discountPrice = originalPrice*(discountRate/100);
-				 var finalPrice = originalPrice-discountPrice
-				 var couponNo = $("select").val();
-				 $("#discountPrice").html("<strong>-<span style=\"color:red;\">"+discountPrice+"</span></strong>");
-				 $("#finalprice").html(finalPrice+"원");
-				 $("input[name=lastPrice]").val(finalPrice);
-				 $("input[name=\"couponNo\"]").val(couponNo);
+				if($(".coupon-select option:selected").val()=='0'){
+					 $("#priceSection").hide();
+					 var originPrice = $("#originalPrice").val();
+					 $("#finalprice").html(originPrice);
+					 $("input[name=lastPrice]").val(originPrice);
+				 } else {
+					 $("#priceSection").show();
+					 var discountRate = $(".coupon-select option:selected").text().slice(-3,-1).trim();
+					 var discountPrice = Math.floor(originalPrice*(discountRate/100)/10)*10;
+					 var finalPrice = originalPrice-discountPrice
+					 var couponNo = $("select").val();
+					 $("#discountPrice").html("<strong>-<span style=\"color:red;\">"+discountPrice+"</span></strong>");
+					 $("#finalprice").html(finalPrice+"원");
+					 $("input[name=lastPrice]").val(finalPrice);
+					 $("input[name=\"couponNo\"]").val(couponNo);
+				 }
 			 })	 
 			 
 			 $('a#modifyInfo').click(function(){
@@ -254,17 +264,17 @@
 			})
 			
 			 // 카카오페이
-			 /*
-			 $("#").click(function(){
+			 $("#kakaoPay").click(function(){
 				 // 보낼 데이터
 				 var attNo=$("input[name=attNo]").val();
 				 var attDate=$("input[name=attDate]").val();
 				 var totalQuantity=$("input[name=totalQuantity]").val();
 				 var couponNo=$("input[name=couponNo]").val();
 				 var lastPrice=$("input[name=lastPrice]").val();
-				 var name=$("input[name=name]").val();
-				 var email=$("input[name=email]").val();
-				 var tel=$("input[name=tel]").val();
+				 var name=$("input[name=buyerName]").val();
+				 var email=$("input[name=buyerEmail]").val();
+				 var tel=$("input[name=buyerTel]").val();
+				 var attName=$("#attName").text();
 				 
 				 var optionNoLength=$("input[name=optionNo]").length;
 					 if(optionNoLength>0){
@@ -273,11 +283,11 @@
 							optionNo.push($(this).val());
 						 });
 					 } else{
-						 var optionNo=0;
+						 var optionNo='';
 					 }
 				 
 				 var productQuantity=$("input[name=productQuantity]").length;
-					 if(productQuantity>0){
+					 if(productQuantity>1){
 						 var productQuantity=[];
 						 $("input[name=productQuantity]").each(function(){
 							 productQuantity.push($(this).val());
@@ -295,20 +305,19 @@
 						"lastPrice":lastPrice,
 						"name":name,
 						"email":email,
-						"tel":tel
+						"tel":tel,
+						"attName":attName
 				}
-					 
-				// 값을 보내는 ajax
+				
 				$.ajax({
-					type:post,
+					type:"get",
 					data:datas,
-					url:"",
-					success:function(){
-						$("form").submit();
-					}
-				})
-					 
-			 }) */
+					url:"pay/ready",
+					success:function(result){
+						location.href= result.next_redirect_pc_url;
+					}// success끝
+				});//ajax끝		 
+			 }); // 카카오페이 끝
 			
 		}) // 함수의 끝	 
 		</script>

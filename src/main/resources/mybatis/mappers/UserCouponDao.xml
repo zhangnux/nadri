@@ -90,6 +90,5 @@
 		and coupon_used='n'
 		and user_no = #{userNo}
 	</select>
-	
 
 </mapper>

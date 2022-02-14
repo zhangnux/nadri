@@ -75,7 +75,7 @@
 					and user_sms_check is not null
 				</if>
 			</where>)
-		where rn >= #{pageNo}*5-4 and rn &lt; #{pageNo}*5 + 1
+		where rn >= #{begin} and rn &lt; #{end}
 	</select>
 	
 	<select id="getCountUserByCriteria" parameterType="com.nadri.manager.dto.UserCriteria"  resultType="int">
@@ -107,7 +107,8 @@
 	<!-- 성별 비율 -->
 	<select id="getGenderRateOfUser" resultType="int">
 		select count(*)
-			from user_table
+		from user_table
+		where user_delete_check = 0
 		group by user_gender
 	</select>
 	<!-- 나이별 비율 -->
@@ -115,13 +116,14 @@
 		with age_count 
 		as (select age, count(*) as cnt
 		from ( select CASE
-		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 20 then 10
-		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 30 then 20
-		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 40 then 30
-		        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 50 then 40
-		        else 50
-		        end as age
-		from user_table)
+			        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 20 then 10
+			        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 30 then 20
+			        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 40 then 30
+			        when floor((to_char(sysdate, 'yyyy') - (to_char(user_birth, 'yyyy'))) / 10) * 10 &lt; 50 then 40
+			        else 50
+			        end as age
+				from user_table
+				where user_delete_check = 0)
 		group by age),
 		ages as (
 		select level * 10 age
@@ -135,16 +137,18 @@
 	</select>
 	
 	<!-- 인기 노선 BEST4 -->
-	<select id="getFavoriteTrain" resultType="com.nadri.manager.dto.FavoriteTrainDto">
+	<select id="getFavoriteTrain" resultType="com.nadri.manager.dto.FavoriteCategoryDto">
 		select a.rn as rowNo, 
 			t1.station_name || '  ▶  ' || t2.station_name as destination, 
 			a.cnt as count, 
 			r.route_image as image
 		from train_route r, train_station t1, train_station t2,
 		        (select row_number() over (order by count(*) desc) rn, s.route_no, count(*) cnt
-		        from train_ticket t, train_schedule s
-		        where t.schedule_no = s.schedule_no
-		        and t.is_canceled = 'N'
+		        from train_ticket t, train_schedule s, train_reservation n
+		        where t.is_canceled = 'N'
+		        and t.schedule_no = s.schedule_no
+		        and to_char(n.reservation_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+		        and t.reservation_no = n.reservation_no
 		        group by s.route_no) a
 		where r.route_no = a.route_no
 		and a.rn >=1 and a.rn &lt;= 4
@@ -153,5 +157,57 @@
 		order by a.rn
 	</select>
 	
+	<!-- 인기 음식점 BEST 4 -->
+	<select id="getFavoirteRestuarnt" resultType="com.nadri.manager.dto.FavoriteCategoryDto">
+		select r.restaurant_name as destination, 
+				r.restaurant_picture as image, 
+				a.cnt as count
+		from restaurant r, (select row_number() over (order by count(*) desc) rn, e.restaurant_no, count(*) cnt
+		        from restaurant_reservation e, restaurant r
+		        where to_char(e.reservation_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+		        and e.reservation_process = '완료'
+		        and r.restaurant_no = e.restaurant_no
+		        group by e.restaurant_no) a
+		where r.restaurant_no = a.restaurant_no
+		and a.rn >=1 and a.rn &lt;= 4
+		order by a.rn
+	</select>
+	
+	<!-- 인기 여행지 BEST 4 -->
+	<select id="getFavoirteAttraction" resultType="com.nadri.manager.dto.FavoriteCategoryDto">
+		select n.att_name as destination, n.att_photo as image, b.cnt as count
+		from attraction n, (select row_number() over(order by count(*) desc) rn, o.att_no, count(*) cnt
+		                    from att_order o, attraction a
+		                    where to_char(o.order_date, 'yyyy-mm') = to_char(sysdate, 'yyyy-mm')
+		                    and o.att_no = a.att_no
+		                    and o.order_process = '결제'
+		                    group by o.att_no) b
+		where n.att_no = b.att_no
+		and b.rn >=1 and b.rn &lt;= 4
+		order by b.rn
+	</select>
+	
+	<!-- 이번달과 지난달의 회원수 통계 -->
+	<select id="getUserCountByMonth" resultType="com.nadri.manager.dto.UserCountDate">
+		with sumDate
+		as (
+		select A.dates,
+		    SUM(DECODE(A.months, to_char(ADD_MONTHS(sysdate, -1), 'mm'), A.CNT, 0)) before,
+		    SUM(DECODE(A.months, to_char(sysdate, 'mm'), A.CNT, 0)) now
+		from (select count(*) CNT, to_char(USER_CREATED_DATE, 'mm') months, to_char(USER_CREATED_DATE, 'fmdd') dates
+		    from user_table
+		    where to_char(USER_CREATED_DATE, 'yyyy/mm') in (to_char(sysdate, 'yyyy/mm'), to_char(ADD_MONTHS(sysdate, -1), 'yyyy/mm'))
+		    group by to_char(USER_CREATED_DATE, 'mm'), to_char(USER_CREATED_DATE, 'fmdd')
+		        ) A
+		group by a.dates),
+		createdDate as (
+		select level as lab
+		from dual
+		connect by level &lt;= 31)
+		select d.lab as dates, nvl(s.now, 0) as now, nvl(s.before, 0) as before
+		from sumDate s, createdDate d
+		where s.dates(+) = d.lab
+		order by d.lab
+	</select>
 	
 </mapper>

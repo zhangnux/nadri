@@ -234,7 +234,7 @@
 		        a.schedule_arrival_time as arrivalDate, 
 		        a.train_name as trainName, 
 		        a.train_no as trainNo, 
-		        a.dp as departureStatioin, 
+		        a.dp as departureStation, 
 		        a.ar as arrivalStation,
 		        a.room_type as roomType, 
 		        a.room_name as roomName, 
@@ -243,8 +243,9 @@
 		        a.is_canceled as isCanceled,  
 		        a.price as price,
 		        a.passenger_type as type,
-		        a.reservation_date as reservedDate
-		FROM (select row_number() over(order by t.ticket_no) rn, t.ticket_no, 
+		        a.reservation_date as reservedDate,
+		        a.is_printed as isPrinted
+		FROM (select row_number() over(order by t.ticket_no) rn, t.ticket_no, n.is_printed,
 		        s.schedule_departure_time, s.schedule_arrival_time, e.train_name, t.train_no, 
 		        t1.station_name dp, t2.station_name ar,
 		        r.room_type, r.room_name, t.seat_no,
@@ -276,6 +277,7 @@
 			and r.reservation_date >= #{startDate }
 			and r.reservation_date &lt; #{endDate }+1
 			and t.is_canceled = 'N'
+			and r.reservation_no = t.reservation_no
 		</where>
 	</select>
 	
@@ -322,14 +324,16 @@
 		        a.room_no as roomNo, 
 		        a.room_name as roomName, 
 		        a.room_type as roomType, 
-		        a.seat_no as seatNo
+		        a.seat_no as seatNo,
+		        a.user_name as name
 		from (select row_number() over(order by t.ticket_no) rn, t.ticket_no, 
 		        t.customer_name, t.passenger_type, t.is_canceled, t.reservation_no, 
 		        t.schedule_no, t.train_no, t.price_id, p.price, t.room_no, r.room_name, 
-		        r.room_type, t.seat_no
-		        from train_ticket t, train_room r, train_price p, train_reservation n
+		        r.room_type, t.seat_no, u.user_name
+		        from train_ticket t, train_room r, train_price p, train_reservation n, user_table u
 		        where t.reservation_no = #{reservationNo}
 		        and n.user_no = #{userNo}
+		        and u.user_no = n.user_no
 		        and t.reservation_no = n.reservation_no
 		        and t.room_no = r.room_no
 		        and t.is_canceled = 'N'
@@ -483,5 +487,15 @@
 			from dual
 		</foreach> ) A
 	</insert>
+	
+	<!-- 예약전에 예약된 좌석 있나 확인 -->
+	<select id="getSeatList" parameterType="com.nadri.train.vo.TrainTicket" resultType="int">
+		select seat_no
+		from train_ticket
+		where schedule_no = #{scheduleNo}
+		and room_no = #{roomNo}
+		and train_no = #{trainNo}
+		and price_id = #{priceId}
+	</select>
 	
 </mapper>

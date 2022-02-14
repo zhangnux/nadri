@@ -21,15 +21,17 @@ public class ReviewService {
 	public List<AttrReview> getReviewList(int attNo, int beginIndex, int endIndex) { 
 		return reviewDao.getListByNo(attNo, beginIndex, endIndex); 
 	}
-	
+
 	public void addReview(AttrReview attrReview, List<AttrReviewPic> attrReviewPic) throws Exception{ 
 		reviewDao.insertReview(attrReview);
-		for(AttrReviewPic pic:attrReviewPic) {
-			pic.setNo(attrReview.getNo());
-			reviewDao.insertReviewPic(pic);
+		if(attrReviewPic!=null) {
+			for(AttrReviewPic pic:attrReviewPic) {
+				pic.setNo(attrReview.getNo());
+				reviewDao.insertReviewPic(pic);
+			}
 		}
 	}
-	
+
 	public void modifyReview(int reviewNo, String content) throws Exception{ 
 		reviewDao.updateReview(reviewNo, content);
 	}

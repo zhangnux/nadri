@@ -169,4 +169,7 @@ public interface TrainMapper {
 	void insertRefund(List<TrainRefund> refundList);
 	
 	void deleteRefund(@Param("no") List<Integer> refundList);
+
+
+	List<Integer> getSeatList(TrainTicket ticket);
 }

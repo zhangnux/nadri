@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nadri.manager.annotation.LoginedManager;
-import com.nadri.manager.dto.FavoriteTrainDto;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.service.ManagerService;
 import com.nadri.manager.util.SessionUtils;
@@ -55,14 +54,9 @@ public class ManagerRestController {
 	@GetMapping("/userSearch.do")
 	public Map<String, Object> userSearch(@LoginedManager Manager manager, UserCriteria criteria) {
 		log.info("확인: " + criteria.toString());
-		List<User> userList = service.getUserByCriteria(criteria);
-		int no = service.getCountUserByCriteria(criteria);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("items", userList);
-		map.put("totalBlock", Math.ceil(no/5.0));
-		map.put("active", criteria.getPageNo());
+		Map<String, Object> response = service.getUserByCriteria(criteria);
 		
-		return map;
+		return response;
 	}
 	
 	@GetMapping("/famous/{category}")
@@ -75,11 +69,11 @@ public class ManagerRestController {
 			break;
 
 		case "restaurant":
-			response.put("famousList", service.getFavoriteTrain());
+			response.put("famousList", service.getFavoirteRestuarnt());
 			break;
 			
 		case "attr":
-			response.put("famousList", service.getFavoriteTrain());
+			response.put("famousList", service.getFavoirteAttraction());
 			break;
 		}
 		
@@ -87,13 +81,21 @@ public class ManagerRestController {
 	}
 	
 	@GetMapping("/chart")
-	public Map<String, Object> chart() {
+	public Map<String, Object> chart(@LoginedManager Manager manager) {
 		Map<String, Object> response = new HashMap<>();
 		
 		int total = service.getAllUser().size();
 		response.put("genderRate", service.getGenderRateOfUser(total));
 		response.put("ageRate", service.getAgeRateOfUser(total));
 		
+		return response;
+	}
+	
+	@GetMapping("/index")
+	public Map<String, Object> index(@LoginedManager Manager manager) {
+		Map<String, Object> response = new HashMap<>();
+		
+		response.put("monthsRate", service.getUserCountByMonth());
 		return response;
 	}
 }
