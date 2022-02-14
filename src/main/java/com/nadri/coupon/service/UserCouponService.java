@@ -40,4 +40,9 @@ public class UserCouponService {
 		return userCouponDao.couponCount(userNo);
 	}
 	
+	/* 유저 보유 쿠폰 목록-음식점 */
+	public List<UserCoupon> getRestaurantCouponList(int userNo){
+		return userCouponDao.getRestCouponList(userNo);
+	}
+	
 }

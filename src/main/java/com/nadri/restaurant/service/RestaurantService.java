@@ -144,8 +144,11 @@ public class RestaurantService {
 	
 	
 	public int reserveRestaurant(ReservationForm form) {
-		// 쿠폰 사용은?
-		
+		// 쿠폰 사용
+		int couponNo = form.getCouponNo();
+		if(couponNo != 0) {
+		rtMapper.updateCoupon(form.getUserNo(), couponNo);
+		}
 		Restaurant restaurant = rtMapper.getRestaurantDetail(form.getRestaurantNo());
 		// 레스토랑 sales +1
 		int sales = restaurant.getSales() + 1;
@@ -170,6 +173,7 @@ public class RestaurantService {
 		ReservationCurrentState state = rtMapper.getCurrentState(restaurant.getNo(), form.getReservedDate(), form.getTimetableNo());
 		if(state != null) {
 			int reservedPeople = state.getReservedPeople() + form.getPeople();
+			
 			state.setReservedPeople(reservedPeople);
 			rtMapper.updateCurrentState(state);
 		} else {

@@ -437,5 +437,15 @@
 		delete from rt_reservation_current_state
 		where current_state_no = #{value}
 	</delete>
+	
+	<!--
+		void updateCoupon(@Param("userNo")int userNo, @Param("couponNo")int couponNo)
+	-->
+	<update id="updateCoupon">
+		update coupons_user
+		set coupon_used = 'y'
+		where user_no = ${userNo}
+		and coupon_no= ${couponNo}
+	</update>
 
 </mapper>

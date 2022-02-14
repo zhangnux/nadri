@@ -90,4 +90,10 @@ public class CouponRestController {
 		return couponCount;
 	}
 	
+	@GetMapping("/restaurantcou")
+	public List<UserCoupon> getRestaurantCouponList(@LoginedUser User user){
+		List<UserCoupon> restaurantCouponList = userCouponService.getRestaurantCouponList(user.getNo());
+		return restaurantCouponList;
+	}
+	
 }
