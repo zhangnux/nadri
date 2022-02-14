@@ -40,14 +40,37 @@
 		          	<a class="dropdown-item" href="/train/reservationList.nadri">기차예약조회</a>
 		            <a class="dropdown-item" href="#">위시리스트</a>
 		     	<div class="dropdown-divider"></div>
-		            <a class="dropdown-item" href="/user/logout.nadri">로그아웃</a>
-		          </div>
-		    </li>
-	      </c:if>
+		            <c:choose>
+			            	<c:when test="${LOGIN_USER.type eq 'normal' }">
+					            <a class="dropdown-item" href="/user/logout.nadri">로그아웃</a>
+			            	</c:when>
+			            	<c:when test="${LOGIN_USER.type eq 'kakao' }">
+					            <a class="dropdown-item" href="/user/logout.nadri" id="nav-item-kakao-logout">카카오 로그아웃</a>
+			            	</c:when>
+			            </c:choose>
+			        </div>
+		        </li>
+	        </c:if>
                  	
 	      </ul>
   		</div>
-			    
-     </div>
- </nav>
- <script src="../../../resources/js/scripts.js"></script> 
+  		
+  	</div>
+</nav>       
+<script src="../../../resources/js/scripts.js">
+$(function() {
+	// 카카오 로그아웃 처리
+	$("#nav-item-kakao-logout").click(function(event) {
+		event.preventDefault();
+		Kakao.init('ed0e18dc56c2e428f0075b50e0ea0ac6');
+		
+		if (!Kakao.Auth.getAccessToken()) {
+			location.href = "/home.nadri";
+			return;
+		}
+		Kakao.Auth.logout(function() {
+			location.href = '/user/logout.nadri';
+		});
+	});
+})
+</script>

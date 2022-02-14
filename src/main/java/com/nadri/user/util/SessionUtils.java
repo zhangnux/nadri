@@ -1,6 +1,5 @@
 package com.nadri.user.util;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.context.request.RequestAttributes;
@@ -39,4 +38,7 @@ public class SessionUtils {
 		return RequestContextHolder.getRequestAttributes().getAttribute(name, RequestAttributes.SCOPE_SESSION);
 	}
 	
+	public static void sessionInvlidate() {
+		((HttpSession)RequestContextHolder.getRequestAttributes().getSessionMutex()).invalidate();
+	}
 }
