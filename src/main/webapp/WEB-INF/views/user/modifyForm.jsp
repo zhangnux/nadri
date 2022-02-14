@@ -10,10 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
 	::placeholder {
 		font-size: 0.8em;
@@ -33,14 +32,16 @@
 	font-weight:bold;
  	font-style:italic;
 	font-size:16px;
-	margin: 0;
+	margin: 1;
 }
 .check {
+
 }
-body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
-   legend, li, ol, p, select, option, div, table, label, td, textarea, th, ul {
-   margin: 3px;
-   padding: 3px;
+.userInput{
+	padding:3px;
+}
+input {
+	margin-bottom:10px;
 }
 </style>
 </head>
@@ -51,7 +52,7 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 	<div class="px-4 py-5 my-5 text-center">
 		<h1 class="display-5 fw-bold">이용 불가</h1>
 		<div class="col-lg-6 mx-auto">
-			<p class="lead mb-4">프로필 관리는 로그인 된 사용자만 이용할 수 있습니다.</p>
+			<p class="lead mb-4">프로필 관리는 회원만 이용할 수 있습니다.</p>
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 				<a href="../home.nadri"><button type="button" class="btn btn-lg btn-dark">홈페이지 돌아가기</button></a>
 			</div>
@@ -63,47 +64,51 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 </div>
 </c:if>
 <c:if test="${not empty LOGIN_USER }">
-<div class="container">
-	<div class="row justify-content-sm-center h-100">
-		<c:if test="${not empty error }">
-			<div class="mb-3 alert alert-danger">
-				<strong>오류</strong> ${error }
-			</div>
-		</c:if>
-		<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
-			<div class="card shadow-lg">
-				<div class="card-body p-5">
-					<h1 class="fs-4 card-title fw-bold mb-4">프로필 변경</h1>
-					<div class="card mb-2 align-self-center" style="float: none; margin:0 auto; width: 15rem; height: 10rem;">
-						<div class="card-body" style="text-align: center">
-							<i class="bi bi-piggy-bank" id="ltPiggy"></i>
+	<div class="container">
+		<div class="row justify-content-sm-center h-100">
+			<c:if test="${not empty error }">
+				<div class="mb-3 alert alert-danger">
+					<strong>오류</strong> ${error }
+				</div>
+			</c:if>
+			<div class="col-md-4">
+					<div class="card shadow-lg">
+						<div class="card-body m-3 p-4">
+							<h1 class="fs-4 card-title fw-bold mb-4">프로필 변경</h1>
+							<div class="" style="text-align: center">
+								<i class="bi bi-piggy-bank" id="ltPiggy"></i>
+							</div>
 						</div>
-					</div>
-					<form method="post" action="modify.nadri" name="modifyForm" id="modifyForm">
-						<div class="userInput">
-							<label class="form-label">비밀번호 *</label> <input type="password" class="check form-control" name="password" id="pw" placeholder="영문, 숫자, 특수문자 2가지 조합 4~20자" maxlength="20" />
-							<h6 class="list">
-								<span id="pwError"></span>
-							</h6>
-						</div>
-						<div class="userInput">
-							<label class="form-label">비밀번호 확인 *</label> <input type="password" class="check form-control" id="pwCheck" placeholder="비밀번호를 한번 더 입력해주세요" maxlength="20" />
-							<h6 class="list">
-								<span id="pwCheckError"></span>
-							</h6>
-						</div>
-						<div class="userInput">
-							<label class="form-label">이메일 *</label> <input type="email" class="check form-control" name="email" id="email" value="${LOGIN_USER.email}" placeholder="ID@example.com" maxlength="20" />
-							<h6 class="list">
-								<span id="emailError"></span>
-							</h6>
-						</div>
-						<div class="userInput">
-							<label class="form-label">전화번호 *</label> <input type="tel" class="check form-control" name="tel" id="tel" value="${LOGIN_USER.tel}" placeholder="-를 포함한 13자리" />
-							<h6 class="list">
-								<span id="telError"></span>
-							</h6>
-						</div>
+						<form class="m-3" method="post" action="modify.nadri" name="modifyForm" id="modifyForm">
+						<div class="row">
+							<div class="col-md-5">
+								<label for="firstName" class="form-label">이름</label> 
+								<input type="text" class="form-control" id="name" name="name" value="${LOGIN_USER.name }" disabled>
+							</div>
+							<div class="col-md-7">
+								<label for="firstName" class="form-label">전화번호</label> 
+								<input type="tel" class="check form-control" name="tel" id="tel" value="${LOGIN_USER.tel}" placeholder="-를 포함한 13자리" />
+								<h6 class="list">
+									<span id="telError"></span>
+								</h6>
+							</div>
+							<div class="">
+								<label for="firstName" class="form-label">이메일</label> 
+								<input type="tel" class="check form-control" name="email" id="email" value="${LOGIN_USER.email}" placeholder="ID@example.com" maxlength="20"/>
+								<h6 class="list">
+									<span id="telError"></span>
+								</h6>
+							</div>
+							<div class="">
+								<label for="firstName" class="form-label">주소</label><input class="btn btn-success btn-sm"  style="float:right; font-size:14px;" type="button" onclick="execDaumPostcode()" value="우편번호 찾기"> 
+								<input type="text" class="check form-control" id="roadAddress" name="address" value="${LOGIN_USER.address }">
+								<span id="guide" style="color: #999; display: none"></span>
+								<h6 class="list">
+									<span id="telError"></span>
+								</h6>
+								
+							</div>
+						</div> 
 						<div class="d-grid gap-2">
 							<button type="button" class="btn btn-dark" id="back">이전페이지</button>
 							<button type="submit" class="btn btn-primary">프로필 수정</button>
@@ -113,9 +118,8 @@ body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h3, h5, h6, input,
 			</div>
 		</div>
 	</div>
-</div>
 </c:if>
-	<script type="text/javascript">
+<script type="text/javascript">
 $(function() {
 	$("#modifyForm").submit(function() {
 		
@@ -124,6 +128,7 @@ $(function() {
 		var email = $("#email").val();
 		var tel = $("#tel").val();
 		var error = $("list > span");
+		var address = $("#roadAddress").val();
 		
 		var pwLimit = /^[a-zA-Z0-9~!@#$%^&*()_-]{4,20}$/;
 		var nameLimit = /^[가-힣]{2,15}$/;
@@ -176,6 +181,25 @@ $(function() {
 			
 			return false;
 		}
+	
+		if (tel == "") {
+			Swal.fire({
+				  icon: 'error',
+				  title: '전화번호를 입력하세요.',
+				  text: '전화번호는 필수 입력값입니다.',
+				});
+			$("#tel").focus();
+			
+			return false;
+		}
+		
+		if (!telLimit.test(tel)) {
+			$("#telError").text("전화번호 형식이 올바르지 않습니다.");
+			$("tel").focus();
+			
+			return false;
+		}
+		
 		
 		if (email == "") {
 			Swal.fire({
@@ -195,20 +219,13 @@ $(function() {
 			return false;
 		}
 		
-		if (tel == "") {
+		if (address == "") {
 			Swal.fire({
 				  icon: 'error',
-				  title: '전화번호를 입력하세요.',
-				  text: '전화번호는 필수 입력값입니다.',
+				  title: '도로명 주소를 입력하세요.',
+				  text: '도로명 주소는 필수 입력값입니다.',
 				});
 			$("#tel").focus();
-			
-			return false;
-		}
-		
-		if (!telLimit.test(tel)) {
-			$("#telError").text("전화번호 형식이 올바르지 않습니다.");
-			$("tel").focus();
 			
 			return false;
 		}
@@ -256,23 +273,48 @@ $(function() {
 		
 })// function
 
-/* $(function() {
-	$("[name=insertForm]").submit(function() {
-		var idLimit = /^[a-zA-Z0-9-_]{5,20}$/;
-		var id = $("#id").val();
-		if (id == "") {
-			$("#idError").text("아이디는 필수 입력값입니다.");
-			return false;
-		}
-		if (!idLimit.test(id)) {
-			$("#idError").text("5~20자의 영문 소대문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.");
-			return false;
-		}
-		
-	})
-}) */
 
+function execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
+            // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            var extraRoadAddr = ''; // 참고 항목 변수
+
+            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                extraRoadAddr += data.bname;
+            }
+            // 건물명이 있고, 공동주택일 경우 추가한다.
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+               extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+            if(extraRoadAddr !== ''){
+                extraRoadAddr = ' (' + extraRoadAddr + ')';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById("roadAddress").value = roadAddr;
+
+            var guideTextBox = document.getElementById("guide");
+            // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+            if(data.autoRoadAddress) {
+                var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                guideTextBox.style.display = 'block';
+                
+            } else {
+                guideTextBox.innerHTML = '';
+                guideTextBox.style.display = 'none';
+            }
+        }
+    }).open();
+}
 
 </script>
 <%@ include file="../common/footer.jsp" %>	

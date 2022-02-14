@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nadri.user.exception.DeleteErrorException;
 import com.nadri.user.exception.JoinErrorException;
 import com.nadri.user.exception.LoginErrorException;
+import com.nadri.user.exception.ModifyErrorException;
+import com.nadri.user.exception.PasswordErrorException;
 import com.nadri.user.mapper.UserMapper;
 import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
@@ -23,6 +25,12 @@ public class UserService {
 	public User login(String id, String password) {
 		// 회원정보
 		User savedUser = userMapper.getUserById(id);		
+		if (id == "") {
+			throw new LoginErrorException("아이디를 입력해주세요.");
+		}
+		if (password == "") {
+			throw new LoginErrorException("비밀번호를 입력해주세요.");
+		}
 		if (savedUser == null) {
 			throw new LoginErrorException("회원정보가 존재하지 않습니다.");
 		}
@@ -67,11 +75,29 @@ public class UserService {
 	// 유저 객체 전달받아 프로필 업데이트
 	public User updateUser(User user) {
 		User savedUser = userMapper.getUserById(user.getId());
-		savedUser.setPassword(user.getPassword());
 		savedUser.setEmail(user.getEmail());
 		savedUser.setTel(user.getTel());
+		savedUser.setAddress(user.getAddress());
 		
 		userMapper.updateUser(savedUser);
+		
+		return savedUser;
+	}
+	
+	// 유저 객체 전달받아 비밀번호 업데이트
+	public User updateUserPassword(User user) {
+		User savedUser = userMapper.getUserById(user.getId());
+		
+		if (savedUser.getId() == user.getPassword()) {
+			throw new PasswordErrorException("아이디와 비밀번호가 같습니다.");
+		}
+		if (savedUser.getPassword() == user.getPassword()) {
+			throw new PasswordErrorException("새로운 비밀번호를 입력해주세요.");
+		} 
+		
+		savedUser.setPassword(user.getPassword());
+		
+		userMapper.updateUserPassword(savedUser);
 		
 		return savedUser;
 	}
