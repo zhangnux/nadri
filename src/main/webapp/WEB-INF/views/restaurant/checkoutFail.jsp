@@ -16,27 +16,13 @@
 <div class="container">
     <div class="row mb-3">
         <div class="col">
-            <h1>주문 완료</h1>
+            <h1>예약 실패</h1>
         </div>
     </div>
     <div class="row mb-3">
         <div class="col">
-            <p>주문내용 정보를 확인하세요.</p>
-            <div class="card">
-            	<div class="card-body">
-            		<h5 class="card-title">주문 정보 요약</h5>
-            		<p>예약번호 : ${reservation.no }</p>
-            		<p>예약상태 : ${reservation.process }</p>
-            		<p>예약날짜 : ${reservation.reservedDate }</p>
-            		<p>결제금액 : <fmt:formatNumber value="${reservation.deposit }" /></p>
-            	</div>
-            </div>
+            <p>메인 페이지로 돌아갑니다.</p>
         </div>
-    </div>
-    <div class="row mb-3">
-    	<div class="col text-end">
-    		<a href="/restaurant/list.nadri" class="btn btn-primary btn-ls">계속</a>
-    	</div>
     </div>
 </div>
 <%@ include file="../common/footer.jsp" %>

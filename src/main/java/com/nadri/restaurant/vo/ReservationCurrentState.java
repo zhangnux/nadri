@@ -21,7 +21,7 @@ public class ReservationCurrentState {
 	private int restaurantNo;	// no
 	private int timetableNo;
 	private String startTime;	// startTime;
-	private Date reservedDate;
+	private String reservedDate;
 	private int reservedPeople;	// 해당 날짜에 예약한 총 인원수
 
 }

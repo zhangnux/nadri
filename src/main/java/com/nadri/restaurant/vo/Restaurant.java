@@ -30,7 +30,7 @@ public class Restaurant {
 	private int sales;			// 매출양
 	private double starPoint;		// 별점
 	private double lat;			// 위도 mapx
-	private double lon;			// 경도 mapy
+	private double lng;			// 경도 mapy
 	private String categoryName;
 	private int categoryNo;
 

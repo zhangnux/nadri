@@ -16,6 +16,7 @@ import com.nadri.restaurant.vo.ReservationCurrentState;
 import com.nadri.restaurant.vo.Restaurant;
 import com.nadri.restaurant.vo.RestaurantReview;
 import com.nadri.restaurant.vo.Timetable;
+import com.nadri.restaurant.web.form.ReservationForm;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
 
 @Service
@@ -142,24 +143,85 @@ public class RestaurantService {
 	}
 	
 	
-	public void reserveRestaurant(int restaurantNo) {
-		
+	public int reserveRestaurant(ReservationForm form) {
 		// 쿠폰 사용은?
 		
-		Restaurant restaurant = rtMapper.getRestaurantDetail(restaurantNo);
-		
-		
+		Restaurant restaurant = rtMapper.getRestaurantDetail(form.getRestaurantNo());
 		// 레스토랑 sales +1
 		int sales = restaurant.getSales() + 1;
 		restaurant.setSales(sales);
-		restaurant.setNo(restaurantNo);
+		restaurant.setNo(form.getRestaurantNo());
 		rtMapper.updateRestaurant(restaurant);
 		
 		Reservation reservation = new Reservation();
+		reservation.setRestaurantNo(restaurant.getNo());
+		reservation.setUserNo(form.getUserNo());
+		reservation.setReservedDate(form.getReservedDate());
+		reservation.setName(form.getReservedName());
+		reservation.setTel(form.getTel());
+		reservation.setDeposit(form.getDeposit());
+		reservation.setTimetableNo(form.getTimetableNo());
+		reservation.setAdult(form.getAdult());
+		reservation.setChild(form.getChild());
+		reservation.setPeople(form.getPeople());
 		rtMapper.insertReservation(reservation);
-		ReservationCurrentState state = new ReservationCurrentState();
-		rtMapper.insertCurrentState(state);
+		
+		// currentState가 있을 때와 없을 때로 나뉘어짐.
+		ReservationCurrentState state = rtMapper.getCurrentState(restaurant.getNo(), form.getReservedDate(), form.getTimetableNo());
+		if(state != null) {
+			int reservedPeople = state.getReservedPeople() + form.getPeople();
+			state.setReservedPeople(reservedPeople);
+			rtMapper.updateCurrentState(state);
+		} else {
+			ReservationCurrentState currentState = new ReservationCurrentState();
+			currentState.setReservedDate(form.getReservedDate());
+			currentState.setRestaurantNo(restaurant.getNo());
+			currentState.setTimetableNo(form.getTimetableNo());
+			currentState.setReservedPeople(form.getPeople());
+			rtMapper.insertCurrentState(currentState);
+		}
+		return reservation.getNo();
+	}
+	
+	public void failReservation(int reservationNo) {
+		// 쿠폰 되살리기 추가
+		
+		Reservation reservation = rtMapper.getReservationByNo(reservationNo);		
+		ReservationCurrentState state = rtMapper.getCurrentState(reservationNo, reservation.getReservedDate(), reservation.getTimetableNo());
+		// rservedPeople이 0이되면 state 삭제
+		int reservedPeople = (state.getReservedPeople() - reservation.getPeople());
+		if(reservedPeople == 0 ) {
+			rtMapper.deleteCurrentState(state.getNo());
+		}
+		state.setReservedPeople(reservedPeople);
+		rtMapper.updateCurrentState(state);
+		rtMapper.deleteReservation(reservationNo);
 		
 	}
 	
+	public void cancleReservation(int reservationNo) {
+		Reservation reservation = rtMapper.getReservationByNo(reservationNo);		
+		ReservationCurrentState state = rtMapper.getCurrentState(reservationNo, reservation.getReservedDate(), reservation.getTimetableNo());
+		// rservedPeople이 0이되면 state 삭제
+		int reservedPeople = (state.getReservedPeople() - reservation.getPeople());
+		if(reservedPeople == 0 ) {
+			rtMapper.deleteCurrentState(state.getNo());
+		}
+		state.setReservedPeople(reservedPeople);
+		rtMapper.updateCurrentState(state);
+		// reservation process '취소'
+		reservation.setProcess("취소");
+		rtMapper.updateReservation(reservation);
+	}
+	
+	public Reservation getReservationByNo(int reservationNo) {
+		return rtMapper.getReservationByNo(reservationNo);
+	}
+	
+	public void completedReservation(int reservationNo) {
+		Reservation reservation = rtMapper.getReservationByNo(reservationNo);
+		// process 결제완료
+		reservation.setProcess("결제완료");
+		rtMapper.updateReservation(reservation);
+	}
 }

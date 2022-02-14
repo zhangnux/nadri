@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<%@ include file="../common/head.jsp" %>
     <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,8 +21,7 @@
 
 </style>
 <body>
-
-<%@ include file="../common/mainnav.jsp" %>
+<%@ include file="../common/navbar.jsp" %>
 <header class="masthead" style="background-image: url('../resources/images/nadri-restaurant.jpg');background-attachment: local">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
