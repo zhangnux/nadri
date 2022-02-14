@@ -1,10 +1,7 @@
 package com.nadri.manager.web.exceptionController;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nadri.manager.exception.LoginErrorException;
 
@@ -12,9 +9,8 @@ import com.nadri.manager.exception.LoginErrorException;
 public class ExceptionHandlerController {
 
 	@ExceptionHandler(LoginErrorException.class)
-	public String handlerLoginException(LoginErrorException e, Model model) {
-		model.addAttribute(e);
-		return "manager/login";
+	public String handlerLoginErrorException(LoginErrorException e) {
+		return "/admin";
 	}
 	
 	// error페이지 만들면 사용

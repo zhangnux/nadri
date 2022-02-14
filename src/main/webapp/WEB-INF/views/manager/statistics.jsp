@@ -18,11 +18,13 @@
 	html, body {
 		width: 100%;
 		height: 100%;
+		overflow: hidden;
 	}
 
 	.container-fluid
 	{
     position:fixed;
+    overflow: auto;
     padding:0;
     margin:0;
 
@@ -113,10 +115,10 @@
 				</div>
 			</div>
 			<div class="row mx-4 mt-2">
-				<div class="col-6 border me-3 p-4">
+				<div class="col-6 border me-3" style="text-align: -webkit-center; width: 766px;">
 					<div id="barChart_1"></div>
 				</div>
-				<div class="col border p-4">
+				<div class="col-6 border" style="width: 766px;">
 					<div id="barChart_2"></div>
 				</div>
 			</div>
@@ -209,18 +211,28 @@
 				dataType:'json',
 				success:function(response) {
 					$("#famousList").empty()
-					$.each(response.famousList, function(index, data) {
+					if (response.famousList.length == 0) {
 						let list;
-						list = '<div class="border">'
-						list += '<img alt="' + data.destination + '" src="../../resources/images/train/route/' + data.image + '">'
-						list += '<div class="text-start ps-3 mt-3">'
-						list += '<h5><strong>' + data.destination +'</strong></h5>'
-						list += '</div>'
-						list += '<div class="text-start pb-2 px-3">예약 건수: ' + data.count + '</div>'
-						list += '</div>'
-						
+						list = '<div class="text-center" style="height: 160px; margin-left: 100%; margin-top: 100px;"><h5><strong>예약 정보가 존재하지 않습니다.</strong></h5></div>'
 						$("#famousList").append(list)
-					})
+					} else {
+						$.each(response.famousList, function(index, data) {
+							let list;
+							list = '<div class="border">'
+							if (category == 'restaurant') {
+								list += '<img alt="' + data.destination + '" src="' + data.image +'">'
+							} else {
+								list += '<img alt="' + data.destination + '" src="../../resources/images/train/route/' + data.image + '">'
+							}
+							list += '<div class="text-start ps-3 mt-3">'
+							list += '<h5><strong>' + data.destination +'</strong></h5>'
+							list += '</div>'
+							list += '<div class="text-start pb-2 px-3">예약 건수: ' + data.count + '</div>'
+							list += '</div>'
+							
+							$("#famousList").append(list)
+						})
+					}
 				}, 
 				error:function() {
 					

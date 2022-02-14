@@ -94,12 +94,12 @@ article {
 			<%@ include file="common/detailside.jsp"%>
 			<div class="col-8 mt-3 mb-5">
 				<div class="mb-3">
-					<h5>
-						<i class="bi bi-pin-map"></i> <a
-							href="list.nadri?place=${detail.place }"
-							style="text-decoration: none; color: black;">
-							&nbsp;${detail.place }</a>
-					</h5>
+					<strong>
+						<i class="bi bi-map"></i>
+							<a href="list.nadri" style="text-decoration: none; color: black;">전국</a>
+							<a href="list.nadri?place=${detail.place }" style="text-decoration: none; color: black;">
+							>&nbsp;${detail.place }</a>
+					</strong>
 				</div>
 				<div>
 					<h2 class="text-center">
@@ -201,7 +201,7 @@ article {
 						<c:when test="${empty LOGIN_USER }">
 						</c:when>
 						<c:otherwise>
-						<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data">
+						<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data" action="">
 						<div class="row">
 							<div class="col-auto mt-2">
 								<h5>
@@ -230,32 +230,11 @@ article {
 						</div>
 						
 						<div class="row mt-4 register" id="thumb">
-						 <%--
-							<div class="col-auto">
-								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
-										style="padding-top:12px;height:50px;width:50px">
-									<i class="bi bi-camera"></i>
-								</label>
-								<input type="file" name="upfiles" id="rphoto"
-										accept="image/*" multiple/>
-								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
-										style="padding-top:12px;height:50px;width:50px">
-									<i class="bi bi-camera"></i>
-								</label>
-								<input type="file" name="upfiles" id="rphoto"
-										accept="image/*" multiple/>
-								<label class="btn btn-outline-danger mt-auto mb-2" for="rphoto"
-										style="padding-top:12px;height:50px;width:50px">
-									<i class="bi bi-camera"></i>
-								</label>
-								<input type="file" name="upfiles" id="rphoto"
-										accept="image/*" multiple/>
-							</div>
-						--%>		
 							<div class="col-12 text-end">
 								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
 									<i class="bi bi-pencil-square"></i>
 								</button>
+								<input type="hidden" name="upfiles">
 							</div>																				
 						</div>
 						<input type="hidden" name="attNo" value=${param.no }>

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="mybatis.mappers.AttrOrderDao">
-	<resultMap id="orderResultMap" type="com.nadri.attr.vo.AttrOrderForm">
+<mapper namespace="com.nadri.attr.dao.AttrOrderDao">
+	<resultMap id="orderResultMap" type="com.nadri.attr.vo.AttrOrder">
 		<id column="order_no" property="orderNo" />
 		<result column="order_date" property="attDate" />
 		<result column="order_price" property="price" />
 		<result column="order_lastprice" property="lastPrice"/>
 		<result column="order_deposit" property="deposit" />
 		<result column="order_process" property="process" />
+		<result column="user_no" property="userNo" />
+		<result column="buyer_tel" property="buyerTel" />
+		<result column="buyer_name" property="buyerName" />
+		<result column="buyer_email" property="buyerEmail" />
+		<result column="att_no" property="attNo" />
+		<result column="coupon_no" property="couponNo" />
+		<result column="total_quantity" property="totalQuantity" />
 		<collection property="userInfo" resultMap="userResultMap" />
 		<collection property="attraction" resultMap="AttrResultMap" />
 		<collection property="attOption" resultMap="AttrOptionMap" />
@@ -31,10 +38,61 @@
 		<result column="att_optno" property="optNo"/>
 	</resultMap>
 	
-	<insert id="orderInfo" parameterType="com.nadri.attr.vo.AttrOrderForm">
-		insert into att_order(order_no, order_price, user_no)
-		values (att_order_no_seq.nextval, #{price}, #{userNo});
+	<!-- 무통장 -->
+	<!-- 주문정보 -->
+	<insert id="depositOrderInfo" parameterType="com.nadri.attr.vo.AttrOrder">
+		insert into att_order(order_no, order_lastprice, user_no, att_date, buyer_tel, buyer_email, buyer_name, att_no, coupon_no, total_quantity)
+		values (att_order_no_seq.nextval, #{lastPrice}, #{userNo}, #{attDate}, #{buyerTel}, #{buyerEmail}, #{buyerName}, #{attNo}, #{couponNo}, #{totalQuantity})
 	</insert>
+	<!-- 옵션정보 -->
+	<insert id="depositOptionInfo" parameterType="com.nadri.attr.vo.AttrOrder">
+		insert into att_order_product(order_no, product_quantity, option_no)
+		values (att_order_no_seq.currval, #{productQuantity}, #{optionNo})
+	</insert>
+	<!-- 판매량 증가 -->
+	<update id="salesQuantity" parameterType="int">
+		update attraction
+		set att_sales = att_sales+1
+		where att_no = #{userNo}
+	</update>
 	
+	<!-- 쿠폰사용완료 -->
+	<update id="couponUsed">
+		update coupons_user
+		set coupon_used = 'y'
+		where user_no = ${userNo}
+		and coupon_no= ${couponNo}
+	</update>
+	
+	<!-- 카카오페이용 -->
+	<!-- 주문정보 -->
+	<insert id="kakaoOrderInfo" parameterType="com.nadri.attr.vo.AttrOrder">
+		<selectKey keyProperty="orderNo" resultType="int" order="BEFORE">
+			select att_order_no_seq.nextval from dual
+		</selectKey>
+		insert into att_order(order_no, order_lastprice, user_no, att_date, buyer_tel, buyer_email, buyer_name, att_no, coupon_no, total_quantity)
+		values (#{orderNo},  #{lastPrice}, #{userNo}, #{attDate}, #{buyerTel}, #{buyerEmail}, #{buyerName}, #{attNo}, #{couponNo}, #{totalQuantity})
+	</insert>
+	<!-- 옵션정보 -->
+	<insert id="kakaoOptionInfo" parameterType="com.nadri.attr.vo.AttrOrder">
+		insert into att_order_product(order_no, product_quantity, option_no)
+		values (att_order_no_seq.currval, #{productQuantity}, #{optionNo})
+	</insert>
+	<!-- 옵션정보삭제 by userNo -->
+	<delete id="kakaoOptionDelete" parameterType="int">
+		delete att_order_product
+		where order_no=#{orderNo}
+	</delete>
+	<!-- 주문정보삭제 by userNo -->
+	<delete id="kakaoOrderDelete" parameterType="int">
+		delete att_order
+		where order_no =#{orderNo}	
+	</delete>
+	<!-- 결제완료 -->
+	<update id="kakaoCompleted" parameterType="int">
+		update att_order
+		set order_process = '결제완료'
+		where order_no=#{orderNo}
+	</update>
 		
 </mapper>

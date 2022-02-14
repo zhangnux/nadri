@@ -24,27 +24,15 @@
 <div class="container">
 	<div class="row border rounded mt-5 p-3 border-5">
 		<div class="row border-bottom text-center border-2">
-			<h2><strong>상품 주문이 완료되었습니다.</strong></h2>
+			<h2><strong>결제가 취소되었습니다.</strong></h2>
 		</div>
-		<div class="col text-center mt-3"><h4>상세 내역은 마이페이지를 확인해주세요</h4></div>
+		<div class="col text-center mt-3"><h4>처음부터 다시 진행해주세요.</h4></div>
 	</div>
 </div>
 <script>
 function home(){
 	location.replace("http://localhost/home.nadri");
 }
-
-function noEvent() {
-    if (event.keyCode == 116) {
-        event.keyCode= 2;
-        return false;
-    }
-    else if(event.ctrlKey && (event.keyCode==78 || event.keyCode == 82))
-    {
-        return false;
-    }
-}
-document.onkeydown = noEvent;
 </script>
 </body>
 </html>

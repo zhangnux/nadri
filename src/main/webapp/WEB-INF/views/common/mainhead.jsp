@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap" rel="stylesheet" type="text/css" />
 
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="../resources/css/styles.css" rel="stylesheet" />
+<link href="../../../resources/css/styles.css" rel="stylesheet" />
 <!-- JQuery -->
 <style type="text/css">
 .row {

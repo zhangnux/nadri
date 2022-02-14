@@ -23,19 +23,22 @@
 <%@ include file="../common/navbar.jsp"%>
 <div class="container">
 	<div class="row mt-5 mb-4"><h2><strong>결제하기</strong></h2></div>
-			
-	<form action="waiting.nadri" method="post">
+<c:if test="${empty LOGIN_USER }">
+		<div class="col text-center">로그인 후 다시 이용해주세요</div>
+</c:if>
+<%-- <c:if test="${not empty LOGIN_USER }">		--%>
+	<form method="post" action="waiting.nadri">
 		<div class="border rounded p-3 mb-3">
 			<div class="row mb-4 border-bottom"><h3><strong>구매 상품</strong></h3></div>
 			<div class="row mb-3">
 				<div class="col-auto"><img src="../../../resources/images/att/${orderInfo.attPic }" style="width:100px;height:100px;object-fit:cover"></div>
-				<div class="col-8"><h4><strong>${orderInfo.attName }</strong></h4></div>
+				<div class="col-8" id="attName"><h4><strong>${orderInfo.attName }</strong></h4></div>
 				<input type="hidden" name="attNo" value="${orderInfo.attNo }">
 			</div>
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>사용일</strong></h5></div>
-				<div class="col-9"><fmt:formatDate value="${orderInfo.attDate }" pattern="yyyy년 MM월 dd일"/></div>
-				<input type="hidden" name="attDate" value="${orderInfo.attDate }">						
+				<div class="col-9" id="attDateText"><fmt:formatDate value="${orderInfo.attDate }" pattern="yyyy년 MM월 dd일"/></div>
+				<input type="date" name="attDate" value="<fmt:formatDate value="${orderInfo.attDate }" pattern="yyyy-MM-dd"/>" style="display:none;">					
 			</div>
 <c:choose>
 	<c:when test="${not empty optionInfo}">
@@ -45,7 +48,7 @@
 				<div class="col-5"><strong>${opt.optionName }</strong></div>
 				<input type="hidden" name="productQuantity" value="${opt.productQuantity }">						
 				<div class="col-4">${opt.productQuantity }매　　
-					<span onload="optquantity();addComma();" class="optionPrice${opt.optionNo }">${(opt.optionPrice)*(opt.productQuantity) }
+					<span onload="optquantity();" class="optionPrice${opt.optionNo }">${(opt.optionPrice)*(opt.productQuantity) }
 					</span>원
 				</div>
 			</div>
@@ -54,27 +57,32 @@
 	<c:otherwise>
  		<div class="row mt-3">
 			<div class="col-3"><h5><strong>구매수량</strong></h5></div>
-			<div class="col-4">${orderInfo.productQuantity }매　　<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원</div>
+			<div class="col-4">
+				<input type="hidden" name="productQuantity" value="${orderInfo.productQuantity }">
+				${orderInfo.productQuantity }매　　<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원</div>
 		</div>
 	</c:otherwise>
 </c:choose>
 		</div>
-	
+		<input type="hidden" name="totalQuantity" value="0">
 		<div class="border rounded p-3 mb-3">								
 			<div class="row mb-4 border-bottom"><h3><strong>할인 적용</strong></h3></div>
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>쿠폰선택</strong></h5></div>
 				<div class="col-9" id="coupon"><%-- 쿠폰 선택 --%></div>					
-				<div class="row mt-3" id="discount"><%-- 할인금액표시 --%></div>
 			</div>
-			<div class="row mt-3">
-				<div class="col-3">
-					<h5><strong>최종 결제금액</strong></h5>
-				</div>
-				<input type="hidden" id="originalPrice" value="${orderInfo.price }" disabled>
-				<input type="hidden" name="lastPrice" value="${orderInfo.price }" id="lastPrice">
-				<div class="col-4" id="finalprice">
-					<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원
+			<div class="row" id="priceSection">
+				<div class="row mt-2" id="discount"><%-- 할인금액표시 --%></div>
+				<input type="hidden" name="couponNo" value="0">
+				<div class="row mt-2">
+					<div class="col-3">
+						<h5><strong>최종 결제금액</strong></h5>
+					</div>
+					<input type="hidden" id="originalPrice" value="${orderInfo.price }" disabled>
+					<input type="hidden" name="lastPrice" value="${orderInfo.price }" id="lastPrice">
+					<div class="col-4" id="finalprice">
+						<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원
+					</div>
 				</div>					
 			</div>
 		</div>
@@ -91,17 +99,17 @@
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>예약자명</strong></h5></div>
 				<div class="col-auto originalName">${LOGIN_USER.name }</div>
-				<input type="hidden" id="name" name="name" value="${LOGIN_USER.name }" maxlength="5" size="5" required>				
+				<input type="hidden" id="name" name="buyerName" value="${LOGIN_USER.name }" maxlength="5" size="5" required>				
 			</div>
 			<div class="row mt-3">
 				<div class="col-3"><h5><strong>이메일 주소</strong></h5></div>
 				<div class="col-9 originalEmail">${LOGIN_USER.email }</div>
-				<input type="hidden" id="email" name="email" value="${LOGIN_USER.email }" maxlength="5" size="5" required>				
+				<input type="hidden" id="email" name="buyerEmail" value="${LOGIN_USER.email }" maxlength="5" size="5" required>				
 			</div>
 			<div class="row mt-3">
 				<div class="col-3" class="originalTel"><h5><strong>휴대폰 번호</strong></h5></div>
 				<div class="col-9 originalTel">${LOGIN_USER.tel }</div>	
-				<input type="hidden" id="tel" name="tel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
+				<input type="hidden" id="tel" name="buyerTel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
 			</div>
 			<div class="row mt-3 d-flex justify-content-center" id="modifybtn"><%-- 수정버튼 들어갈 곳 --%></div>
 		</div>	
@@ -109,18 +117,33 @@
 			<div class="row mb-4 border-bottom"><h3><strong>결제 수단</strong></h3></div>
 			<div class="row mt-3 p-2">
 				<div class="col-auto">
-					<button type="submit" class="btn btn-primary">무통장입금</button>
+					<a class="btn btn-primary" id="deposit">무통장입금</a>
 				</div>
 				<div class="col-auto">
-					<a class="btn btn-warning">
+					<a class="btn btn-warning" id="kakaoPay">
 						카카오페이<img src="https://developers.kakao.com/tool/resource/static/img/button/pay/payment_icon_yellow_small.png" style="height:20px;">
 					</a>
 				</div>					
 			</div>			
 		</div>
-
+<%-- </c:if>--%>
 		<script>
-			 
+		$(function(){
+			
+			/*
+			// attDate input포맷변경하기
+			var attDate = $("#attDateText").text();
+			var formattedDate = attDate.replace(/(년|월)/g,'-').replace(/일/g,'').replace(/^\s+|\s+$/gm,'');
+			*/
+			
+			// 전체구매갯수 구하기
+		    var sum = 0;
+		    $('input[name="productQuantity"]').each(function(){
+		            sum += parseInt($(this).val());
+		    });
+		    $("input[name=totalQuantity]").val(sum);
+			
+		    // 쿠폰리스트출력
 			 $.ajax({
 				 type:"get",
 				 url:"/coupon/attrcou",
@@ -131,7 +154,8 @@
 						 htmls+="보유한 쿠폰이 없습니다."
 					 } else {
 						 htmls+="<select class=\"coupon-select\" aria-label=\"Default select example\">"
-						 htmls+="	<option selected disabled>사용할 쿠폰을 선택하세요</option>"
+						 htmls+="	<option selected disabled>쿠폰을 선택해주세요</option>"
+						 htmls+="	<option value=\"0\">쿠폰 사용 안함</option>"
 						 $(coulist).each(function(){
 							 htmls+="<option value="+this.couponNo+">"+this.couponName+" / 할인율 "+this.discountRate+"%</option>"
 						 })
@@ -149,12 +173,22 @@
 			 
 				 var originalPrice = $("#originalPrice").val();
 			 $("#coupon").change(function(){
-				 var discountRate = $(".coupon-select option:selected").text().slice(-3,-1).trim();
-				 var discountPrice = originalPrice*(discountRate/100);
-				 var finalPrice = originalPrice-discountPrice
-				 $("#discountPrice").html("<strong>-<span style=\"color:red;\">"+discountPrice+"</span></strong>");
-				 $("#finalprice").html(finalPrice+"원");
-				 $("input[name=lastPrice]").val(finalPrice);
+				if($(".coupon-select option:selected").val()=='0'){
+					 $("#priceSection").hide();
+					 var originPrice = $("#originalPrice").val();
+					 $("#finalprice").html(originPrice);
+					 $("input[name=lastPrice]").val(originPrice);
+				 } else {
+					 $("#priceSection").show();
+					 var discountRate = $(".coupon-select option:selected").text().slice(-3,-1).trim();
+					 var discountPrice = Math.floor(originalPrice*(discountRate/100)/10)*10;
+					 var finalPrice = originalPrice-discountPrice
+					 var couponNo = $("select").val();
+					 $("#discountPrice").html("<strong>-<span style=\"color:red;\">"+discountPrice+"</span></strong>");
+					 $("#finalprice").html(finalPrice+"원");
+					 $("input[name=lastPrice]").val(finalPrice);
+					 $("input[name=\"couponNo\"]").val(couponNo);
+				 }
 			 })	 
 			 
 			 $('a#modifyInfo').click(function(){
@@ -223,8 +257,69 @@
 				 $(".originalTel").html(newTel);					 
 				 $('a#modifyInfo').show();
 				 $(this).hide();
-			}); // 정보수정 함수	 
-			 
+			}); // 정보수정 끝	 
+			
+			$("#deposit").click(function(){
+				$("form").submit();
+			})
+			
+			 // 카카오페이
+			 $("#kakaoPay").click(function(){
+				 // 보낼 데이터
+				 var attNo=$("input[name=attNo]").val();
+				 var attDate=$("input[name=attDate]").val();
+				 var totalQuantity=$("input[name=totalQuantity]").val();
+				 var couponNo=$("input[name=couponNo]").val();
+				 var lastPrice=$("input[name=lastPrice]").val();
+				 var name=$("input[name=buyerName]").val();
+				 var email=$("input[name=buyerEmail]").val();
+				 var tel=$("input[name=buyerTel]").val();
+				 var attName=$("#attName").text();
+				 
+				 var optionNoLength=$("input[name=optionNo]").length;
+					 if(optionNoLength>0){
+						 var optionNo = [];
+						 $("input[name=optionNo]").each(function(){
+							optionNo.push($(this).val());
+						 });
+					 } else{
+						 var optionNo='';
+					 }
+				 
+				 var productQuantity=$("input[name=productQuantity]").length;
+					 if(productQuantity>1){
+						 var productQuantity=[];
+						 $("input[name=productQuantity]").each(function(){
+							 productQuantity.push($(this).val());
+						 })
+					 } else{
+						 productQuantity=$("input[name=productQuantity]").val();
+					 }
+				var datas = {
+						"attNo":attNo,
+						"attDate":attDate,
+						"optionNo":optionNo,
+						"productQuantity":productQuantity,
+						"totalQuantity":totalQuantity,
+						"couponNo":couponNo,
+						"lastPrice":lastPrice,
+						"name":name,
+						"email":email,
+						"tel":tel,
+						"attName":attName
+				}
+				
+				$.ajax({
+					type:"get",
+					data:datas,
+					url:"pay/ready",
+					success:function(result){
+						location.href= result.next_redirect_pc_url;
+					}// success끝
+				});//ajax끝		 
+			 }); // 카카오페이 끝
+			
+		}) // 함수의 끝	 
 		</script>
 
 															

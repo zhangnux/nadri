@@ -1,39 +1,47 @@
 package com.nadri.attr.controller;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.nadri.attr.kakaoPay.ApproveResponse;
+import com.nadri.attr.kakaoPay.KakaoPayServiceAttr;
+import com.nadri.attr.kakaoPay.ReadyResponse;
 import com.nadri.attr.service.AttrOrderService;
+import com.nadri.attr.service.AttrService;
+import com.nadri.attr.vo.AttrOrder;
 import com.nadri.attr.vo.AttrOrderForm;
+import com.nadri.attr.vo.Attraction;
+import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 @RequestMapping("/attr")
 public class AttrOrderController {
 
 	@Autowired
 	AttrOrderService attrOrderService;
+	@Autowired
+	AttrService attrService;
+	@Autowired
+	KakaoPayServiceAttr kakaoPayService;
 	
 	/**
 	 * 오더폼
@@ -62,7 +70,7 @@ public class AttrOrderController {
 			@RequestParam(name="price")int price,
 			Model model) {
 
-		List<AttrOrderForm> optionInfo = new ArrayList<>();
+		List<AttrOrder> optionInfo = new ArrayList<>();
 		if(optNo!=null) {
 			for(int i=0; i<optNo.size();i++) {
 				int quantity = productQuantity.get(i);
@@ -71,18 +79,19 @@ public class AttrOrderController {
 				int optPrice = optionPrice.get(i);
 				
 				if(quantity!=0) {
-					AttrOrderForm orderForm = new AttrOrderForm();
+					AttrOrder orderForm = new AttrOrder();
 					orderForm.setProductQuantity(quantity);
 					orderForm.setOptionNo(optionNo);
 					orderForm.setOptionName(optName);
 					orderForm.setOptionPrice(optPrice);
 					optionInfo.add(orderForm);
 				}
+				
 			}
 			model.addAttribute("optionInfo",optionInfo);
 		}
 		
-		AttrOrderForm orderInfo = new AttrOrderForm();
+		AttrOrder orderInfo = new AttrOrder();
 		orderInfo.setProductQuantity(productQuantity.get(0));
 		orderInfo.setAttNo(attNo);
 		orderInfo.setPrice(price);
@@ -94,69 +103,114 @@ public class AttrOrderController {
 		
 		return "attr/orderform";
 	}
-	
-	@GetMapping("/deposit.nadri")
-	public String desposit() {
+
+	@PostMapping("/waiting.nadri")
+	public String waiting(@LoginedUser User user,AttrOrderForm form, Model model) {
+		// 주문정보 저장
+		AttrOrder attrOrder = new AttrOrder();
+		int userNo = user.getNo();
+		form.setUserNo(userNo);
+		BeanUtils.copyProperties(form, attrOrder);
+		
+		attrOrderService.addDepositOrder(attrOrder);
+		
+		List<Integer> optionNo = form.getOptionNo();
+		List<Integer> optionQuantity = form.getProductQuantity();
+		if(optionNo!=null) {
+			for(int i=0;i<optionNo.size();i++) {
+				AttrOrder attrOption = new AttrOrder();
+				attrOption.setOptionNo(optionNo.get(i));
+				attrOption.setProductQuantity(optionQuantity.get(i));
+				attrOrderService.addDepositOption(attrOption);
+			}
+		}
+		
+		// 쿠폰사용여부 변경
+		int couponNo = form.getCouponNo();
+		if(couponNo!=0) {
+			attrOrderService.couponUsedStat(userNo, couponNo);
+		}
+		// 판매량 증가
+		int attNo = form.getAttNo();
+		attrOrderService.addSalesCount(attNo);
 		return "attr/orderWaiting";
 	}
+		
+
+	@GetMapping("/pay/ready")
+	public @ResponseBody ReadyResponse payReady(@LoginedUser User user, AttrOrderForm form, Model model) {
+		log.info("주문 상품: " + form.getAttName());
+		log.info("주문 수량: " + form.getTotalQuantity());
+		log.info("주문 금액: " + form.getLastPrice());	
+		
+		// 유저아이디 추가
+		int userNo = user.getNo();
+		form.setUserNo(userNo);
+		AttrOrder attrOrder = new AttrOrder();
+		BeanUtils.copyProperties(form, attrOrder);
+		
+		// 결제 임시 데이터 추가
+		int orderNo = attrOrderService.addKakaoOrder(attrOrder);
+		List<Integer> optionNo = form.getOptionNo();
+		List<Integer> optionQuantity = form.getProductQuantity();
+		if(optionNo!=null) {
+			for(int i=0;i<optionNo.size();i++) {
+				AttrOrder attrOption = new AttrOrder();
+				attrOption.setOptionNo(optionNo.get(i));
+				attrOption.setProductQuantity(optionQuantity.get(i));
+				attrOrderService.addKakaoOption(attrOption);
+			}
+		}
+		
+		SessionUtils.addAttribute("orderNo", orderNo);
+
+		int attrNo = form.getAttNo();
+		int quantity = form.getTotalQuantity();
+		int lastPrice = form.getLastPrice();
+
+		Attraction attraction = attrService.getDetailPage(attrNo);
+
+		// 카카오 결재 준비 하기
+		ReadyResponse readyResponse = kakaoPayService.payReady(attraction, quantity, lastPrice);
+		// 결재고유 번호(tid)를 세션에 저장시킨다.
+		SessionUtils.addAttribute("tid", readyResponse.getTid());
+		log.info("결재고유 번호: " + readyResponse.getTid());
+
+		return readyResponse;
+	}
+	
+	
+	@GetMapping("/pay/completed")
+	public String payCompleted(@RequestParam("pg_token") String pgToken, Model model) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		String tid = (String) SessionUtils.getAttribute("tid");
+		int orderNo = (Integer) SessionUtils.getAttribute("orderNo");
+		
+		log.info("결제승인 요청을 인증하는 토큰: " + pgToken);
+		log.info("결제고유 번호: " + tid);
+		log.info("로그인한 사용자 정보: " + user);
+		
+		// 카카오 결재 요청하기
+		ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);	
+		
+		return "redirect:/attr/success.nadri?orderNo=" + orderNo;
+	}	
 	
 	@GetMapping("/success.nadri")
 	public String success() {
+		int orderNo = (Integer) SessionUtils.getAttribute("orderNo");
+		attrOrderService.kakaoPayCompleted(orderNo);
 		return "attr/orderSuccess";
 	}
 	
-	@PostMapping("/waiting.nadri")
-	public String waiting() {
-		return "attr/orderWaiting";
-	}
-	
-	@RequestMapping("/kakao")
-	@ResponseBody
-	public String kakaopay() {
-		try {
-			// 보내는 부분
-			URL address = new URL("https://kapi.kakao.com/v1/payment/ready");
-			HttpURLConnection connection = (HttpURLConnection) address.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Authorization", "KakaoAK ecec992fac63f12189ad56fae9ba5211");
-			connection.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-			connection.setDoOutput(true);
-			String parameter = "cid=TC0ONETIME" // 가맹점 코드
-					+ "&partner_order_id=partner_order_id" // 가맹점 주문번호
-					+ "&partner_user_id=partner_user_id" // 가맹점 회원 id
-					+ "&item_name=1" // 상품명
-					+ "&quantity=1" // 상품 수량
-					+ "&total_amount=5000" // 총 금액
-					+ "&vat_amount=200" // 부가세
-					+ "&tax_free_amount=4800" // 상품 비과세 금액
-					+ "&approval_url=http://localhost/" // 결제 성공 시
-					+ "&fail_url=http://localhost/" // 결제 실패 시
-					+ "&cancel_url=http://localhost/"; // 결제 취소 시
-			OutputStream send = connection.getOutputStream(); // 이제 뭔가를 줄 수 있다.
-			DataOutputStream dataSend = new DataOutputStream(send); // 이제 데이터를 줄 수 있다.
-			dataSend.writeBytes(parameter); // OutputStream은 데이터를 바이트 형식으로 주고 받기로 약속되어 있다. (형변환)
-			dataSend.close(); // flush가 자동으로 호출이 되고 닫는다. (보내고 비우고 닫다)
-			
-			int result = connection.getResponseCode(); // 전송 잘 됐나 안됐나 번호를 받는다.
-			InputStream receive;
-			
-			if(result == 200) {
-				receive = connection.getInputStream();
-			}else {
-				receive = connection.getErrorStream(); 
-			}
-			// 읽는 부분
-			InputStreamReader read = new InputStreamReader(receive); // 받은걸 읽는다.
-			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
-			// 받는 부분
-			// return change.readLine(); // 문자열로 형변환을 알아서 해주고 찍어낸다 그리고 본인은 비워진다.
-			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "";
+	@GetMapping("/fail.nadri")
+	public String fail() {
+		int orderNo = (Integer) SessionUtils.getAttribute("orderNo");
+		attrOrderService.deleteKakaoOption(orderNo);
+		attrOrderService.deleteKakaoOrder(orderNo);
+		
+		return "attr/orderFail";
 	}
 	
 }

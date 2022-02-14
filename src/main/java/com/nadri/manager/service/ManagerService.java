@@ -1,25 +1,28 @@
 package com.nadri.manager.service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.nadri.manager.dto.FavoriteTrainDto;
+import com.nadri.manager.dto.FavoriteCategoryDto;
 import com.nadri.manager.dto.UserAgeRate;
+import com.nadri.manager.dto.UserCountDate;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.exception.LoginErrorException;
 import com.nadri.manager.mapper.ManagerMapper;
 import com.nadri.manager.util.CountRate;
+import com.nadri.manager.util.Pagination;
 import com.nadri.manager.vo.Manager;
-import com.nadri.manager.web.restController.ManagerRestController;
 import com.nadri.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ManagerService {
-	static final Logger log = LogManager.getLogger(ManagerRestController.class);
 	@Autowired
 	ManagerMapper mapper;
 	
@@ -47,8 +50,16 @@ public class ManagerService {
 	 * @param keyword
 	 * @return
 	 */
-	public List<User> getUserByCriteria(UserCriteria criteria) {
-		return mapper.getUserByCriteria(criteria);
+	public Map<String, Object> getUserByCriteria(UserCriteria criteria) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Pagination pagination = new Pagination(criteria.getPageNo(), mapper.getCountUserByCriteria(criteria), 6, 3);
+		
+		criteria.setBegin(pagination.getBegin());
+		criteria.setEnd(pagination.getEnd());
+		List<User> userList = mapper.getUserByCriteria(criteria);
+		map.put("userList", userList);
+		map.put("pagination", pagination);
+		return map;
 	}
 	
 	public List<Double> getGenderRateOfUser(int total) {
@@ -67,7 +78,32 @@ public class ManagerService {
 		return mapper.getCountUserByCriteria(criteria);
 	}
 	
-	public List<FavoriteTrainDto> getFavoriteTrain() {
+	/**
+	 * 인기 열차 노선 best4 반환
+	 * @return
+	 */
+	public List<FavoriteCategoryDto> getFavoriteTrain() {
 		return mapper.getFavoriteTrain();
+	}
+	
+	/**
+	 * 인기 음식점 best4 반환
+	 * @return
+	 */
+	public List<FavoriteCategoryDto> getFavoirteRestuarnt() {
+		return mapper.getFavoirteRestuarnt();
+	}
+	
+	/**
+	 * 인기 여행지 best4 반환
+	 * @return
+	 */
+	public List<FavoriteCategoryDto> getFavoirteAttraction() {
+		return mapper.getFavoirteAttraction();
+	}
+	
+	public List<UserCountDate> getUserCountByMonth() {
+		LocalDate now = LocalDate.now();
+		return mapper.getUserCountByMonth(now.getMonthValue(),  (now.getMonthValue()-1));
 	}
 }

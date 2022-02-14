@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<%@ include file="../common/head.jsp" %>
     <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,19 +22,7 @@
 </style>
 <body>
 
-<%@ include file="../common/mainnav.jsp" %>
-<header class="masthead" style="background-image: url('../resources/images/nadri-restaurant.jpg');background-attachment: local">
-    <div class="container position-relative px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="site-heading">
-                    <h1 class="text-warning fw-bold">Restaurant</h1>
-                    <span class="subheading">입 안의 즐거움!</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+<%@ include file="../common/navbar.jsp" %>
 
 <!-- ★ -->
 
@@ -94,10 +83,10 @@
 		<div class="col-2">
 			<ul class="nav flex-column nav-tabs">
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="list.nadri">전체</a>
+					<a class="nav-link" aria-current="page" href="list.nadri?city=">전체</a>
 				</li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
+				    <a class="nav-link dropdown-toggle ${city.no eq param.city ? 'active' : ''}" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
 				    <ul class="dropdown-menu">
 				    	<c:forEach var="city" items="${cities }">
 				    		<li><a class="dropdown-item" href="list.nadri?city=${city.no} ">${city.cityName }</a></li>
@@ -105,7 +94,7 @@
 				    </ul>
 				</li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
+				    <a class="nav-link dropdown-toggle ${category.no eq param.category ? 'active' : ''}" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
 				    <ul class="dropdown-menu">
 				    	<c:forEach var="category" items="${categories }">
 				    		<li><a class="dropdown-item" href="list.nadri?category=${category.no }">${category.categoryName }</a></li>
