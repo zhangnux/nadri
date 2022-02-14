@@ -17,5 +17,6 @@ public interface UserMapper {
 	User getUserById(String id);
 	// 유저 번호로 조회
 	User getUserByNo(int no);
-	
+	// 유저 이메일로 정보 가져오기
+	User getUserByEmail(String email);
 }

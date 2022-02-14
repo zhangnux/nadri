@@ -19,6 +19,7 @@
 		<result column="user_created_date" property="createdDate"/>
 		<result column="user_sms_check" property="smsCheck"/>
 		<result column="user_email_check" property="emailCheck"/>
+		<result column="user_deleted_date" property="deletedDate"/>
 	</resultMap>
 	
 	<!-- 
@@ -31,9 +32,9 @@
 		</selectKey>
 		insert into user_table
 		(user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, 
-		user_address, user_point, user_email, user_type, user_sms_check, user_email_check)
+		user_address, user_point, user_email, user_type, user_sms_check, user_email_check, user_deleted_date)
 		values
-		(#{no},#{id},#{password},#{name},#{birth},#{gender},#{tel},#{address},#{point},#{email},#{type},#{smsCheck},#{emailCheck})
+		(#{no},#{id},#{password},#{name},#{birth},#{gender},#{tel},#{address},#{point},#{email},#{type},#{smsCheck},#{emailCheck},#{deletedDate})
 	</insert>
 	
 	<!-- 
@@ -58,7 +59,7 @@
 			user_table
 		set
 			user_delete_check = 1,
-			
+			user_deleted_date = sysdate
 		where
 			user_password = #{password}
 	</update>
@@ -69,7 +70,7 @@
 	<select id="getUserById" parameterType="String" resultMap="UserResultMap">
 		select  
 			user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, user_address, user_point, 
-			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_Check 
+			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_check, user_deleted_date 
 		from  
 			user_table
 		where  
@@ -82,11 +83,24 @@
 	<select id="getUserByNo" parameterType="int" resultMap="UserResultMap">
 		select  
 			user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, user_address, user_point, 
-			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_Check 
+			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_check, user_deleted_date 
 		from 
 			user_table
 		where 
 			user_no = #{value}
+	</select>
+	
+	<!-- 
+		User getUserByEmail
+	 -->
+	<select id="getUserByEmail" parameterType="String" resultMap="UserResultMap">
+		select  
+			user_no, user_id, user_password, user_name, user_birth, user_gender, user_tel, user_address, user_point, 
+			user_delete_check, user_email, user_type, user_created_date, user_sms_check, user_email_check, user_deleted_date 
+		from 
+			user_table
+		where 
+			user_email = #{value}
 	</select>
 	
 </mapper>
