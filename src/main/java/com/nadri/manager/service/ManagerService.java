@@ -1,6 +1,7 @@
 package com.nadri.manager.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.nadri.manager.dto.FavoriteTrainDto;
 import com.nadri.manager.dto.UserAgeRate;
+import com.nadri.manager.dto.UserCountDate;
 import com.nadri.manager.dto.UserCriteria;
 import com.nadri.manager.exception.LoginErrorException;
 import com.nadri.manager.mapper.ManagerMapper;
@@ -69,5 +71,9 @@ public class ManagerService {
 	
 	public List<FavoriteTrainDto> getFavoriteTrain() {
 		return mapper.getFavoriteTrain();
+	}
+	
+	public Map<String, Object> getUserCountByMonth() {
+		return mapper.getUserCountByMonth();
 	}
 }

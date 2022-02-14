@@ -25,6 +25,7 @@ public class TrainReservaionTicket {
 	private String type;
 	private int priceId;
 	private Date reservedDate;
+	private String isPrinted;
 	
 	public long getPrice() {
 		if ("어린이".equals(type)) {

@@ -478,7 +478,7 @@
     					add += '<div class="row mt-1"><div class="col">' + train + '열차</div><div class="col"> ' + ticket.roomType + ' ' + ticket.roomName + ' ' + ticket.seatNo + '</div></div>'
     					add += '<div class="mt-1 row" style="background-color: lightgray; border-bottom: 1px solid black; border-top: 1px solid black;"><div class="col">운임요금 ' + addCommas(ticket.price) + '원</div></div>'
     					add += '<div class="my-1">' + ticket.type + '</div>'
-    					add += '<div>예약자 : ' + name + ' <span class="ms-4">승차자 : ' + ticket.customerName + '</span></div>'
+    					add += '<div>예약자 : ' + ticket.name + ' <span class="ms-4">승차자 : ' + ticket.customerName + '</span></div>'
     					add += '</div>'
     					add += '</div>'
 	    				$("#print-target").append(add)

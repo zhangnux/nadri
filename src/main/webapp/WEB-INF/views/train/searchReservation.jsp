@@ -83,6 +83,28 @@
 		border-bottom: 1px solid lightgray;
 		height: 65px;
 	}
+	
+	#page span {
+		border: 0;
+		border-radius: 3px;
+	}
+	#page .page-item.active .page-link {
+		background-color: #7E5C5E;
+		height: 40px;
+		
+	}
+	.page-link {
+		color: #9A565B;
+	}
+	.page {
+		padding: 9px 12px;
+		cursor: pointer;
+	}
+	
+	span[aria-label] {
+		padding: 4px 12px;
+		font-size: 21px;
+	}
 </style>
 <body>
 <%@ include file="../common/navbar.jsp" %>
@@ -140,56 +162,29 @@
 			<table id="table-search" class="text-center">
 				<thead>
 					<tr>
-						<th>승차일자</th>
-						<th>열차번호</th>
-						<th>출발역</th>
-						<th>도착역</th>
-						<th>객실등급</th>
-						<th>좌석정보</th>
-						<th>승차자명</th>
-						<th>발권 상태</th>
-						<th>금액</th>
+						<th width="12%">승차일자</th>
+						<th width="12%">열차번호</th>
+						<th width="12%">출발역</th>
+						<th width="12%">도착역</th>
+						<th width="8%">객실등급</th>
+						<th width="10%">좌석정보</th>
+						<th width="10%">승차자명</th>
+						<th width="12%">발권 상태</th>
+						<th width="12%">금액</th>
 					</tr>
 				</thead>
-				<tbody>
-<%-- 					<c:choose>
-						<c:when test="${not empty reservationList }">
-							<c:forEach var="reservation" items="${reservationList }">
-								<tr>
-									<td><fmt:formatDate value="${reservation.departureTime }" pattern="yyyy-MM-dd"/></td>
-									<td>${reservation.trainName } - ${reservation.trainNo }</td>
-									<td>${reservation.departureStation }<div><fmt:formatDate value="${reservation.departureTime }" pattern="HH:mm"/></div></td>
-									<td>${reservation.arrivalStation }<div><fmt:formatDate value="${reservation.arrivalTime }" pattern="HH:mm"/></div></td>
-									<td>${reservation.totalCount }</td>
-									<c:choose>
-										<c:when test="${reservation.tickectStatus eq '결제' }">
-											<td>결제완료</td>
-										</c:when>
-										<c:otherwise>
-											<td>${reservation.tickectStatus }</td>
-										</c:otherwise>
-									</c:choose>
-									<c:choose>
-										<c:when test="${reservation.isPrinted eq 'N' }">
-											<td>미완료</td>
-										</c:when>
-										<c:otherwise>
-											<td>발급완료</td>
-										</c:otherwise>
-									</c:choose>
-									<td><fmt:formatNumber value="${reservation.totalPrice }" pattern="##,###"/></td>
-								</tr>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<tr>
-								<td colspan="10" class="p-5">이용 내역이 없습니다</td>
-							</tr>
-						</c:otherwise>
-					</c:choose> --%>
+				<tbody id="tbody-info">
+		
 				</tbody>
 			</table>
 		</div>
+	</div>
+	<div class="pb-2" id="pagination">
+		<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
+			<ul class="pagination justify-content-center mt-4">
+
+			</ul>
+		</nav>
 	</div>
 </div>
 <%@ include file="../common/footer.jsp" %>
@@ -197,6 +192,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		function addCommas(nStr) {
+		    nStr += '';
+		    x = nStr.split('.');
+		    x1 = x[0];
+		    x2 = x.length > 1 ? '.' + x[1] : '';
+		    var rgx = /(\d+)(\d{3})/;
+		    while (rgx.test(x1)) {
+		        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		    }
+		    return x1 + x2;
+		}
+		
 		let now = new Date(); 
 		
 		let nowDate = now.getFullYear() + "/" + (("00"+(now.getMonth()+1)).slice(-2)) + "/" + (("00"+now.getDate()).slice(-2))
@@ -211,8 +218,6 @@
 		function pagination(no) {
 			let start = moment($("[name=date1]").val(), "YYYY/MM/DD")
 			let end = moment($("[name=date2]").val(), "YYYY/MM/DD")
-			console.log(start)
-			console.log(end.diff(start, 'months'))
  			if (end.diff(start, 'months') > 2) {
 				alert("조회기간은 최대 3개월까지 가능합니다.")
 				return;
@@ -224,42 +229,94 @@
 			let jsonData = JSON.stringify(result)
 			
 			$.ajax({
-				type:"GET",
-				url:"/api/train/searchReservation",
+				type:"POST",
+				url:"/api/train/searchReserved",
 				contentType:"application/json",
 				data:jsonData,
 				success:function(response) {
 					console.log(response)
+					$(".pagination").empty()
+					$("#tbody-info").empty()
+					let list = "";
+					if (response.infoList.length == 0) {
+						list += '<tr><td class="py-5" colspan="9">이용내역이 존재하지 않습니다.</td></tr>' 
+					} else {
+						$.each(response.infoList, function(index, data) {
+							list += '<tr>'
+							list += '<td>' + moment(data.departureDate).format('yyyy-MM-DD') + '</td>'
+							list += '<td>' + data.trainName + " " + data.trainNo + '</td>'
+							list += '<td>' + data.departureStation + '<div>' + moment(data.departureDate).format('HH:mm') + '</div></td>'
+							list += '<td>' + data.arrivalStation + '<div>' + moment(data.arrivalDate).format('HH:mm') + '</div></td>'
+							list += '<td>' + data.roomType + '</td>'
+							list += '<td>' + data.roomName + ' - ' + data.seatNo + '</td>'
+							if (data.customerName != null) {
+								list += '<td>' + data.customerName + '</td>'
+							} else {
+								list += '<td> - </td>'
+							}
+							if (data.isPrinted == 'N') {
+								list += '<td>발권완료</td>'
+							} else {
+								list += '<td>미완료</td>'
+							}
+							list += '<td>' + addCommas(data.price) + '</td>'
+							list += '</tr>'
+						})
+						
+					}
+					$("#tbody-info").append(list)
+					
+					let page = response.pagination
+					let pagination = "";
+					
+					if (page.existPrev) {
+						pagination += '<li class="page-item" id="previous" data-prev-page="' + page.prevPage +'">'
+					} else {
+						pagination += '<li class="page-item disabled" id="previous" data-prev-page="">'
+					}
+					
+					pagination += '<span class="page-link" aria-label="Previous">'
+					pagination += '<span aria-hidden="true"><strong>&laquo;</strong></span>'
+					pagination += '</span></li>'
+					
+					for (var i=page.beginPage; i<= page.endPage; i++) {
+						if (i == page.pageNo) {
+							pagination += '<li class="page-item active"><span class="page-link page" >' + i +'</span></li>'
+						} else {
+							pagination += '<li class="page-item"><span class="page-link page">' + i +'</span></li>'
+						}
+					}
+					
+					if (page.existNext) {
+						pagination += '<li class="page-item" id="next" data-next-page="' + page.nextPage + '">'
+					} else {
+						pagination += '<li class="page-item disabled" id="next" data-next-page="">'
+					}
+					pagination += '<span class="page-link" aria-label="Next">'
+					pagination += '<span aria-hidden="true"><strong>&raquo;</strong></span>'
+					pagination += '</span></li>'
+					$(".pagination").append(pagination)
 				}
 			})
 		}
 		
 		$("#btn-search").click(function() {
-			let start = moment($("[name=date1]").val(), "YYYY/MM/DD")
-			let end = moment($("[name=date2]").val(), "YYYY/MM/DD")
-			console.log(start)
-			console.log(end.diff(start, 'months'))
- 			if (end.diff(start, 'months') > 2) {
-				alert("조회기간은 최대 3개월까지 가능합니다.")
-				return;
-			} else if (end.diff(start, 'days') < 0) {
-				alert("시작일이 종료일보다 빠른날짜 입니다.")
-				return;
-			}
-			let result = {startDate:start, endDate:end, pageNo:1}
-			let jsonData = JSON.stringify(result)
-			console.log(jsonData)
-			$.ajax({
-				type:"POST",
-				url:"/api/train/searchReserved",
-				data:jsonData,
-				contentType:"application/json",
-				success:function(response) {
-					console.log(response)
-				}
-			})
+			pagination(1)
+			
 		})
 		
+		$(".pagination").on('click', "li:has(.page)", function() {
+			console.log($(this).children().text())
+			pagination($(this).children().text())
+		})
+		$(".pagination").on('click', "#next", function() {
+			console.log($(this).attr("data-next-page"))
+			pagination($(this).attr("data-next-page"))
+		})
+		$(".pagination").on('click', "#previous", function() {
+			console.log($(this).attr("data-prev-page"))
+			pagination($(this).attr("data-prev-page"))
+		})
 	})
 </script>
 </html>
