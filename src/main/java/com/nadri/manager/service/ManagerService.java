@@ -7,7 +7,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.nadri.manager.dto.AgePaymentDto;
+import com.nadri.manager.dto.CategoryStatus;
+import com.nadri.manager.dto.DayRateDto;
 import com.nadri.manager.dto.FavoriteCategoryDto;
+import com.nadri.manager.dto.GenderPaymentDto;
 import com.nadri.manager.dto.UserAgeRate;
 import com.nadri.manager.dto.UserCountDate;
 import com.nadri.manager.dto.UserCriteria;
@@ -105,5 +110,39 @@ public class ManagerService {
 	public List<UserCountDate> getUserCountByMonth() {
 		LocalDate now = LocalDate.now();
 		return mapper.getUserCountByMonth(now.getMonthValue(),  (now.getMonthValue()-1));
+	}
+	
+	/**
+	 * 나이별/카테고리별 누적 금액
+	 * @return
+	 */
+	public List<AgePaymentDto> getAgePayment() {
+		return mapper.getAgePayment();
+	}
+	
+	/**
+	 * 성별/카테고리별 누적 금액
+	 * @return
+	 */
+	public List<GenderPaymentDto> getGenderPayment() {
+		return mapper.getGenderPayment();
+	}
+	
+	/**
+	 * 금일 회원/카테고리 별 데이터
+	 * @return
+	 */
+	public DayRateDto getDayRate() {
+		return mapper.getDayRate();
+	}
+	
+	public CategoryStatus getTrainStatus() {
+		return mapper.getTrainStatus();
+	}
+	public CategoryStatus getRestaurantStatus() {
+		return mapper.getRestaurantStatus();
+	}
+	public CategoryStatus getAttractionStatus() {
+		return mapper.getAttractionStatus();
 	}
 }

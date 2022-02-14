@@ -70,6 +70,15 @@
 		padding: 4px 12px;
 		font-size: 21px;
 	}
+	.bb svg {
+    font: 15px sans-serif;
+    }
+    .bb-chart-arc text { 
+    	font-size: 16px;
+    }
+    .bb-legend-item {
+    	font-size: 15px;
+    }
 </style>
 <body>
 <c:set var="menu" value="user"/>
@@ -79,7 +88,7 @@
 			<%@ include file="common/navbar.jsp" %>
 		</div>
 		<div class="col-10" style="margin-left: 310px;">
-			<div class="pt-4 px-4 fw-bold">
+			<div class="pt-3 px-4 fw-bold">
 				<h2><Strong>사용자 관리</Strong></h2>
 			</div>
 			<div class="row mt-3 mx-4" >
@@ -130,7 +139,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="d-flex flex-column flex-shrink-0 p-3 border mx-4 mt-3" style="height: 400px;">
+			<div class="d-flex flex-column flex-shrink-0 p-3 border mx-4 mt-3" style="height: 410px;">
 				<table class="text-center" id="table-user">
 					<thead>
 						<tr>
@@ -151,17 +160,17 @@
 								<td style="cursor: pointer; color: #7E5C5E;"><strong>${user.no }</strong></td>
 								<td class="td-userInfo">${user.id }</td>
 								<td>${user.name }</td>
-								<td><fmt:formatDate value="${user.birth }" pattern="yyyy년MM월dd일"/></td>
+								<td><fmt:formatDate value="${user.birth }" pattern="yyyy/MM/dd/"/></td>
 								<td>${user.email }</td>
 								<td>${user.tel }</td>
 								<td><fmt:formatNumber value="${user.point }" pattern="##,###"/></td>
-								<td><fmt:formatDate value="${user.createdDate }" pattern="yyyy년MM월dd일"/></td>
+								<td><fmt:formatDate value="${user.createdDate }" pattern="yyyy/MM/dd/"/></td>
 								<c:choose>
 									<c:when test="${empty user.deletedDate}">
 										<td> - </td>
 									</c:when>
 									<c:otherwise>
-										<td><fmt:formatDate value="${user.deletedDate }" pattern="yyyy년MM월dd일"/></td>
+										<td><fmt:formatDate value="${user.deletedDate }" pattern="yyyy/MM/dd"/></td>
 									</c:otherwise>
 								</c:choose>
 							</tr>
@@ -170,7 +179,7 @@
 				</table>
 				<div class="pb-2" id="pagination">
 					<nav aria-label="Page navigation example" style="text-decoration: none;" id="page">
-						<ul class="pagination justify-content-center mt-4">
+						<ul class="pagination justify-content-center mt-1">
 			
 						</ul>
 					</nav>
@@ -180,6 +189,7 @@
 	</div>
 </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script type="text/javascript">
 	$(function() {
  		function chart() {
@@ -298,13 +308,13 @@
 							userList += '<td style="cursor: pointer; color: #7E5C5E;"><strong>' + user.no + '</strong></td>'
 							userList += '<td>' + user.id + '</td>'
 							userList += '<td>' + user.name + '</td>'
-							userList += '<td>' + user.birth + '</td>'
+							userList += '<td>' + moment(user.birth).format('yyyy/MM/DD') + '</td>'
 							userList += '<td>' + user.email + '</td>'
 							userList += '<td>' + user.tel + '</td>'
 							userList += '<td>' + addCommas(user.point) + '</td>'
-							userList += '<td>' + user.createdDate + '</td>'
-							if (user.deleteCheck == 'Y') {
-								userList += '<td>' + user.deletedDate + '</td>'
+							userList += '<td>' + moment(user.createdDate).format('yyyy/MM/DD') + '</td>'
+							if (user.deleteCheck == 1) {
+								userList += '<td>' + moment(user.deletedDate).format('yyyy/MM/DD') + '</td>'
 							} else {
 								userList += '<td> - </td>'
 							}
