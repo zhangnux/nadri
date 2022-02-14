@@ -41,10 +41,14 @@
 		      <img src="https://d2ur7st6jjikze.cloudfront.net/cms/478_original_1634118710.jpg?1634118710" class="d-block w-100" alt="...">
 		    </div>
 		    <div class="carousel-item">
-		      <img src="https://d2ur7st6jjikze.cloudfront.net/cms/1595_original_1641521542.png?1641521542" class="d-block w-100" alt="...">
+		      <a href="http://localhost/attr/list.nadri?place=%EC%A0%9C%EC%A3%BC%EB%8F%84">
+		      	<img src="https://img.modetour.com//promotion20/11369/1100_11369.jpg" class="d-block w-100">
+		      </a>
 		    </div>
 		    <div class="carousel-item">
-		      <img src="https://d2ur7st6jjikze.cloudfront.net/cms/1163_original_1631163923.png?1631163923" class="d-block w-100" alt="...">
+		      <a href="http://localhost/restaurant/list.nadri?category=2">
+		      	<img src="../../resources/images/restaurant_banner.jpg" class="d-block w-100">
+		      </a>
 		    </div>
 		  </div>
 		  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

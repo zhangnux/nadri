@@ -14,19 +14,16 @@ public interface AttrOrderDao {
 	void depositOrderInfo(AttrOrder attrOrder);
 	void depositOptionInfo(AttrOrder attrOrder);
 	
+	void salesQuantity(int attNo);
 	void couponUsed(@Param("userNo")int userNo, @Param("couponNo")int couponNo);
 	
-	/* 카카오페이용으로 쓸 예정
-	void depositOrderInfo(@Param("userNo") int userNo,
-						@Param("attNo") int attNo,
-						@Param("attDate") Date attDate,
-						@Param("lastPrice") int lastPrice,
-						@Param("tel") String tel,
-						@Param("email") String email,
-						@Param("name") String name);
-	
-	void depositOptionInfo(@Param("totalQuantity")int totalQuantity,
-							@Param("couponNo")int couponNo,
-							@Param("optionNo")int optionNo);
-	*/
+	/* 카카오페이 관련 */
+	// 결제
+	void kakaoOrderInfo(AttrOrder attrOrder);
+	void kakaoOptionInfo(AttrOrder attrOrder);
+	// 취소
+	void kakaoOptionDelete(int orderNo);
+	void kakaoOrderDelete(int orderNo);
+	// 결제 완료
+	void kakaoCompleted(int orderNo);
 }
