@@ -34,7 +34,11 @@ public class ManagerController {
 	}
 	
 	@GetMapping("/index.nadri")
-	public String total(@LoginedManager Manager manager) {
+	public String total(@LoginedManager Manager manager, Model model) {
+		model.addAttribute("dayRate", service.getDayRate());
+		model.addAttribute("trainStatus", service.getTrainStatus());
+		model.addAttribute("attrStatus", service.getAttractionStatus());
+		model.addAttribute("resStatus", service.getRestaurantStatus());
 		return "manager/index";
 	}
 	

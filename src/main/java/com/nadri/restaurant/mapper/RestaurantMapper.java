@@ -65,6 +65,9 @@ public interface RestaurantMapper {
 	void deleteReservation(int no);
 	void deleteCurrentState(int no);
 	
+	// 쿠폰 변경
+	void updateCoupon(@Param("userNo")int userNo, @Param("couponNo")int couponNo);
+	
 	
 	
 	// 리뷰기능

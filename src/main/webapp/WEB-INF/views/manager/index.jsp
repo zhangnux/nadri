@@ -41,6 +41,7 @@
 	}
 	#table-user td {
 		height: 50px;
+		font-size: 18px;
 	}
 	#table-user tr {
 		border-top: 1px solid #C0C0C0;
@@ -79,31 +80,35 @@
 								<th width="10%">카테고리.</th>
 								<th width="5%">주문량</th>
 								<th width="5%">예약</th>
+								<th width="5%">결제</th>
 								<th width="5%">취소</th>
 								<th width="15%">매출액</th>
 							</tr>
 						</thead>
 						<tbody id="tbody-user">
 							<tr>
-								<td>음식점</td>
-								<td>10</td>
-								<td>10</td>
-								<td>2</td>
-								<td>100,000원</td>
+								<td>기차</td>
+								<td>${trainStatus.total }</td>
+								<td>${trainStatus.reservaion }</td>
+								<td>${trainStatus.finish }</td>
+								<td>${trainStatus.cancel }</td>
+								<td data-train="${dayRate.trainPayment }"><fmt:formatNumber value="${dayRate.trainPayment }" pattern="##,###"/></td>
+							</tr>
+							<tr>
+								<td>여행지</td>
+								<td>${attrStatus.total }</td>
+								<td>${attrStatus.reservaion }</td>
+								<td>${attrStatus.finish }</td>
+								<td>${attrStatus.cancel }</td>
+								<td data-att="${dayRate.attractionPayment }"><fmt:formatNumber value="${dayRate.attractionPayment }" pattern="##,###"/></td>
 							</tr>
 							<tr>
 								<td>음식점</td>
-								<td>10</td>
-								<td>10</td>
-								<td>2</td>
-								<td>100,000원</td>
-							</tr>
-							<tr>
-								<td>음식점</td>
-								<td>10</td>
-								<td>10</td>
-								<td>2</td>
-								<td>100,000원</td>
+								<td>${resStatus.total }</td>
+								<td>${resStatus.reservaion }</td>
+								<td>${resStatus.finish }</td>
+								<td>${resStatus.cancel }</td>
+								<td data-res="${dayRate.restaurantPayment }"><fmt:formatNumber value="${dayRate.restaurantPayment }" pattern="##,###"/></td>
 							</tr>
 						</tbody>
 					</table>
@@ -113,15 +118,15 @@
 						<strong>금일 매출</strong>
 					</div>
 					<div class="text-center my-4">
-						<h4><strong>3,500,000</strong>원</h4>
+						<h4 data-total="${dayRate.total }"><strong><fmt:formatNumber value="${dayRate.total }" pattern="##,###"/></strong>원</h4>
 					</div>
 					<div class="p-3 text-start">
 						<strong>일일 회원 현황</strong>
 					</div>
 					<div class="mt-4 mb-5">
 						<ul style="display: table; margin-left: auto; margin-right: auto; font-size:18px;">
-							<li><strong>가입</strong>: <span class="ps-2">4</span>명</li>
-							<li><strong>탈퇴</strong>: <span class="ps-2">4</span>명</li>
+							<li><strong>가입</strong>: <span class="ps-2">${dayRate.createdUser }</span>명</li>
+							<li><strong>탈퇴</strong>: <span class="ps-2">${dayRate.deletedUser }</span>명</li>
 						</ul>
 					</div>
 				</div>
@@ -146,6 +151,33 @@
 </body>
 <script type="text/javascript">
 	$(function() {
+		let train = $("[data-train]").attr("data-train")
+		let att = $("[data-att]").attr("data-att")
+		let res = $("[data-res]").attr("data-res")
+		let total = $("[data-total]").attr("data-total")
+		console.log(train)
+		console.log(att)
+		console.log(res)
+		console.log(Math.trunc((train/total*100)*10)/10)
+		
+		
+		var chart = bb.generate({
+			  data: {
+			    columns: [
+				["기차", Math.trunc((train/total*100)*10)/10],
+				["여행지", Math.trunc((att/total*100)*10)/10],	["음식점", Math.trunc((res/total*100)*10)/10]
+			    ],
+			    type: "pie", 
+			    colors: {
+			      기차: "#83B1DF",
+			      여행지: "#CD868B",
+			      음식점: "#B393D2"
+			    }
+			  },
+			  bindto: "#pieChart"
+		});
+		
+		
 		let date = new Date()
 		let before = date.getMonth()
 		let now = date.getMonth() + 1
@@ -168,8 +200,8 @@
 						["이번달", ...nows]
 					    ],
 					    types: {
-					    	지난달: "area-spline", // for ESM specify as: area()
-					        이번달: "area-spline", // for ESM specify as: areaSpline()
+					    	지난달: "area", // for ESM specify as: area()
+					        이번달: "area", // for ESM specify as: areaSpline()
 					      },
 					   	colors: {
 					   		지난달: "#83B1DF",
@@ -177,22 +209,6 @@
 					    }
 					  },
 					  bindto: "#simpleXYLineChart"
-				});
-				
-				var chart = bb.generate({
-					  data: {
-					    columns: [
-						["기차", 3],
-						["여행지", 5],	["음식점", 2]
-					    ],
-					    type: "pie", 
-					    colors: {
-					      기차: "#83B1DF",
-					      여행지: "#CD868B",
-					      음식점: "#B393D2"
-					    }
-					  },
-					  bindto: "#pieChart"
 				});
 			}
 			

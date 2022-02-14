@@ -73,5 +73,10 @@ public class CouponController {
 		return "redirect:coulist.nadri";
 	}
 	
+	@GetMapping("/zone.nari")
+	public String couponZone() {
+		return "coupon/couponzone";
+	}
+	
 	
 }

@@ -1,5 +1,7 @@
 package com.nadri.attr.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +58,10 @@ public class AttrOrderService {
 	// 결제상태 변경
 	public void kakaoPayCompleted(int orderNo) {
 		orderDao.kakaoCompleted(orderNo);
+	}
+	
+	/* 예약내역 확인 */
+	public List<AttrOrder> getReservList(int userNo){
+		return orderDao.reservList(userNo);
 	}
 }

@@ -109,7 +109,7 @@
 							사용기간 ~<fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd"/>
 						</div>
 						<div class="col-6 text-end">
-							<a class="btn btn-outline-warning" id="${c.couponNo }">발급받기</a>
+							<a class="btn btn-outline-danger" id="${c.couponNo }">발급받기</a>
 						</div>
 					</div>
 				</div>

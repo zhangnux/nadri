@@ -66,6 +66,10 @@
 	.border {
 		background-color: white;
 	}
+	
+	.bb svg {
+    font: 12px sans-serif;
+    }
 </style>
 <body>
 <c:set var="menu" value="statistics"/>
@@ -115,10 +119,10 @@
 				</div>
 			</div>
 			<div class="row mx-4 mt-2">
-				<div class="col-6 border me-3" style="text-align: -webkit-center; width: 766px;">
+				<div class="col-6 border me-3 pt-4 pe-3" style="text-align: -webkit-center; width: 766px;">
 					<div id="barChart_1"></div>
 				</div>
-				<div class="col-6 border" style="width: 766px;">
+				<div class="col-6 border pt-4 pe-3" style="width: 766px;">
 					<div id="barChart_2"></div>
 				</div>
 			</div>
@@ -128,75 +132,123 @@
 </body>
 <script type="text/javascript">
 	$(function() {
-		var chart = bb.generate({
-			  data: {
-			    x: "x",
-			    columns: [
-			  ["x", "10~19", "20~29", "30~39", "40~49", "50~"],
-				["음식점", 130, 100, 140, 200, 150, 50],
-				["기차", 30, 200, 100, 400, 150, 250],
-				["여행지", 30, 200, 100, 400, 150, 250]
-			    ],
-			    type: "bar", // for ESM specify as: bar()
-			    colors: {
-			      기차: "#83B1DF",
-			      음식점: "#B393D2",
-			      여행지: "#CD868B"
-			    }
-			  },
-			  bar: {
-			    width: {
-			      ratio: 0.7
-			    }
-			  },
-			  axis: {
-			    x: {
-			      type: "category",
-			      tick: {
-			        rotate: 0,
-			        multiline: false,
-			        tooltip: true
-			      },
-			      height: 35,
-			    }
-			  },
-			  bindto: "#barChart_1"
-			});
+		function addCommas(nStr) {
+		    nStr += '';
+		    x = nStr.split('.');
+		    x1 = x[0];
+		    x2 = x.length > 1 ? '.' + x[1] : '';
+		    var rgx = /(\d+)(\d{3})/;
+		    while (rgx.test(x1)) {
+		        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		    }
+		    return x1 + x2;
+		}	
 		
-		var chart2 = bb.generate({
-			  data: {
-			    x: "x",
-			    columns: [
-			  ["x", "여성", "남성"],
-				["음식점", 130, 100, 140, 200, 150, 50],
-				["기차", 30, 200, 100, 400, 150, 250],
-				["여행지", 30, 200, 100, 400, 150, 250]
-			    ],
-			    type: "bar", // for ESM specify as: bar()
-			    colors: {
-			      기차: "#83B1DF",
-			      음식점: "#B393D2",
-			      여행지: "#CD868B"
-			    }
-			  },
-			  bar: {
-			    width: {
-			      ratio: 0.7
-			    }
-			  },
-			  axis: {
-			    x: {
-			      type: "category",
-			      tick: {
-			        rotate: 0,
-			        multiline: false,
-			        tooltip: true
-			      },
-			      height: 35,
-			    }
-			  },
-			  bindto: "#barChart_2"
-			});
+		$.getJSON('/rest/admin/statistics',
+			function(response) {
+				console.log(response)
+				let restaurantPayment = response.agePayment.map(data => data.restaurantPayment)
+				let attractionPayment = response.agePayment.map(data => data.attractionPayment)
+				let trainPayment = response.agePayment.map(data => data.trainPayment)
+				
+				let restaurantGender = response.genderPayment.map(data => data.restaurantPayment)
+				let attractionGender = response.genderPayment.map(data => data.attractionPayment)
+				let trainGender = response.genderPayment.map(data => data.trainPayment)
+				var chart = bb.generate({
+					  data: {
+					    x: "x",
+					    columns: [
+					  ["x", "10~19", "20~29", "30~39", "40~49", "50~"],
+						["음식점", ...restaurantPayment],
+						["기차", ...trainPayment],
+						["여행지", ...attractionPayment]
+					    ],
+					    type: "bar", // for ESM specify as: bar()
+					    labels: {
+					    	format: {
+						    	기차: function(x) { return d3.format(',')(x)},
+						    	음식점: function(x) { return d3.format(',')(x)},
+						    	여행지: function(x) { return d3.format(',')(x)}
+					    	},
+					    	colors:"black"
+					    },
+					    colors: {
+					      기차: "#83B1DF",
+					      음식점: "#B393D2",
+					      여행지: "#CD868B"
+					    },
+					    options: {
+					            scale: {
+					                pointLabels: {
+					                    fontSize: 50
+					                }
+					           }
+					    }
+					  },
+					  bar: {
+					    width: {
+					      ratio: 0.7
+					    }
+					  },
+					  axis: {
+					    x: {
+					      type: "category",
+					      tick: {
+					        rotate: 0,
+					        multiline: false,
+					        tooltip: true
+					      },
+					      height: 35,
+					    }
+					  },
+					  bindto: "#barChart_1"
+					});
+				
+				var chart2 = bb.generate({
+					  data: {
+					    x: "x",
+					    columns: [
+					  ["x", "여성", "남성"],
+						["음식점", ...restaurantGender],
+						["기차", ...attractionGender],
+						["여행지", ...trainGender]
+					    ],
+					    type: "bar", // for ESM specify as: bar()
+					    labels: {
+					    	format: {
+						    	기차: function(x) { return d3.format(',')(x)},
+						    	음식점: function(x) { return d3.format(',')(x)},
+						    	여행지: function(x) { return d3.format(',')(x)}
+					    	},
+					    	colors:"black"
+					    },
+					    colors: {
+					      기차: "#83B1DF",
+					      음식점: "#B393D2",
+					      여행지: "#CD868B"
+					    }
+					  },
+					  bar: {
+					    width: {
+					      ratio: 0.7
+					    }
+					  },
+					  axis: {
+					    x: {
+					      type: "category",
+					      tick: {
+					        rotate: 0,
+					        multiline: false,
+					        tooltip: true
+					      },
+					      height: 35,
+					    }
+					  },
+					  bindto: "#barChart_2"
+					});
+			}
+		)
+			
 		
 		
 		
@@ -221,6 +273,8 @@
 							list = '<div class="border">'
 							if (category == 'restaurant') {
 								list += '<img alt="' + data.destination + '" src="' + data.image +'">'
+							} else if (category == 'attr') {
+								list += '<img alt="' + data.destination + '" src="../../resources/images/att/' + data.image + '">'
 							} else {
 								list += '<img alt="' + data.destination + '" src="../../resources/images/train/route/' + data.image + '">'
 							}

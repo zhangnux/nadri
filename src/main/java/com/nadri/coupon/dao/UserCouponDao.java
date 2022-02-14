@@ -19,5 +19,7 @@ public interface UserCouponDao {
 	List<UserCoupon> attrCouponList(int userNo);
 	// 보유쿠폰 갯수 
 	int couponCount(int userNo);
+	// 보유쿠폰 조회-음식점
+	List<UserCoupon> getRestCouponList(int userNo);
 	
 }

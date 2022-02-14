@@ -98,4 +98,13 @@ public class ManagerRestController {
 		response.put("monthsRate", service.getUserCountByMonth());
 		return response;
 	}
+	
+	@GetMapping("/statistics")
+	public Map<String, Object> statistics(@LoginedManager Manager manager) {
+		Map<String, Object> response = new HashMap<>();
+		
+		response.put("agePayment", service.getAgePayment());
+		response.put("genderPayment", service.getGenderPayment());
+		return response;
+	}
 }

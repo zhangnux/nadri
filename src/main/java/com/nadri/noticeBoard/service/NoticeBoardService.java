@@ -52,5 +52,6 @@ public class NoticeBoardService {
 		nbMapper.updateNoticeBoard(noticeBoard);
 	}
 	
+	public List<NoticeBoard> getMainBoard(){ return nbMapper.mainBoard(); }
 
 }
