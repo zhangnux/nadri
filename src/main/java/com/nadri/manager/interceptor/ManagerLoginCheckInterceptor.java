@@ -34,7 +34,7 @@ public class ManagerLoginCheckInterceptor implements HandlerInterceptor {
 		HandlerMethod method = (HandlerMethod)handler;
 		MethodParameter[] parameters = method.getMethodParameters();
 		for (MethodParameter parameter : parameters) {
-			if (parameter.hasMethodAnnotation(LoginedManager.class)) {
+			if (parameter.hasParameterAnnotation(LoginedManager.class)) {
 				hasLoginManager = true;
 				break;
 			}
@@ -51,7 +51,8 @@ public class ManagerLoginCheckInterceptor implements HandlerInterceptor {
 		Manager manager = (Manager)SessionUtils.getAttribute("LOGIN_MANAGER");
 		// 로그인 안되어 있으면 exception발생
 		if (manager == null) {
-			throw new LoginErrorException("관리자 권한이 없는 접근입니다.");
+			response.sendRedirect("/admin?error=deny");
+			return false;
 		}
 		log.info("로그인되어 있는가? :"+ hasLoginManager);
 		// 로그인 되어 있으면 요청핸들러 메소드 실행

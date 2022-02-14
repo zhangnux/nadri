@@ -782,6 +782,9 @@
 							if (response.status == 'OK') {
 								console.log(response.items)
 								location.replace("http://localhost/train/confirmReservation.nadri?reservedNo1=" + response.items[0])
+							} else {
+								alert(response.error)
+								location.reload();
 							}
 				})
 			}
@@ -821,6 +824,9 @@
 						function(response) {
 							if (response.status == 'OK') {
 								location.replace("http://localhost/train/confirmReservation.nadri?reservedNo1=" + response.items[0] + "&reservedNo2=" + response.items[1])
+							} else {
+								alert(response.error)
+								location.reload();
 							}
 				})
 			}

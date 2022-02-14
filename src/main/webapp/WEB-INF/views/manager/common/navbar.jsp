@@ -54,7 +54,7 @@ html, body {
 	        </a>
 	      </li>
 	      <li class="nav-item mt-3">
-	        <a href="../coupon/coulist.nadri" class="nav-link ${menu eq 'notice' ? 'active' : ''}">
+	        <a href="../coupon/coulist.nadri" class="nav-link ${menu eq 'coupon' ? 'active' : ''}">
 	          쿠폰관리
 	        </a>
 	      </li>

@@ -11,6 +11,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<style>
+	html, body {
+		width: 100%;
+		height: 100%;
+	}
+
+	.container-fluid {
+	    position:fixed;
+	    padding:0;
+	    margin:0;
+	
+	    top:0;
+	    left:0;
+	
+	    width: 100%;
+	    height: 100%;
+	}
+	
+</style>
 <body>
 <c:set var="menu" value="qna"/>
 <div class="container-fluid bg-light">

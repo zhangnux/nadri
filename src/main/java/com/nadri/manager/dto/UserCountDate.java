@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCountDate {
-	private List<Integer> dates;
-	private List<Integer> now;
-	private List<Integer> before;
+	private int dates;
+	private int now;
+	private int before;
 	
 //	private String month;
 //	private int day1;

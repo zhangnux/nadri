@@ -488,4 +488,14 @@
 		</foreach> ) A
 	</insert>
 	
+	<!-- 예약전에 예약된 좌석 있나 확인 -->
+	<select id="getSeatList" parameterType="com.nadri.train.vo.TrainTicket" resultType="int">
+		select seat_no
+		from train_ticket
+		where schedule_no = #{scheduleNo}
+		and room_no = #{roomNo}
+		and train_no = #{trainNo}
+		and price_id = #{priceId}
+	</select>
+	
 </mapper>

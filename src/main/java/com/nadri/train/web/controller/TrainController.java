@@ -179,7 +179,6 @@ public class TrainController {
 		StringBuffer outPutData = new StringBuffer();
 		String reservationNo = (String)SessionUtils.getAttribute("reservationNo");
 		String[] noList = reservationNo.split(" ");
-		
 		outPutData.append("cid=TC0ONETIME")
 				.append("&tid=").append((String)SessionUtils.getAttribute("tid"))
 				.append("&partner_order_id=").append(reservationNo)
