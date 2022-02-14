@@ -90,5 +90,21 @@
 		and coupon_used='n'
 		and user_no = #{userNo}
 	</select>
+	
+	<!-- 보유쿠폰리스트 조회-음식점 -->
+	<select id="getRestCouponList" parameterType="int" resultType="com.nadri.coupon.vo.UserCoupon">
+		select c.coupon_name as couponName, 
+				c.coupon_category as category, 
+				c.coupon_discountrate as discountRate, 
+				c.coupon_enddate as endDate,
+				c.coupon_no as couponNo
+		from coupons c, coupons_user u
+		where c.coupon_no = u.coupon_no
+		and coupon_enddate > sysdate
+		and coupon_category='음식점'
+		and coupon_deleted='n'
+		and coupon_used='n'
+		and user_no = #{userNo}
+	</select>
 
 </mapper>

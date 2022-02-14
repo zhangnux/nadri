@@ -639,7 +639,6 @@
 	    		 dataType: 'json',
 	    		 success: function(bookables){
 	    			
-	    			
 			    	$("#select-timetable").append('<option value="" selected disabled>선택</option>')
 		    		$.each(bookables, function(index, bookable) {
 			    		var opt = '	<option value="'+bookable.timeTableNo+'" '+(bookable.bookablePeople == 0 ? "disabled" : "")+'" >'+bookable.startTime+'</option>';

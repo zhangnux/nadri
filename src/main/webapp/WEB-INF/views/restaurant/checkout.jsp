@@ -104,17 +104,20 @@
 							</div>
 							<div class="row">
 								<div class="col">
-									<select class="form-select" id="select-coupon" name="coupon">
+									<select class="form-select" id="select-coupon" name="couponNo">
 									</select>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div>
-					
+					<div class="ms-3 me-3">
+						<h5> 예약 금액: <span>${register.deposit }</span>원</h5>
+					</div>
+					<div class="ms-3 me-3 mb-2">
+						<h5>-할인 금액: <span id="span-discount-price">0</span>원</h5>
 					</div>
 					<div id="final-price" class="p-3 m-3">
-						<h4> = 총 결제 금액: <strong id="final-deposit" data-total-price="${register.deposit }"><span>${register.deposit }</span></strong>원</h4>
+						<h4> = 총 결제 금액: <strong id="final-deposit" data-total-price="${register.deposit }"><span id="span-final-deposit">${register.deposit }</span></strong>원</h4>
 						<input type="hidden" name="deposit" value="0"/>
 					</div>
 				</div>
@@ -132,27 +135,58 @@
 </div>
 <script type="text/javascript">
 	
-	/*
+	getCouponList();
+	
+	
 	function getCouponList(){
 		// 쿠폰리스트출력
 		 $.ajax({
 			 type:"get",
-			 url:"",
+			 url:"/coupon/restaurantcou",
 			 success:function(couponList){
-				 var htmls=""
+				 var htmlContent='';
 				 if(couponList==0){
-					 htmls+="보유한 쿠폰이 없습니다."
+					 htmlContent+='<option selected disabled>보유한 쿠폰이 없습니다.</option>';
 				 } else {
-					 htmls+="	<option selected disabled>사용할 쿠폰을 선택하세요</option>"
-					 $(coulist).each(function(){
-						 htmls+="<option value="+this.couponNo+">"+this.couponName+" / 할인율 "+this.discountRate+"%</option>"
+					 htmlContent+='<option selected disabled>사용할 쿠폰을 선택하세요</option>';
+					$.each(couponList, function(index, coupon) {
+						 htmlContent+='<option value="'+coupon.couponNo+'" id="option-coupon" date-coupon-rate="'+coupon.discountRate+'">"'+coupon.couponName+'" / 할인율 "'+coupon.discountRate+'"%</option>';
 					 })
 				 }
-				 $("#select-coupon").html(htmls);
+				 $("#select-coupon").html(htmlContent);
 			 } 
 		 })
 	}
+	
+	
+	$(document).ready(function(){
+		$("#select-coupont").on('change', function(){
+			var discountRate = $("#select-coupon option:selected").attr("date-coupon-rate");
+			var price = $("#final-deposit").attr("data-total-price");
+			var discountPrice = price*(discountRate/100);
+			var finalPrice = price-discountPrice;
+			$("#span-discount-price").text(discountPrice);
+			$("data-total-price").text(finalPrice);
+			$("#span-final-deposit").text(finalPrice);
+			
+		})
+		
+	})
+	
+	/*
+	$("#select-coupont").change(function() {
+		var discountRate = $("#select-coupon option:selected").attr("date-coupon-rate");
+		
+		var price = $("#final-deposit").attr("data-total-price");
+		var discountPrice = price*(discountRate/100);
+		var finalPrice = price-discountPrice;
+		
+		$("data-total-price").text(finalPrice);
+		$("#span-final-deposit").text(finalPrice);
+		
+	})
 	*/
+	
 
 
 	$(function() {
@@ -178,8 +212,7 @@
 			
 			// 나중에 쿠폰 추가
 			
-			
-			
+			var couponNo=$("#select-coupon").val();
 			var restaurantNo= $("#restaurantName").attr("data-rt-no");
 			var quantity = 1;
 			var deposit = $("#final-deposit").attr("data-total-price");
@@ -196,6 +229,7 @@
 				type: 'post',
 				url: '/restaurant/pay/ready.nadri',
 				data: {
+					couponNo: couponNo,
 					restaurantNo: restaurantNo,
 					quantity: quantity,
 					deposit: deposit,

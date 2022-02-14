@@ -36,7 +36,7 @@ public class ReservationForm {
 	private int people;					// 총인원수
 	private int quantity;				// 예약 수량 =1
 	
-	
+	private int couponNo;
 	
 	
 	
