@@ -15,19 +15,20 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class KakaoPayService {
 
-	public ReadyResponse payReady(Restaurant restaurant, int quantity, int totalPrice) {
+	public ReadyResponse payReady(String restaurantName, int reservationNo, int quantity, int totalPrice) {
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
 		parameters.add("cid", "TC0ONETIME");
 		parameters.add("partner_order_id", "1234567890");
 		parameters.add("partner_user_id", "음식점");
-		parameters.add("item_name", restaurant.getName());
-		parameters.add("item_code", String.valueOf(restaurant.getNo()));
+		parameters.add("item_name", restaurantName);
+		parameters.add("item_code", String.valueOf(reservationNo));
 		parameters.add("quantity", String.valueOf(quantity));
 		parameters.add("total_amount", String.valueOf(totalPrice));
 		parameters.add("tax_free_amount", "0");
-		parameters.add("approval_url", "http://localhost/order/pay/completed");
-		parameters.add("cancel_url", "http://localhost/order/pay/cancel");
-		parameters.add("fail_url", "http://localhost/order/pay/fail");
+		parameters.add("approval_url", "http://localhost/restaurant/pay/completed.nadri");
+		parameters.add("cancel_url", "http://localhost/restaurant/pay/cancle.nadri");
+		parameters.add("fail_url", "http://localhost/restaurant/pay/fail.nadri");
+		
 		
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
 		

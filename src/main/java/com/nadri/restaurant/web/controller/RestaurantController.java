@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestTemplate;
 
 import com.nadri.coupon.util.Pagination;
@@ -36,6 +37,7 @@ import com.nadri.restaurant.web.form.ReservationForm;
 import com.nadri.restaurant.web.form.RestaurantCriteria;
 import com.nadri.restaurant.web.form.RestaurantSearchForm;
 import com.nadri.user.annotation.LoginedUser;
+import com.nadri.user.util.SessionUtils;
 import com.nadri.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -172,7 +174,7 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/checkout.nadri")
-	public String checkout(ReservationForm form, Model model) {
+	public String checkout(@LoginedUser User user, ReservationForm form, Model model) {
 		
 		logger.debug("form 값"+form);
 		
@@ -184,81 +186,67 @@ public class RestaurantController {
 		return "restaurant/checkout";
 	}
 	
-	@GetMapping("/pay/ready")
-	public @ResponseBody ReadyResponse payReady(@RequestParam("no") int no, int quantity, int totalPrice, Model model) {
-		log.info("레스토랑 번호: " + no);
-		log.info("주문 수량: " + quantity);
-		log.info("주문 금액: " + totalPrice);
+	@PostMapping("/pay/ready.nadri")
+	public @ResponseBody ReadyResponse payReady(@LoginedUser User user, ReservationForm form, Model model) {
 		
-		Restaurant restaurant = rtService.getRestaurantDetail(no);
+		log.info("예약 정보: " + form);
 		
-		// 카카오 결재 준비 하기
-		ReadyResponse readyResponse = kakaoPayService.payReady(restaurant, quantity, totalPrice);
+		Restaurant restaurant = rtService.getRestaurantDetail(form.getRestaurantNo());
+		form.setUserNo(user.getNo());
+		
+		int reservationNo = rtService.reserveRestaurant(form);
+		SessionUtils.addAttribute("reservationNo", reservationNo);
+		
+		// 카카오 결제 준비 하기 restaurant 부분 reservationNo로
+		ReadyResponse readyResponse = kakaoPayService.payReady(restaurant.getName(), reservationNo, form.getQuantity(), form.getDeposit());
 		// 결재고유 번호(tid)를 세션에 저장시킨다.
-		model.addAttribute("tid", readyResponse.getTid());
+		SessionUtils.addAttribute("tid", readyResponse.getTid());
 		log.info("결재고유 번호: " + readyResponse.getTid());
 		
 		return readyResponse;
 	}
 	
-	@GetMapping("/pay/completed")
-	public String payCompleted(@LoginedUser User user, @RequestParam("pg_token") String pgToken, @ModelAttribute("tid") String tid, Model model) {
+	@GetMapping("/pay/cancle.nadri")
+	public String payCancel() {
+		int reservationNo = (Integer) SessionUtils.getAttribute("reservationNo");
+		rtService.cancleReservation(reservationNo);
+		return "restaurant/checkoutCancle";
+	}
+	
+	@GetMapping("/pay/completed.nadri")
+	public String payCompleted(@LoginedUser User user, @RequestParam("pg_token") String pgToken, Model model) {
+		
+		String tid = (String)SessionUtils.getAttribute("tid");
+		int reservationNo = (Integer) SessionUtils.getAttribute("reservationNo");
 		
 		log.info("결제승인 요청을 인증하는 토큰: " + pgToken);
 		log.info("결재고유 번호: " + tid);
 		log.info("로그인한 사용자 정보: " + user);
 		
-		// 카카오 결재 요청하기
-		ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);	
-		
-		int userNo = user.getNo();
-		int totalPrice = approveResponse.getAmount().getTotal();
-		int restaurantNo = Integer.parseInt(approveResponse.getItem_code());	
-		int quantity = approveResponse.getQuantity();
-		
-		/*
-		OrderItem orderItem = new OrderItem();
-		orderItem.setBookNo(bookNo);
-		orderItem.setQuantity(quantity);
-		
-		orderService.saveOrder(userNo, tid, totalPrice, orderItem);
-		*/
-		
-		return "redirect:/order/completed?id=" + tid;
+		// 카카오 결제 요청하기
+		kakaoPayService.payApprove(tid, pgToken);	
+		rtService.completedReservation(reservationNo);
+
+		return "redirect:/restaurant/checkoutCompleted.nadri";
 	}
 	
-	@RequestMapping("/completed")
-	public String completed(@RequestParam("id") String orderId, Model model) {
-		/*
-		Order order = orderService.getOrderById(orderId);
-		model.addAttribute("order", order);
-		*/
-		return "order/completed";
+	@RequestMapping("/checkoutCompleted.nadri")
+	public String completed(Model model) {
+		int reservationNo = (Integer) SessionUtils.getAttribute("reservationNo");
+		
+		Reservation reservation = rtService.getReservationByNo(reservationNo);
+		model.addAttribute("reservation", reservation);
+		
+		return "restaurant/checkoutCompleted";
 	}
 	
-	/*
-	@PostMapping("/reserve.nadri")
-	public String reserve(@LoginedUser User user, ReservationForm form) {
-		
-		// coupon 어케 사용??
-		
-		Restaurant restaurant = rtService.getRestaurantDetail(form.getRestaurantNo());
-		Reservation reservation = new Reservation();
-		ReservationCurrentState state = new ReservationCurrentState();
-		
-		int sales = restaurant.getSales() + 1;
-		restaurant.setSales(sales);
-		restaurant.setNo(form.getRestaurantNo());
-		rtService.updateSales(restaurant);
-		
-		
-		
-		rtService.insertReservation(reservation);
-		rtService.insertCurrentState(state);
-		
-		return null;
+	@GetMapping("/pay/fail.nadri")
+	public String fail() {
+		int reservationNo = (Integer) SessionUtils.getAttribute("reservationNo");
+		rtService.failReservation(reservationNo);
+		return "restaurant/checkoutFail";
 	}
-	*/
+	
 
 
 }

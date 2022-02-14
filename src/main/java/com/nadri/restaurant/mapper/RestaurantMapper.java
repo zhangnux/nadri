@@ -48,8 +48,22 @@ public interface RestaurantMapper {
 	
 	void insertReservation(Reservation reservation);
 	void insertCurrentState(ReservationCurrentState currentState);
+	
+	ReservationCurrentState getCurrentState(@Param("restaurantNo") int restaurantNo, @Param("reservedDate") String date, @Param("timetableNo") int timetableNo);
+	Reservation getReservationByNo(int reservationNo);
+	
 	// 예약시 sales 수정
 	void updateRestaurant(Restaurant restaurant);
+	
+	// 삭제 혹은 수정
+	void updateCurrentState(ReservationCurrentState state);
+	
+	// 예약 수정
+	void updateReservation(Reservation reservation);
+	
+	// 예약 삭제
+	void deleteReservation(int no);
+	void deleteCurrentState(int no);
 	
 	
 	

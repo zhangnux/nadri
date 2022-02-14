@@ -47,7 +47,7 @@
 			restaurant_tel as tel,
 			restaurant_open_time as openTime,
 			restaurant_lat as lat,
-			restaurant_lon as lon
+			restaurant_lng as lng
 		from
 			restaurant
 		where
@@ -66,9 +66,9 @@
 		</selectKey>
 		insert into restaurant
 		(restaurant_no, restaurant_name, restaurant_picture, restaurant_address, restaurant_parking,
-		 restaurant_tel, restaurant_lat, restaurant_lon, city_no, category_no, restaurant_restdate, restaurant_open_time)
+		 restaurant_tel, restaurant_lat, restaurant_lng, city_no, category_no, restaurant_restdate, restaurant_open_time)
 		values
-		(#{no}, #{name}, #{picture}, #{address}, #{parking}, #{tel}, #{lat}, #{lon}, #{cityNo}, #{categoryNo}, #{restDate}, #{openTime})	
+		(#{no}, #{name}, #{picture}, #{address}, #{parking}, #{tel}, #{lat}, #{lng}, #{cityNo}, #{categoryNo}, #{restDate}, #{openTime})	
 	</insert>
 	-->
 	
@@ -333,15 +333,15 @@
 	-->
 	<insert id="insertReservation" parameterType="com.nadri.restaurant.vo.Reservation">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
-			select restaurant_reservation_no.nextval
+			select RESTAURANT_RERVATION_NO.nextval
 			from dual
 		</selectKey>
 			insert into restaurant_reservation
-				(reservation_no, restaurant_no, user_no, time_table_no, reservation_name, reservation_deposit, reservation_progress,
-				reservation_adult, reservation_child, reservation_date, reservation_used_point, reservation_reserved_point, reservation_people)
+				(reservation_no, restaurant_no, user_no, time_table_no, reservation_name, reservation_deposit,
+				reservation_adult, reservation_child, reservation_date, reservation_people, reservation_tel)
 			values
-				(#{no}, #{restaurantNo}, #{userNo}, #{timetableNo}, #{reservedName}, #{deposit}, #{progress},
-				#{adult}, #{child}, #{reservedDate}, #{usedPoint}, #{reservedPoint}, #{people})
+				(#{no}, #{restaurantNo}, #{userNo}, #{timetableNo}, #{name}, #{deposit},
+				#{adult}, #{child}, #{reservedDate}, #{people}, #{tel})
 	</insert>
 	
 	<!-- 
@@ -352,11 +352,46 @@
 			select current_state_seq.nextval
 			from dual
 		</selectKey>
-		insert into restaurant_current_state
+		insert into rt_reservation_current_state
 		(current_state_no, reservation_date, reserved_people, time_table_no, restaurant_no)
 		values
 		(#{no}, #{reservedDate}, #{reservedPeople}, #{timetableNo}, #{restaurantNo})
 	</insert>
+	
+	<!--
+		ReservationCurrentState getCurrentState(int restaurantNo, String date, int timetableNo)
+	-->
+	<select id="getCurrentState" resultType="com.nadri.restaurant.vo.ReservationCurrentState">
+		select
+			current_state_no no,
+			reserved_people reservedPeople
+		from rt_reservation_current_state
+		where restaurant_no = #{restaurantNo}
+		and to_char(reservation_date, 'yyyy-mm-dd') = #{reservedDate}
+		and time_table_no = #{timetableNo}
+	
+	</select>
+	
+	<!--
+		Reservation getReservationByNo(int reservationNo)
+	-->
+	<select id="getReservationByNo" parameterType="int" resultType="com.nadri.restaurant.vo.Reservation">
+		select
+			reservation_no no,
+			user_no userNo,
+			restaurant_no restaurantNo,
+			time_table_no timetableNo,
+			reservation_name name,
+			reservation_deposit deposit,
+			reservation_process process,
+			reservation_adult adult,
+			reservation_child child,
+			reservation_date reservedDate,
+			reservation_people people,
+			reservation_tel tel
+		from restaurant_reservation
+		where reservation_no = #{no}
+	</select>
 	
 	<!--
 		void updateRestaurant(Restaurant restaurant);
@@ -367,5 +402,40 @@
 			restaurant_sales = #{sales}
 		where restaurant_no = #{no}
 	</update>
+	
+	<!--
+		void updateReservation(Reservation reservation)
+	-->
+	<update id="updateReservation" parameterType="com.nadri.restaurant.vo.Reservation">
+		update restaurant_reservation
+		set
+			reservation_process = #{process}
+		where reservation_no = #{no}
+	</update>
+	<!--
+		void updateCurrentState(ReservationCurrentState state);
+	-->
+	<update id="updateCurrentState" parameterType="com.nadri.restaurant.vo.ReservationCurrentState">
+		update rt_reservation_current_state
+		set
+			reserved_people = #{reservedPeople}
+		where current_state_no = #{no}
+	</update>
+	
+	<!--
+		void deleteReservation(int no)
+	-->
+	<delete id="deleteReservation" parameterType="int">
+		delete from restaurant_reservation
+		where reservation_no = #{value}
+	</delete>
+	
+	<!--
+		void deleteCurrentState(int no)
+	-->
+	<delete id="deleteCurrentState" parameterType="int">
+		delete from rt_reservation_current_state
+		where current_state_no = #{value}
+	</delete>
 
 </mapper>

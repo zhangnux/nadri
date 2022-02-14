@@ -197,26 +197,24 @@
 		<div class="col-12">
 			<h3>위치</h3>
 		</div>
-			<input type="hidden" name="lon" value="${restaurant.lat }" />
-			<input type="hidden" name="lat" value="${restaurant.lon }" />
 		<div class="col-12">
 			<div id="map" style="width:500px;height:400px;"></div>
 			<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c05627174d60c45205e9a8a04f17dfac"></script>
 			<script>
 			
-				var lat = $(":input[name=lat]").val();
-				var lon = $(":input[name=lon]").val();
+				var lat = "${restaurant.lat }"
+				var lng = "${restaurant.lng }"
 				
 				var container = document.getElementById('map');
 				var options = {
-		    			center: new kakao.maps.LatLng(lat, lon),
+		    			center: new kakao.maps.LatLng(lat, lng),
 		    			level: 3
 		    		};
 		
 				var map = new kakao.maps.Map(container, options);
 				
 				// 마커가 표시될 위치입니다
-				var markerPosition  = new kakao.maps.LatLng(lat, lon); 
+				var markerPosition  = new kakao.maps.LatLng(lat, lng); 
 
 				// 마커를 생성합니다
 				var marker = new kakao.maps.Marker({
@@ -308,7 +306,11 @@
 	// btn-book 버튼 클릭시 로그인, 시간, 인원 수 여부 확인
 	$("#btn-book").click(function(e) {
 		// 로그인
-		
+		//if("${LOGIN_USER}" == ""){
+		//	e.preventDefault()
+		//	alert("로그인 후 이용하실 수 있습니다.")
+		//	return location.replace("http://localhost/user/login.nadri");
+		//}
 		
 		// 시간
 		

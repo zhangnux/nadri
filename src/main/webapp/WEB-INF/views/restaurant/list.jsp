@@ -21,7 +21,6 @@
 
 </style>
 <body>
-
 <%@ include file="../common/navbar.jsp" %>
 
 <!-- ★ -->

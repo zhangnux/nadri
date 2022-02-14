@@ -88,11 +88,11 @@
 					<div class="p-3">
 						<div class="m-3">
 							<label class="form-label">예약자 이름*</label>
-							<input type="text" class="form-control" name="reservedName"/>
+							<input type="text" value="${LOGIN_USER.name }" class="form-control" name="reservedName"/>
 						</div>
 						<div class="m-3">
 							<label class="form-label">예약자 전화번호*</label>
-							<input type="text" class="form-control" name="tel" placeholder="010-****-****"/>
+							<input type="text" value="${LOGIN_USER.tel }" class="form-control" name="tel" placeholder="010-****-****"/>
 						</div>
 					</div>
 				</div>
@@ -104,15 +104,17 @@
 							</div>
 							<div class="row">
 								<div class="col">
-									<select class="form-select">
-										<option value=""></option>
+									<select class="form-select" id="select-coupon" name="coupon">
 									</select>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div>
+					
+					</div>
 					<div id="final-price" class="p-3 m-3">
-						<h4> = 총 결제 금액: <strong id="total-amount" data-total-amount="15000">15000</strong>원</h4>
+						<h4> = 총 결제 금액: <strong id="final-deposit" data-total-price="${register.deposit }"><span>${register.deposit }</span></strong>원</h4>
 						<input type="hidden" name="deposit" value="0"/>
 					</div>
 				</div>
@@ -130,22 +132,80 @@
 </div>
 <script type="text/javascript">
 	
-	// 예약자 이름, 전화번호 입력 안하면 클릭 안되게
-	
-	
-	
+	/*
+	function getCouponList(){
+		// 쿠폰리스트출력
+		 $.ajax({
+			 type:"get",
+			 url:"",
+			 success:function(couponList){
+				 var htmls=""
+				 if(couponList==0){
+					 htmls+="보유한 쿠폰이 없습니다."
+				 } else {
+					 htmls+="	<option selected disabled>사용할 쿠폰을 선택하세요</option>"
+					 $(coulist).each(function(){
+						 htmls+="<option value="+this.couponNo+">"+this.couponName+" / 할인율 "+this.discountRate+"%</option>"
+					 })
+				 }
+				 $("#select-coupon").html(htmls);
+			 } 
+		 })
+	}
+	*/
+
 
 	$(function() {
 		$("#btn-pay").click(function(e) {
+			// 로그인
+			if("${LOGIN_USER}" == ""){
+				e.preventDefault()
+				alert("로그인 후 이용하실 수 있습니다.")
+				return location.replace("http://localhost/user/login.nadri");
+			}
+			
+			// 이름, 전화번호 입력 확인
+			
+			if($(":input[name=reservedName]").val()==""){
+				alert("이름을 입력해주세요");
+				return;
+			}
+			
+			if($(":input[name=tel]").val()==""){
+				alert("연락 가능한 전화번호를 입력해주세요");
+				return;
+			}
+			
+			// 나중에 쿠폰 추가
 			
 			
+			
+			var restaurantNo= $("#restaurantName").attr("data-rt-no");
+			var quantity = 1;
+			var deposit = $("#final-deposit").attr("data-total-price");
+			var reservedName = $(":input[name=reservedName]").val();
+			var tel = $(":input[name=tel]").val();
+			var reservedDate = $(":input[name=reservedDate]").val();
+			var timetableNo = $(":input[name=timetableNo]").val();
+			var child = $(":input[name=child]").val();
+			var adult = $(":input[name=adult]").val();
+			var people = $(":input[name=people]").val();
+			
+
 			$.ajax({
-				type: 'get',
-				url: '/restaurant/pay.nadri',
+				type: 'post',
+				url: '/restaurant/pay/ready.nadri',
 				data: {
-					no: $("#restaurantName").attr("data-rt-no"),
-					quantity: 1,
-					total_amount: $("#total-amount").attr("data-total-amount"),
+					restaurantNo: restaurantNo,
+					quantity: quantity,
+					deposit: deposit,
+					reservedName: reservedName,
+					tel: tel,
+					reservedDate: reservedDate,
+					timetableNo: timetableNo,
+					child: child,
+					adult: adult,
+					people: people
 				},
 				success:function(response) {
 					location.href= response.next_redirect_pc_url;
