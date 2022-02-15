@@ -170,7 +170,7 @@
 						<th width="8%">객실등급</th>
 						<th width="10%">좌석정보</th>
 						<th width="10%">승차자명</th>
-						<th width="12%">발권 상태</th>
+						<th width="12%">결제여부</th>
 						<th width="12%">금액</th>
 					</tr>
 				</thead>
@@ -255,10 +255,10 @@
 							} else {
 								list += '<td> - </td>'
 							}
-							if (data.isPrinted == 'N') {
-								list += '<td>발권완료</td>'
+							if (data.isCanceled == 'N') {
+								list += '<td>결제완료</td>'
 							} else {
-								list += '<td>미완료</td>'
+								list += '<td>환불</td>'
 							}
 							list += '<td>' + addCommas(data.price) + '</td>'
 							list += '</tr>'

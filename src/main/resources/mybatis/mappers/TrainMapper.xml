@@ -249,13 +249,16 @@
 		        s.schedule_departure_time, s.schedule_arrival_time, e.train_name, t.train_no, 
 		        t1.station_name dp, t2.station_name ar,
 		        r.room_type, r.room_name, t.seat_no,
-		        t.customer_name, t.is_canceled, p.price, n.reservation_date, t.passenger_type
+		        t.customer_name, t.is_canceled, n.reservation_date, t.passenger_type,
+		        case when t.is_canceled = 'N' then p.price
+                    when t.is_canceled = 'Y' then f.REFUND_PRICE
+                end as price
 		        from train_ticket t, train_room r, train_price p, train_reservation n, train b, train_type e, 
-		            train_schedule s, train_route u, train_station t1, train_station t2
+		            train_schedule s, train_route u, train_station t1, train_station t2, TRAIN_REFUND f
 		        where n.reservation_date >= #{startDate}
 		        and n.reservation_date &lt; #{endDate}+1
 		        and n.user_no = #{userNo}
-		        and t.is_canceled = 'N'
+		        and n.TICKETING_STATUS in ('결제', '취소')
 		        and t.reservation_no = n.reservation_no
 		        and t.room_no = r.room_no
 		        and t.train_no = b.train_no
@@ -265,6 +268,7 @@
 		        and s.route_no = u.route_no
 		        and u.departure_station_id = t1.station_id
 		        and u.arrival_station_id = t2.station_id
+		        and f.TICKET_NO(+) = t.TICKET_NO
 		        ) a
 		where a.rn >= #{begin} and a.rn &lt;= #{end}
 	</select>
@@ -276,7 +280,7 @@
 			r.user_no = #{userNo}
 			and r.reservation_date >= #{startDate }
 			and r.reservation_date &lt; #{endDate }+1
-			and t.is_canceled = 'N'
+			and r.TICKETING_STATUS in ('결제', '취소')
 			and r.reservation_no = t.reservation_no
 		</where>
 	</select>

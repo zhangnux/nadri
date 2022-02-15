@@ -70,6 +70,11 @@
 		color: #644043; 
 		font-size: 18px;
 	}
+	
+	#word-Menu li.active{
+		color:#7E5C5E;
+		font-weight: bold;
+	}
 </style>
 <div class="row">
 	<div class="col">
@@ -222,7 +227,7 @@
     		<div class="modal-body">
     			<div>
     				<ul class="border" id="word-Menu">
-   						<li><span id="45207">가</span></li>
+   						<li class="active"><span id="45207">가</span></li>
    						<li><span id="45795">나</span></li>
    						<li><span id="46971">다</span></li>
    						<li><span id="47559">라</span></li>
@@ -319,6 +324,8 @@
 		$("#word-Menu span").click(function() {
 			let no = $(this).attr('id')
 			getStationMenu(no);
+			$(this).parent().siblings().removeClass('active')
+			$(this).parent().addClass('active')
 		})
 		
 		// 출발역과 도착역 값을 바꿔줌
