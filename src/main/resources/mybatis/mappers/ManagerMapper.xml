@@ -158,7 +158,6 @@
 		order by a.rn
 	</select>
 	
-	<!-- 결제가 완료이고 이행 날짜가 지났을 경우  -->
 	<!-- 인기 음식점 BEST 4 -->
 	<select id="getFavoirteRestuarnt" resultType="com.nadri.manager.dto.FavoriteCategoryDto">
 		select r.restaurant_name as destination, 
@@ -298,9 +297,9 @@
 	</select>
 	
 	<select id="getTrainStatus" resultType="com.nadri.manager.dto.CategoryStatus">
-		select count(decode(ticketing_status, '결제', reservation_no)) as finish,
-        count(decode(ticketing_status, '예약', reservation_no)) as reservaion,
-        count(decode(ticketing_status, '취소', reservation_no)) as cancel
+		select sum(decode(ticketing_status, '결제', 1, 0)) finish,
+		        sum(decode(ticketing_status, '예약', 1, 0)) reservation,
+		        sum(decode(ticketing_status, '취소', 1, 0)) cancel
 		from train_reservation
 		where to_char(reservation_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
 		or to_char(canceled_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
@@ -308,20 +307,18 @@
 	</select>
 	
 	<select id="getRestaurantStatus" resultType="com.nadri.manager.dto.CategoryStatus">
-		select count(decode(reservation_process, '결제완료', reservation_no)) as finish,
-		        count(decode(reservation_process, '예약', reservation_no)) as reservaion,
-		        count(decode(reservation_process, '취소', reservation_no)) as cancel
+		select sum(decode(reservation_process, '결제완료', 1, 0)) finish,
+		        sum(decode(reservation_process, '예약', 1, 0)) reservation,
+		        sum(decode(reservation_process, '취소', 1, 0)) cancel
 		from restaurant_reservation
 		where to_char(payment_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
-		group by reservation_process
 	</select>
 	
 	<select id="getAttractionStatus" resultType="com.nadri.manager.dto.CategoryStatus">
-		select count(decode(order_process, '결제완료', order_no)) as finish,
-		        count(decode(order_process, '예약', order_no)) as reservaion,
-		        count(decode(order_process, '취소', order_no)) as cancel
+		select SUM(decode(order_process, '결제완료', 1, 0)) as finish,
+		        sum(decode(order_process, '예약', 1, 0)) as reservation,
+		        sum(decode(order_process, '취소', 1, 0)) as cancel
 		from att_order
 		where to_char(payment_date, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
-		group by order_process
 	</select>
 </mapper>

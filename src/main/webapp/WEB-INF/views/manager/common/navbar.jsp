@@ -62,7 +62,7 @@ html, body {
     <hr>
     <div class="dropdown">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="" width="32" height="30" class="rounded-circle me-2">
+        <img src="/resources/images/manager.jpg" alt="" width="32" height="30" class="rounded-circle me-2">
         <strong class="fs-6">관리자</strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small" aria-labelledby="dropdownUser1">

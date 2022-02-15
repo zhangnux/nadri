@@ -30,7 +30,7 @@
 					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> ${LOGIN_USER.id }
 					</a>
 						<div class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="/user/detail.nadri">마이페이지</a> <a class="dropdown-item" href="/train/reservationList.nadri">기차예약조회</a> <a class="dropdown-item" href="#">위시리스트</a>
+							<a class="dropdown-item" href="/user/detail.nadri">마이페이지</a><a class="dropdown-item" href="#">위시리스트</a>
 							<div class="dropdown-divider"></div>
 							<c:choose>
 								<c:when test="${LOGIN_USER.type eq 'normal' }">
