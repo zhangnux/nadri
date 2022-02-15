@@ -154,9 +154,6 @@
 				<if test="sort == 'sales'">
 					order by A.restaurant_sales desc
 				</if>
-				<if test="sort == 'starPoint'">
-					order by A.restaurant_star_point desc
-				</if>
 		) X
 		where rn between #{beginIndex} and #{endIndex}
 	</select>

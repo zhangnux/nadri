@@ -275,7 +275,6 @@
 				<div class="mb-3">
 					<input type="file" class="form-control" name="upfile" id="up-file"/>
 				</div>
-				<!-- c:choose로 이미 내용이 있으면 수정과 삭제 버튼 -->
 				<div class="mb-3 d-flex justify-content-end">
 					<button type="button" class="btn btn-primary" id="btn-add-review">등록</button>
 				</div>
@@ -306,11 +305,11 @@
 	// btn-book 버튼 클릭시 로그인, 시간, 인원 수 여부 확인
 	$("#btn-book").click(function(e) {
 		// 로그인
-		//if("${LOGIN_USER}" == ""){
-		//	e.preventDefault()
-		//	alert("로그인 후 이용하실 수 있습니다.")
-		//	return location.replace("http://localhost/user/login.nadri");
-		//}
+		if("${LOGIN_USER}" == ""){
+			e.preventDefault()
+			alert("로그인 후 이용하실 수 있습니다.")
+			return location.replace("http://localhost/user/login.nadri");
+		}
 		
 		// 시간
 		

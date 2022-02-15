@@ -66,9 +66,9 @@
 					<button type="button" class="btn btn-outline-primary btn-sm" id="btn-search-restaurant">검색</button>
 				</div>
 				<div class="col-2">
-					<select class="form-select" name="sort">
-						<option value="sales" ${param.sort == 'sort' ? 'selected' : ''}>매출순</option>
-						<option value="starPoint" ${param.sort == 'sort' ? 'selected' : ''}>별점순</option>
+					<select class="form-select" id="select-sort" name="sort">
+						<option value="">기본순</option>
+						<option value="sales" ${param.sort == 'sales' ? 'selected' : ''}>매출순</option>
 					</select>
 				</div>
 			</form>
@@ -80,12 +80,12 @@
 	<div class="row mb-3">
 	<!-- sideNavbar -->
 		<div class="col-2">
-			<ul class="nav flex-column nav-tabs">
+			<ul class="nav flex-column">
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="list.nadri?city=">전체</a>
+					<a class="nav-link" href="list.nadri?city=">전체</a>
 				</li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle ${city.no eq param.city ? 'active' : ''}" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
+				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">도시</a>
 				    <ul class="dropdown-menu">
 				    	<c:forEach var="city" items="${cities }">
 				    		<li><a class="dropdown-item" href="list.nadri?city=${city.no} ">${city.cityName }</a></li>
@@ -93,7 +93,7 @@
 				    </ul>
 				</li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle ${category.no eq param.category ? 'active' : ''}" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
+				    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
 				    <ul class="dropdown-menu">
 				    	<c:forEach var="category" items="${categories }">
 				    		<li><a class="dropdown-item" href="list.nadri?category=${category.no }">${category.categoryName }</a></li>
