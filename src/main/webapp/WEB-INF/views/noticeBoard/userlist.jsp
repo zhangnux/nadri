@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<%@ include file="../common/head.jsp" %>
     <title>나드리::공지사항</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,15 +32,12 @@
 
 </style>
 <body>
-<c:set var="menu" value="notice"/>
 <div class="container-fluid bg-light">
-	<div class="row">
-			<div class="col-2" style="position: fixed; height: 100%; min-width: 280px;">
-				<%@ include file="../manager/common/navbar.jsp" %>
-			</div>
-			<div class="col-10" style="margin-left: 310px;">
+<%@ include file="../common/navbar.jsp"%>
+	<div class="row ms-5 me-5">
+			<div class="col">
 				<div class="row">
-					<div class="col-auto pt-5 fw-bold">
+					<div class="col-auto pt-5 fw-bold ms-6 mb-3">
 						<h1><Strong>공지사항</Strong></h1>
 					</div>
 				</div>
@@ -74,11 +72,6 @@
 							</c:choose>
 							</tbody>
 						</table>
-					</div>
-				</div>
-				<div class="row m-3">
-					<div class="col d-flex justify-content-end">
-						<a href="insert.nadri" class="btn btn-primary">공지 등록</a>
 					</div>
 				</div>
 				<div class="row m-3">
@@ -128,7 +121,7 @@
 			</div>
 	</div>
 	
-	
+<%@ include file="../common/footer.jsp" %>	
 </div>
 <script type="text/javascript">
 	// 페이지내비게이션의 링크를 클릭했을 때 실행될 이벤트핸들러 함수를 등록한다.
@@ -143,5 +136,6 @@
 		$("#form-search").trigger("submit");
 	})
 </script>
+
 </body>
 </html>

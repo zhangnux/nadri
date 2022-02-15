@@ -5,7 +5,7 @@
 <html lang="ko">
 <head>
 <%@ include file="../common/head.jsp" %>
-    <title></title>
+    <title>나드리::음식점</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -159,34 +159,17 @@
 	}
 	
 	
-	$(document).ready(function(){
-		$("#select-coupont").on('change', function(){
-			var discountRate = $("#select-coupon option:selected").attr("date-coupon-rate");
-			var price = $("#final-deposit").attr("data-total-price");
-			var discountPrice = price*(discountRate/100);
-			var finalPrice = price-discountPrice;
-			$("#span-discount-price").text(discountPrice);
-			$("data-total-price").text(finalPrice);
-			$("#span-final-deposit").text(finalPrice);
-			
-		})
-		
-	})
 	
-	/*
-	$("#select-coupont").change(function() {
+	$("#select-coupon").on('change', function(){
 		var discountRate = $("#select-coupon option:selected").attr("date-coupon-rate");
-		
 		var price = $("#final-deposit").attr("data-total-price");
 		var discountPrice = price*(discountRate/100);
 		var finalPrice = price-discountPrice;
-		
+		$("#span-discount-price").text(discountPrice);
 		$("data-total-price").text(finalPrice);
 		$("#span-final-deposit").text(finalPrice);
 		
 	})
-	*/
-	
 
 
 	$(function() {

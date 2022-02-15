@@ -5,7 +5,7 @@
          <div class="row gx-4 gx-lg-5 justify-content-center">
              <div class="col-md-10 col-lg-8 col-xl-7 list-inline text-center pb-3">
              	<div class="pb-2 fw-bold" id="footer">
-                 	<a class="px-3 link-dark" href="http://localhost/noticeBoard/list.nadri" style="text-decoration-line: none;">공지사항</a>
+                 	<a class="px-3 link-dark" href="http://localhost/noticeBoard/userlist.nadri" style="text-decoration-line: none;">공지사항</a>
                  	<a class="pe-3 link-dark" href="http://localhost/csboard/userlist.nadri" style="text-decoration-line: none;">고객센터</a>
                  	<a class="link-dark" href="../admin" style="text-decoration-line: none;">관리자페이지</a>
                 </div>
