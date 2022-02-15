@@ -118,7 +118,7 @@
 					</div>
 					<div id="final-price" class="p-3 m-3">
 						<h4> = 총 결제 금액: <strong id="final-deposit" data-total-price="${register.deposit }"><span id="span-final-deposit">${register.deposit }</span></strong>원</h4>
-						<input type="hidden" name="deposit" value="0"/>
+						<input type="hidden" name="deposit" value="${register.deposit }"/>
 					</div>
 				</div>
 				<div class="row p-3 m-3">
