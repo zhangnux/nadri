@@ -44,5 +44,12 @@ public class UserCouponService {
 	public List<UserCoupon> getRestaurantCouponList(int userNo){
 		return userCouponDao.getRestCouponList(userNo);
 	}
-	
+	/* 발급가능한 모든 쿠폰 */
+	public List<UserCoupon> getAllValidCoupons(){
+		return userCouponDao.allValidCoupons();
+	}
+	/* 쿠폰 발급여부 조회 */
+	public int couponCheckByUserNo(int couponNo, int userNo) {
+		return userCouponDao.couponCheck(couponNo, userNo);
+	}
 }

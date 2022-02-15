@@ -5,17 +5,10 @@
 <html>
 <head>
 <%@include file="../common/head.jsp"%>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e05a28d0efc0b752b59c9206aaecd6f2"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="UTF-8">
 <title>나드리::쿠폰발급</title>
 <style>
@@ -79,36 +72,66 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="mb-3">
-				<h3><strong>내가 놓친 쿠폰도 확인해보세요!</strong></h3>
+			<div class="mb-3 text-center">
+				<h3><strong>🌸나드리의 새봄맞이 쿠폰🌸</strong></h3>
 			</div>
-			<div class="mb-5 row">
+			<div class="mb-5 row d-flex justify-content-center">
 			<!-- forEach -->
+			<c:forEach var="c" items="${coupons }">
 				<div class="col-3 p-3 m-2 border rounded">
 					<div class="row">
 						<div class="col-7">
-							<h5><strong>쿠폰이름</strong></h5>
+							<h5><strong>${c.couponName }</strong></h5>
 						</div>
 						<div class="col-5">
-							~2022-02-20
+							~ <fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd" />
 						</div>
 					</div>
 					<div>
-						사용처: 음식점
+						사용처: ${c.category }
 					</div>
 					<div>
-						할인율: 15%
+						할인율: ${c.discountRate }%
 					</div>
 					<div class="col-12 text-end">
-						<button class="btn btn-outline-danger">발급받기</button>
+						<button class="btn btn-outline-danger" id="couponIssue" data-coupon-no="${c.no }">발급받기</button>
 					</div>
 				</div>
+			</c:forEach>
 			<!--  -->
 			</div>
 		</div>
 		<hr>
 	</div>
 </div>
+<script>
+$(function(){
+	
+
+	$(".rounded").on("click","#couponIssue",function(){
+		var loginCheck = $("input[name=\"userNo\"]").val();
+		if(loginCheck==''){
+			alert("로그인이 필요합니다.");
+		} else {
+			var couponNo=$(this).data("coupon-no");
+			$.ajax({
+				url:"/coupon/check",
+				data: {couponNo:couponNo},
+				type:"get",
+				success:function(result){
+					if(result=="1"){
+						alert("이미 보유한 쿠폰입니다.")
+					} else {
+						
+					}
+				} // success 끝
+			}) // ajax 끝			
+		}
+	})	
+
+	
+})// function 끝
+</script>
 <%@ include file="../common/footer.jsp"%>
 </body>
 </html>

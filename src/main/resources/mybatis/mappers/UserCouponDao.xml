@@ -106,5 +106,25 @@
 		and coupon_used='n'
 		and user_no = #{userNo}
 	</select>
+	
+	<!-- 발급 가능한 모든 쿠폰 조회 -->
+	<select id="allValidCoupons" resultMap="CouponResultMap">
+		select c.coupon_no, c.coupon_quantity, c.coupon_discountrate, c.coupon_startdate, c.coupon_enddate,
+        		c.coupon_category, c.coupon_name, c.coupon_issue_date, c.coupon_deleted, c.coupon_issue_end
+		from coupons c
+		where coupon_enddate > sysdate
+		and coupon_quantity > 0
+		and coupon_deleted = 'n'
+		order by coupon_issue_end
+	</select>
+	
+	<!-- 유저별 쿠폰발급여부 조회 -->
+	<select id="couponCheck" resultType="int">
+		select count(*)
+		from coupons c, coupons_user u
+		where c.coupon_no = u.coupon_no
+		and u.coupon_no=#{couponNo}
+		and u.user_no=#{userNo}
+	</select>
 
 </mapper>

@@ -96,4 +96,11 @@ public class CouponRestController {
 		return restaurantCouponList;
 	}
 	
+	// 중복체크
+	@GetMapping("/check")
+	public int couponCheck(int couponNo, int userNo) {
+		int result = userCouponService.couponCheckByUserNo(couponNo, userNo);
+		return result;
+	}
+	
 }

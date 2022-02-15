@@ -217,8 +217,13 @@ public class AttrOrderController {
 	@GetMapping("/reservation.nadri")
 	public String reservList(@LoginedUser User user, Model model) {
 		int userNo = user.getNo();
+		
 		List<AttrOrder> reserv = attrOrderService.getReservList(userNo);
 		model.addAttribute("reserv",reserv);
+		
+		List<AttrOrder> options = attrOrderService.getReservList(userNo);
+		model.addAttribute("options",options);
+		
 		return "/attr/reservlist";
 	}
 }

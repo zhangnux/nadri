@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.coupon.form.CouponInsertForm;
 import com.nadri.coupon.service.CouponService;
+import com.nadri.coupon.service.UserCouponService;
 import com.nadri.coupon.vo.Coupon;
+import com.nadri.coupon.vo.UserCoupon;
 
 @Controller
 @RequestMapping("/coupon")
@@ -22,6 +24,9 @@ public class CouponController {
 
 	@Autowired
 	CouponService couponService;
+	
+	@Autowired
+	UserCouponService userCouponService;
 	
 	@PostMapping("/addcou.nadri")
 	public String save(CouponInsertForm form) throws IOException{
@@ -74,9 +79,10 @@ public class CouponController {
 	}
 	
 	@GetMapping("/zone.nari")
-	public String couponZone() {
+	public String couponZone(Model model) {
+		List<UserCoupon> coupons = userCouponService.getAllValidCoupons();
+		model.addAttribute("coupons",coupons);
 		return "coupon/couponzone";
 	}
-	
 	
 }

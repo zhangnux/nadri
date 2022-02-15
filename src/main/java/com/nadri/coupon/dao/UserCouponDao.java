@@ -21,5 +21,8 @@ public interface UserCouponDao {
 	int couponCount(int userNo);
 	// 보유쿠폰 조회-음식점
 	List<UserCoupon> getRestCouponList(int userNo);
-	
+	// 발급가능 쿠폰조회
+	List<UserCoupon> allValidCoupons();
+	// 유저별 쿠폰발급여부 조회
+	int couponCheck(@Param("couponNo")int couponNo,@Param("userNo") int userNo);
 }

@@ -92,8 +92,8 @@
 			<div class="card mb-2" style="width: 15rem;">
 				<div class="card-body">
 					<h5><strong>내 예약관리</strong></h5>
-					<div><a href="/train/reservationList.nadri">기차</a></div>
-					<div><a href="http://localhost/attr/reservation.nadri">즐길거리</a></div>
+					<div><a href="/train/reservationList.nadri" style="text-decoration-line : none;">기차</a></div>
+					<div><a href="http://localhost/attr/reservation.nadri" style="text-decoration-line : none;">즐길거리</a></div>
 				</div>
 			</div>
 		</div>

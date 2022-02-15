@@ -14,6 +14,9 @@
 		<result column="buyer_email" property="buyerEmail" />
 		<result column="att_no" property="attNo" />
 		<result column="coupon_no" property="couponNo" />
+		<result column="att_option" property="optionName" />
+		<result column="att_name" property="attName" />
+		<result column="product_quantity" property="productQuantity" />
 		<result column="total_quantity" property="totalQuantity" />
 		<collection property="userInfo" resultMap="userResultMap" />
 		<collection property="attraction" resultMap="AttrResultMap" />
@@ -98,13 +101,12 @@
 	<!-- 주문확인용 -->
 	<select id="reservList" parameterType="int" resultMap="orderResultMap">
 	<![CDATA[
-	select a.order_date, a.order_lastprice, a.att_date, a.order_process, a.total_quantity,
-	        o.att_option, o.att_price, p.product_quantity, t.att_place, t.att_name
+    select *
 	from att_order a, att_order_product p, att_option o, attraction t
-	where a.order_no = p.order_no(+)
-	and p.option_no = o.att_optno(+)
-	and o.att_no = t.att_no(+)
-	and a.user_no=#{userNo}
+    where a.order_no = p.order_no(+)
+    and p.option_no = o.att_optno(+)
+    and a.att_no = t.att_no
+    and user_no=#{userNo}
 	]]>
 	</select>
 		

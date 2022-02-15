@@ -1,17 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/tags.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="../common/head.jsp"%>
+<%@ include file="../common/head.jsp"%>
+<title>마이페이지</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<title>나드리::즐길거리</title>
 <style>
 #text {
 	text-align: right;
@@ -46,7 +46,7 @@
 	<div class="px-4 py-5 my-5 text-center">
 		<h1 class="display-5 fw-bold">이용 불가</h1>
 		<div class="col-lg-6 mx-auto">
-			<p class="lead mb-4">예약관리는 로그인 된 사용자만 이용할 수 있습니다.</p>
+			<p class="lead mb-4">프로필 관리는 로그인 된 사용자만 이용할 수 있습니다.</p>
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 				<a href="../user/login.nadri"><button type="button" class="btn btn-lg btn-dark">로그인 하기</button></a>
 				<a href="../home.nadri"><button type="button" class="btn btn-lg btn-dark">홈페이지 돌아가기</button></a>
@@ -92,24 +92,47 @@
 			<div class="card mb-2" style="width: 15rem;">
 				<div class="card-body">
 					<h5><strong>내 예약관리</strong></h5>
-					<div><a href="/train/reservationList.nadri">기차</a></div>
-					<div><a href="http://localhost/attr/reservation.nadri">즐길거리</a></div>
+					<div><a href="/train/reservationList.nadri" style="text-decoration-line : none;">기차</a></div>
+					<div><a href="http://localhost/attr/reservation.nadri" style="text-decoration-line : none;">즐길거리</a></div>
 				</div>
 			</div>
 		</div>
-		
-		<div class="col-md-9">
+
+		<div class="col-md-8">
 		<!-- Featured blog post-->
-			<div class="card mb-4 p-3">
+			<div class="card mb-4">
 				<div class="card-body" style="height: 50rem;">
+					<div class="card-body">
 				<!-- ★ -->
 				
 				<div class="text-center"><h1><strong>내 예약</strong></h1></div>
 				<div class="text-center"><h3>즐길거리</h3></div>
 				${reserv }
-				<div class="row">
-					<div class="col"></div>
+				<c:forEach var="r" items="${reserv }">
+				<div class="row mb-3">
+					<div class="border rounded p-3">
+						<div class="row">
+							<div class="col-7"><h4><strong>${r.attName }</strong></h4></div>
+							<div class="col-5">2022-02-15</div>
+						</div>
+						<!-- 옵션 -->
+						<%-- <c:if test="${fn:length(optionName)!=0}">
+							<c:forEach var="o" items="${r }">
+								<div class="row border rounded p-2">
+									<div class="col-5">옵션이름</div>
+									<div class="col">3매</div>
+									<div class="col">가격</div>
+								</div>
+							</c:forEach>
+						</c:if>--%>
+						<!--  -->
+						<div class="row">
+							<div class="col-9 text-end">결제상태</div>
+							<div class="col-3 text-end">총 금액</div>
+						</div>
+					</div>
 				</div>
+				</c:forEach>
 				<!--  -->
 				</div>
 			</div>
