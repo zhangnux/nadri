@@ -303,9 +303,9 @@
 						"totalQuantity":totalQuantity,
 						"couponNo":couponNo,
 						"lastPrice":lastPrice,
-						"name":name,
-						"email":email,
-						"tel":tel,
+						"buyerName":name,
+						"buyerEmail":email,
+						"buyerTel":tel,
 						"attName":attName
 				}
 				

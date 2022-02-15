@@ -69,7 +69,7 @@
 					 -->
 					<i class="bi bi-piggy-bank" id="ltPiggy"></i>
 					<p class="card-text">${LOGIN_USER.id }</p>
-					<a href="modify.nadri" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
+					<a href="/user/modify.nadri" class="fw-bold text-decoration-none"><i class="bi bi-gear"></i>&nbsp;프로필 관리</a>
 				</div>
 			</div>
 			<!-- Categories widget-->
@@ -83,7 +83,7 @@
 						<div class="col-sm-6" id="text">
 								<a href="#" class="fw-bold text-decoration-none">${LOGIN_USER.point } 원 &nbsp; <i class="bi bi-server"></i></a><br>
 								<!-- 아래쪽에 쿠폰 연결 ....... -->
-								<a href="coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
+								<a href="http://localhost/user/coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
 						</div>
 					</div>
 				</div>
@@ -101,18 +101,25 @@
 		<div class="col-md-8">
 		<!-- Featured blog post-->
 			<div class="card mb-4">
-				<div class="card-body" style="height: 50rem;">
+				<div class="card-body">
 					<div class="card-body">
 				<!-- ★ -->
-				
 				<div class="text-center"><h1><strong>내 예약</strong></h1></div>
-				<div class="text-center"><h3>즐길거리</h3></div>
-				${reserv }
+				<div class="text-center mb-4"><h3>즐길거리</h3></div>
 				<c:forEach var="r" items="${reserv }">
 				<div class="row mb-3">
 					<div class="border rounded p-3">
 						<div class="row">
-							<div class="col-7"><h4><strong>${r.attName }</strong></h4></div>
+							<div class="col-7">
+								<h4>
+								<a href="http://localhost/attr/detail.nadri?no=${r.attNo }" 
+										style="text-decoration: none;color: inherit;">
+								<strong>
+									${r.attName }
+								</strong>
+								</a>
+								</h4>
+							</div>
 							<div class="col-5">2022-02-15</div>
 						</div>
 						<!-- 옵션 -->
@@ -127,8 +134,11 @@
 						</c:if>--%>
 						<!--  -->
 						<div class="row">
-							<div class="col-9 text-end">결제상태</div>
-							<div class="col-3 text-end">총 금액</div>
+							<div class="col-9 text-end"><strong>${r.orderProcess }</strong></div>
+							<div class="col-3 text-end">
+								${r.totalQuantity }매　
+								<fmt:formatNumber value="${r.lastPrice }" pattern="###,###" />원
+							</div>
 						</div>
 					</div>
 				</div>
@@ -140,6 +150,17 @@
 	</div>
 </div>
 </c:if>
+<script>
+$(function(){
+	$.ajax({
+		type:"get",
+		url: "/coupon/coucount",
+		success:function(count){
+			$("#couponCount").text(count);
+		}
+	})
+})
+</script>
 <%@ include file="../common/footer.jsp"%>
 </body>
 </html>

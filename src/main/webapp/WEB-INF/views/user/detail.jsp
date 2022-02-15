@@ -83,7 +83,7 @@
 						<div class="col-sm-6" id="text">
 								<a href="#" class="fw-bold text-decoration-none">${LOGIN_USER.point } 원 &nbsp; <i class="bi bi-server"></i></a><br>
 								<!-- 아래쪽에 쿠폰 연결 ....... -->
-								<a href="coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
+								<a href="http://localhost/user/coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
 						</div>
 					</div>
 				</div>

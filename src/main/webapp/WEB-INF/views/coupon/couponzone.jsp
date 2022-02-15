@@ -100,6 +100,7 @@
 			</c:forEach>
 			<!--  -->
 			</div>
+			<input type="hidden" name="userNo" value="${LOGIN_USER.no }">
 		</div>
 		<hr>
 	</div>
@@ -107,10 +108,9 @@
 <script>
 $(function(){
 	
-
 	$(".rounded").on("click","#couponIssue",function(){
 		var loginCheck = $("input[name=\"userNo\"]").val();
-		if(loginCheck==''){
+		if(loginCheck==null){
 			alert("로그인이 필요합니다.");
 		} else {
 			var couponNo=$(this).data("coupon-no");
@@ -119,10 +119,10 @@ $(function(){
 				data: {couponNo:couponNo},
 				type:"get",
 				success:function(result){
-					if(result=="1"){
+					if(result=="fail"){
 						alert("이미 보유한 쿠폰입니다.")
 					} else {
-						
+						alert("쿠폰이 발급되었습니다.")
 					}
 				} // success 끝
 			}) // ajax 끝			

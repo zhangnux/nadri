@@ -15,6 +15,7 @@ import com.nadri.coupon.dto.ResponseDto;
 import com.nadri.coupon.service.CouponService;
 import com.nadri.coupon.service.UserCouponService;
 import com.nadri.coupon.util.Pagination;
+import com.nadri.coupon.vo.Coupon;
 import com.nadri.coupon.vo.UserCoupon;
 import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
@@ -98,9 +99,15 @@ public class CouponRestController {
 	
 	// 중복체크
 	@GetMapping("/check")
-	public int couponCheck(int couponNo, int userNo) {
-		int result = userCouponService.couponCheckByUserNo(couponNo, userNo);
-		return result;
+	public String couponCheck(int couponNo, @LoginedUser User user) {
+		int userNo = user.getNo();
+		try {
+			userCouponService.couponCheckByUserNo(couponNo, userNo);
+		} catch(RuntimeException e) {
+			return "fail";
+		}
+		userCouponService.insertCouponByUserNo(couponNo, userNo);
+		return "success";
 	}
 	
 }

@@ -64,7 +64,7 @@
 								<c:otherwise>                            
 									<c:forEach var="noticeBoard" items="${noticeBoards }" varStatus="loop">
 										<tr>
-											<td>${loop.count }</td>
+											<td>${noticeBoard.no }</td>
 											<td><a href="detail.nadri?no=${noticeBoard.no }">${noticeBoard.title }</a></td>
 											<td><fmt:formatDate value="${noticeBoard.createdDate }" pattern="yyyy-MM-dd" /></td>
 											<td>${noticeBoard.viewCount }</td>

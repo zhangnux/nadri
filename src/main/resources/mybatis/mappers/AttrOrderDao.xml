@@ -7,7 +7,7 @@
 		<result column="order_price" property="price" />
 		<result column="order_lastprice" property="lastPrice"/>
 		<result column="order_deposit" property="deposit" />
-		<result column="order_process" property="process" />
+		<result column="order_process" property="orderProcess" />
 		<result column="user_no" property="userNo" />
 		<result column="buyer_tel" property="buyerTel" />
 		<result column="buyer_name" property="buyerName" />
