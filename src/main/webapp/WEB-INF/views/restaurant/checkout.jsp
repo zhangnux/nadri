@@ -146,9 +146,9 @@
 			 success:function(couponList){
 				 var htmlContent='';
 				 if(couponList==0){
-					 htmlContent+='<option selected disabled>보유한 쿠폰이 없습니다.</option>';
+					 htmlContent+='<option value="0" date-coupon-rate="0">보유한 쿠폰이 없습니다.</option>';
 				 } else {
-					 htmlContent+='<option selected disabled>사용할 쿠폰을 선택하세요</option>';
+					 htmlContent+='<option value="0" date-coupon-rate="0">사용할 쿠폰을 선택하세요</option>';
 					$.each(couponList, function(index, coupon) {
 						 htmlContent+='<option value="'+coupon.couponNo+'" id="option-coupon" date-coupon-rate="'+coupon.discountRate+'">"'+coupon.couponName+'" / 할인율 "'+coupon.discountRate+'"%</option>';
 					 })
@@ -168,6 +168,7 @@
 		$("#span-discount-price").text(discountPrice);
 		$("data-total-price").text(finalPrice);
 		$("#span-final-deposit").text(finalPrice);
+		$(":input[name=deposit]").val(finalPrice);
 		
 	})
 
@@ -193,12 +194,11 @@
 				return;
 			}
 			
-			// 나중에 쿠폰 추가
 			
 			var couponNo=$("#select-coupon").val();
 			var restaurantNo= $("#restaurantName").attr("data-rt-no");
 			var quantity = 1;
-			var deposit = $("#final-deposit").attr("data-total-price");
+			var deposit = $(":input[name=deposit]").val();
 			var reservedName = $(":input[name=reservedName]").val();
 			var tel = $(":input[name=tel]").val();
 			var reservedDate = $(":input[name=reservedDate]").val();
