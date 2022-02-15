@@ -49,7 +49,10 @@ public class UserCouponService {
 		return userCouponDao.allValidCoupons();
 	}
 	/* 쿠폰 발급여부 조회 */
-	public int couponCheckByUserNo(int couponNo, int userNo) {
-		return userCouponDao.couponCheck(couponNo, userNo);
+	public void couponCheckByUserNo(int couponNo, int userNo) {
+		int couponCheck = userCouponDao.couponCheck(couponNo, userNo);
+		if(couponCheck==1) {
+			throw new RuntimeException("fail");
+		}
 	}
 }

@@ -36,6 +36,7 @@ public class AttrOrder {
 	private int totalQuantity;
 	private int attNo;
 	private int couponNo;
+	private String orderProcess;
 	
 	/* 상품정보 */
 	private String attName;

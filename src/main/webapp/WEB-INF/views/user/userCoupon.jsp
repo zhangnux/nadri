@@ -9,7 +9,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/simplex/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -84,19 +83,26 @@
 						<div class="col-sm-6" id="text">
 								<a href="#" class="fw-bold text-decoration-none">${LOGIN_USER.point } 원 &nbsp; <i class="bi bi-server"></i></a><br>
 								<!-- 아래쪽에 쿠폰 연결 ....... -->
-								<a href="coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
+								<a href="http://localhost/user/coupon.nadri" class="fw-bold text-decoration-none" ><span id="couponCount">0</span>개 &nbsp; <i class="bi bi-gift-fill"></i></a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- Side widget-->
 			<div class="card mb-2" style="width: 15rem;">
-				<div class="card-body"> 이벤트를 걸까말까?</div>
+				<div class="card-body">
+					<h5><strong>내 예약관리</strong></h5>
+					<div><a href="/train/reservationList.nadri" style="text-decoration-line : none;">기차</a></div>
+					<div><a href="http://localhost/attr/reservation.nadri" style="text-decoration-line : none;">즐길거리</a></div>
+				</div>
 			</div>
 		</div>
-<!--  -->
-		<div class="col-md-9 border rounded" style="background-color:#ffffff;">
-			<div class="row">
+
+		<div class="col-md-8">
+		<!-- Featured blog post-->
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="card-body">
 				<div style="text-align:center" class="pt-3">
 					<h1><strong>내 보유 쿠폰</strong></h1>
 					<hr>

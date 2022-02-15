@@ -128,14 +128,14 @@ a {
 		<h3><strong>공지사항</strong></h3>
 		<div class="mt-3">
 			<div class="row">
-				<div class="row border-bottom" style="font-size:18px" >
+				<div class="row border-bottom fw-bold" style="font-size:17px;" >
 					<div class="col-1">번호</div>
 					<div class="col-8">제목</div>
 					<div class="col-2">작성일</div>
 					<div class="col-1">조회수</div>
 				</div>
 			<c:forEach var="n" items="${notice }">
-				<div class="row" style="font-size:18px">
+				<div class="row" style="font-size:17px">
 					<div class="col-1">${n.no }</div>
 					<div class="col-8">
 						<a href="http://localhost/noticeBoard/detail.nadri?no=${n.no}" style="text-decoration-line: none;">
