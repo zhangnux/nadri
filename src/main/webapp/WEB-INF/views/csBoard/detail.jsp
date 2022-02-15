@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title></title>
+    <title>나드리::문의사항</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,6 +12,7 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<%@ include file="../common/navbar.jsp"%>
 <div class="container">
 	<div class="row mb-3 p-3">
 		<div class="col">
@@ -48,8 +49,8 @@
 				<a href="userlist.nadri" class="btn btn-secondary">목록</a>
 			</c:when>			
 		</c:choose>
-			<a href="modify.nadri?no=${csBoard.no }" class="btn btn-primary">수정</a>
-			<a href="delete.nadri?no=${csBoard.no }" class="btn btn-danger">삭제</a>
+				<a href="modify.nadri?no=${csBoard.no }" class="btn btn-primary">수정</a>
+				<a href="delete.nadri?no=${csBoard.no }" class="btn btn-danger">삭제</a>
 	</div>
 	<div class="row mb-3 ms-2 me-2" style="border-bottom: 1px solid;">
 		<div class="col">
@@ -80,7 +81,7 @@
 		</div>
 	</div>
 
-
+<%@ include file="../common/footer.jsp"%>
 </div>
 <script type="text/javascript">
 //로딩 완료시점에 자동실행

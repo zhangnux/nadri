@@ -46,9 +46,16 @@
 		</div>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end ms-3 me-3">
-			<a href="list.nadri" class="btn btn-secondary">목록</a>
-			<a href="delete.nadri?no=${noticeBoard.no }" class="btn btn-danger">삭제</a>
-			<a href="modify.nadri?no=${noticeBoard.no }" class="btn btn-primary">수정</a>
+			<c:choose>
+				<c:when test="${!empty LOGIN_MANAGER }">
+					<a href="list.nadri" class="btn btn-secondary">목록</a>
+					<a href="delete.nadri?no=${noticeBoard.no }" class="btn btn-danger">삭제</a>
+					<a href="modify.nadri?no=${noticeBoard.no }" class="btn btn-primary">수정</a>
+				</c:when>
+				<c:when test="${!empty LOGIN_USER }">
+					<a href="userlist.nadri" class="btn btn-secondary">목록</a>
+				</c:when>			
+			</c:choose>
 	</div>
 
 </div>

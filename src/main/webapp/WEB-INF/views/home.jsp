@@ -147,7 +147,7 @@ a {
 				</div>		
 			</c:forEach>
 				<div class="col-12 text-end">
-					<a href="http://localhost/noticeBoard/list.nadri"><i class="bi bi-plus-square"></i> 더보기</a>
+					<a href="http://localhost/noticeBoard/userlist.nadri"><i class="bi bi-plus-square"></i> 더보기</a>
 				</div>
 			</div>
 		</div>

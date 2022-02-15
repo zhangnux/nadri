@@ -5,7 +5,7 @@
 <html lang="ko">
 <head>
 <%@ include file="../common/head.jsp" %>
-    <title></title>
+    <title>나드리::문의사항</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,6 +13,7 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+<%@ include file="../common/navbar.jsp"%>
 <div class="container">
 	<div class="row mb-3 p-3">
 		<div class="col">
@@ -20,24 +21,24 @@
 		</div>
 	</div>
 	<div class="mb-3 p-3">
-	<ul class="nav justify-content-center">
+	<ul class="nav nav-tabs justify-content-center">
 		<li class="nav-item">
-			<a class="nav-link active" aria-current="page" href="userlist.nadri">전체</a>
+			<a class="nav-link ${param.csType eq '' ? 'active':''}" aria-current="page" href="userlist.nadri">전체</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?csType=사이트이용">사이트이용</a>
+			<a class="nav-link ${param.csType eq '사이트이용' ? 'active':''}" href="userlist.nadri?csType=사이트이용">사이트이용</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?csType=프로모션">프로모션</a>
+			<a class="nav-link ${param.csType eq '프로모션' ? 'active':''}" href="userlist.nadri?csType=프로모션">프로모션</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?csType=예약/취소/환불">예약/취소/환불</a>
+			<a class="nav-link ${param.csType eq '예약/취소/환불' ? 'active':''}" href="userlist.nadri?csType=예약/취소/환불">예약/취소/환불</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?csType=쿠폰/포인트">쿠폰/포인트</a>
+			<a class="nav-link ${param.csType eq '쿠폰/포인트' ? 'active':''}" href="userlist.nadri?csType=쿠폰/포인트">쿠폰/포인트</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="list.nadri?csType=기타">기타</a>
+			<a class="nav-link ${param.csType eq '기타' ? 'active':''}" href="userlist.nadri?csType=기타">기타</a>
 		</li>
 	</ul>
 	
