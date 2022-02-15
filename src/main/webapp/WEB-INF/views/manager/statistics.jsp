@@ -117,7 +117,7 @@
 			<div class="row border mt-4 mx-4" style="background-color: white;">
 				<div class="col">
 					<div class="text-center" style="font-size: 20px; font-weight: bold;">
-						연령별/성별 누적금액 현황
+						이번달 연령별/성별 누적금액 현황
 					</div>
 				</div>
 			</div>

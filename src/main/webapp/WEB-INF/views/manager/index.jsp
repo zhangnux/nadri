@@ -65,8 +65,15 @@
 		</div>
 		<div class="col-10" style="margin-left: 310px;">
 			<div class="row border m-4">
-				<div class="col text-end p-2" style="background-color: white; font-size: 20px;">
-					<strong>nadri 관리자 페이지 입니다.</strong>
+				<div class="col p-2" style="background-color: white; font-size: 20px; text-align-last: justify;">
+					<div style="display: inline-block;">
+						<c:set var="today" value="<%=new java.util.Date()%>" />
+						오늘 날짜는 
+						<strong><fmt:formatDate value="${today}" pattern="yyyy/MM/dd" />입니다.</strong>
+					</div>
+					<div style="display: inline-block;" >
+						<strong>nadri 관리자 페이지 입니다.</strong>
+					</div>
 				</div>
 			</div>
 			<div class="row m-4 mt-5">

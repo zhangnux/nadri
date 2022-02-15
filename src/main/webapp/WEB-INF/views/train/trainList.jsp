@@ -194,8 +194,14 @@
 	<hr>
 	<%@ include file="common/searchBar.jsp" %>
 	<div class="row">
-		<div class="col m-5">
-			예메 버튼을 눌러 좌석을 선택해 주세요.
+		<div class="col">
+			<div class="border my-4 p-3">
+				<ul style="margin: 0;">
+					<li>
+						예메 버튼을 눌러 좌석을 선택해 주세요.
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div>
