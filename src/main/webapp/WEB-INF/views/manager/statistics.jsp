@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title></title>
+    <title>나드리::통계</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -96,7 +96,10 @@
 				</div>
 			</div>
 			<div class="border m-4">
-				<h4 class="mt-4 ms-5"><strong>예약순위</strong></h4>
+				<c:set var="today" value="<%=new java.util.Date()%>" />
+				<h4 class="mt-4 ms-5">
+				<strong><fmt:formatDate value="${today}" pattern="MM" />월달</strong>
+				<strong class="ms-2">예약순위</strong></h4>
 				<div class="mx-4" id="famousList">
 					<c:forEach var="famous" items="${famousList }">
 					<div class="border">
@@ -119,11 +122,20 @@
 				</div>
 			</div>
 			<div class="row mx-4 mt-2">
-				<div class="col-6 border me-3 pt-4 pe-3" style="text-align: -webkit-center; width: 766px;">
-					<div id="barChart_1"></div>
-				</div>
-				<div class="col-6 border pt-4 pe-3" style="width: 766px;">
-					<div id="barChart_2"></div>
+				<div class="col border p-3">
+					<div class="row">
+						<div class="col-6" >
+							<div class="  border p-3">
+								<div id="barChart_1"></div>
+							</div>
+						</div>
+						<div class="col-6" >
+							<div class=" border p-3">
+								<div id="barChart_2"></div>
+							</div>
+						</div>
+					
+					</div>
 				</div>
 			</div>
 		</div>
