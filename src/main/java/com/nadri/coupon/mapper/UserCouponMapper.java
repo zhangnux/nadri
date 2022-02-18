@@ -1,4 +1,4 @@
-package com.nadri.coupon.dao;
+package com.nadri.coupon.mapper;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.nadri.coupon.vo.UserCoupon;
 
 @Mapper
-public interface UserCouponDao {
+public interface UserCouponMapper {
 	
 	// 쿠폰발급
 	void getCoupon(@Param("couponNo") int couponNo, @Param("userNo") int userNo);

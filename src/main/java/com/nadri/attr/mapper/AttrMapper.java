@@ -1,4 +1,4 @@
-package com.nadri.attr.dao;
+package com.nadri.attr.mapper;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import com.nadri.coupon.vo.UserCoupon;
 import com.nadri.restaurant.vo.Restaurant;
 
 @Mapper
-public interface AttrDao{
+public interface AttrMapper{
 
 	// 전체리스트
 	List<Attraction> allAttrList();

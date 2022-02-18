@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nadri.attr.dao.AttrDao;
-import com.nadri.attr.dao.AttrReviewDao;
+import com.nadri.attr.mapper.AttrMapper;
+import com.nadri.attr.mapper.AttrReviewMapper;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.AttrReviewPic;
 
@@ -14,9 +14,9 @@ import com.nadri.attr.vo.AttrReviewPic;
 public class ReviewService {
 
 	@Autowired
-	AttrReviewDao reviewDao;
+	AttrReviewMapper reviewDao;
 	@Autowired
-	AttrDao attrDao;
+	AttrMapper attrDao;
 	
 	public List<AttrReview> getReviewList(int attNo, int beginIndex, int endIndex) { 
 		return reviewDao.getListByNo(attNo, beginIndex, endIndex); 

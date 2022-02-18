@@ -1,4 +1,4 @@
-package com.nadri.coupon.dao;
+package com.nadri.coupon.mapper;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.nadri.coupon.util.Criteria;
 import com.nadri.coupon.vo.Coupon;
 
 @Mapper
-public interface CouponDao {
+public interface CouponMapper {
 
 	// 쿠폰 생성
 	void insertCoupon(Coupon coupon);

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nadri.attr.dao.AttrDao;
+import com.nadri.attr.mapper.AttrMapper;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.restaurant.vo.Restaurant;
 
@@ -15,9 +15,9 @@ import com.nadri.restaurant.vo.Restaurant;
 public class MainService {
 
 	@Autowired
-	private AttrDao attrDao;
+	private AttrMapper attrMapper;
 	
-	public List<Attraction> randomAttraction(){ return attrDao.mainRandomAttr(); }
-	public List<Restaurant> randomRestaurant(){ return attrDao.mainRandomRes(); }
+	public List<Attraction> randomAttraction(){ return attrMapper.mainRandomAttr(); }
+	public List<Restaurant> randomRestaurant(){ return attrMapper.mainRandomRes(); }
 
 }

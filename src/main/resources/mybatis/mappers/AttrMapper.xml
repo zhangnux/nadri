@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.nadri.attr.dao.AttrDao">
-
+<mapper namespace="com.nadri.attr.mapper.AttrMapper">
+	
+	
 	<resultMap id="AttrResultMap" type="com.nadri.attr.vo.Attraction">
 		<id column="att_no" property="no"/>
 		<result column="att_name" property="name"/>
