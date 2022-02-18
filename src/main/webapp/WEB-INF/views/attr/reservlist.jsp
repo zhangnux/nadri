@@ -106,38 +106,43 @@
 				<!-- ★ -->
 				<div class="text-center"><h1><strong>내 예약</strong></h1></div>
 				<div class="text-center mb-4"><h3>즐길거리</h3></div>
+				<hr>
+				<c:choose>
+					<c:when test="${empty reserv }">
+
+						<div class="col-12 text-center mt-5"><h3>예약 내역이 없습니다.</h3></div>
+					</c:when>
+				</c:choose>
 				<c:forEach var="r" items="${reserv }">
 				<div class="row mb-3">
 					<div class="border rounded p-3">
 						<div class="row">
-							<div class="col-7">
+							<div class="col-9">
 								<h4>
 								<a href="http://localhost/attr/detail.nadri?no=${r.attNo }" 
 										style="text-decoration: none;color: inherit;">
 								<strong>
 									${r.attName }
+
 								</strong>
 								</a>
 								</h4>
 							</div>
-							<div class="col-5">2022-02-15</div>
+							<div class="col-3">이용일: <fmt:formatDate value="${r.attDate }" pattern="yyyy-MM-dd" /></div>
 						</div>
-						<!-- 옵션 -->
-						<%-- <c:if test="${fn:length(optionName)!=0}">
-							<c:forEach var="o" items="${r }">
-								<div class="row border rounded p-2">
-									<div class="col-5">옵션이름</div>
-									<div class="col">3매</div>
-									<div class="col">가격</div>
-								</div>
-							</c:forEach>
-						</c:if>--%>
-						<!--  -->
 						<div class="row">
 							<div class="col-9 text-end"><strong>${r.orderProcess }</strong></div>
 							<div class="col-3 text-end">
 								${r.totalQuantity }매　
 								<fmt:formatNumber value="${r.lastPrice }" pattern="###,###" />원
+							</div>
+						</div>
+						<div class="row justify-content-end mt-2">
+							<div class="col-auto">
+								<a class="btn btn-outline-primary getDetail" id="${r.orderNo }">상세내역</a>
+							</div>
+							<div class="col-auto">
+								<a class="btn btn-outline-danger">예약취소</a>
 							</div>
 						</div>
 					</div>
@@ -151,6 +156,12 @@
 </div>
 </c:if>
 <script>
+
+$(".getDetail").click(function(){
+	var orderNo = $(this).attr("id");
+	var detail = window.open("detailinfo.nadri?orderNo="+orderNo+"","orderDetail","width=600, height=800, scrollbars=yes, location=no")
+})
+
 $(function(){
 	$.ajax({
 		type:"get",
@@ -159,6 +170,7 @@ $(function(){
 			$("#couponCount").text(count);
 		}
 	})
+	
 })
 </script>
 <%@ include file="../common/footer.jsp"%>

@@ -29,6 +29,7 @@ public class AttrOrderForm {
 	private List<Integer> productQuantity;
 	private int totalQuantity;
 	private int couponNo;
+	private int price;
 	private int lastPrice;
 	private String buyerName;
 	private String buyerEmail;

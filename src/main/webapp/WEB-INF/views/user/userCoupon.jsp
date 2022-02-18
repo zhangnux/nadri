@@ -121,10 +121,7 @@
 							<div class="col-2">
 								<span>${c.discountRate }% OFF</span>
 							</div>
-							<div class="col-2">
-								<span></span>
-							</div>
-							<div class="col text-end">
+							<div class="col-5">
 								<span>
 									사용기한　~<fmt:formatDate value="${c.endDate }" pattern="yyyy-MM-dd" />
 								</span>

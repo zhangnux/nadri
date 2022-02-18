@@ -59,6 +59,7 @@
 			<div class="col-3"><h5><strong>구매수량</strong></h5></div>
 			<div class="col-4">
 				<input type="hidden" name="productQuantity" value="${orderInfo.productQuantity }">
+				<input type="hidden" name="price" value="${orderInfo.price }">
 				${orderInfo.productQuantity }매　　<fmt:formatNumber value="${orderInfo.price }" pattern="###,###" />원</div>
 		</div>
 	</c:otherwise>
