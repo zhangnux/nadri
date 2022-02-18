@@ -43,20 +43,7 @@ public class AttrOrderController {
 	@Autowired
 	KakaoPayServiceAttr kakaoPayService;
 	
-	/**
-	 * 오더폼
-	 * @param attDate
-	 * @param attName
-	 * @param attNo
-	 * @param attPic
-	 * @param optNo
-	 * @param optionName
-	 * @param optionPrice
-	 * @param productQuantity
-	 * @param price
-	 * @param model
-	 * @return
-	 */
+	// 오더폼
 	@PostMapping("/orderform.nadri")
 	public String orderform(
 			@RequestParam(name="attdate") @DateTimeFormat(pattern = "yyyy-MM-dd")Date attDate,
