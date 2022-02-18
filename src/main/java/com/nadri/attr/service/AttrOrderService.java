@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nadri.attr.dao.AttrOrderDao;
+import com.nadri.attr.mapper.AttrOrderMapper;
 import com.nadri.attr.vo.AttrOrder;
 
 @Service
@@ -14,7 +14,7 @@ import com.nadri.attr.vo.AttrOrder;
 public class AttrOrderService {
 
 	@Autowired
-	private AttrOrderDao orderDao;
+	private AttrOrderMapper orderDao;
 	
 	public AttrOrder getOrderInfo(AttrOrder orderForm){ 
 		return orderDao.orderInfo(orderForm);

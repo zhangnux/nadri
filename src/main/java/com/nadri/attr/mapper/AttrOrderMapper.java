@@ -1,4 +1,4 @@
-package com.nadri.attr.dao;
+package com.nadri.attr.mapper;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.nadri.attr.vo.AttrOrder;
 
 @Mapper
-public interface AttrOrderDao {
+public interface AttrOrderMapper {
 	
 	AttrOrder orderInfo(AttrOrder attrOrder);
 	AttrOrder productInfo(AttrOrder attrOrder);

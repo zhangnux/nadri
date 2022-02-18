@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.nadri.coupon.dao.UserCouponDao">
+<mapper namespace="com.nadri.coupon.mapper.UserCouponMapper">
 
 	<resultMap id="attrCouponResultMap" type="com.nadri.coupon.vo.UserCoupon">
 		<result column="coupon_used" property="used" />

@@ -1,4 +1,4 @@
-package com.nadri.attr.dao;
+package com.nadri.attr.mapper;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.AttrReviewPic;
 
 @Mapper
-public interface AttrReviewDao {
+public interface AttrReviewMapper {
 
 	// 후기 리스트 출력
 	List<AttrReview> getListByNo(@Param("no") int attNo, 

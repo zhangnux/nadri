@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nadri.coupon.dao.UserCouponDao;
+import com.nadri.coupon.mapper.UserCouponMapper;
 import com.nadri.coupon.vo.UserCoupon;
 
 @Service
@@ -14,7 +14,7 @@ import com.nadri.coupon.vo.UserCoupon;
 public class UserCouponService {
 
 	@Autowired
-	UserCouponDao userCouponDao;
+	UserCouponMapper userCouponDao;
 	
 	/* 유저No로 쿠폰 추가 */
 	public void insertCouponByUserNo(int couponNo, int userNo) {

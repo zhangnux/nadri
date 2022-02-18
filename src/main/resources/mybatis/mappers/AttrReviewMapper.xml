@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.nadri.attr.dao.AttrReviewDao">
+<mapper namespace="com.nadri.attr.mapper.AttrReviewMapper">
 	<resultMap id="ReviewMap" type="com.nadri.attr.vo.AttrReview">
 		<id column="review_no" property="no"/>
 		<result column="review_star" property="star"/>

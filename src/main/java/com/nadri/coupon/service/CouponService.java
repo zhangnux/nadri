@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nadri.coupon.dao.CouponDao;
+import com.nadri.coupon.mapper.CouponMapper;
 import com.nadri.coupon.util.Criteria;
 import com.nadri.coupon.vo.Coupon;
 
@@ -15,7 +15,7 @@ import com.nadri.coupon.vo.Coupon;
 public class CouponService {
 
 	@Autowired
-	private CouponDao couponDao;
+	private CouponMapper couponDao;
 	
 	public List<Coupon> getAllCouponList(int begin, int end){ return couponDao.getAllCoupons(begin, end); }
 	

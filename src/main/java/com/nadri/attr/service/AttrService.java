@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nadri.attr.dao.AttrDao;
 import com.nadri.attr.dto.AttOptionDetail;
+import com.nadri.attr.mapper.AttrMapper;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
@@ -20,20 +20,20 @@ import com.nadri.restaurant.vo.Restaurant;
 public class AttrService {
 
 	@Autowired
-	private AttrDao attrDao;
+	private AttrMapper attrMapper;
 	
-	public List<Attraction> getAllAttrList(){return attrDao.allAttrList();}
-	public int getListCount() {return attrDao.attrcount();}
-	public List<Attraction> getSearchResult(Search search){return attrDao.searchAttraction(search);}
-	public int getSearchedRowCount(Search search){ return attrDao.getSearchedRow(search); }
-	public Attraction getDetailPage(int no) { return attrDao.getDetailByNo(no); }
-	public List<Attraction> getOptionInfo(int no) { return attrDao.getOptionByNo(no); }
-	public int getReviewCount(int attNo) { return attrDao.reviewCount(attNo); }
-	public double getStarCount(int attNo) { return attrDao.star(attNo); }
-	public List<Attraction> getRandom(int attNo, String place) { return attrDao.random(attNo, place); }
-	public List<UserCoupon> getCoupon(int userNo){ return attrDao.coupon(userNo); }
+	public List<Attraction> getAllAttrList(){return attrMapper.allAttrList();}
+	public int getListCount() {return attrMapper.attrcount();}
+	public List<Attraction> getSearchResult(Search search){return attrMapper.searchAttraction(search);}
+	public int getSearchedRowCount(Search search){ return attrMapper.getSearchedRow(search); }
+	public Attraction getDetailPage(int no) { return attrMapper.getDetailByNo(no); }
+	public List<Attraction> getOptionInfo(int no) { return attrMapper.getOptionByNo(no); }
+	public int getReviewCount(int attNo) { return attrMapper.reviewCount(attNo); }
+	public double getStarCount(int attNo) { return attrMapper.star(attNo); }
+	public List<Attraction> getRandom(int attNo, String place) { return attrMapper.random(attNo, place); }
+	public List<UserCoupon> getCoupon(int userNo){ return attrMapper.coupon(userNo); }
 	
-	public List<Attraction> randomAttraction(){ return attrDao.mainRandomAttr(); }
-	public List<Restaurant> randomRestaurant(){ return attrDao.mainRandomRes(); }
+	public List<Attraction> randomAttraction(){ return attrMapper.mainRandomAttr(); }
+	public List<Restaurant> randomRestaurant(){ return attrMapper.mainRandomRes(); }
 
 }
