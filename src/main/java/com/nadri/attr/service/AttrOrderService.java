@@ -14,54 +14,59 @@ import com.nadri.attr.vo.AttrOrder;
 public class AttrOrderService {
 
 	@Autowired
-	private AttrOrderMapper orderDao;
+	private AttrOrderMapper orderMapper;
 	
 	public AttrOrder getOrderInfo(AttrOrder orderForm){ 
-		return orderDao.orderInfo(orderForm);
+		return orderMapper.orderInfo(orderForm);
 	}
 	
 	public AttrOrder getProductInfo(AttrOrder orderForm){
-		return orderDao.productInfo(orderForm); 
+		return orderMapper.productInfo(orderForm); 
 	}
 	
 	/* 무통장 오더정보 추가 */
 	public void addDepositOrder(AttrOrder attrOrder) {
-		orderDao.depositOrderInfo(attrOrder);
+		orderMapper.depositOrderInfo(attrOrder);
 	}
 	public void addDepositOption(AttrOrder attrOrder) {
-		orderDao.depositOptionInfo(attrOrder);
+		orderMapper.depositOptionInfo(attrOrder);
 	}
 	public void addSalesCount(int attNo) {
-		orderDao.salesQuantity(attNo);
+		orderMapper.salesQuantity(attNo);
 	}
 	/* 쿠폰 사용여부 변경 */
 	public void couponUsedStat(int userNo, int couponNo) {
-		orderDao.couponUsed(userNo, couponNo);
+		orderMapper.couponUsed(userNo, couponNo);
 	}
 	
 	/* 카카오페이*/
 	// 오더정보 추가
 	public int  addKakaoOrder(AttrOrder attrOrder) {
-		orderDao.kakaoOrderInfo(attrOrder);
+		orderMapper.kakaoOrderInfo(attrOrder);
 		return attrOrder.getOrderNo();
 	}
 	public void addKakaoOption(AttrOrder attrOrder) {
-		orderDao.kakaoOptionInfo(attrOrder);
+		orderMapper.kakaoOptionInfo(attrOrder);
 	}
 	// 오더정보 삭제
 	public void deleteKakaoOption(int orderNo) {
-		orderDao.kakaoOptionDelete(orderNo);
+		orderMapper.kakaoOptionDelete(orderNo);
 	}
 	public void deleteKakaoOrder(int orderNo) {
-		orderDao.kakaoOrderDelete(orderNo);
+		orderMapper.kakaoOrderDelete(orderNo);
 	}
 	// 결제상태 변경
 	public void kakaoPayCompleted(int orderNo) {
-		orderDao.kakaoCompleted(orderNo);
+		orderMapper.kakaoCompleted(orderNo);
 	}
 	
 	/* 예약내역 확인 */
 	public List<AttrOrder> getReservList(int userNo){
-		return orderDao.reservList(userNo);
+		return orderMapper.reservList(userNo);
 	}
+	/* 예약상세내역확인 */
+	public List<AttrOrder> getReservDetail(int orderNo, int userNo){
+		return orderMapper.detailOrderInfo(orderNo, userNo);
+	}
+	
 }

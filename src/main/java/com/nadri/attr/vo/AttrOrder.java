@@ -1,6 +1,7 @@
 package com.nadri.attr.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +26,7 @@ public class AttrOrder {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date attDate;
+	private Date orderDate;
 	private int price;
 	private int lastPrice;
 	private int deposit;
@@ -54,5 +56,11 @@ public class AttrOrder {
 	private User userInfo;
 	private Attraction attraction;
 	private AttOption attOption;
+	
+	/* 예약내역 조회 */
+	private List<Integer> optionsQuantity;
+	private List<Integer> optionsNo;
+	private List<String> optionsName;
+	private List<Integer> optionsPrice;
 	
 }

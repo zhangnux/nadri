@@ -221,9 +221,15 @@ public class AttrOrderController {
 		List<AttrOrder> reserv = attrOrderService.getReservList(userNo);
 		model.addAttribute("reserv",reserv);
 		
-		List<AttrOrder> options = attrOrderService.getReservList(userNo);
-		model.addAttribute("options",options);
-		
 		return "/attr/reservlist";
+	}
+	
+	// 주문상세정보확인
+	@GetMapping("/detailinfo.nadri")
+	public String reservDetail(@LoginedUser User user, @RequestParam("orderNo") int orderNo,Model model) {
+		int userNo = user.getNo();
+		List<AttrOrder> options = attrOrderService.getReservDetail(orderNo, userNo);
+		model.addAttribute("options",options);
+		return "/attr/reservdetail";
 	}
 }
