@@ -20,6 +20,15 @@
 			<h1><strong>예약정보조회</strong></h1>
 		</div>
 	</div>
+<c:if test="${empty LOGIN_USER }">
+	<div class="px-4 py-5 my-5 text-center">
+		<h1 class="display-5 fw-bold">이용 불가</h1>
+		<div class="col-lg-6 mx-auto">
+			<p class="lead mb-4">로그인 된 사용자만 이용할 수 있습니다.</p>
+		</div>
+	</div>
+</c:if>
+<c:if test="${not empty LOGIN_USER }">
 	<div>
 		<div class="row border rounded mt-3 p-4">
 			<div class="col text-center">
@@ -95,6 +104,7 @@
 				</div>
 			</div>
 		</div>
+</c:if>
 		<div class="row mt-3">
 			<div class="col text-center">
 				<button class="btn btn-primary" onclick="self.close();">닫기</button>
