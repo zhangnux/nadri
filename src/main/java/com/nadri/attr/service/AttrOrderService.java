@@ -61,7 +61,7 @@ public class AttrOrderService {
 	}
 	
 	/* 예약내역 확인 */
-	public List<AttrOrder> getReservList(int userNo){
+	public List<AttrOrder> getReservList(int userNo){	
 		return orderMapper.reservList(userNo);
 	}
 	/* 예약상세내역확인 */

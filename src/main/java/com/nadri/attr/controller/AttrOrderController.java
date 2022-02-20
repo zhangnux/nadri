@@ -10,12 +10,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.nadri.attr.kakaoPay.ApproveResponse;
 import com.nadri.attr.kakaoPay.KakaoPayServiceAttr;
@@ -42,6 +40,11 @@ public class AttrOrderController {
 	AttrService attrService;
 	@Autowired
 	KakaoPayServiceAttr kakaoPayService;
+	
+	@GetMapping("/orderform.nadri")
+	public String orderFormGet() {
+		return "/user/loginForm";
+	}
 	
 	// 오더폼
 	@PostMapping("/orderform.nadri")
@@ -129,11 +132,25 @@ public class AttrOrderController {
 		log.info("주문 상품: " + form.getAttName());
 		log.info("주문 수량: " + form.getTotalQuantity());
 		log.info("주문 금액: " + form.getLastPrice());	
+
+		int attrNo = form.getAttNo();
+		int quantity = form.getTotalQuantity();
+		int lastPrice = form.getLastPrice();
+
+		Attraction attraction = attrService.getDetailPage(attrNo);
+
+		AttrOrder attrOrder = new AttrOrder();
+		// 카카오 결재 준비 하기
+		ReadyResponse readyResponse = kakaoPayService.payReady(attraction, quantity, lastPrice);
+		// 결재고유 번호(tid)를 세션에 저장시킨다.
+		SessionUtils.addAttribute("tid", readyResponse.getTid());
+		log.info("결재고유 번호: " + readyResponse.getTid());
+		String tid = (String) SessionUtils.getAttribute("tid");
+		form.setTid(tid);
 		
 		// 유저아이디 추가
 		int userNo = user.getNo();
 		form.setUserNo(userNo);
-		AttrOrder attrOrder = new AttrOrder();
 		BeanUtils.copyProperties(form, attrOrder);
 		
 		// 결제 임시 데이터 추가
@@ -151,18 +168,6 @@ public class AttrOrderController {
 		
 		SessionUtils.addAttribute("orderNo", orderNo);
 
-		int attrNo = form.getAttNo();
-		int quantity = form.getTotalQuantity();
-		int lastPrice = form.getLastPrice();
-
-		Attraction attraction = attrService.getDetailPage(attrNo);
-
-		// 카카오 결재 준비 하기
-		ReadyResponse readyResponse = kakaoPayService.payReady(attraction, quantity, lastPrice);
-		// 결재고유 번호(tid)를 세션에 저장시킨다.
-		SessionUtils.addAttribute("tid", readyResponse.getTid());
-		log.info("결재고유 번호: " + readyResponse.getTid());
-
 		return readyResponse;
 	}
 	
@@ -178,11 +183,17 @@ public class AttrOrderController {
 		log.info("결제고유 번호: " + tid);
 		log.info("로그인한 사용자 정보: " + user);
 		
-		// 카카오 결재 요청하기
+		// 카카오 결제  요청하기
 		ApproveResponse approveResponse = kakaoPayService.payApprove(tid, pgToken);	
 		
 		return "redirect:/attr/success.nadri?orderNo=" + orderNo;
-	}	
+	}
+	
+	@PostMapping("/pay/cancel")
+	public String payCanceled(String tid) {
+	
+		return "/attr/reservation.nadri";
+	}
 	
 	@GetMapping("/success.nadri")
 	public String success() {
@@ -203,12 +214,14 @@ public class AttrOrderController {
 	// 주문내역확인
 	@GetMapping("/reservation.nadri")
 	public String reservList(@LoginedUser User user, Model model) {
+		try {
 		int userNo = user.getNo();
-		
 		List<AttrOrder> reserv = attrOrderService.getReservList(userNo);
 		model.addAttribute("reserv",reserv);
-		
 		return "/attr/reservlist";
+		} catch(NullPointerException e) {
+			return "/user/loginForm";
+		}
 	}
 	
 	// 주문상세정보확인
@@ -219,4 +232,5 @@ public class AttrOrderController {
 		model.addAttribute("options",options);
 		return "/attr/reservdetail";
 	}
+	
 }

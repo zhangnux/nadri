@@ -28,11 +28,13 @@ public class UserCouponController {
 	 */
 	@GetMapping("/coupon.nadri")
 	public String userCoupon(@LoginedUser User user, Model model) {
-
+		try {
 		List<UserCoupon> couponList = userCouponService.getCouponList(user.getNo());
 		model.addAttribute("couponList", couponList);
-		
 		return "user/userCoupon";
+		} catch (NullPointerException e) {
+			return "user/loginForm";
+		}
 	}
 
 }

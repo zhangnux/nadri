@@ -55,7 +55,7 @@
 					</div>
 		
 					<div class="modal-body p-5 pt-0">
-						<form class="" action="login.nadri" method="post" name="loginForm" id="loginForm">
+						<form class="" action="/user/login.nadri" method="post" name="loginForm" id="loginForm">
 							<div class="form-floating mb-3">
 								<input type="text" class="form-control" placeholder=" " name="id" id="id"> <label for="id">ID</label>
 							</div>
