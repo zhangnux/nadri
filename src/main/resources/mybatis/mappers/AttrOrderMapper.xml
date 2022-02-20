@@ -116,6 +116,7 @@
 		    a.coupon_no,
 		    a.order_process,
 		    a.total_quantity,
+		    a.order_tid,
 		    p.product_quantity, 
 		    p.option_no, 
 		    o.att_price, 
@@ -130,7 +131,7 @@
     order by att_date
 	]]>
 	</select>
-	<select id="detailOrderInfo" resultType="com.nadri.attr.vo.AttrOrder">
+	<select id="detailOrderInfo" parameterType="int" resultType="com.nadri.attr.vo.AttrOrder">
 	select o.order_no as orderNo, 
 	o.order_price as price, 
 	o.order_lastPrice as lastPrice, 
@@ -148,7 +149,6 @@
 	and p.option_no = opt.att_optno(+)
 	and o.att_no = t.att_no(+)
 	and o.order_no = #{orderNo}
-	and o.user_no = #{userNo}
 	</select>
 		
 </mapper>

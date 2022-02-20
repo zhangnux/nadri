@@ -56,6 +56,7 @@ public class KakaoPayServiceAttr {
 		
 		return approveResponse;
 	}
+
 	
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();

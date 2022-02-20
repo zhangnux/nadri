@@ -32,5 +32,5 @@ public interface AttrOrderMapper {
 	// 주문내역확인
 	List<AttrOrder> reservList(int userNo);
 	// 주문 상세내역 확인
-	List<AttrOrder> detailOrderInfo(@Param("orderNo")int orderNo, @Param("userNo")int userNo);
+	List<AttrOrder> detailOrderInfo(int orderNo);
 }

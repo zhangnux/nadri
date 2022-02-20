@@ -137,16 +137,20 @@
 								<fmt:formatNumber value="${r.lastPrice }" pattern="###,###" />원
 							</div>
 						</div>
-						<div class="row justify-content-end mt-2">
-							<div class="col-auto">
-								<a class="btn btn-outline-primary getDetail" id="${r.orderNo }">상세내역</a>
+						<form action="" method="post">
+							<div class="row justify-content-end mt-2">
+								<div class="col-auto">
+									<a class="btn btn-outline-primary getDetail" id="${r.orderNo }">상세내역</a>
+								</div>
+								<c:if test="${r.orderProcess !='예약취소'}">
+									<input type="hidden" name="tid" value="${r.tid }">
+									<input type="hidden" name="orderNo" value="${r.orderNo }">
+									<div class="col-auto">
+										<button class="btn btn-outline-danger">예약취소</button>
+									</div>
+								</c:if>
 							</div>
-							<c:if test="${r.orderProcess !='예약취소'}">
-							<div class="col-auto">
-								<a class="btn btn-outline-danger">예약취소</a>
-							</div>
-							</c:if>
-						</div>
+						</form>
 					</div>
 				</div>
 				</c:forEach>
