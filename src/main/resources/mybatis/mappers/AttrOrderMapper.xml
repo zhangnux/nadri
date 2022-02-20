@@ -148,17 +148,5 @@
 	and o.order_no = #{orderNo}
 	and o.user_no = #{userNo}
 	</select>
-	<!-- 
-	<select id="detailOrderInfo" resultMap="orderResultMap">
-	select o.order_no, o.order_lastPrice, o.user_no, o.buyer_tel, o.buyer_email, o.buyer_name, o.total_quantity, 
-        	o.coupon_no, p.product_quantity, opt.att_option, opt.att_price, t.att_name
-	from att_order o, att_order_product p, att_option opt, attraction t
-	where o.order_no = p.order_no(+)
-	and p.option_no = opt.att_optno(+)
-	and o.att_no = t.att_no(+)
-	and o.order_no = #{orderNo}
-	and o.user_no = #{userNo}
-	</select>
-	 -->
 		
 </mapper>
