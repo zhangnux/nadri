@@ -26,7 +26,7 @@
 <c:if test="${empty LOGIN_USER }">
 		<div class="col text-center">로그인 후 다시 이용해주세요</div>
 </c:if>
-<%-- <c:if test="${not empty LOGIN_USER }">		--%>
+<c:if test="${not empty LOGIN_USER }">
 	<form method="post" action="waiting.nadri">
 		<div class="border rounded p-3 mb-3">
 			<div class="row mb-4 border-bottom"><h3><strong>구매 상품</strong></h3></div>
@@ -127,7 +127,7 @@
 				</div>					
 			</div>			
 		</div>
-<%-- </c:if>--%>
+</c:if>
 		<script>
 		$(function(){
 			
@@ -271,6 +271,7 @@
 				 var attDate=$("input[name=attDate]").val();
 				 var totalQuantity=$("input[name=totalQuantity]").val();
 				 var couponNo=$("input[name=couponNo]").val();
+				 var price=$("input[name=price]").val();
 				 var lastPrice=$("input[name=lastPrice]").val();
 				 var name=$("input[name=buyerName]").val();
 				 var email=$("input[name=buyerEmail]").val();
@@ -307,7 +308,8 @@
 						"buyerName":name,
 						"buyerEmail":email,
 						"buyerTel":tel,
-						"attName":attName
+						"attName":attName,
+						"price":price
 				}
 				
 				$.ajax({

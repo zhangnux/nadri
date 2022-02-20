@@ -141,9 +141,11 @@
 							<div class="col-auto">
 								<a class="btn btn-outline-primary getDetail" id="${r.orderNo }">상세내역</a>
 							</div>
+							<c:if test="${r.orderProcess !='예약취소'}">
 							<div class="col-auto">
 								<a class="btn btn-outline-danger">예약취소</a>
 							</div>
+							</c:if>
 						</div>
 					</div>
 				</div>
@@ -170,8 +172,8 @@ $(function(){
 			$("#couponCount").text(count);
 		}
 	})
-	
 })
+
 </script>
 <%@ include file="../common/footer.jsp"%>
 </body>

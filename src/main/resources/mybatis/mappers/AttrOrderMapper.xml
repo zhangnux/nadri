@@ -20,6 +20,7 @@
 		<result column="att_price" property="optionPrice" />
 		<result column="product_quantity" property="productQuantity" />
 		<result column="total_quantity" property="totalQuantity" />
+		<result column="order_tid" property="tid" />
 		<collection property="userInfo" resultMap="userResultMap" />
 		<collection property="attraction" resultMap="AttrResultMap" />
 		<collection property="attOption" resultMap="AttrOptionMap" />
@@ -75,8 +76,8 @@
 		<selectKey keyProperty="orderNo" resultType="int" order="BEFORE">
 			select att_order_no_seq.nextval from dual
 		</selectKey>
-		insert into att_order(order_no, order_price, order_lastprice, user_no, att_date, buyer_tel, buyer_email, buyer_name, att_no, coupon_no, total_quantity)
-		values (#{orderNo}, #{price}, #{lastPrice}, #{userNo}, #{attDate}, #{buyerTel}, #{buyerEmail}, #{buyerName}, #{attNo}, #{couponNo}, #{totalQuantity})
+		insert into att_order(order_no, order_price, order_lastprice, user_no, att_date, buyer_tel, buyer_email, buyer_name, att_no, coupon_no, total_quantity, order_tid)
+		values (#{orderNo}, #{price}, #{lastPrice}, #{userNo}, #{attDate}, #{buyerTel}, #{buyerEmail}, #{buyerName}, #{attNo}, #{couponNo}, #{totalQuantity}, #{tid})
 	</insert>
 	<!-- 옵션정보 -->
 	<insert id="kakaoOptionInfo" parameterType="com.nadri.attr.vo.AttrOrder">
@@ -125,6 +126,7 @@
     and p.option_no = o.att_optno(+)
     and a.att_no = t.att_no
     and user_no=#{userNo}
+    and att_date > sysdate
     order by att_date
 	]]>
 	</select>

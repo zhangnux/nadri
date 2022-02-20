@@ -35,5 +35,6 @@ public class AttrOrderForm {
 	private String buyerEmail;
 	private String buyerTel;
 	private String attName;
+	private String tid;
 	
 }
