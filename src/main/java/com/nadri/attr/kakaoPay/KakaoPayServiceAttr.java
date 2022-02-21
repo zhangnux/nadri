@@ -57,6 +57,21 @@ public class KakaoPayServiceAttr {
 		return approveResponse;
 	}
 
+	public ApproveResponse cancelReady(String tid, int cancelPrice) {
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("cid", "TC0ONETIME");
+		parameters.add("tid", tid);
+		parameters.add("cancel_amount", String.valueOf(cancelPrice));
+		parameters.add("cancel_tax_free_amount", "0");
+		
+		HttpEntity<MultiValueMap<String,String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+		
+		RestTemplate template = new RestTemplate();
+		String url="https://kapi.kakao.com/v1/payment/cancel";
+		ApproveResponse approveResponse = template.postForObject(url, requestEntity, ApproveResponse.class);
+		
+		return approveResponse;
+	}
 	
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();

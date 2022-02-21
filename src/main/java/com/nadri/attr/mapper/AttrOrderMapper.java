@@ -33,4 +33,7 @@ public interface AttrOrderMapper {
 	List<AttrOrder> reservList(int userNo);
 	// 주문 상세내역 확인
 	List<AttrOrder> detailOrderInfo(int orderNo);
+	
+	// 주문process변경
+	void cancelOrder(int orderNo);
 }

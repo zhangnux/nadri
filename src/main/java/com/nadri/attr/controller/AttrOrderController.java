@@ -190,9 +190,21 @@ public class AttrOrderController {
 	}
 	
 	@PostMapping("/pay/cancel")
-	public String payCanceled(@RequestParam(name="tid")String tid, @RequestParam(name="orderNo")int orderNo) {
+	public String payCanceled(@RequestParam(name="orderNo")int orderNo) {
+		List<AttrOrder> detail = attrOrderService.getReservDetail(orderNo);
+		String tid = detail.get(0).getTid();
+		int cancelPrice = detail.get(0).getLastPrice();
+
+		ApproveResponse approveResponse = kakaoPayService.cancelReady(tid, cancelPrice);
+		attrOrderService.updateCancelOrder(orderNo);
 		
-		return "/attr/reservation.nadri";
+		return "redirect:/attr/reservation.nadri";
+	}
+	
+	@GetMapping("/cancel")
+	public String cancel(@RequestParam(name="orderNo")int orderNo) {
+		attrOrderService.updateCancelOrder(orderNo);
+		return "redirect:/attr/reservation.nadri";		
 	}
 	
 	@GetMapping("/success.nadri")
