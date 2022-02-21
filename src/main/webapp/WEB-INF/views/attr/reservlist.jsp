@@ -137,18 +137,27 @@
 								<fmt:formatNumber value="${r.lastPrice }" pattern="###,###" />원
 							</div>
 						</div>
-						<form action="" method="post">
+						<form action="pay/cancel" method="post">
 							<div class="row justify-content-end mt-2">
 								<div class="col-auto">
 									<a class="btn btn-outline-primary getDetail" id="${r.orderNo }">상세내역</a>
 								</div>
-								<c:if test="${r.orderProcess !='예약취소'}">
-									<input type="hidden" name="tid" value="${r.tid }">
-									<input type="hidden" name="orderNo" value="${r.orderNo }">
-									<div class="col-auto">
-										<button class="btn btn-outline-danger">예약취소</button>
-									</div>
-								</c:if>
+								<c:choose>
+									<c:when test="${r.orderProcess =='결제완료'}">
+										<input type="hidden" name="orderNo" value="${r.orderNo }">
+										<div class="col-auto">
+											<button class="btn btn-outline-danger cancel-btn">예약취소</button>
+										</div>
+									</c:when>
+									<c:when test="${r.orderProcess=='결제대기' }">
+										<input type="hidden" name="orderNo" value="${r.orderNo }">
+										<div class="col-auto">
+											<a class="btn btn-outline-danger cancel-btn" href="cancel?orderNo=${r.orderNo }">예약취소</a>
+										</div>
+									</c:when>
+									<c:when test="${r.orderProcess='예약취소' }">
+									</c:when>
+								</c:choose>
 							</div>
 						</form>
 					</div>
@@ -176,6 +185,15 @@ $(function(){
 			$("#couponCount").text(count);
 		}
 	})
+})
+
+$(".cancel-btn").click(function(){
+	
+    if(confirm("정말 취소하시겠습니까 ?") == true){}
+    else{
+        return false;
+    }
+	
 })
 
 </script>

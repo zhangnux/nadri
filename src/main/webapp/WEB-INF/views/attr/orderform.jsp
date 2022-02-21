@@ -113,7 +113,8 @@
 				<input type="hidden" id="tel" name="buyerTel" value="${LOGIN_USER.tel }" maxlength="5" size="5" required>					
 			</div>
 			<div class="row mt-3 d-flex justify-content-center" id="modifybtn"><%-- 수정버튼 들어갈 곳 --%></div>
-		</div>	
+		</div>
+			
 		<div class="border rounded p-3 mb-4">
 			<div class="row mb-4 border-bottom"><h3><strong>결제 수단</strong></h3></div>
 			<div class="row mt-3 p-2">
@@ -197,26 +198,26 @@
 				 editInfo();
 			 });
 			 
-			 function editInfo(){
-				 var originalName = $("#name").val();
-				 
-				 var name = "";
-				 name += "<input type=\"text\" id=\"newName\" name=\"name\" value=\""+originalName+"\" maxlength=\"10\" size=\"20\" required>"
-				 $(".originalName").html(name);
-				 
-				 var originalEmail = $("#email").val();
-				 var mail = "";
-				 mail += "<input type=\"text\" id=\"newEmail\" name=\"email\" value=\""+originalEmail+"\" maxlength=\"30\" size=\"20\" required>"
-				 $(".originalEmail").html(mail);
-				 
-				 var originalTel = $("#tel").val();
-				 var tel = "";
-				 tel += "<input type=\"text\" id=\"newTel\" name=\"tel\" value=\""+originalTel+"\" maxlength=\"13\" size=\"20\" required>"
-			 	 $(".originalTel").html(tel);
-				 
-				 $("#modifybtn").html("<div class=\"col-6\"><a class=\"btn btn-primary\" id=\"modify\" style=\"width:200px;\">변경</button></div>")
-			 	
-			 }
+		 function editInfo(){
+			 var originalName = $("#name").val();
+			 
+			 var name = "";
+			 name += "<input type=\"text\" id=\"newName\" name=\"name\" value=\""+originalName+"\" maxlength=\"10\" size=\"20\" required>"
+			 $(".originalName").html(name);
+			 
+			 var originalEmail = $("#email").val();
+			 var mail = "";
+			 mail += "<input type=\"text\" id=\"newEmail\" name=\"email\" value=\""+originalEmail+"\" maxlength=\"30\" size=\"20\" required>"
+			 $(".originalEmail").html(mail);
+			 
+			 var originalTel = $("#tel").val();
+			 var tel = "";
+			 tel += "<input type=\"text\" id=\"newTel\" name=\"tel\" value=\""+originalTel+"\" maxlength=\"13\" size=\"20\" required>"
+		 	 $(".originalTel").html(tel);
+			 
+			 $("#modifybtn").html("<div class=\"col-6\"><a class=\"btn btn-primary\" id=\"modify\" style=\"width:200px;\">변경</button></div>")
+		 	
+		 }
 			 
 			 $(".originalTel").on("keyup", "#newTel", function() { 
 				 $(this).val( $(this).val().replace(/[^0-9]/g, "").replace(/(^02|^0505|^1[0-9]{3}|^0[0-9]{2})([0-9]+)?([0-9]{4})$/,"$1-$2-$3").replace("--", "-") ); 

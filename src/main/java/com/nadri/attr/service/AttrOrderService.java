@@ -68,5 +68,8 @@ public class AttrOrderService {
 	public List<AttrOrder> getReservDetail(int orderNo){
 		return orderMapper.detailOrderInfo(orderNo);
 	}
-	
+	/* 예약 취소 */ 
+	public void updateCancelOrder(int orderNo) {
+		orderMapper.cancelOrder(orderNo);
+	}
 }

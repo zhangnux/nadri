@@ -133,22 +133,30 @@
 	</select>
 	<select id="detailOrderInfo" parameterType="int" resultType="com.nadri.attr.vo.AttrOrder">
 	select o.order_no as orderNo, 
-	o.order_price as price, 
-	o.order_lastPrice as lastPrice, 
-	o.user_no, o.buyer_tel as buyerTel, 
-	o.buyer_email as buyerEmail, 
-	o.buyer_name as buyerName, 
-	o.total_quantity as totalQuantity, 
-    o.coupon_no as couponNo, 
-    p.product_quantity as productQuantity, 
-    opt.att_option as optionName, 
-    opt.att_price as optionPrice, 
-    t.att_name as attName
+			o.order_price as price, 
+			o.order_lastPrice as lastPrice,
+			o.user_no, o.buyer_tel as buyerTel,
+			o.buyer_email as buyerEmail, 
+			o.buyer_name as buyerName, 
+			o.total_quantity as totalQuantity, 
+		    o.coupon_no as couponNo,
+		    o.order_tid as tid,
+		    p.product_quantity as productQuantity, 
+		    opt.att_option as optionName, 
+		    opt.att_price as optionPrice, 
+		    t.att_name as attName
 	from att_order o, att_order_product p, att_option opt, attraction t
 	where o.order_no = p.order_no(+)
 	and p.option_no = opt.att_optno(+)
 	and o.att_no = t.att_no(+)
 	and o.order_no = #{orderNo}
 	</select>
+	
+	<!-- 예약취소 -->
+	<update id="cancelOrder" parameterType="int">
+	update att_order
+	set order_process = '예약취소'
+	where order_no = #{orderNo}
+	</update>
 		
 </mapper>
