@@ -20,7 +20,8 @@ public interface AttrReviewMapper {
 	// 후기 등록
 	void insertReview(AttrReview attrReview);
 	void insertReviewPic(AttrReviewPic attrReviewPic); 
-	List<AttrReviewPic> ReviewPicsByNo(int reviewNo);
+	// 후기 사진 정보
+	List<String> getReviewPic(int reviewNo);
 	
 	// 후기 수정
 	void updateReview(@Param("no")int reviewNo, @Param("content")String content);

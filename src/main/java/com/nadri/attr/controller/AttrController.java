@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.binding.BindingException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,22 +83,44 @@ public class AttrController {
 		if(loginedUser != null) {
 			int userNo = loginedUser.getNo();
 			List<UserCoupon> couponList = attrService.getCoupon(userNo);
-			model.addAttribute("couponList", couponList);			
+			model.addAttribute("couponList", couponList);
+			int reviewCount = 0;
+			try {
+				reviewCount = attrService.getReviewCountPerUser(userNo,no);
+				model.addAttribute("userReviewCount", reviewCount);
+			}catch(BindingException e) {
+				model.addAttribute("userReviewCount", reviewCount);
+			}
 		}
 	
 		return "attr/attrdetail";
 	}
 	
-	
 	@PostMapping("/addreview")
-	public String addReview(ReviewForm reviewForm) throws Exception {
+	public String addReview(ReviewForm reviewForm, @LoginedUser User user) throws Exception {
 		
-		String saveDirectory="C:\\Develop\\projects\\final-workspace\\nadri\\src\\main\\webapp\\resources\\images\\att\\review";
+		int userNo = user.getNo();
+		reviewForm.setUserNo(userNo);
+		
 		List<AttrReviewPic> attrReviewPics = new ArrayList<>();
+		List<MultipartFile> upfiles = reviewForm.getUpfiles();
+		String saveDirectory="C:\\jy-nadri\\nadri\\src\\main\\webapp\\resources\\images\\att\\review";
+		for(MultipartFile files:upfiles) {
+			if(!files.isEmpty()) {
+				String fileName = System.currentTimeMillis()+files.getOriginalFilename();
+				AttrReviewPic attrReviewPic = new AttrReviewPic();
+				attrReviewPic.setPic(fileName);
+				attrReviewPics.add(attrReviewPic);
+				
+				InputStream in = files.getInputStream();
+				FileOutputStream out = new FileOutputStream(new File(saveDirectory,fileName));
+				FileCopyUtils.copy(in,out);
+			}	
+		}
 		
 		AttrReview attrReview = new AttrReview();
 		BeanUtils.copyProperties(reviewForm, attrReview);
-		reviewService.addReview(attrReview);
+		reviewService.addReview(attrReview,attrReviewPics);
 		
 		return "redirect:/attr/detail.nadri?no="+attrReview.getAttNo();
 	}

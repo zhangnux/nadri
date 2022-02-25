@@ -52,7 +52,7 @@
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 	            <c:forEach var="cate" items="${category }">
 				  <div class="col">
-				    <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${cate.no}&page=1';">
+				    <div class="card h-100 shadow" onclick="location.href='detail.nadri?no=${cate.no}';">
 				      <img src="../resources/images/att/${cate.thumbnail }" class="card-img-top" style="height:200px;">
 				      <div class="card-body">
 				      	<p class="card-text">${cate.place } / ${cate.category }</p>
