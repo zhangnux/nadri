@@ -9,22 +9,26 @@
 		<result column="att_no" property="attNo"/>
 		<result column="user_no" property="userNo"/>
 		<result column="user_id" property="userId"/>
-		<result column="review_pic" property="pic"/>
 	</resultMap>
 	
+	<!-- 리뷰가져오기 -->
 	<select id="getListByNo" resultMap="ReviewMap">
 		<![CDATA[
-		select r.review_no, r.review_star, r.review_content, r.review_date, r.user_no, u.user_id, p.review_pic 
+		select r.review_no, r.review_star, r.review_content, r.review_date, r.user_no, u.user_id
 		from ( select row_number() over(order by review_no desc) rn, review_no, review_star, review_content, review_date, user_no, att_no 
 		       from att_review 
-		       where att_no = #{no})r, user_table u, att_review_pic p 
-		       where rn between #{beginIndex} and #{endIndex} 
+		       where att_no = #{no})r, user_table u
+		       where rn between #{beginIndex} and #{endIndex}  
 		       and r.user_no = u.user_no 
-		       and r.review_no = p.review_no(+) 
 		       order by review_date desc
 		]]>
 	</select>
-	
+	<select id="getReviewPic" parameterType="int" resultType="string">
+		select review_pic
+		from att_review_pic
+        where review_no=#{no}
+	</select>
+		
 	<!-- 리뷰작성 -->
 	<insert id="insertReview" parameterType="com.nadri.attr.vo.AttrReview">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">

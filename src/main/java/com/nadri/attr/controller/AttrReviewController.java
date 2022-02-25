@@ -3,11 +3,13 @@ package com.nadri.attr.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,8 @@ import com.nadri.attr.service.ReviewService;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.AttrReviewPic;
 import com.nadri.attr.vo.ReviewForm;
+import com.nadri.user.annotation.LoginedUser;
+import com.nadri.user.vo.User;
 
 @RestController
 @RequestMapping("/attr")
@@ -41,11 +45,14 @@ public class AttrReviewController {
 		int beginIndex = pagination.getBegin();
 		int endIndex = pagination.getEnd();
 		
-		result.put("reviewList", reviewService.getReviewList(attNo, beginIndex, endIndex));
+		List<AttrReview> reviewList = reviewService.getReviewList(attNo, beginIndex, endIndex);
+		
+		result.put("reviewList", reviewList);
 		result.put("pagination", pagination);
 		
 		return result;
 	}
+	
 	
 	@PostMapping("/delete")
 	public void deleteByNo(int reviewNo) {
@@ -56,6 +63,5 @@ public class AttrReviewController {
 	public void updateReview(int reviewNo, String content) throws Exception {
 		reviewService.modifyReview(reviewNo, content);
 	}
-
 
 }

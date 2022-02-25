@@ -33,6 +33,9 @@ public interface AttrMapper{
 	Attraction getDetailByNo(int no);
 	List<Attraction> getOptionByNo(int no);
 	
+	// 유저별 후기작성여부
+	int reviewCountPerUser(int userNo, int attNo);
+	
 	// 후기 갯수+별점 평균
 	int reviewCount(int attNo);
 	double star(int attNo);

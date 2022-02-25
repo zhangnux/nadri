@@ -10,6 +10,8 @@
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">	
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script
@@ -77,14 +79,7 @@ article {
     display: block;
     overflow: hidden;
 }
-/*
-#thumb img{
-    display: block;
-    min-width: 100%;
-    min-height: 100%; 
-    -ms-interpolation-mode: bicubic;
-}
-*/
+
 </style>
 </head>
 <body>
@@ -197,50 +192,58 @@ article {
 					</div>
 					
 					<div id="review"><%-- 리뷰 출력되는 곳(ajax) --%></div>
-					
 					<c:choose>
-						<c:when test="${empty LOGIN_USER }">
+						<c:when test="${not empty LOGIN_USER && userReviewCount==0 }">
+							<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data">
+							<div class="row">
+								<div class="col-auto mt-2">
+									<h5>
+										<strong>후기 작성</strong>
+									</h5>
+								</div>
+								<div class="col-auto star-rating">
+									  <input type="radio" id="5-stars" name="star" value="5" />
+									  <label for="5-stars" class="star">&#9733;</label>
+									  <input type="radio" id="4-stars" name="star" value="4" />
+									  <label for="4-stars" class="star">&#9733;</label>
+									  <input type="radio" id="3-stars" name="star" value="3" />
+									  <label for="3-stars" class="star">&#9733;</label>
+									  <input type="radio" id="2-stars" name="star" value="2" />
+									  <label for="2-stars" class="star">&#9733;</label>
+									  <input type="radio" id="1-star" name="star" value="1" />
+									  <label for="1-star" class="star">&#9733;</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-11 form-floating">
+								  <textarea class="form-control" id="textarea" name="content"
+								  			style="height: 200px;resize: none;" maxlength="500"></textarea>
+								  <label for="floatingTextarea2">500자까지 작성 가능합니다.</label>
+								</div>	
+							</div>
+							<div class="row mt-2">
+								<div class="col">
+									<input type="file" name="upfiles" accept=".gif, .jpeg, .jpg, .png">
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div class="col">
+									<input type="file" name="upfiles" accept="image/gif, image/jpeg, image/png">
+								</div>
+								<div class="col-1 d-flex flex-column bd-highlight mb-3">
+									<%--
+									<button type="button" class="btn btn-outline-danger mb-2" style="height:50px;width:50px" id="photo-review">
+										<i class="bi bi-images"></i>
+									</button>
+									 --%>
+									<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px" id="register-review">
+										<i class="bi bi-pencil-square"></i>
+									</button>
+								</div>																				
+							</div>
+							<input type="hidden" name="attNo" value=${param.no }>
+							</form>
 						</c:when>
-						<c:otherwise>
-						<form name="reviewform" class="border rounded p-4 mb-4" enctype="multipart/form-data" action="">
-						<div class="row">
-							<div class="col-auto mt-2">
-								<h5>
-									<strong>후기 작성</strong>
-								</h5>
-							</div>
-							<div class="col-auto star-rating">
-								  <input type="radio" id="5-stars" name="star" value="5" />
-								  <label for="5-stars" class="star">&#9733;</label>
-								  <input type="radio" id="4-stars" name="star" value="4" />
-								  <label for="4-stars" class="star">&#9733;</label>
-								  <input type="radio" id="3-stars" name="star" value="3" />
-								  <label for="3-stars" class="star">&#9733;</label>
-								  <input type="radio" id="2-stars" name="star" value="2" />
-								  <label for="2-stars" class="star">&#9733;</label>
-								  <input type="radio" id="1-star" name="star" value="1" />
-								  <label for="1-star" class="star">&#9733;</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12 form-floating">
-							  <textarea class="form-control" id="textarea" name="content"
-							  			style="height: 200px;resize: none;" maxlength="500"></textarea>
-							  <label for="floatingTextarea2">500자까지 작성 가능합니다.</label>
-							</div>	
-						</div>
-						
-						<div class="row mt-4 register" id="thumb">
-							<div class="col-12 text-end">
-								<button type="button" class="btn btn-outline-primary" style="height:50px;width:50px">
-									<i class="bi bi-pencil-square"></i>
-								</button>
-							</div>																				
-						</div>
-						<input type="hidden" name="attNo" value=${param.no }>
-						<input type="hidden" name="userNo" value=${LOGIN_USER.no }>	
-						</form>
-						</c:otherwise>
 					</c:choose>
 
 				<div class="row mt-5 mb-3">
@@ -287,11 +290,12 @@ article {
 				href="javascript:window.scrollTo(0,0);"><i class="bi bi-arrow-up-square">
 				</i><strong>위로</strong>
 			</a>
-
+			
 			</div>
 		</div>
 	</div>
 <%@ include file="../common/footer.jsp"%>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
 <script type="text/javascript">
 /*
 // 썸네일
@@ -313,6 +317,22 @@ function setThumbnail(event) {
 // 로딩 완료시점에 자동실행
 $(function() {
 
+	$('input[name=upfiles]').change(function(){
+		var imgFile = $('input[name=upfiles]').val();
+		var fileForm = /(.*?)\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/;
+		var maxSize = 5 * 1024 * 1024;
+		var fileSize = this.files[0].size;
+	    if(!imgFile.match(fileForm)) {
+	    	alert("이미지 파일만 업로드 가능");
+	    	$(this).val('');
+	        return;
+	    } else if(fileSize > maxSize) {
+	    	alert("파일 사이즈는 5MB까지 가능");
+	    	$(this).val('');
+	        return;
+	    }
+	})
+	
 	/* 리뷰불러오기 */
 	var currentPage = '${param.page}'
 	var no = '${param.no}'
@@ -349,10 +369,16 @@ $(function() {
 							htmls += '</div>'
 						}
 						htmls += '<div>'+this.date+'</div>'
-						htmls += '<div class="col-11 mt-2" id="content'+this.no+'">'+this.content+'</div>'
-						htmls += '<div class="col-1">'
-						if(this.pic != null){
-							htmls += '<img src=\"../../../resources/images/att/review/'+this.pic+'" style="width:70px;height:70px;object-fit:cover">'
+						htmls += '<div class="col-12 mt-2" id="content'+this.no+'">'+this.content+'</div>'
+						htmls += '<div class="row mt-2">'
+						if(this.pic.length>0){
+							var picNumber = this.pic.length;
+							for(var i=0;i<picNumber;i++){
+								htmls += '<div class="col-2" class="'+this.no+'">'
+								htmls += '<a href=\"../../../resources/images/att/review/'+this.pic[i]+'" data-fancybox>'
+								htmls += '<img src=\"../../../resources/images/att/review/'+this.pic[i]+'" style="width:100px;height:100px;object-fit:cover" data-bs-toggle="modal" data-bs-target="#exampleModalToggle"></a>'
+								htmls += '</div>'
+							}
 						}
 						htmls += '</div>'
 						htmls += '</div>'
@@ -392,6 +418,7 @@ $(function() {
 			}	   // Ajax success end
 		});	// Ajax end
 	}
+
 	
 	/* 리뷰 페이지 변경 */
 	 $("#review").on('click', '.page-link', function(event){
@@ -401,7 +428,7 @@ $(function() {
 	 });
 	
 	/* 후기등록 */
-	$(".register .btn-outline-primary").click(function(){
+	$("#register-review").click(function(){
 		var textarea = document.getElementById("textarea");
 		var form = document.reviewform;
 
@@ -442,7 +469,7 @@ $(function() {
 				type:"post",
 				data:{reviewNo:reviewNo},
 				success:function(){
-					getReviewList();
+					document.location.reload();
 				},
 				error:function(error){
 					console.log(error);

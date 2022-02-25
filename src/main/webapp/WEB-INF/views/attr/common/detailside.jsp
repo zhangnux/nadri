@@ -125,11 +125,10 @@
 		
 		$("a.btn-outline-danger").click(function(){
 			var couponNo=$(this).attr("id")
-			var userNo = ${LOGIN_USER.no};
 			$.ajax({
 				type:"get",
 				url:"addCoupon",
-				data:{userno:userNo, couponno:couponNo},
+				data:{couponno:couponNo},
 				success: function(){
 					alert("쿠폰 발급이 완료되었습니다.")
 					location.reload();

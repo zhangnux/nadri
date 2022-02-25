@@ -1,9 +1,7 @@
 package com.nadri.attr.vo;
 
 import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -29,7 +27,7 @@ public class AttrReview {
 	private Date date;
 	private int attNo;
 	private int userNo;
-	private String pic;
+	private List<String> pic;
 	
 	private String userId;
 	
