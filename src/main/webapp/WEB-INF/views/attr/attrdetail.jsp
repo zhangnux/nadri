@@ -137,24 +137,42 @@ article {
 						</div>
 					</c:otherwise>
 				</c:choose>
-				<%--
+
 				<div class="border-top mt-5 pt-4">
 					<h5 class="mb-3">
-						<strong>위치 안내</strong>
+						<strong>위치 안내</strong>　${detail.address }
 					</h5>
-					<div>지도 넣기
-
-				<!-- forEach -->
-				<script>
-
-				</script>
-				<!--  -->
-
-					</div>
+					
+					<div id="map" style="width:750px;height:350px;"></div>
+					
+					<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9c86a6bad7327a2b75d4058fd4d98faa"></script>
+					<script>
+						var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+						    mapOption = {
+						        center: new kakao.maps.LatLng(${detail.lat}, ${detail.lng}), // 지도의 중심좌표
+						        level: 3, // 지도의 확대 레벨
+						        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
+						    }; 
+				
+						// 지도를 생성한다 
+						var map = new kakao.maps.Map(mapContainer, mapOption); 
+				
+						// 지도에 마커를 생성하고 표시한다
+						var marker = new kakao.maps.Marker({
+						    position: new kakao.maps.LatLng(${detail.lat}, ${detail.lng}), // 마커의 좌표
+						    map: map // 마커를 표시할 지도 객체
+						});
+				
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : '<div style="padding:5px;">${detail.name}</div>' // 인포윈도우에 표시할 내용
+						});
+						infowindow.open(map, marker);
+					</script>
 				</div>
 
 				<!-- 후기 -->
 				
+				<%--
 				<div class="border-top mt-5 pt-4 mb-2">
 					<h5>
 						<strong>후기 사진</strong>

@@ -16,6 +16,8 @@
 		<result column="att_photo" property="photo"/>
 		<result column="att_address" property="address"/>
 		<result column="att_detailcontent" property="detail"/>
+		<result column="att_lat" property="lat" />
+		<result column="att_lng" property="lng" />
 		<result column="star" property="star"/>
 		<result column="cnt" property="count"/>
 		<collection property="attOption" resultMap="AttrOptionMap" />
@@ -45,6 +47,8 @@
 			b.att_category,
 			b.att_thumbnail,
 			b.att_photo,
+			b.att_lat,
+			b.att_lng,
 			(select nvl(round(avg(x.review_star),1), 0) from att_review x where x.att_no = b.att_no) star,
 			(select count(x.review_no) cnt from att_review x where x.att_no = b.att_no) cnt
 		from attraction b
@@ -57,6 +61,7 @@
 	<select id="attrcount" resultType="int">
 		select count(*)
 		from attraction
+		where (att_enddate is null or att_enddate > sysdate)
 	</select>
 	
 	<!-- 카테고리 -->

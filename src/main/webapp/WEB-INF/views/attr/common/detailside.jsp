@@ -115,8 +115,11 @@
 				</div>
 			</c:forEach>
 		</c:when>
+		<c:when test="${empty LOGIN_USER }">
+			<div class="text-center">로그인 후 할인 혜택을 확인하세요!</div>		
+		</c:when>
 		<c:otherwise>
-			<div class="text-center">로그인 후 할인 혜택을 확인하세요!</div>
+			<div class="text-center">발급 가능한 쿠폰이 없습니다.</div>			
 		</c:otherwise>
 	</c:choose>
 	</div>
