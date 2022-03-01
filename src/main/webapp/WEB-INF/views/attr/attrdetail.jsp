@@ -164,7 +164,7 @@ article {
 						});
 				
 						var infowindow = new kakao.maps.InfoWindow({
-						    content : '<div style="padding:5px;">${detail.name}</div>' // 인포윈도우에 표시할 내용
+						    content : '<div style="padding:5px;width:300px;text-align:center;">${detail.name}　</div>' // 인포윈도우에 표시할 내용
 						});
 						infowindow.open(map, marker);
 					</script>
