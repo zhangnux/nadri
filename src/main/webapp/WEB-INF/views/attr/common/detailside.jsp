@@ -184,6 +184,7 @@
 			$("#total").text(total);
 			$("input[name=price]").val(total);
 			$("#quantity-" + optNo).val(num);
+			
 		});
 		
 		$(".down").click(function(e){

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nadri.attr.dto.AttOptionDetail;
+import com.nadri.attr.vo.AttOption;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
@@ -19,6 +20,10 @@ public interface AttrMapper{
 
 	// 전체리스트
 	List<Attraction> allAttrList();
+
+	// 상품 추가
+	void addAtt(Attraction attraction);
+	void addAttOption(AttOption attOption);
 	
 	// 리스트 갯수
 	int attrcount();

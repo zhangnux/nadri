@@ -57,6 +57,20 @@
 		]]>
 	</select>
 	
+	<!-- 상품 추가 -->
+	<insert id="addAtt" parameterType="com.nadri.attr.vo.Attraction">
+		insert into 
+    		attraction(att_no, att_name, att_content, att_startdate, att_enddate, att_place, att_category, att_thumbnail, att_photo, att_address, att_detailcontent, att_lat, att_lng, att_price)
+		values   
+   			(att_no_seq.nextval, #{name}, #{content}, #{startDate}, #{endDate}, #{place}, #{category}, #{thumbnail}, #{photo}, #{address}, #{detail}, #{lat}, #{lng}, #{price})
+	</insert>
+	<insert id="addAttOption" parameterType="com.nadri.attr.vo.AttOption">
+		insert into 
+		    att_option(att_no, att_option, att_price, att_optNo)
+		values
+		    (att_no_seq.currval, #{option}, #{price}, att_optno_seq.nextval)		
+	</insert>
+	
 	<!-- 상품 수 -->
 	<select id="attrcount" resultType="int">
 		select count(*)

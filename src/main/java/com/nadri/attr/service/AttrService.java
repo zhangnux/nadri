@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nadri.attr.mapper.AttrMapper;
+import com.nadri.attr.vo.AttAddForm;
+import com.nadri.attr.vo.AttOption;
 import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.Search;
 import com.nadri.coupon.vo.UserCoupon;
@@ -19,6 +21,7 @@ public class AttrService {
 	@Autowired
 	private AttrMapper attrMapper;
 	
+	/* 상품리스트 관련 */
 	public List<Attraction> getAllAttrList(){return attrMapper.allAttrList();}
 	public int getListCount() {return attrMapper.attrcount();}
 	public List<Attraction> getSearchResult(Search search){return attrMapper.searchAttraction(search);}
@@ -27,6 +30,10 @@ public class AttrService {
 	public List<Attraction> getOptionInfo(int no) { return attrMapper.getOptionByNo(no); }
 	public int getReviewCount(int attNo) { return attrMapper.reviewCount(attNo); }
 	public double getStarCount(int attNo) { return attrMapper.star(attNo); }
+	
+	/* 상품추가 관련 */
+	public void insertAttr(Attraction attraction) { attrMapper.addAtt(attraction); }
+	public void insertAttrOption(AttOption attOption) { attrMapper.addAttOption(attOption); }
 	
 	public int getReviewCountPerUser(int userNo,int attNo) {
 		return attrMapper.reviewCountPerUser(userNo,attNo); 

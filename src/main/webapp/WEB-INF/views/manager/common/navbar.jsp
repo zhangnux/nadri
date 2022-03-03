@@ -39,11 +39,6 @@ html, body {
 	        </a>
 	      </li>
 	      <li class="nav-item mt-3">
-	        <a href="#" class="nav-link ${menu eq 'review' ? 'active' : ''}">
-	          구매평
-	        </a>
-	      </li>
-	      <li class="nav-item mt-3">
 	        <a href="../csboard/list.nadri" class="nav-link ${menu eq 'qna' ? 'active' : ''}">
 	          문의
 	        </a>
@@ -56,6 +51,11 @@ html, body {
 	      <li class="nav-item mt-3">
 	        <a href="../coupon/coulist.nadri" class="nav-link ${menu eq 'coupon' ? 'active' : ''}">
 	          쿠폰관리
+	        </a>
+	      </li>
+	      <li class="nav-item mt-3">
+	        <a href="/attr/addform.nadri" class="nav-link ${menu eq 'attrform' ? 'active' : ''}">
+	          액티비티 등록
 	        </a>
 	      </li>
 	    </ul>

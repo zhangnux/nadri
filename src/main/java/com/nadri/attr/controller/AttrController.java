@@ -26,7 +26,6 @@ import com.nadri.attr.vo.Attraction;
 import com.nadri.attr.vo.ReviewForm;
 import com.nadri.attr.vo.Search;
 import com.nadri.coupon.service.UserCouponService;
-import com.nadri.coupon.vo.Coupon;
 import com.nadri.coupon.vo.UserCoupon;
 import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.util.SessionUtils;
@@ -54,8 +53,7 @@ public class AttrController {
 	
 	@GetMapping("/list.nadri")
 	public String searching(@RequestParam(name="place", defaultValue = "") String category,
-							@RequestParam(name="page", defaultValue="1") int page,Search search,Model model) 
-	{
+							@RequestParam(name="page", defaultValue="1") int page,Search search,Model model) {
 		List<Attraction> attraction = attrService.getSearchResult(search);
 		model.addAttribute("category", attraction);
 		model.addAttribute("place",category);
