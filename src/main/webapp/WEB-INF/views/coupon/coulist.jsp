@@ -130,7 +130,7 @@
 			<c:set var="menu" value="coupon"/>
 			<%@ include file="../manager/common/navbar.jsp" %>
 		</div>
-		<div class="col-10" style="margin-left: 310px;">
+		<div class="col-10" style="margin-left: 350px;">
 			<div class="row">
 				<div class="col-auto pt-5 fw-bold">
 					<h1><strong>쿠폰 관리</strong></h1>
