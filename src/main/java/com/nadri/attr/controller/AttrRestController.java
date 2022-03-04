@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nadri.attr.service.AttrService;
 import com.nadri.attr.vo.Attraction;
+import com.nadri.attr.vo.Coordinate;
 import com.nadri.coupon.service.UserCouponService;
 import com.nadri.user.annotation.LoginedUser;
 import com.nadri.user.vo.User;
@@ -29,10 +30,16 @@ public class AttrRestController {
 		userCouponService.reduceCouponQuantity(couponNo);
 	}
 	
-	@GetMapping("/maplist")
+	@GetMapping("/attlist")
 	public List<Attraction> list() {
 		List<Attraction> attractions = attrService.getAllAttrList();		
 		return attractions;
+	}
+	
+	@GetMapping("/maplist")
+	public List<Attraction> list(Coordinate coordinate) {
+		List<Attraction> lists = attrService.getListInMap(coordinate);	
+		return lists;
 	}
 	
 }
