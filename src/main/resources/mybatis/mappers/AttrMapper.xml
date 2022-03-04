@@ -78,6 +78,14 @@
 		where (att_enddate is null or att_enddate > sysdate)
 	</select>
 	
+	<!-- 영역변화 리스트출력 -->
+	<select id="listInMap" parameterType="com.nadri.attr.vo.Coordinate" resultMap="AttrResultMap">
+		select *
+		from attraction
+		where att_lat between #{swlat} and #{nelat}
+		and att_lng between #{swlng} and #{nelng}
+	</select>
+	
 	<!-- 카테고리 -->
 	<select id="searchAttraction" parameterType="com.nadri.attr.vo.Search" resultMap="AttrResultMap">
 		

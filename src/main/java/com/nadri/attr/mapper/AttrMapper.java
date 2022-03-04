@@ -10,6 +10,7 @@ import com.nadri.attr.dto.AttOptionDetail;
 import com.nadri.attr.vo.AttOption;
 import com.nadri.attr.vo.AttrReview;
 import com.nadri.attr.vo.Attraction;
+import com.nadri.attr.vo.Coordinate;
 import com.nadri.attr.vo.Search;
 import com.nadri.coupon.vo.Coupon;
 import com.nadri.coupon.vo.UserCoupon;
@@ -27,6 +28,9 @@ public interface AttrMapper{
 	
 	// 리스트 갯수
 	int attrcount();
+	
+	// 지도 검색
+	List<Attraction> listInMap(Coordinate coordinate);
 	
 	// 카테고리별 검색
 	List<Attraction> searchAttraction(Search search);

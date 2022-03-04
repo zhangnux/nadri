@@ -10,6 +10,7 @@ import com.nadri.attr.mapper.AttrMapper;
 import com.nadri.attr.vo.AttAddForm;
 import com.nadri.attr.vo.AttOption;
 import com.nadri.attr.vo.Attraction;
+import com.nadri.attr.vo.Coordinate;
 import com.nadri.attr.vo.Search;
 import com.nadri.coupon.vo.UserCoupon;
 import com.nadri.restaurant.vo.Restaurant;
@@ -30,14 +31,13 @@ public class AttrService {
 	public List<Attraction> getOptionInfo(int no) { return attrMapper.getOptionByNo(no); }
 	public int getReviewCount(int attNo) { return attrMapper.reviewCount(attNo); }
 	public double getStarCount(int attNo) { return attrMapper.star(attNo); }
+	public List<Attraction> getListInMap(Coordinate coordinate){ return attrMapper.listInMap(coordinate); }
 	
 	/* 상품추가 관련 */
 	public void insertAttr(Attraction attraction) { attrMapper.addAtt(attraction); }
 	public void insertAttrOption(AttOption attOption) { attrMapper.addAttOption(attOption); }
 	
-	public int getReviewCountPerUser(int userNo,int attNo) {
-		return attrMapper.reviewCountPerUser(userNo,attNo); 
-	}
+	public int getReviewCountPerUser(int userNo,int attNo) { return attrMapper.reviewCountPerUser(userNo,attNo); }
 	
 	public List<Attraction> getRandom(int attNo, String place) { return attrMapper.random(attNo, place); }
 	public List<UserCoupon> getCoupon(int userNo){ return attrMapper.coupon(userNo); }
